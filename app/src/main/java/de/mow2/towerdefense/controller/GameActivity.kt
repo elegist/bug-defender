@@ -1,6 +1,9 @@
 package de.mow2.towerdefense.controller
 
+import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
 import de.mow2.towerdefense.R
 

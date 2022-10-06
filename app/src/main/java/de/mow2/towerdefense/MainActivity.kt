@@ -17,7 +17,7 @@ import de.mow2.towerdefense.databinding.ActivityMainBinding
 
 /**
  * Remove comment before Release!!!
- * This class represents the main entry point
+ * This class is the main entry point
  * TODO: Add Preferences and Nav
  */
 class MainActivity : AppCompatActivity() {
