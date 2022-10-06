@@ -34,8 +34,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
-        if (canvas != null) {
-            canvas.drawRect(100f, 100f, 100f, 100f, Paint().color )
-        }
+        canvas?.drawRect(100f, 100f, 100f, 100f, Paint())
     }
 }
