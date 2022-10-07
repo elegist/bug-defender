@@ -4,7 +4,12 @@
     </style>
 
     <style name="Widget.Theme.TowerDefense.ButtonBar.Fullscreen" parent="">
-        <item name="android:background">@color/black_overlay</item>
+        <item name="android:background">@color/dark_green</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
+
+    <style name="Widget.Theme.TowerDefense.Button.Fullscreen" parent="">
+        <item name="android:background">@color/light_brown</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">TurmVerteidigung</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="dummy_button">Dummy Button</string>
+    <string name="title_activity_main">Tower Defense</string>
+    <string name="startGame_button">Starte Spiel</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="pause_resume_Button">Stop/Start</string>
+    <string name="info_button">Spielanleitung</string>
+    <string name="preference_button">Präferenzen</string>
+    <string name="about_button">Über</string>
+    <string name="game_icon">Spiel Icon</string>
+
 </resources>
