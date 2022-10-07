@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <item android:drawable="@drawable/tower_slingshot_weapon1" android:duration="100"/>
+    <item android:drawable="@drawable/tower_slingshot_weapon2" android:duration="100"/>
+    <item android:drawable="@drawable/tower_slingshot_weapon3" android:duration="100"/>
+    <item android:drawable="@drawable/tower_slingshot_weapon4" android:duration="100"/>
+    <item android:drawable="@drawable/tower_slingshot_weapon5" android:duration="100"/>
+    <item android:drawable="@drawable/tower_slingshot_weapon6" android:duration="100"/>
+    <item android:drawable="@drawable/tower_slingshot_weapon7" android:duration="100"/>
+    <item android:drawable="@drawable/tower_slingshot_weapon8" android:duration="100"/>
+</animation-list>

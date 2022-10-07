@@ -1,14 +1,13 @@
 package de.mow2.towerdefense.controller
 
+
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import java.lang.Exception
-import java.util.jar.Attributes
+
+
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
     var gameLoop: GameLoop
@@ -22,6 +21,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * Use surfaceCreated to initialize game objects, field and so on...
      */
     override fun surfaceCreated(holder: SurfaceHolder) {
+
         gameLoop.setRunning(true)
         gameLoop.start()
     }
@@ -52,9 +52,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     /**
      * method to draw on canvas
      */
-    override fun draw(canvas: Canvas?) {
+    override fun draw(canvas: Canvas) { // changed "Canvas?" to "Canvas". Type mismatch has to be corrected first
         super.draw(canvas)
 
+
+    /*
         //testing stuff
         if (canvas != null) {
             val paint = Paint()
@@ -62,5 +64,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             paint.style = Paint.Style.FILL
             canvas.drawRect(0f, 0f, 100f, 100f, paint)
         }
+     */
+
     }
 }
