@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.playground
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import de.mow2.towerdefense.R
