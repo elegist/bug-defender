@@ -2,20 +2,20 @@ package de.mow2.towerdefense
 
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowInsets
-import android.widget.LinearLayout
-import android.widget.TextView
 import de.mow2.towerdefense.controller.GameActivity
-import de.mow2.towerdefense.databinding.ActivityMainBinding
+//import de.mow2.towerdefense.databinding.ActivityMainBinding
 import android.media.MediaPlayer
-import android.widget.ImageButton
+import android.transition.Slide
+import android.transition.TransitionManager
+import android.view.*
+import android.widget.*
 
 /**
  * Remove comment before Release!!!
@@ -28,16 +28,39 @@ class MainActivity : AppCompatActivity() {
         playBackgroundMusic()
 
         setContentView(R.layout.activity_main)
+
+        // tryout PopUp Window Menu
+        val menuLayout = findViewById<LinearLayout>(R.id.menu_layout)
+        val infoButton = findViewById<Button>(R.id.info_button)
+        infoButton.setOnClickListener {
+            val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val infoView = inflater.inflate(R.layout.popup_view, null)
+            val popupWindow = PopupWindow(infoView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            popupWindow.elevation = 10.0F
+            val slideIn = Slide()
+            slideIn.slideEdge = Gravity.TOP
+            popupWindow.enterTransition = slideIn
+
+            val tv = infoView.findViewById<TextView>(R.id.textView)
+            val buttonPopup = infoView.findViewById<Button>(R.id.buttonPopup)
+
+            buttonPopup.setOnClickListener{
+                popupWindow.dismiss()
+            }
+
+            TransitionManager.beginDelayedTransition(menuLayout)
+            popupWindow.showAtLocation(
+                menuLayout, // Location to display popup window
+                Gravity.CENTER, // Layout position to display popup
+                0, // X offset
+                0 // Y offset
+            )
+        }
     }
 
     fun startGame(view: View) {
         startActivity(Intent(this, GameActivity::class.java))
     }
-
-    // tryout PopUp Window for Navigation
-
-
-
 
     // background music in main activity
     var backgroundMusic: MediaPlayer? = null

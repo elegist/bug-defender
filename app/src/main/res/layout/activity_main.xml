@@ -41,6 +41,7 @@
             app:srcCompat="@android:drawable/ic_lock_silent_mode_off" />
 
         <LinearLayout
+            android:id="@+id/menu_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

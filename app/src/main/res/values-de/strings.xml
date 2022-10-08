@@ -8,5 +8,6 @@
     <string name="preference_button">Präferenzen</string>
     <string name="about_button">Über</string>
     <string name="game_icon">Spiel Icon</string>
+    <string name="close_button">Schließen</string>
 
 </resources>

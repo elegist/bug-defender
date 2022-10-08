@@ -8,4 +8,5 @@
     <string name="preference_button">Preferences</string>
     <string name="about_button">About</string>
     <string name="game_icon">game icon</string>
+    <string name="close_button">Close</string>
 </resources>
