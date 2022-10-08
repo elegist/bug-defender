@@ -9,5 +9,8 @@
     <string name="about_button">Über</string>
     <string name="game_icon">Spiel Icon</string>
     <string name="close_button">Schließen</string>
+    <string name="game_name">Raus aus meinem Garten</string>
+    <string name="about_text">This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributers are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.</string>
+    <string name="preferences_text">set your preferences:</string>
 
 </resources>
