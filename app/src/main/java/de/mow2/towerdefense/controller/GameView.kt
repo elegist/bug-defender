@@ -1,27 +1,34 @@
 package de.mow2.towerdefense.controller
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import java.lang.Exception
-import java.util.jar.Attributes
+import de.mow2.towerdefense.model.playground.PlayGround
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
-    var gameLoop: GameLoop
+    private var gameLoop: GameLoop
+    private var playGround: PlayGround
+
+    //flag to block comparing coordinates (when construction menu is open)
+    private var blockInput = false
+    private var indexOfSelected: Int = 0
 
     init {
         holder.addCallback(this)
         gameLoop = GameLoop(this, holder)
+        playGround = PlayGround(Resources.getSystem().displayMetrics.widthPixels, Resources.getSystem().displayMetrics.heightPixels, resources)
     }
 
     /**
      * Use surfaceCreated to initialize game objects, field and so on...
      */
     override fun surfaceCreated(holder: SurfaceHolder) {
+        //start game loop
         gameLoop.setRunning(true)
         gameLoop.start()
     }
@@ -52,15 +59,52 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     /**
      * method to draw on canvas
      */
-    override fun draw(canvas: Canvas?) {
+    override fun draw(canvas: Canvas) {
         super.draw(canvas)
 
-        //testing stuff
-        if (canvas != null) {
-            val paint = Paint()
-            paint.color = Color.BLUE
-            paint.style = Paint.Style.FILL
-            canvas.drawRect(0f, 0f, 100f, 100f, paint)
+        //drawing playground
+        playGround.squareArray.forEach { it.drawField(canvas) }
+    }
+
+    /**
+     * handling user inputs
+     */
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        var x: Float; var y: Float
+        when (ev?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                x = ev.x
+                y = ev.y
+                invalidate()
+                if(!blockInput) {
+                    compareCoords(x, y)
+                    // öffne baumenü an gegebenen koordinaten
+                } else {
+                    playGround.squareArray[indexOfSelected].unlockSquare()
+                    blockInput = false
+                    // schließe baumenü bzw. baue turm oder was auch immer
+                }
+            }
+            MotionEvent.ACTION_MOVE -> {}
+
+            MotionEvent.ACTION_UP -> {
+                x = ev.x
+                y = ev.y
+                invalidate()
+            }
+        }
+        return true
+    }
+
+    private fun compareCoords(x: Float, y: Float) {
+        playGround.squareArray.forEachIndexed { i, it ->
+            val coordRangeX = it.coordX..(it.coordX+it.width)
+            val coordRangeY = it.coordY..(it.coordY+it.height)
+            if(x in coordRangeX && y in coordRangeY) {
+                it.lockSquare()
+                blockInput = true
+                indexOfSelected = i
+            }
         }
     }
 }
