@@ -28,8 +28,8 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
                 //synchronize threads, so this is the only one to draw onto canvas
                 synchronized(surfaceHolder) {
                     //updating gameview
-                    this.gameView.update()
-                    this.gameView.draw(canvas!!)
+                    gameView.update()
+                    gameView.draw(canvas!!)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
