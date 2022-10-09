@@ -3,14 +3,13 @@ package de.mow2.towerdefense.controller
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.actors.Tower
+import de.mow2.towerdefense.model.actors.TowerTypes
 import de.mow2.towerdefense.model.playground.PlayGround
 import de.mow2.towerdefense.model.playground.SquareField
 
@@ -29,7 +28,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         holder.addCallback(this)
         gameLoop = GameLoop(this, holder)
         playGround = PlayGround(Resources.getSystem().displayMetrics.widthPixels, Resources.getSystem().displayMetrics.heightPixels, resources)
-
     }
 
     /**
@@ -72,7 +70,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         //drawing playground
         playGround.squareArray.forEach { it.drawField(canvas) }
-        tower?.draw(canvas)
+        GameManager.drawObjects(canvas, resources)
     }
 
     /**
@@ -87,16 +85,23 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 invalidate()
                 blockInput = if(!blockInput) {
                     selectedSquare = selectSquare(x, y)
-                    selectedSquare.lockSquare()
 
-                    //take selected tower and place tower
-                    tower = Tower(selectedSquare, BitmapFactory.decodeResource(resources, R.drawable.tower_block))
+                    //if square is not start or end row of map
+                    if(selectedSquare.mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                        //lock square
+                        selectedSquare.lockSquare()
+                    }
                     // TODO: öffne baumenü an gegebenen koordinaten
                     // TODO: Prüfen ob schon ein Turm an gegebener Stelle, wenn Ja: Öffne Upgrademenü, wenn Nein: Turm löschen?
 
                     true
                 } else {
-                    selectedSquare.unlockSquare()
+                    //if user clicks on already selected square build tower, else unlock square
+                    if(selectedSquare == selectSquare(x, y)) {
+                        GameManager.buildTower(selectedSquare)
+                    } else {
+                        selectedSquare.unlockSquare()
+                    }
 
                     // TODO: schließe baumenü bzw. baue turm oder was auch immer
                     // TODO: Prüfe ob Spieler auf Baumenü geklickt hat, wenn ja: Baue Turm, wenn nein: schließe Baumenü

@@ -21,7 +21,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        playBackgroundMusic()
 
         setContentView(R.layout.activity_main)
 
@@ -104,7 +103,6 @@ class MainActivity : AppCompatActivity() {
     fun startGame(view: View) {
         startActivity(Intent(this, GameActivity::class.java))
     }
-
 
     // background music in main activity
     var backgroundMusic: MediaPlayer? = null
