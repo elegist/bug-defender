@@ -4,7 +4,7 @@
     </style>
 
     <style name="Widget.Theme.TowerDefense.ButtonBar.Fullscreen" parent="">
-        <item name="android:background">@color/light_green</item>
+        <item name="android:background">@color/middle_green</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
 
@@ -12,4 +12,24 @@
         <item name="android:background">@color/light_brown</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="Button.Main" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_border</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:soundEffectsEnabled">true</item>
+    </style>
+
 </resources>

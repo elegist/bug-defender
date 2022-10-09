@@ -9,7 +9,7 @@
     android:theme="@style/ThemeOverlay.TowerDefense.FullscreenContainer"
     tools:context=".MainActivity">
 
-       <ImageButton
+    <ImageButton
         android:id="@+id/pause_resume_Button"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -38,8 +38,8 @@
 
     <TextView
         android:id="@+id/gameName_text"
-        android:layout_width="330dp"
-        android:layout_height="83dp"
+        android:layout_width="227dp"
+        android:layout_height="81dp"
         android:layout_marginTop="8dp"
         android:fontFamily="monospace"
         android:gravity="center"
@@ -55,16 +55,9 @@
 
     <Button
         android:id="@+id/info_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        style="@style/Button.Main"
         android:layout_marginTop="32dp"
-        android:layout_marginRight="15dp"
-        android:backgroundTint="@color/light_green"
-        android:fontFamily="monospace"
-        android:padding="?attr/dialogPreferredPadding"
         android:text="@string/info_button"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,49 +65,28 @@
 
     <Button
         android:id="@+id/preference_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:backgroundTint="@color/light_green"
-        android:fontFamily="monospace"
-        android:padding="?attr/dialogPreferredPadding"
+        style="@style/Button.Main"
         android:text="@string/preference_button"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/info_button" />
 
     <Button
         android:id="@+id/about_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:backgroundTint="@color/light_green"
-        android:fontFamily="monospace"
-        android:padding="?attr/dialogPreferredPadding"
+        style="@style/Button.Main"
         android:text="@string/about_button"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.586"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/preference_button" />
 
     <Button
         android:id="@+id/startGame_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        style="@style/Button.Main"
         android:layout_marginBottom="36dp"
         android:layout_weight="1"
-        android:backgroundTint="@color/light_green"
-        android:fontFamily="monospace"
         android:onClick="startGame"
-        android:padding="?attr/dialogPreferredPadding"
         android:text="@string/startGame_button"
-        android:textColor="@color/white"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.551"
