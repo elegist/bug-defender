@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">TowerDefense</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="dummy_button">Dummy Button</string>
+    <string name="title_activity_main">Tower Defense</string>
+    <string name="startGame_button">Start Game</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="weapon_anim">weapon animation</string>
+    <string name="pause_resume_Button">Stop/Start</string>
+    <string name="info_button">Game Instructions</string>
+    <string name="preference_button">Preferences</string>
+    <string name="about_button">About</string>
+    <string name="game_icon">game icon</string>
+    <string name="close_button">Close</string>
+    <string name="game_name">Get out of my garden</string>
+    <string name="about_text">This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributers are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.
+    This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributers are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.
+    This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributers are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.
+   </string>
+    <string name="preferences_text">set your preferences:</string>
 </resources>
