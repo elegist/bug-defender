@@ -8,21 +8,14 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import de.mow2.towerdefense.model.actors.Tower
-import de.mow2.towerdefense.model.actors.TowerTypes
-import de.mow2.towerdefense.model.playground.PlayGround
-import de.mow2.towerdefense.model.playground.SquareField
+import de.mow2.towerdefense.model.core.SquareField
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     private var playGround: PlayGround
-    private var tower: Tower? = null
 
-
-
-    //flag to block comparing coordinates (when construction menu is open)
-    private var blockInput = false
     private lateinit var selectedSquare: SquareField
+    private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
 
     init {
         holder.addCallback(this)
@@ -30,18 +23,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         playGround = PlayGround(Resources.getSystem().displayMetrics.widthPixels, Resources.getSystem().displayMetrics.heightPixels, resources)
     }
 
-    /**
-     * Use surfaceCreated to initialize game objects, field and so on...
-     */
     override fun surfaceCreated(holder: SurfaceHolder) {
         //start game loop
         gameLoop.setRunning(true)
         gameLoop.start()
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-
-    }
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         var retry = true
@@ -58,12 +46,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     /**
      * method to update game objects data
+     * should only call GameManager and similar classes update methods
      */
     fun update() {
     }
 
     /**
      * method to draw on canvas
+     * should only call GameManager and similar classes draw methods
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
@@ -78,34 +68,35 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         var x: Float; var y: Float
+
         when (ev?.action) {
             MotionEvent.ACTION_DOWN -> {
                 x = ev.x
                 y = ev.y
                 invalidate()
-                blockInput = if(!blockInput) {
-                    selectedSquare = selectSquare(x, y)
 
-                    //if square is not start or end row of map
-                    if(selectedSquare.mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                //if selected square is not start or finish line, and not blocked by tower TODO: open build & upgrade menu
+                if(getSquareAt(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1 && !getSquareAt(x, y).isBlocked) {
+                    blockInput = if(!blockInput) {
+                        selectedSquare = getSquareAt(x, y)
+
                         //lock square
-                        selectedSquare.lockSquare()
-                    }
-                    // TODO: öffne baumenü an gegebenen koordinaten
-                    // TODO: Prüfen ob schon ein Turm an gegebener Stelle, wenn Ja: Öffne Upgrademenü, wenn Nein: Turm löschen?
+                        selectedSquare.selectSquare()
+                        // TODO: öffne baumenü an gegebenen koordinaten
 
-                    true
-                } else {
-                    //if user clicks on already selected square build tower, else unlock square
-                    if(selectedSquare == selectSquare(x, y)) {
-                        GameManager.buildTower(selectedSquare)
+                        true
                     } else {
-                        selectedSquare.unlockSquare()
-                    }
+                        //if user clicks on already selected square: build tower, else: free square
+                        if(selectedSquare == getSquareAt(x, y)) {
+                            GameManager.buildTower(selectedSquare)
+                            selectedSquare.isBlocked = true
+                        } else {
+                            selectedSquare.clearSquare()
+                        }
 
-                    // TODO: schließe baumenü bzw. baue turm oder was auch immer
-                    // TODO: Prüfe ob Spieler auf Baumenü geklickt hat, wenn ja: Baue Turm, wenn nein: schließe Baumenü
-                    false
+                        // TODO: Prüfe ob Spieler auf Baumenü geklickt hat, wenn ja: Baue Turm, wenn nein: schließe Baumenü
+                        false
+                    }
                 }
             }
             MotionEvent.ACTION_MOVE -> {}
@@ -120,7 +111,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         return true
     }
 
-    private fun selectSquare(x: Float, y: Float): SquareField {
+    private fun getSquareAt(x: Float, y: Float): SquareField {
         var indexOfSelected = 0
         playGround.squareArray.forEachIndexed { i, it ->
             val coordRangeX = it.coordX..(it.coordX+it.width)

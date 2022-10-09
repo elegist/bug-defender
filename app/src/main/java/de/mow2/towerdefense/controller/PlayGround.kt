@@ -1,9 +1,9 @@
-package de.mow2.towerdefense.model.playground
+package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import de.mow2.towerdefense.R
-import de.mow2.towerdefense.controller.GameManager
+import de.mow2.towerdefense.model.core.SquareField
 
 class PlayGround(val width: Int, val height: Int, resources: Resources) {
     val TAG = javaClass.name

@@ -7,7 +7,9 @@ import android.graphics.Canvas
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.actors.Tower
 import de.mow2.towerdefense.model.actors.TowerTypes
-import de.mow2.towerdefense.model.playground.SquareField
+import de.mow2.towerdefense.model.core.SquareField
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 object GameManager {
     //playground variables
@@ -24,23 +26,29 @@ object GameManager {
     }
 
     fun buildTower(selectedField: SquareField) {
+/*      //unused variables represent x & y coordinates [e.g. (0,0) for top left] maybe useful for faster mapping and routing?
         val col: Int = selectedField.mapPos["x"]!!
-        val row: Int = selectedField.mapPos["y"]!!
+        val row: Int = selectedField.mapPos["y"]!!*/
         val tower = Tower(selectedField, TowerTypes.BLOCK)
         towerList = towerList.plus(tower)
+        towerList.sort() //sorting array to avoid overlapped drawing
     }
 
     /**
      * decides which objects to draw
      */
     fun drawObjects(canvas: Canvas, resources: Resources) {
-        //draw towers
-        towerList.forEach {
-            when(it.type) {
-                TowerTypes.BLOCK -> {
-                        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), it.w, it.h), it.x, it.y)
+        runBlocking {
+            launch {
+                //draw towers
+                towerList.forEach {
+                    when(it.type) {
+                        TowerTypes.BLOCK -> {
+                            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), it.w, it.h), it.x, it.y)
+                        }
                     }
                 }
+            }
         }
     }
 
