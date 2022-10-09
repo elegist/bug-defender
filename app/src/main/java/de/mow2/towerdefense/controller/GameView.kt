@@ -36,10 +36,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * Use surfaceCreated to initialize game objects, field and so on...
      */
     override fun surfaceCreated(holder: SurfaceHolder) {
-
-        //remove me later
-        tower = Tower(playGround.squareArray[1], BitmapFactory.decodeResource(resources, R.drawable.tower_block))
-
         //start game loop
         gameLoop.setRunning(true)
         gameLoop.start()
@@ -77,7 +73,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //drawing playground
         playGround.squareArray.forEach { it.drawField(canvas) }
         tower?.draw(canvas)
-
     }
 
     /**
