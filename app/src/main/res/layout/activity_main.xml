@@ -5,19 +5,17 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_green"
+    android:background="@color/dark_brown"
     android:theme="@style/ThemeOverlay.TowerDefense.FullscreenContainer"
     tools:context=".MainActivity">
 
     <ImageButton
         android:id="@+id/pause_resume_Button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        style="@style/ImageButton.Main"
         android:layout_gravity="end"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/sound_on"
-        android:backgroundTint="@color/black_overlay"
         android:contentDescription="@string/pause_resume_Button"
         android:onClick="pauseResumeMusic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,13 +23,14 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="75dp"
-        android:layout_height="125dp"
+        android:layout_width="82dp"
+        android:layout_height="156dp"
         android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="44dp"
         android:contentDescription="@string/game_icon"
         android:paddingBottom="?attr/dialogPreferredPadding"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pause_resume_Button"
         app:srcCompat="@drawable/icon_main" />
@@ -49,36 +48,8 @@
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <Button
-        android:id="@+id/info_button"
-        style="@style/Button.Main"
-        android:layout_marginTop="32dp"
-        android:text="@string/info_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameName_text" />
-
-    <Button
-        android:id="@+id/preference_button"
-        style="@style/Button.Main"
-        android:text="@string/preference_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/info_button" />
-
-    <Button
-        android:id="@+id/about_button"
-        style="@style/Button.Main"
-        android:text="@string/about_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.586"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preference_button" />
 
     <Button
         android:id="@+id/startGame_button"
@@ -89,7 +60,38 @@
         android:text="@string/startGame_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameName_text"
+        app:layout_constraintVertical_bias="0.377" />
+
+    <ImageButton
+        android:id="@+id/preference_button"
+        style="@style/ImageButton.Main"
+        android:layout_marginEnd="110dp"
+        android:contentDescription="@string/preference_button"
+        android:onClick="popUpButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_preferences" />
+
+    <ImageButton
+        android:id="@+id/about_button"
+        style="@style/ImageButton.Main"
+        android:layout_marginStart="110dp"
+        android:contentDescription="@string/about_text"
+        android:onClick="popUpButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <ImageButton
+        android:id="@+id/info_button"
+        style="@style/ImageButton.Main"
+        android:contentDescription="@string/info_button"
+        android:onClick="popUpButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/preference_button"
+        app:layout_constraintStart_toEndOf="@+id/about_button"
+        app:srcCompat="@android:drawable/ic_dialog_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
