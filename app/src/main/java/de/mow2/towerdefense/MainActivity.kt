@@ -1,17 +1,15 @@
 package de.mow2.towerdefense
 
-import androidx.appcompat.app.AppCompatActivity
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import de.mow2.towerdefense.controller.GameActivity
 //import de.mow2.towerdefense.databinding.ActivityMainBinding
+
+import android.content.Intent
 import android.media.MediaPlayer
-import android.transition.Slide
-import android.transition.TransitionManager
+import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
+import de.mow2.towerdefense.controller.GameActivity
+
 
 /**
  * Remove comment before Release!!!
@@ -24,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        /*
         // tryout PopUp Window Menu
         val menuLayout = findViewById<ConstraintLayout>(R.id.main_layout)
         val infoButton = findViewById<Button>(R.id.info_button)
@@ -97,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 0, // X offset
                 0 // Y offset
             )
-        }
+        }*/
     }
 
     fun startGame(view: View) {

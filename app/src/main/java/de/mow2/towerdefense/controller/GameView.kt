@@ -3,16 +3,21 @@ package de.mow2.towerdefense.controller
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Canvas
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import de.mow2.towerdefense.R
+import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     private var playGround: PlayGround
+    //background tiles
+    private var bgPaint: Paint
+    private var bgBitmap: Bitmap
 
     private lateinit var selectedSquare: SquareField
     private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
@@ -20,7 +25,15 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     init {
         holder.addCallback(this)
         gameLoop = GameLoop(this, holder)
-        playGround = PlayGround(Resources.getSystem().displayMetrics.widthPixels, Resources.getSystem().displayMetrics.heightPixels, resources)
+        //creating new playground, ratio is 1:2
+        playGround = PlayGround(Resources.getSystem().displayMetrics.widthPixels, Resources.getSystem().displayMetrics.widthPixels * 2)
+        //initializing background tiles
+        bgPaint = Paint()
+        bgPaint.style = Paint.Style.FILL
+        val bgTileDimension = playGround.squareArray[0].width * 2
+        bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
+        bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+        setWillNotDraw(false)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -57,47 +70,26 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-
-        //drawing playground
-        playGround.squareArray.forEach { it.drawField(canvas) }
+        //drawing background
+        canvas.drawPaint(bgPaint)
+        //drawing objects
         GameManager.drawObjects(canvas, resources)
     }
 
     /**
      * handling user inputs
      */
+    private var lastX: Float = 0.0f
+    private var lastY: Float = 0.0f
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         var x: Float; var y: Float
 
         when (ev?.action) {
             MotionEvent.ACTION_DOWN -> {
-                x = ev.x
-                y = ev.y
+                lastX = ev.x
+                lastY = ev.y
                 invalidate()
 
-                //if selected square is not start or finish line, and not blocked by tower TODO: open build & upgrade menu
-                if(getSquareAt(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1 && !getSquareAt(x, y).isBlocked) {
-                    blockInput = if(!blockInput) {
-                        selectedSquare = getSquareAt(x, y)
-
-                        //lock square
-                        selectedSquare.selectSquare()
-                        // TODO: öffne baumenü an gegebenen koordinaten
-
-                        true
-                    } else {
-                        //if user clicks on already selected square: build tower, else: free square
-                        if(selectedSquare == getSquareAt(x, y)) {
-                            GameManager.buildTower(selectedSquare)
-                            selectedSquare.isBlocked = true
-                        } else {
-                            selectedSquare.clearSquare()
-                        }
-
-                        // TODO: Prüfe ob Spieler auf Baumenü geklickt hat, wenn ja: Baue Turm, wenn nein: schließe Baumenü
-                        false
-                    }
-                }
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -105,7 +97,34 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 x = ev.x
                 y = ev.y
                 invalidate()
-                // TODO: Prüfe ob "Loslassen" gleiche Koordinaten hat wie drücken, wenn Nein: nichts tun
+                // TODO: Test on actual mobile phone, comparison could be too accurate
+                if(x == lastX && y == lastY) {
+                    // TODO: Prüfe ob "Loslassen" gleiche Koordinaten hat wie drücken, wenn Nein: nichts tun
+                    if(getSquareAt(x, y).isBlocked) {
+                        //selected square is already blocked by a tower
+                        //TODO: Open upgrade tower menu
+                    } else {
+                        //if selected square is not start or finish line TODO: open build tower menu
+                        if(getSquareAt(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                            blockInput = if(!blockInput) {
+                                // initialize and select square
+                                selectedSquare = getSquareAt(x, y)
+                                selectedSquare.selectSquare()
+                                true
+                            } else {
+                                //if user clicks on already selected square: build tower, else: free square
+                                if(selectedSquare == getSquareAt(x, y)) {
+                                    GameManager.buildTower(selectedSquare)
+                                    selectedSquare.isBlocked = true
+                                } else {
+                                    selectedSquare.clearSquare()
+                                }
+                                // TODO: Prüfe ob Spieler auf Baumenü geklickt hat, wenn ja: Baue Turm, wenn nein: schließe Baumenü
+                                false
+                            }
+                        }
+                    }
+                }
             }
         }
         return true
