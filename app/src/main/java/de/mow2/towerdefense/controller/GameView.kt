@@ -15,6 +15,8 @@ import de.mow2.towerdefense.model.core.SquareField
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     private var playGround: PlayGround
+    private var gameWidth = Resources.getSystem().displayMetrics.widthPixels
+    private var gameHeight = 2 * gameWidth
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
@@ -26,20 +28,21 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         holder.addCallback(this)
         gameLoop = GameLoop(this, holder)
         //creating new playground, ratio is 1:2
-        playGround = PlayGround(Resources.getSystem().displayMetrics.widthPixels, Resources.getSystem().displayMetrics.widthPixels * 2)
+
+        playGround = PlayGround(gameWidth, gameHeight)
         //initializing background tiles
         bgPaint = Paint()
         bgPaint.style = Paint.Style.FILL
         val bgTileDimension = playGround.squareArray[0].width * 2
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-        setWillNotDraw(false)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
+        setWillNotDraw(false)
         //start game loop
-        gameLoop.setRunning(true)
-        gameLoop.start()
+        //gameLoop.setRunning(true)
+        //gameLoop.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -64,16 +67,28 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     fun update() {
     }
 
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        //drawing background
+        canvas!!.drawPaint(bgPaint)
+        //drawing objects
+        GameManager.drawObjects(canvas, resources)
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val height = gameHeight // should be calculated based on the content
+        val width = gameWidth // should be calculated based on the content
+
+        setMeasuredDimension(width, height)
+    }
+
     /**
      * method to draw on canvas
      * should only call GameManager and similar classes draw methods
      */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        //drawing background
-        canvas.drawPaint(bgPaint)
-        //drawing objects
-        GameManager.drawObjects(canvas, resources)
     }
 
     /**
