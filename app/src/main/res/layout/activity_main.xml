@@ -74,6 +74,7 @@
     <Button
         android:id="@+id/about_button"
         style="@style/Button.Main"
+        android:onClick="openPopUp"
         android:text="@string/about_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.586"
