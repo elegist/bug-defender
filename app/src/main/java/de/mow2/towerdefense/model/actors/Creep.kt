@@ -1,6 +1,7 @@
 package de.mow2.towerdefense.model.actors
 
-import de.mow2.towerdefense.model.playground.SquareField
+import de.mow2.towerdefense.model.core.SquareField
+
 
 class Creep(var squareField: SquareField, var type: CreepTypes) {
     var x: Float = squareField.coordX

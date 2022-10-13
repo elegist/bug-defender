@@ -1,11 +1,9 @@
 package de.mow2.towerdefense.controller
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.Chronometer
 import android.widget.TextView
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import de.mow2.towerdefense.R
 

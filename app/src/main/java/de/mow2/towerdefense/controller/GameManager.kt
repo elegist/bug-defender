@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.controller
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import de.mow2.towerdefense.R
@@ -11,9 +10,6 @@ import de.mow2.towerdefense.model.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
-
-
 
 object GameManager {
     //playground variables

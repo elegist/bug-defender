@@ -4,18 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Bundle
 import de.mow2.towerdefense.controller.GameActivity
-//import de.mow2.towerdefense.databinding.ActivityMainBinding
-
-import android.content.Intent
-import android.media.MediaPlayer
-import android.os.Bundle
-import android.view.*
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import de.mow2.towerdefense.controller.GameActivity
 
 import android.view.*
 import android.widget.*
+
 import androidx.constraintlayout.widget.ConstraintLayout
 import de.mow2.towerdefense.controller.SoundManager
 
