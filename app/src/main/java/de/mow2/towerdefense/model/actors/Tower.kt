@@ -16,6 +16,4 @@ class Tower(var squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     init {
         y = squareField.coordY - w
     }
-
-
 }

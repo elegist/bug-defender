@@ -3,6 +3,8 @@ package de.mow2.towerdefense.controller
 import android.content.res.Resources
 import android.graphics.*
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.model.actors.Creep
+import de.mow2.towerdefense.model.actors.CreepTypes
 import de.mow2.towerdefense.model.actors.Tower
 import de.mow2.towerdefense.model.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
@@ -14,22 +16,29 @@ object GameManager {
     val squaresX = 9
     val squaresY = 18
     //game variables
-    var lifes: Int = 3
+    var lives: Int = 3
     var coins: Int = 100
     //currently as array, should be a matrix (map or list)
     var towerList = emptyArray<Tower>()
+    var creepList = emptyArray<Creep>()
+    lateinit var sprite: Sprite
+    lateinit var spriteSheet: SpriteSheet
+
+
 
     init {
-        //TODO: get actual lifes and coins
+        //TODO: get actual lives and coins
     }
 
     fun buildTower(selectedField: SquareField) {
-/*      //unused variables represent x & y coordinates [e.g. (0,0) for top left] maybe useful for faster mapping and routing?
-        val col: Int = selectedField.mapPos["x"]!!
-        val row: Int = selectedField.mapPos["y"]!!*/
         val tower = Tower(selectedField, TowerTypes.BLOCK)
         towerList = towerList.plus(tower)
         towerList.sort() //sorting array to avoid overlapped drawing
+    }
+
+    fun createCreep(spawnField: SquareField){
+        val creep = Creep(spawnField, CreepTypes.LEAFBUG)
+        creepList = creepList.plus(creep)
     }
 
     /**
@@ -48,6 +57,8 @@ object GameManager {
                 }
             }
         }
+
+        //draw creeps
     }
 
     /**
@@ -64,4 +75,6 @@ object GameManager {
     private fun resizeImage(bitmap: Bitmap, width: Int, height: Int): Bitmap {
         return Bitmap.createScaledBitmap(bitmap, width, height, false)
     }
-}
+
+
+    }

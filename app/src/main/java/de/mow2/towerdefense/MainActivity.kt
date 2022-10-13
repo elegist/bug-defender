@@ -1,15 +1,15 @@
 package de.mow2.towerdefense
 
-//import de.mow2.towerdefense.databinding.ActivityMainBinding
-
-import android.content.Intent
-import android.media.MediaPlayer
-import android.os.Bundle
-import android.view.*
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.os.Bundle
 import de.mow2.towerdefense.controller.GameActivity
 
+import android.view.*
+import android.widget.*
+
+import androidx.constraintlayout.widget.ConstraintLayout
+import de.mow2.towerdefense.controller.SoundManager
 
 /**
  * Remove comment before Release!!!
@@ -17,129 +17,59 @@ import de.mow2.towerdefense.controller.GameActivity
  * TODO: Add Preferences and Nav
  */
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-
-        /*
-        // tryout PopUp Window Menu
-        val menuLayout = findViewById<ConstraintLayout>(R.id.main_layout)
-        val infoButton = findViewById<Button>(R.id.info_button)
-        val preferenceButton = findViewById<Button>(R.id.preference_button)
-        val aboutButton = findViewById<Button>(R.id.about_button)
-        infoButton.setOnClickListener {
-            val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val infoView = inflater.inflate(R.layout.popup_instructions_view, null)
-            val popupWindow = PopupWindow(infoView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            popupWindow.elevation = 10.0F
-            val slideIn = Slide()
-            slideIn.slideEdge = Gravity.TOP
-            popupWindow.enterTransition = slideIn
-
-            val buttonPopup = infoView.findViewById<Button>(R.id.buttonPopup)
-
-            buttonPopup.setOnClickListener{
-                popupWindow.dismiss()
-            }
-
-            TransitionManager.beginDelayedTransition(menuLayout)
-            popupWindow.showAtLocation(
-                menuLayout, // Location to display popup window
-                Gravity.CENTER, // Layout position to display popup
-                0, // X offset
-                0 // Y offset
-            )
-        }
-        preferenceButton.setOnClickListener{
-            val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val preferenceView = inflater.inflate(R.layout.popup_preferences_view, null)
-            val popupWindow = PopupWindow(preferenceView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            popupWindow.elevation = 10.0F
-            val slideIn = Slide()
-            slideIn.slideEdge = Gravity.TOP
-            popupWindow.enterTransition = slideIn
-
-            val buttonPopup = preferenceView.findViewById<Button>(R.id.buttonPopup)
-
-            buttonPopup.setOnClickListener{
-                popupWindow.dismiss()
-            }
-
-            TransitionManager.beginDelayedTransition(menuLayout)
-            popupWindow.showAtLocation(
-                menuLayout, // Location to display popup window
-                Gravity.CENTER, // Layout position to display popup
-                0, // X offset
-                0 // Y offset
-            )
-        }
-        aboutButton.setOnClickListener {
-            val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val aboutView = inflater.inflate(R.layout.popup_about_view, null)
-            val popupWindow = PopupWindow(aboutView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            popupWindow.elevation = 10.0F
-            val slideIn = Slide()
-            slideIn.slideEdge = Gravity.TOP
-            popupWindow.enterTransition = slideIn
-
-            val buttonPopup = aboutView.findViewById<Button>(R.id.buttonPopup)
-
-            buttonPopup.setOnClickListener{
-                popupWindow.dismiss()
-            }
-
-            TransitionManager.beginDelayedTransition(menuLayout)
-            popupWindow.showAtLocation(
-                menuLayout, // Location to display popup window
-                Gravity.CENTER, // Layout position to display popup
-                0, // X offset
-                0 // Y offset
-            )
-        }*/
     }
 
     fun startGame(view: View) {
         startActivity(Intent(this, GameActivity::class.java))
     }
 
-    // background music in main activity
-    var backgroundMusic: MediaPlayer? = null
+    fun popUpButton(view: View) {
+        val menuInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = menuInflater.inflate(R.layout.popup_view, null)
+        val width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+        val height = ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-    // 1. starts background music with app start
-    fun playBackgroundMusic() {
-        if (backgroundMusic == null) {
-            backgroundMusic = MediaPlayer.create(this, R.raw.sound1)
-            backgroundMusic!!.isLooping = true
-            backgroundMusic!!.start()
-        } else backgroundMusic!!.start()
+        val popupWindow = PopupWindow(popupView, width, height, true)
+        val buttonPopup = popupView.findViewById<Button>(R.id.buttonPopup)
+        val popupText = popupView.findViewById<TextView>(R.id.popup_textView)
+
+        when (view.id) {
+            R.id.about_button -> popupText.setText(R.string.about_text)
+            R.id.preference_button -> popupText.setText(R.string.preferences_text)
+            R.id.info_button -> popupText.setText(R.string.info_text)
+        }
+
+        buttonPopup.setOnClickListener{
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
     }
 
     // 2. pause || resumes playback
     fun pauseResumeMusic(view: View) {
-        val pauseResumeButton = findViewById<ImageButton>(R.id.pause_resume_Button)
-        if (backgroundMusic?.isPlaying == true) {
-            backgroundMusic?.pause()
-            pauseResumeButton.setImageResource(R.drawable.sound_off)
+        val pauseResumeButton = R.id.pause_resume_Button
+        if (SoundManager.mediaPlayer.isPlaying) {
+            SoundManager.mediaPlayer.pause()
         } else {
-            backgroundMusic?.start()
-            pauseResumeButton.setImageResource(R.drawable.sound_on)
+            SoundManager.mediaPlayer.start()
         }
     }
 
-    // 3. restart playback when reentering main activity
-    override fun onRestart() {
-        super.onRestart()
-        playBackgroundMusic()
+    // background music in main activity
+    // initialize MediaPlayer
+    override fun onResume(){
+        super.onResume()
+        SoundManager.initMediaPlayer(this, R.raw.sound1)
     }
 
-    // 4. destroys MediaPlayer instance when the app is closed
-    override fun onStop() {
-        super.onStop()
-        if (backgroundMusic != null) {
-            backgroundMusic!!.release()
-            backgroundMusic = null
-        }
+    // 4. stops MediaPlayer while not being in activity
+    override fun onPause() {
+        super.onPause()
+        SoundManager.mediaPlayer.release()
     }
-
 }

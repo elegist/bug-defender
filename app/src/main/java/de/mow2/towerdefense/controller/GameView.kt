@@ -1,6 +1,7 @@
 package de.mow2.towerdefense.controller
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -8,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.TextView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -33,13 +35,15 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //initializing background tiles
         bgPaint = Paint()
         bgPaint.style = Paint.Style.FILL
-        val bgTileDimension = playGround.squareArray[0].width * 2
+        val bgTileDimension = playGround.squareSize * 2
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         setWillNotDraw(false)
+        // create test creep
+        GameManager.createCreep(playGround.squareArray[0])
         //start game loop
         //gameLoop.setRunning(true)
         //gameLoop.start()
@@ -129,6 +133,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             } else {
                                 //if user clicks on already selected square: build tower, else: free square
                                 if(selectedSquare == getSquareAt(x, y)) {
+                                    //TODO: Baumenü öffnen
                                     GameManager.buildTower(selectedSquare)
                                     selectedSquare.isBlocked = true
                                 } else {
