@@ -42,6 +42,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         setWillNotDraw(false)
+        // create test creep
+        GameManager.createCreep(playGround.squareArray[0])
         //start game loop
         //gameLoop.setRunning(true)
         //gameLoop.start()
