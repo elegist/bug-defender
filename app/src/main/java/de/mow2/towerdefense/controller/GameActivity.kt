@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Chronometer
 import android.widget.TextView
+
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import de.mow2.towerdefense.R
 
@@ -25,6 +27,15 @@ class GameActivity : AppCompatActivity() {
         chrono.start()
 
         coinsTxt = findViewById(R.id.coinsText)
+        
+        SoundManager.initMediaPlayer(this, R.raw.song3)
     }
+
+    // stops MediaPlayer while not being in activity
+    override fun onPause() {
+        super.onPause()
+        SoundManager.mediaPlayer.release()
+    }
+
 }
 
