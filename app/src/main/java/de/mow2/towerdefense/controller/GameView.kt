@@ -70,6 +70,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         //drawing playground
         playGround.squareArray.forEach { it.drawField(canvas) }
+
+        // create test creep
+        GameManager.createCreep(playGround.squareArray[0])
+
+        //draw sprites
         GameManager.drawObjects(canvas, resources)
     }
 

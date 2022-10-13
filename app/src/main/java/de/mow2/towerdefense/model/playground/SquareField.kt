@@ -13,6 +13,7 @@ class SquareField(val coordX: Float, val coordY: Float, val width: Int, val heig
 
     fun drawField(canvas: Canvas) {
         canvas.drawBitmap(mutableImg, coordX, coordY, null)
+        
     }
 
     override fun toString(): String {
