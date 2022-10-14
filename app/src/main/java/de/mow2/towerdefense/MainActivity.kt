@@ -2,61 +2,55 @@ package de.mow2.towerdefense
 
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.media.AudioManager
+import android.media.SoundPool
 import android.os.Bundle
 import de.mow2.towerdefense.controller.GameActivity
-
 import android.view.*
-import android.widget.*
-
-import androidx.constraintlayout.widget.ConstraintLayout
 import de.mow2.towerdefense.controller.SoundManager
+import de.mow2.towerdefense.controller.DialogFragment
+import kotlinx.android.synthetic.main.popup_view.*
 
 /**
  * Remove comment before Release!!!
  * This class is the main entry point
  * TODO: Add Preferences and Nav
  */
+//@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
+    /*var soundPool: SoundPool? = null
+    val soundId = 1*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        /* // tryout sound pool
+         soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
+         soundPool!!.load(baseContext, R.raw.hit_04, 1)*/
     }
+
+  /*  // tryout sound pool
+    fun playSound (view: View){
+        soundPool?.play(soundId, 1F, 1F, 0,0, 1F)
+    }*/
 
     fun startGame(view: View) {
         startActivity(Intent(this, GameActivity::class.java))
     }
 
     fun popUpButton(view: View) {
-        val menuInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = menuInflater.inflate(R.layout.popup_view, null)
-        val width = ConstraintLayout.LayoutParams.WRAP_CONTENT
-        val height = ConstraintLayout.LayoutParams.WRAP_CONTENT
-
-        val popupWindow = PopupWindow(popupView, width, height, true)
-        val buttonPopup = popupView.findViewById<Button>(R.id.buttonPopup)
-        val popupText = popupView.findViewById<TextView>(R.id.popup_textView)
-
+        var dialogPopup = DialogFragment()
         when (view.id) {
-            R.id.about_button -> popupText.setText(R.string.about_text)
-            R.id.preference_button -> popupText.setText(R.string.preferences_text)
-            R.id.info_button -> popupText.setText(R.string.info_text)
-        }
-
-        buttonPopup.setOnClickListener{
-            popupWindow.dismiss()
-        }
-
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-    }
-
-    // 2. pause || resumes playback
-    fun pauseResumeMusic(view: View) {
-        val pauseResumeButton = R.id.pause_resume_Button
-        if (SoundManager.mediaPlayer.isPlaying) {
-            SoundManager.mediaPlayer.pause()
-        } else {
-            SoundManager.mediaPlayer.start()
+            R.id.info_button -> {
+                dialogPopup.show(supportFragmentManager, "customDialog", )
+            }
+            R.id.about_button -> {
+                dialogPopup.show(supportFragmentManager, "customDialog")
+            }
+            R.id.preference_button -> {
+                dialogPopup.show(supportFragmentManager, "customDialog")
+            }
         }
     }
 
@@ -72,4 +66,14 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         SoundManager.mediaPlayer.release()
     }
+
+    /*fun loadPreferences() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val token = preferences.getString("music_pref", "")
+        if (!token.equals("", ignoreCase = true)) {
+            Log.w(TAG, token!!)
+        } else {
+            Log.w(TAG, "kein token verfügbar")
+        }
+    }*/
 }

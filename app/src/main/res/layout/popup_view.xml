@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popUpLayout"
     style="@style/popUp.View"
     android:scrollIndicators="right">
 
@@ -10,22 +11,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="monospace"
-        android:text=""
         android:textColor="@color/white"
         android:textSize="20sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--<androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="de.mow2.towerdefense.controller.SettingsFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/buttonPopup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout="@layout/popup_view" />-->
+
+    <CheckBox
+        android:id="@+id/musicOnOff"
+        style="@style/checkbox"
+        android:onClick="checkBoxMusic"
+        android:text="@string/preference_music"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonPopup"
         style="@style/popup.Button"
-        android:layout_marginTop="12dp"
+        android:onClick="playSound"
         android:text="@string/close_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popup_textView"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
