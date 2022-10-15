@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBoxPreference
-        android:defaultValue="true"
+        android:defaultValue="@bool/musicCheckbox"
         android:key="music_pref"
         android:title="@string/preference_music" />
 </PreferenceScreen>

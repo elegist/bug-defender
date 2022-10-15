@@ -6,18 +6,6 @@
     style="@style/popUp.View"
     android:scrollIndicators="right">
 
-    <TextView
-        android:id="@+id/popup_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="monospace"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <!--<androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="de.mow2.towerdefense.controller.SettingsFragment"
@@ -28,14 +16,27 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:layout="@layout/popup_view" />-->
 
-    <CheckBox
-        android:id="@+id/musicOnOff"
-        style="@style/checkbox"
-        android:onClick="checkBoxMusic"
-        android:text="@string/preference_music"
-        android:visibility="visible"
+    <TextView
+        android:id="@+id/popupText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/popupFragmentContainer"
+        android:name="de.mow2.towerdefense.controller.SettingsFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@android:layout/simple_gallery_item" />
 
     <Button
         android:id="@+id/buttonPopup"

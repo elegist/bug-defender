@@ -1,14 +1,18 @@
 package de.mow2.towerdefense
 
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import android.media.AudioManager
-import android.media.SoundPool
 import android.os.Bundle
-import de.mow2.towerdefense.controller.GameActivity
+import android.provider.Settings
+import android.util.Log
 import android.view.*
-import de.mow2.towerdefense.controller.SoundManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.controller.DialogFragment
+import de.mow2.towerdefense.controller.GameActivity
+import de.mow2.towerdefense.controller.SettingsFragment
+import de.mow2.towerdefense.controller.SoundManager
 import kotlinx.android.synthetic.main.popup_view.*
 
 /**
@@ -18,13 +22,16 @@ import kotlinx.android.synthetic.main.popup_view.*
  */
 //@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
+    private val TAG: String = javaClass.name
+    private val fm = supportFragmentManager
+    var dialogPopup = DialogFragment()
     /*var soundPool: SoundPool? = null
     val soundId = 1*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        loadPreferences()
         /* // tryout sound pool
          soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
          soundPool!!.load(baseContext, R.raw.hit_04, 1)*/
@@ -40,16 +47,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun popUpButton(view: View) {
-        var dialogPopup = DialogFragment()
         when (view.id) {
             R.id.info_button -> {
-                dialogPopup.show(supportFragmentManager, "customDialog", )
+                dialogPopup.show(fm, "infoDialog")
             }
             R.id.about_button -> {
-                dialogPopup.show(supportFragmentManager, "customDialog")
+                dialogPopup.show(fm, "aboutDialog")
             }
             R.id.preference_button -> {
-                dialogPopup.show(supportFragmentManager, "customDialog")
+                dialogPopup.show(fm, "settingsDialog")
             }
         }
     }
@@ -67,13 +73,10 @@ class MainActivity : AppCompatActivity() {
         SoundManager.mediaPlayer.release()
     }
 
-    /*fun loadPreferences() {
+    private fun loadPreferences() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val token = preferences.getString("music_pref", "")
-        if (!token.equals("", ignoreCase = true)) {
-            Log.w(TAG, token!!)
-        } else {
-            Log.w(TAG, "kein token verfügbar")
-        }
-    }*/
+        val musicSetting = preferences.getBoolean("music_pref", true)
+        //wenn musicSetting = false dann stoppe musik
+        Log.i(TAG, musicSetting.toString())
+    }
 }
