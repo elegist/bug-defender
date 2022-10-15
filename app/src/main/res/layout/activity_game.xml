@@ -8,6 +8,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@+id/bottomGUI"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +23,6 @@
                 android:id="@+id/gameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
 
             </de.mow2.towerdefense.controller.GameView>
         </LinearLayout>

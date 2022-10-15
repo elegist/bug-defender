@@ -29,7 +29,6 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
                 synchronized(surfaceHolder) {
                     //updating gameview
                     gameView.update()
-                    gameView.draw(canvas!!)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

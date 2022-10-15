@@ -5,11 +5,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
+import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -22,6 +27,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
+    //build and upgrade menu
+    private lateinit var buildMenu: BuildUpgradeMenu
 
     private lateinit var selectedSquare: SquareField
     private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
@@ -29,8 +36,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     init {
         holder.addCallback(this)
         gameLoop = GameLoop(this, holder)
-        //creating new playground, ratio is 1:2
-
         playGround = PlayGround(gameWidth, gameHeight)
         //initializing background tiles
         bgPaint = Paint()
@@ -77,12 +82,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         canvas!!.drawPaint(bgPaint)
         //drawing objects
         GameManager.drawObjects(canvas, resources)
+
+        if(this::buildMenu.isInitialized && buildMenu.active) {
+            GameManager.drawBuildMenu(canvas, resources, buildMenu.x, buildMenu.y)
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val height = gameHeight // should be calculated based on the content
-        val width = gameWidth // should be calculated based on the content
+        val height = gameHeight
+        val width = gameWidth
 
         setMeasuredDimension(width, height)
     }
@@ -108,7 +117,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastX = ev.x
                 lastY = ev.y
                 invalidate()
-
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -116,33 +124,26 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 x = ev.x
                 y = ev.y
                 invalidate()
-                // TODO: Test on actual mobile phone, comparison could be too accurate
+
                 if(x == lastX && y == lastY) {
-                    // TODO: Prüfe ob "Loslassen" gleiche Koordinaten hat wie drücken, wenn Nein: nichts tun
-                    if(getSquareAt(x, y).isBlocked) {
-                        //selected square is already blocked by a tower
-                        //TODO: Open upgrade tower menu
-                    } else {
-                        //if selected square is not start or finish line TODO: open build tower menu
+                    if(!blockInput) {
                         if(getSquareAt(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                            blockInput = if(!blockInput) {
-                                // initialize and select square
-                                selectedSquare = getSquareAt(x, y)
-                                selectedSquare.selectSquare()
-                                true
-                            } else {
-                                //if user clicks on already selected square: build tower, else: free square
-                                if(selectedSquare == getSquareAt(x, y)) {
-                                    //TODO: Baumenü öffnen
-                                    GameManager.buildTower(selectedSquare)
-                                    selectedSquare.isBlocked = true
-                                } else {
-                                    selectedSquare.clearSquare()
-                                }
-                                // TODO: Prüfe ob Spieler auf Baumenü geklickt hat, wenn ja: Baue Turm, wenn nein: schließe Baumenü
-                                false
-                            }
+                            selectedSquare = getSquareAt(x, y)
+                            selectedSquare.selectSquare()
+                            //open up build and upgrade menu
+                            buildMenu = BuildUpgradeMenu(ev.x, ev.y)
+                            buildMenu.active = true
+                            blockInput = true
                         }
+                    } else { // build and upgrade menu is opened
+                        if(x in buildMenu.getRangeX() && y in buildMenu.getRangeY()) {
+                            GameManager.buildTower(selectedSquare)
+                            selectedSquare.isBlocked = true
+                        } else {
+                            selectedSquare.clearSquare()
+                        }
+                        blockInput = false
+                        buildMenu.active = false
                     }
                 }
             }

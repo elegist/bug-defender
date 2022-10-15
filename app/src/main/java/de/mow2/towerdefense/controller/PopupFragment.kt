@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.popup_view.*
 import kotlinx.android.synthetic.main.popup_view.view.*
 
 
-class DialogFragment: DialogFragment() {
+class PopupFragment: DialogFragment() {
     private lateinit var popUpView: View
     override fun onCreateView(
         inflater: LayoutInflater,

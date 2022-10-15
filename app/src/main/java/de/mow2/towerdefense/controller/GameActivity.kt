@@ -1,6 +1,8 @@
 package de.mow2.towerdefense.controller
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
 
@@ -34,6 +36,5 @@ class GameActivity : AppCompatActivity() {
         super.onPause()
         SoundManager.mediaPlayer.release()
     }
-
 }
 

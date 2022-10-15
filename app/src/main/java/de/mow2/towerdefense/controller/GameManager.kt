@@ -41,6 +41,9 @@ object GameManager {
         creepList = creepList.plus(creep)
     }
 
+    fun drawBuildMenu(canvas: Canvas, resources: Resources, x: Float, y: Float) {
+        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 500, 200), x, y)
+    }
     /**
      * decides which objects to draw
      */
