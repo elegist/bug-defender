@@ -8,6 +8,7 @@ class SquareField(val coordX: Float, val coordY: Float, val width: Int, val heig
 
     //var for blocking this field (tower built) can be used e.g. for routing
     var isBlocked = false
+    var isPath = false
 
     override fun toString(): String {
         return "${javaClass.name} - posX: $coordX, posY: $coordY, width: $width, height: $height"

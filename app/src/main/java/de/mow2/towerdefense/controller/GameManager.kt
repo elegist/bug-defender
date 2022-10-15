@@ -2,14 +2,17 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
+import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.actors.Creep
 import de.mow2.towerdefense.model.actors.CreepTypes
 import de.mow2.towerdefense.model.actors.Tower
 import de.mow2.towerdefense.model.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.pathfinding.Astar
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlin.reflect.typeOf
 
 object GameManager {
     //playground variables
@@ -23,11 +26,22 @@ object GameManager {
     var creepList = emptyArray<Creep>()
     lateinit var sprite: Sprite
     lateinit var spriteSheet: SpriteSheet
-
-
+    //nodes test
+    lateinit var path: MutableSet<Astar.Node>
+    var compoundPath: MutableList<SquareField> = mutableListOf()
 
     init {
         //TODO: get actual lives and coins
+    }
+
+    fun comparePathCoords() {
+        GameView.playGround.squareArray.forEach { square ->
+            path.forEach { node ->
+                if (square.mapPos["x"] == node.x && square.mapPos["y"] == node.y) {
+                    compoundPath.add(square)
+                }
+            }
+        }
     }
 
     fun buildTower(selectedField: SquareField) {
@@ -58,9 +72,12 @@ object GameManager {
                         }
                     }
                 }
+                //for testing purposes
+                compoundPath.forEach{
+                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
+                }
             }
         }
-
         //draw creeps
     }
 
