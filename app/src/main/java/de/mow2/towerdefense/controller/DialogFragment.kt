@@ -29,13 +29,15 @@ class DialogFragment: DialogFragment() {
         //decide which fragment will be inflated
         when(tag.toString()) {
             "aboutDialog" -> {
-                popupText.text = "Ich bin ein about Dialog"
+                popupFragmentContainer.visibility = View.GONE
+                popupText.setText(R.string.about_text)
             }
             "infoDialog" -> {
-                popupText.text = "Ich bin ein Infodialog"
+                popupFragmentContainer.visibility = View.GONE
+                popupText.setText(R.string.info_text)
             }
             "settingsDialog" -> {
-                popupText.visibility = View.GONE
+                popupText.setText(R.string.preferences_text)
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
@@ -50,6 +52,7 @@ class DialogFragment: DialogFragment() {
                 SoundManager.resumeMusic()
             }
         }*/
+
         popUpView.buttonPopup.setOnClickListener{
             dismiss()
         }

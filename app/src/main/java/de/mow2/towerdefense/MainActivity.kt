@@ -2,31 +2,25 @@ package de.mow2.towerdefense
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.controller.DialogFragment
 import de.mow2.towerdefense.controller.GameActivity
-import de.mow2.towerdefense.controller.SettingsFragment
 import de.mow2.towerdefense.controller.SoundManager
-import kotlinx.android.synthetic.main.popup_view.*
 
 /**
  * Remove comment before Release!!!
  * This class is the main entry point
- * TODO: Add Preferences and Nav
  */
-//@Suppress("DEPRECATION")
+
 class MainActivity : AppCompatActivity() {
     private val TAG: String = javaClass.name
     private val fm = supportFragmentManager
     var dialogPopup = DialogFragment()
-    /*var soundPool: SoundPool? = null
-    val soundId = 1*/
+    //var soundPool: SoundPool? = null
+    //val soundId = 1*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     private fun loadPreferences() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val musicSetting = preferences.getBoolean("music_pref", true)
-        //wenn musicSetting = false dann stoppe musik
         Log.i(TAG, musicSetting.toString())
     }
 }
