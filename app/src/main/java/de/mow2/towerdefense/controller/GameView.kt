@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -13,12 +14,10 @@ import android.widget.TextView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.pathfinding.Astar
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
-    private var playGround: PlayGround
-    private var gameWidth = Resources.getSystem().displayMetrics.widthPixels
-    private var gameHeight = 2 * gameWidth
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
@@ -31,22 +30,21 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         gameLoop = GameLoop(this, holder)
         //creating new playground, ratio is 1:2
 
-        playGround = PlayGround(gameWidth, gameHeight)
         //initializing background tiles
         bgPaint = Paint()
         bgPaint.style = Paint.Style.FILL
         val bgTileDimension = playGround.squareSize * 2
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+
+        GameManager.path = astar.findPath(Astar.Node(0, 0), Astar.Node(15, 15), 16, 16)!!
+        GameManager.comparePathCoords()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         setWillNotDraw(false)
         // create test creep
         GameManager.createCreep(playGround.squareArray[0])
-        //start game loop
-        //gameLoop.setRunning(true)
-        //gameLoop.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -160,5 +158,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
         }
         return playGround.squareArray[indexOfSelected]
+    }
+
+    companion object {
+        var gameWidth = Resources.getSystem().displayMetrics.widthPixels
+        var gameHeight = 2 * gameWidth
+        val playGround = PlayGround(gameWidth, gameHeight)
+        //path finding algorithm
+        var astar = Astar()
     }
 }

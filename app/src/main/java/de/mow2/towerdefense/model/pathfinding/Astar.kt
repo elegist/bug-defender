@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.pathfinding
 
+import android.util.Log
 import java.util.PriorityQueue
 import kotlin.math.abs
 
@@ -86,4 +87,3 @@ class Astar {
         }
     }
 }
-
