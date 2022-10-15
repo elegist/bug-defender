@@ -20,12 +20,10 @@
         android:id="@+id/popupText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
+        app:layout_constraintBottom_toTopOf="@id/popupFragmentContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/popupFragmentContainer"
@@ -35,7 +33,6 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:layout="@android:layout/simple_gallery_item" />
 
     <Button
@@ -45,6 +42,7 @@
         android:text="@string/close_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

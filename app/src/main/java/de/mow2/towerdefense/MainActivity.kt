@@ -13,15 +13,14 @@ import de.mow2.towerdefense.controller.SoundManager
 /**
  * Remove comment before Release!!!
  * This class is the main entry point
- * TODO: Add Preferences and Nav
  */
-//@Suppress("DEPRECATION")
+
 class MainActivity : AppCompatActivity() {
     private val TAG: String = javaClass.name
     private val fm = supportFragmentManager
     var dialogPopup = PopupFragment()
-    /*var soundPool: SoundPool? = null
-    val soundId = 1*/
+    //var soundPool: SoundPool? = null
+    //val soundId = 1*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     private fun loadPreferences() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val musicSetting = preferences.getBoolean("music_pref", true)
-        //wenn musicSetting = false dann stoppe musik
         Log.i(TAG, musicSetting.toString())
     }
 }
