@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
-import de.mow2.towerdefense.controller.DialogFragment
+import de.mow2.towerdefense.controller.PopupFragment
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager
 
@@ -18,7 +18,7 @@ import de.mow2.towerdefense.controller.SoundManager
 class MainActivity : AppCompatActivity() {
     private val TAG: String = javaClass.name
     private val fm = supportFragmentManager
-    var dialogPopup = DialogFragment()
+    var dialogPopup = PopupFragment()
     //var soundPool: SoundPool? = null
     //val soundId = 1*/
 
