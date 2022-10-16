@@ -6,7 +6,6 @@ import java.lang.Exception
 
 class GameLoop(private val gameView: GameView, private val surfaceHolder: SurfaceHolder) : Thread() {
     private var running = false
-    private val targetFPS = 50
 
     fun setRunning(isRunning: Boolean) {
         this.running = isRunning
@@ -15,32 +14,21 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
         var startTime: Long
         var timeMillis: Long
         var waitTime: Long
-        val targetTime = (1000 / targetFPS).toLong()
+        val targetTime = (1000 / targetUPS).toLong()
 
         /* Game Loop */
         while (running) {
             startTime = System.nanoTime()
-            canvas = null
             try {
                 startTime = System.nanoTime()
                 //locking canvas to draw onto
-                canvas = this.surfaceHolder.lockCanvas()
                 //synchronize threads, so this is the only one to draw onto canvas
                 synchronized(surfaceHolder) {
                     //updating gameview
-                    gameView.update()
+                    GameManager.updateLogic()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-            } finally {
-                if(canvas != null) {
-                    try {
-                        //draw canvas and post
-                        surfaceHolder.unlockCanvasAndPost(canvas)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
             }
 
             //calculate elapsed time, then wait
@@ -57,6 +45,6 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
         }
     }
     companion object {
-        private var canvas: Canvas? = null
+        const val targetUPS = 60
     }
 }

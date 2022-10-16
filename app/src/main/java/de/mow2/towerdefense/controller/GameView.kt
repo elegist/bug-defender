@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.core.content.ContextCompat
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -40,8 +41,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         setWillNotDraw(false)
-        // create test creep
-        GameManager.createCreep(playGround.squareArray[0])
+
+        //start game loop
+        gameLoop.setRunning(true)
+        gameLoop.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -60,22 +63,28 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     /**
-     * method to update game objects data
-     * should only call GameManager and similar classes update methods
+     * use onDraw to render anything on the canvas
      */
-    fun update() {
-    }
-
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+
         //drawing background
         canvas!!.drawPaint(bgPaint)
-        //drawing objects
+
+        ////////////////////
+        //object draw area//
+
         GameManager.drawObjects(canvas, resources)
 
+        //object draw area end//
+        ///////////////////////
+
+        //build menu should always draw on top
         if(this::buildMenu.isInitialized && buildMenu.active) {
             GameManager.drawBuildMenu(canvas, resources, buildMenu.x, buildMenu.y, buildMenu.menuPosition)
         }
+        //redraw canvas
+        this.postInvalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -84,14 +93,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val width = gameWidth
 
         setMeasuredDimension(width, height)
-    }
-
-    /**
-     * method to draw on canvas
-     * should only call GameManager and similar classes draw methods
-     */
-    override fun draw(canvas: Canvas) {
-        super.draw(canvas)
     }
 
     /**
@@ -150,6 +151,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
         return true
     }
+    // impl this for screen reader friendly approach
+    override fun performClick(): Boolean {
+        super.performClick()
+        return false
+    }
 
     private fun getSquareAt(x: Float, y: Float): SquareField {
         var indexOfSelected = 0
@@ -162,6 +168,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
         return playGround.squareArray[indexOfSelected]
     }
+
 
     companion object {
         var gameWidth = Resources.getSystem().displayMetrics.widthPixels
