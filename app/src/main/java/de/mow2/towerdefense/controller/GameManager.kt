@@ -10,8 +10,6 @@ import de.mow2.towerdefense.model.actors.Tower
 import de.mow2.towerdefense.model.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.pathfinding.Astar
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 object GameManager {
@@ -30,6 +28,9 @@ object GameManager {
     lateinit var path: MutableSet<Astar.Node>
     var compoundPath: MutableList<SquareField> = mutableListOf()
     private var target: Target = Target(GameView.gameWidth/2.toFloat(), GameView.gameHeight.toFloat())
+    //build and upgrade menu
+    var buildMenuButtons = emptyArray<Bitmap>()
+    var buildMenuButtonRanges = emptyArray<ClosedFloatingPointRange<Float>>()
     private val TAG = javaClass.name
 
     init {
@@ -46,31 +47,52 @@ object GameManager {
         }
     }
 
-    fun buildTower(selectedField: SquareField) {
-        val tower = Tower(selectedField, TowerTypes.BLOCK)
+    fun buildTower(selectedField: SquareField, towerType: TowerTypes) {
+        val tower = when(towerType) {
+            TowerTypes.BLOCK -> {
+                Tower(selectedField, TowerTypes.BLOCK)
+            }
+            TowerTypes.SLOW -> {
+                Tower(selectedField, TowerTypes.SLOW)
+            }
+            TowerTypes.AOE -> {
+                Tower(selectedField, TowerTypes.AOE)
+            }
+        }
         towerList = towerList.plus(tower)
         towerList.sort() //sorting array to avoid overlapped drawing
     }
 
-    fun createCreep(spawnField: SquareField){
-        val creep = Creep(spawnField, CreepTypes.LEAFBUG)
-        creepList = creepList.plus(creep)
-    }
-
-    fun drawBuildMenu(canvas: Canvas, resources: Resources, x: Float, y: Float, menuPosition: String) {
+    fun initBuildMenu(resources: Resources) {
         val dimensionX = 100
         val dimensionY = 200
-        var offsetX = 0
-        var offsetY = 0
-        when(menuPosition) {
-            "leftBottom" -> { offsetX = -dimensionX; offsetY = 0 }
-            "leftTop" -> { offsetX = -dimensionX; offsetY = -dimensionY }
-            "rightTop" -> { offsetX = dimensionX; offsetY = -dimensionY }
-            "rightBottom" -> { offsetX = dimensionX; offsetY = 0 }
+        var drawable: Int
+        enumValues<TowerTypes>().forEach {
+            drawable = when(it) {
+                TowerTypes.BLOCK -> {
+                    R.drawable.tower_block
+                }
+                TowerTypes.SLOW -> {
+                    R.drawable.tower_slow
+                }
+                TowerTypes.AOE -> {
+                    R.drawable.tower_aoe
+                }
+            }
+            buildMenuButtons = buildMenuButtons.plus(resizeImage(BitmapFactory.decodeResource(resources, drawable), dimensionX, dimensionY))
         }
-        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), dimensionX, dimensionY), x + offsetX, y + offsetY)
-        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), dimensionX, dimensionY), x + offsetX * 2, y + offsetY)
-        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), dimensionX, dimensionY), x + offsetX * 3, y + offsetY)
+    }
+
+    fun drawBuildMenu(canvas: Canvas, x: Float, y: Float) {
+        buildMenuButtonRanges = emptyArray()
+        var offsetX = 0
+        var offsetY = -GameView.bottomGuiHeight * 2
+        buildMenuButtons.forEach {
+            draw(canvas, it, x + offsetX, y + offsetY)
+            val range = ((x+offsetX)..(x+offsetX+it.width))
+            buildMenuButtonRanges = buildMenuButtonRanges.plus(range)
+            offsetX += 120
+        }
     }
     /**
      * decides which objects to draw
@@ -118,7 +140,7 @@ object GameManager {
     /**
      * actually draws objects
      */
-    private fun draw(canvas: Canvas, bitmap: Bitmap, posX: Float, posY: Float) {
+    @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap, posX: Float, posY: Float) {
         canvas.drawBitmap(bitmap, posX, posY, null)
     }
 
@@ -130,8 +152,3 @@ object GameManager {
         return Bitmap.createScaledBitmap(bitmap, width, height, false)
     }
 }
-
-
-
-
-
