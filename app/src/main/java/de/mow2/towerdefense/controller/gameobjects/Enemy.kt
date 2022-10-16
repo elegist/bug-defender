@@ -47,7 +47,7 @@ class Enemy(var target: Target, coordX: Float = (Random.nextInt(1 until gameWidt
         var spawnsPerSecond: Float = spawnsPerMinute / 60
         //link with updates per second
         private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond
-        private var waitUpdates: Float = updateCycle
+        private var waitUpdates: Float = 0f
 
         fun canSpawn() :Boolean{
             if(waitUpdates <= 0f) {

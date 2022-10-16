@@ -2,6 +2,7 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
+import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.gameobjects.Enemy
 import de.mow2.towerdefense.controller.gameobjects.Target
@@ -74,31 +75,30 @@ object GameManager {
                         }
                     }
                 }
-                //draw creeps
-                creepList.forEach {
+                //draw creeps TODO: unhandled ConcurrentModificationException (1/2)
+                creepList?.forEach {
                     it.draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1))
                 }
-
                 //for testing purposes
                 compoundPath.forEach{
                     draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
                 }
-
             }
         }
-
-
     }
     /**
      * updates to game logic related values
      */
     fun updateLogic() {
-        if (Enemy.canSpawn()) {
-            creepList.add(Enemy(target))
-            //Log.i(TAG, "${creepList.size} enemies spawned")
+        //add enemies to the spawn
+        if (Enemy.canSpawn()) { //wait for update timer
+            //add creeps/enemies
+            creepList.add(Enemy(target)) // TODO: unhandled ConcurrentModificationException (2/2)
+            Log.i(TAG, "${creepList.size} enemies spawned")
         }
-
-            creeps.update()
+        //update creeps
+        creepList.forEach{
+            it.update()
         }
     }
 

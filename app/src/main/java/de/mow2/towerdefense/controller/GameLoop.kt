@@ -59,6 +59,6 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
     }
     companion object {
         private var canvas: Canvas? = null
-        const val targetUPS = 60
+        const val targetUPS = 30
     }
 }
