@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content">
 
             </de.mow2.towerdefense.controller.GameView>
+
         </LinearLayout>
     </ScrollView>
 

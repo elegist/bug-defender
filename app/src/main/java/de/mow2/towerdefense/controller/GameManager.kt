@@ -16,8 +16,8 @@ import kotlin.reflect.typeOf
 
 object GameManager {
     //playground variables
-    val squaresX = 9
-    val squaresY = 18
+    const val squaresX = 9
+    const val squaresY = 18
     //game variables
     var lives: Int = 3
     var coins: Int = 100
@@ -55,8 +55,20 @@ object GameManager {
         creepList = creepList.plus(creep)
     }
 
-    fun drawBuildMenu(canvas: Canvas, resources: Resources, x: Float, y: Float) {
-        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 500, 200), x, y)
+    fun drawBuildMenu(canvas: Canvas, resources: Resources, x: Float, y: Float, menuPosition: String) {
+        val dimensionX = 100
+        val dimensionY = 200
+        var offsetX = 0
+        var offsetY = 0
+        when(menuPosition) {
+            "leftBottom" -> { offsetX = -dimensionX; offsetY = 0 }
+            "leftTop" -> { offsetX = -dimensionX; offsetY = -dimensionY }
+            "rightTop" -> { offsetX = dimensionX; offsetY = -dimensionY }
+            "rightBottom" -> { offsetX = dimensionX; offsetY = 0 }
+        }
+        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), dimensionX, dimensionY), x + offsetX, y + offsetY)
+        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), dimensionX, dimensionY), x + offsetX * 2, y + offsetY)
+        draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), dimensionX, dimensionY), x + offsetX * 3, y + offsetY)
     }
     /**
      * decides which objects to draw

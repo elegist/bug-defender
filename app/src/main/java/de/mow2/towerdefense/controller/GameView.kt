@@ -1,20 +1,12 @@
 package de.mow2.towerdefense.controller
 
-
-import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
-import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import androidx.fragment.app.FragmentManager
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -82,7 +74,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         GameManager.drawObjects(canvas, resources)
 
         if(this::buildMenu.isInitialized && buildMenu.active) {
-            GameManager.drawBuildMenu(canvas, resources, buildMenu.x, buildMenu.y)
+            GameManager.drawBuildMenu(canvas, resources, buildMenu.x, buildMenu.y, buildMenu.menuPosition)
         }
     }
 
@@ -124,12 +116,22 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 invalidate()
 
                 if(x == lastX && y == lastY) {
-                    if(!blockInput) {
+                    if(!blockInput && !getSquareAt(x, y).isBlocked) {
                         if(getSquareAt(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
                             selectedSquare = getSquareAt(x, y)
                             selectedSquare.selectSquare()
                             //open up build and upgrade menu
-                            buildMenu = BuildUpgradeMenu(ev.x, ev.y)
+                            //detect distance to screen edge
+                            var menuDirection = if(x < gameWidth / 2) {
+                                if(y < gameHeight / 2)
+                                { "rightBottom" }
+                                else { "rightTop" }
+                            } else {
+                                if(y < gameHeight / 2) { "leftBottom" }
+                                else { "leftTop" }
+                            }
+
+                            buildMenu = BuildUpgradeMenu(ev.x, ev.y, menuDirection)
                             buildMenu.active = true
                             blockInput = true
                         }
