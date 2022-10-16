@@ -69,10 +69,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * method to update game objects data
      * should only call GameManager and similar classes update methods
      */
-
     fun update() {
         GameManager.updateLogic()
     }
+
     /**
      * use onDraw to render on the canvas
      */
@@ -83,7 +83,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         ////////////////////
         //object draw area//
-        //GameManager.updateLogic()
+
         GameManager.drawObjects(canvas, resources)
 
         //object draw area end//

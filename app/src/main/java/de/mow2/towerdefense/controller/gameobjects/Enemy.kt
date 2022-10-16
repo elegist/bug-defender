@@ -13,7 +13,7 @@ class Enemy(var target: Target, coordX: Float = (Random.nextInt(1 until gameWidt
      * link movement speed to gam
      * calc pixels per update and init speed
      */
-    private var speedPixelsPerSecond: Float = (gameWidth+gameHeight)*0.05f
+    private var speedPixelsPerSecond: Float = (gameWidth+gameHeight)*0.02f
         set(value){
             field = (gameWidth+gameHeight)*value
         }

@@ -20,8 +20,8 @@ object GameManager {
     var coins: Int = 100
 
     //currently as array, should be a matrix (map or list)
-    var towerList = emptyArray<Tower>()
-    var creepList: MutableList<Enemy> = mutableListOf()
+    private var towerList = emptyArray<Tower>()
+    private var creepList = emptyArray<Enemy>()
     lateinit var sprite: Sprite
     lateinit var spriteSheet: SpriteSheet
 
@@ -114,14 +114,14 @@ object GameManager {
                 }
             }
         }
-        //draw creeps TODO: unhandled ConcurrentModificationException (1/2)
+        //draw creeps
         creepList.forEach {
             draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), it.getPositionX(), it.getPositionY())
         }
-        //for testing purposes
+/*        //for testing purposes
         compoundPath.forEach {
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
-        }
+        }*/
     }
 
     /**
@@ -131,7 +131,7 @@ object GameManager {
         //add enemies to the spawn
         if (Enemy.canSpawn()) { //wait for update timer
             //add creeps/enemies
-            creepList.add(Enemy(target)) // TODO: unhandled ConcurrentModificationException (2/2)
+            creepList = creepList.plus(Enemy(target))
             //Log.i(TAG, "${creepList.size} enemies spawned")
         }
         //update creeps

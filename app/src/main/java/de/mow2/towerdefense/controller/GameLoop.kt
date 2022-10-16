@@ -11,8 +11,7 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
     private var running = false
     private var avgUps: Double = 0.0
     private var avgFps: Double = 0.0
-
-
+    
     fun setRunning(isRunning: Boolean) {
         this.running = isRunning
     }
@@ -23,29 +22,20 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
         var waitTime: Long
         var updateCount = 0
         var frameCount = 0
-        var canvas: Canvas? = null
         /* Game Loop */
         while (running) {
             try{
-                canvas = surfaceHolder.lockCanvas()
                 synchronized(surfaceHolder) {
-                    gameView.doOnPreDraw { GameManager.updateLogic() }
+                    GameManager.updateLogic()
                     updateCount++
                     gameView.invalidate()
                 }
             }catch(e : Exception){
                 e.printStackTrace()
             }finally {
-                if(canvas != null){
-                    try{
-                        surfaceHolder.unlockCanvasAndPost(canvas)
-                        frameCount++
-                    }catch(e: Exception){
-                        e.printStackTrace()
-                    }
-                }
+                frameCount++
             }
-            //pause gameLoop if targetUPS is exceeded
+            //pause gameLoop if targetUPS could be exceeded
             elapsedTime = System.currentTimeMillis() - startTime
             waitTime = ((updateCount * targetTime) - elapsedTime).toLong()
             if (waitTime > 0) {
@@ -55,17 +45,7 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
                     e.printStackTrace()
                 }
             }
-
-            //
-            while (waitTime < 0 && updateCount < targetUPS - 1) {
-                //Log.i("Skipped Frame:", updateCount.toString())
-                gameView.doOnPreDraw { GameManager.updateLogic() }
-                updateCount++
-                elapsedTime = System.currentTimeMillis() - startTime
-                waitTime = ((updateCount * targetTime) - elapsedTime).toLong()
-            }
-
-            //calc avg Ups and Fps
+            //calc avg ups and fps
             elapsedTime = System.currentTimeMillis() - startTime
             if (elapsedTime >= 1000) {
                 avgUps = (updateCount) / (1E-3 * elapsedTime)
@@ -77,7 +57,6 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
             }
         }
     }
-
     companion object {
         const val targetUPS = 30
         const val targetTime: Double = 1E+3 / targetUPS
