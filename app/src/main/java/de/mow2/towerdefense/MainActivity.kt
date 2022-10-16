@@ -1,14 +1,16 @@
 package de.mow2.towerdefense
 
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.controller.PopupFragment
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
+import de.mow2.towerdefense.controller.SoundManager.soundPool
 
 /**
  * Remove comment before Release!!!
@@ -19,30 +21,24 @@ class MainActivity : AppCompatActivity() {
     private val TAG: String = javaClass.name
     private val fm = supportFragmentManager
     var dialogPopup = PopupFragment()
-    //var soundPool: SoundPool? = null
-    //val soundId = 1*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        /* // tryout sound pool
-         soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
-         soundPool!!.load(baseContext, R.raw.hit_04, 1)*/
+        SoundManager.playSounds()
     }
-
-  /*  // tryout sound pool
-    fun playSound (view: View){
-        soundPool?.play(soundId, 1F, 1F, 0,0, 1F)
-    }*/
 
     fun startGame(view: View) {
         startActivity(Intent(this, GameActivity::class.java))
     }
 
     fun popUpButton(view: View) {
+        // how to play sound with onClick
+        soundPool.load(this, R.raw.hit_04, 1)
         when (view.id) {
             R.id.info_button -> {
                 dialogPopup.show(fm, "infoDialog")
+                soundPool.play(1, 1F, 1F, 1, 0, 1F)
             }
             R.id.about_button -> {
                 dialogPopup.show(fm, "aboutDialog")
@@ -67,6 +63,12 @@ class MainActivity : AppCompatActivity() {
     // 4. stops MediaPlayer while not being in activity
     override fun onPause() {
         super.onPause()
+        SoundManager.mediaPlayer.release()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        soundPool.release()
         SoundManager.mediaPlayer.release()
     }
 }
