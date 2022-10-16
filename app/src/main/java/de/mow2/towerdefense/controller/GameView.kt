@@ -1,20 +1,13 @@
 package de.mow2.towerdefense.controller
 
-
-import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
-import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import androidx.fragment.app.FragmentManager
+import androidx.core.content.ContextCompat
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -48,8 +41,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         setWillNotDraw(false)
-        // create test creep
-        GameManager.createCreep(playGround.squareArray[0])
+
+        //start game loop
+        gameLoop.setRunning(true)
+        gameLoop.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -72,18 +67,32 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
      * should only call GameManager and similar classes update methods
      */
     fun update() {
+        //updating game state
+        GameManager.updateLogic()
     }
-
+    /**
+     * use onDraw to render anything on the canvas
+     */
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+
         //drawing background
         canvas!!.drawPaint(bgPaint)
-        //drawing objects
+
+        ////////////////////
+        //object draw area//
+
         GameManager.drawObjects(canvas, resources)
 
+        //object draw area end//
+        ///////////////////////
+
+        //build menu should always draw on top
         if(this::buildMenu.isInitialized && buildMenu.active) {
             GameManager.drawBuildMenu(canvas, resources, buildMenu.x, buildMenu.y)
         }
+        //redraw canvas
+        this.postInvalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -92,14 +101,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val width = gameWidth
 
         setMeasuredDimension(width, height)
-    }
-
-    /**
-     * method to draw on canvas
-     * should only call GameManager and similar classes draw methods
-     */
-    override fun draw(canvas: Canvas) {
-        super.draw(canvas)
     }
 
     /**
@@ -148,6 +149,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
         return true
     }
+    // impl this for screen reader friendly approach
+    override fun performClick(): Boolean {
+        super.performClick()
+        return false
+    }
 
     private fun getSquareAt(x: Float, y: Float): SquareField {
         var indexOfSelected = 0
@@ -160,6 +166,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
         return playGround.squareArray[indexOfSelected]
     }
+
 
     companion object {
         var gameWidth = Resources.getSystem().displayMetrics.widthPixels

@@ -2,17 +2,16 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
-import android.util.Log
 import de.mow2.towerdefense.R
-import de.mow2.towerdefense.model.actors.Creep
-import de.mow2.towerdefense.model.actors.CreepTypes
+import de.mow2.towerdefense.controller.gameobjects.Enemy
+import de.mow2.towerdefense.controller.gameobjects.Target
 import de.mow2.towerdefense.model.actors.Tower
 import de.mow2.towerdefense.model.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.pathfinding.Astar
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlin.reflect.typeOf
+
 
 object GameManager {
     //playground variables
@@ -23,12 +22,14 @@ object GameManager {
     var coins: Int = 100
     //currently as array, should be a matrix (map or list)
     var towerList = emptyArray<Tower>()
-    var creepList = emptyArray<Creep>()
+    var creepList: MutableList<Enemy> = mutableListOf()
     lateinit var sprite: Sprite
     lateinit var spriteSheet: SpriteSheet
     //nodes test
     lateinit var path: MutableSet<Astar.Node>
     var compoundPath: MutableList<SquareField> = mutableListOf()
+    private var target: Target = Target(GameView.gameWidth/2.toFloat(), GameView.gameHeight.toFloat())
+    private val TAG = javaClass.name
 
     init {
         //TODO: get actual lives and coins
@@ -50,11 +51,6 @@ object GameManager {
         towerList.sort() //sorting array to avoid overlapped drawing
     }
 
-    fun createCreep(spawnField: SquareField){
-        val creep = Creep(spawnField, CreepTypes.LEAFBUG)
-        creepList = creepList.plus(creep)
-    }
-
     fun drawBuildMenu(canvas: Canvas, resources: Resources, x: Float, y: Float) {
         draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 500, 200), x, y)
     }
@@ -70,15 +66,40 @@ object GameManager {
                         TowerTypes.BLOCK -> {
                             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), it.w, it.h), it.x, it.y)
                         }
+                        TowerTypes.SLOW -> {
+                            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), it.w, it.h), it.x, it.y)
+                        }
+                        TowerTypes.AOE -> {
+                            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), it.w, it.h), it.x, it.y)
+                        }
                     }
                 }
+                //draw creeps
+                creepList.forEach {
+                    it.draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1))
+                }
+
                 //for testing purposes
                 compoundPath.forEach{
                     draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
                 }
+
             }
         }
-        //draw creeps
+
+
+    }
+    /**
+     * updates to game logic related values
+     */
+    fun updateLogic() {
+        if (Enemy.canSpawn()) {
+            creepList.add(Enemy(target))
+            //Log.i(TAG, "${creepList.size} enemies spawned")
+        }
+
+            creeps.update()
+        }
     }
 
     /**
@@ -95,6 +116,9 @@ object GameManager {
     private fun resizeImage(bitmap: Bitmap, width: Int, height: Int): Bitmap {
         return Bitmap.createScaledBitmap(bitmap, width, height, false)
     }
+}
 
 
-    }
+
+
+

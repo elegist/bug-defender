@@ -6,7 +6,6 @@ import java.lang.Exception
 
 class GameLoop(private val gameView: GameView, private val surfaceHolder: SurfaceHolder) : Thread() {
     private var running = false
-    private val targetFPS = 50
 
     fun setRunning(isRunning: Boolean) {
         this.running = isRunning
@@ -15,7 +14,7 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
         var startTime: Long
         var timeMillis: Long
         var waitTime: Long
-        val targetTime = (1000 / targetFPS).toLong()
+        val targetTime = (1000 / targetUPS).toLong()
 
         /* Game Loop */
         while (running) {
@@ -41,6 +40,8 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
                         e.printStackTrace()
                     }
                 }
+
+
             }
 
             //calculate elapsed time, then wait
@@ -58,5 +59,6 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
     }
     companion object {
         private var canvas: Canvas? = null
+        const val targetUPS = 60
     }
 }
