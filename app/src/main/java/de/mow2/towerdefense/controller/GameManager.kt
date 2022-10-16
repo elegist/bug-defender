@@ -11,12 +11,10 @@ import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.pathfinding.Astar
 
 
-
 object GameManager {
     //playground variables
     const val squaresX = 9
     const val squaresY = 18
-
     //game variables
     var lives: Int = 3
     var coins: Int = 100
@@ -30,8 +28,10 @@ object GameManager {
     //nodes test
     lateinit var path: MutableSet<Astar.Node>
     var compoundPath: MutableList<SquareField> = mutableListOf()
-    private var target: Target =
-        Target(GameView.gameWidth / 2.toFloat(), GameView.gameHeight.toFloat())
+    private var target: Target = Target(GameView.gameWidth/2.toFloat(), GameView.gameHeight.toFloat())
+    //build and upgrade menu
+    var buildMenuButtons = emptyArray<Bitmap>()
+    var buildMenuButtonRanges = emptyArray<ClosedFloatingPointRange<Float>>()
     private val TAG = javaClass.name
 
     init {
@@ -48,19 +48,52 @@ object GameManager {
         }
     }
 
-    fun buildTower(selectedField: SquareField) {
-        val tower = Tower(selectedField, TowerTypes.BLOCK)
+    fun buildTower(selectedField: SquareField, towerType: TowerTypes) {
+        val tower = when(towerType) {
+            TowerTypes.BLOCK -> {
+                Tower(selectedField, TowerTypes.BLOCK)
+            }
+            TowerTypes.SLOW -> {
+                Tower(selectedField, TowerTypes.SLOW)
+            }
+            TowerTypes.AOE -> {
+                Tower(selectedField, TowerTypes.AOE)
+            }
+        }
         towerList = towerList.plus(tower)
         towerList.sort() //sorting array to avoid overlapped drawing
     }
 
-    fun drawBuildMenu(canvas: Canvas, resources: Resources, x: Float, y: Float) {
-        draw(
-            canvas,
-            resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 500, 200),
-            x,
-            y
-        )
+    fun initBuildMenu(resources: Resources) {
+        val dimensionX = 100
+        val dimensionY = 200
+        var drawable: Int
+        enumValues<TowerTypes>().forEach {
+            drawable = when(it) {
+                TowerTypes.BLOCK -> {
+                    R.drawable.tower_block
+                }
+                TowerTypes.SLOW -> {
+                    R.drawable.tower_slow
+                }
+                TowerTypes.AOE -> {
+                    R.drawable.tower_aoe
+                }
+            }
+            buildMenuButtons = buildMenuButtons.plus(resizeImage(BitmapFactory.decodeResource(resources, drawable), dimensionX, dimensionY))
+        }
+    }
+
+    fun drawBuildMenu(canvas: Canvas, x: Float, y: Float) {
+        buildMenuButtonRanges = emptyArray()
+        var offsetX = 0
+        var offsetY = -GameView.bottomGuiHeight * 2
+        buildMenuButtons.forEach {
+            draw(canvas, it, x + offsetX, y + offsetY)
+            val range = ((x+offsetX)..(x+offsetX+it.width))
+            buildMenuButtonRanges = buildMenuButtonRanges.plus(range)
+            offsetX += 120
+        }
     }
 
     /**
@@ -110,7 +143,7 @@ object GameManager {
     /**
      * actually draws objects
      */
-    private fun draw(canvas: Canvas, bitmap: Bitmap, posX: Float, posY: Float) {
+    @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap, posX: Float, posY: Float) {
         canvas.drawBitmap(bitmap, posX, posY, null)
     }
 
@@ -122,8 +155,3 @@ object GameManager {
         return Bitmap.createScaledBitmap(bitmap, width, height, false)
     }
 }
-
-
-
-
-

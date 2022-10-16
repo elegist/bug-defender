@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
@@ -89,7 +91,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         //build menu should always draw on top
         if(this::buildMenu.isInitialized && buildMenu.active) {
-            GameManager.drawBuildMenu(canvas, resources, buildMenu.x, buildMenu.y)
+            GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y)
         }
     }
 
@@ -113,7 +115,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             MotionEvent.ACTION_DOWN -> {
                 lastX = ev.x
                 lastY = ev.y
-                //invalidate()
+                invalidate()
+                Log.i("Get Range", "user input x: $lastX , y: $lastY")
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -123,18 +126,29 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 //invalidate()
 
                 if(x == lastX && y == lastY) {
-                    if(!blockInput) {
+                    if(!blockInput && !getSquareAt(x, y).isBlocked) {
                         if(getSquareAt(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
                             selectedSquare = getSquareAt(x, y)
                             selectedSquare.selectSquare()
                             //open up build and upgrade menu
-                            buildMenu = BuildUpgradeMenu(ev.x, ev.y)
+                            //detect distance to screen edge
+                            var menuDirection = if(x < gameWidth / 2) {
+                                if(y < gameHeight / 2)
+                                { "rightBottom" }
+                                else { "rightTop" }
+                            } else {
+                                if(y < gameHeight / 2) { "leftBottom" }
+                                else { "leftTop" }
+                            }
+                            Log.i("Location BottomGUI", bottomEnd.toString())
+                            buildMenu = BuildUpgradeMenu(0f, bottomEnd)
                             buildMenu.active = true
                             blockInput = true
                         }
                     } else { // build and upgrade menu is opened
                         if(x in buildMenu.getRangeX() && y in buildMenu.getRangeY()) {
-                            GameManager.buildTower(selectedSquare)
+                            val towerType = buildMenu.getTowerType(x)
+                            GameManager.buildTower(selectedSquare, towerType)
                             selectedSquare.isBlocked = true
                         } else {
                             selectedSquare.clearSquare()
@@ -164,11 +178,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         return playGround.squareArray[indexOfSelected]
     }
 
-
     companion object {
         var gameWidth = Resources.getSystem().displayMetrics.widthPixels
         var gameHeight = 2 * gameWidth
         val playGround = PlayGround(gameWidth, gameHeight)
+        var bottomEnd = 0f
+        var bottomGuiHeight = 0f
         //path finding algorithm
         var astar = Astar()
     }
