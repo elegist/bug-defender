@@ -19,29 +19,16 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
         /* Game Loop */
         while (running) {
             startTime = System.nanoTime()
-            canvas = null
             try {
                 startTime = System.nanoTime()
                 //locking canvas to draw onto
-                canvas = this.surfaceHolder.lockCanvas()
                 //synchronize threads, so this is the only one to draw onto canvas
                 synchronized(surfaceHolder) {
                     //updating gameview
-                    gameView.update()
+                    GameManager.updateLogic()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-            } finally {
-                if(canvas != null) {
-                    try {
-                        //draw canvas and post
-                        surfaceHolder.unlockCanvasAndPost(canvas)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-
-
             }
 
             //calculate elapsed time, then wait
@@ -58,7 +45,6 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
         }
     }
     companion object {
-        private var canvas: Canvas? = null
-        const val targetUPS = 30
+        const val targetUPS = 60
     }
 }

@@ -43,19 +43,19 @@ class Enemy(var target: Target, coordX: Float = (Random.nextInt(1 until gameWidt
 
     companion object{
         //set spawn rate
-        var spawnsPerMinute: Float = 10f
+        var spawnsPerMinute: Float = 30f
         var spawnsPerSecond: Float = spawnsPerMinute / 60
         //link with updates per second
         private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond
         private var waitUpdates: Float = 0f
 
         fun canSpawn() :Boolean{
-            if(waitUpdates <= 0f) {
+            return if(waitUpdates <= 0f) {
                 waitUpdates += updateCycle
-                return true
+                true
             }else{
                 waitUpdates--
-                return false
+                false
             }
         }
     }
