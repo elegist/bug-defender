@@ -2,13 +2,13 @@ package de.mow2.towerdefense
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.controller.PopupFragment
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager
+import de.mow2.towerdefense.controller.SoundManager.musicSetting
 
 /**
  * Remove comment before Release!!!
@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loadPreferences()
         /* // tryout sound pool
          soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
          soundPool!!.load(baseContext, R.raw.hit_04, 1)*/
@@ -58,18 +57,16 @@ class MainActivity : AppCompatActivity() {
     // initialize MediaPlayer
     override fun onResume(){
         super.onResume()
+        SoundManager.loadPreferences(this)
         SoundManager.initMediaPlayer(this, R.raw.sound1)
+        if(!musicSetting) {
+            SoundManager.pauseMusic()
+        }
     }
 
     // 4. stops MediaPlayer while not being in activity
     override fun onPause() {
         super.onPause()
         SoundManager.mediaPlayer.release()
-    }
-
-    private fun loadPreferences() {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val musicSetting = preferences.getBoolean("music_pref", true)
-        Log.i(TAG, musicSetting.toString())
     }
 }

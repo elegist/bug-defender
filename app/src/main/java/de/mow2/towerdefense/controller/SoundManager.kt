@@ -2,16 +2,12 @@ package de.mow2.towerdefense.controller
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.media.SoundPool
-import android.view.View
-import android.widget.CheckBox
-import de.mow2.towerdefense.MainActivity
-import kotlinx.coroutines.MainScope
+import androidx.preference.PreferenceManager
 
 
 object SoundManager {
     lateinit var mediaPlayer: MediaPlayer
-
+    var musicSetting: Boolean = true
    /* //tryout sound pool
     var soundPool: SoundPool.Builder? = null
     val soundId = 1
@@ -28,16 +24,21 @@ object SoundManager {
         mediaPlayer.start()
     }
 
+    fun loadPreferences(context: Context) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        musicSetting = preferences.getBoolean("music_pref", true)
+    }
+
     // 2. pauses music
     fun pauseMusic() {
-        if (mediaPlayer.isPlaying) {
+        if(mediaPlayer.isPlaying) {
             mediaPlayer.pause()
         }
     }
 
     // 3 resumes music
     fun resumeMusic() {
-        if (!mediaPlayer.isPlaying) {
+        if(!mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
     }
