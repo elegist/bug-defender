@@ -1,13 +1,9 @@
 package de.mow2.towerdefense.controller
 
-import android.graphics.Canvas
-import android.util.Log
-import android.view.SurfaceHolder
-import androidx.core.view.doOnPreDraw
 
 
-class GameLoop(private val gameView: GameView, private val surfaceHolder: SurfaceHolder) :
-    Thread() {
+
+class GameLoop : Thread() {
     private var running = false
     private var avgUps: Double = 0.0
 
@@ -42,7 +38,7 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
                 avgUps = (updateCount) / (1E-3 * elapsedTime)
                 updateCount = 0
                 startTime = System.currentTimeMillis()
-                //Log.i("UPSandFPS", "UPS:${avgUps}")
+                //Log.i("UpsMonitor", "UPS:${avgUps}")
             }
         }
     }
