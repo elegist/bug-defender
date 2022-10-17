@@ -1,4 +1,4 @@
-package de.mow2.towerdefense.model.actors
+package de.mow2.towerdefense.model.gameobjects.actors
 
 import de.mow2.towerdefense.model.core.SquareField
 

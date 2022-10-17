@@ -1,4 +1,4 @@
-package de.mow2.towerdefense.model.actors
+package de.mow2.towerdefense.model.gameobjects.actors
 
 /**
  * list of all creeps

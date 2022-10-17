@@ -3,10 +3,10 @@ package de.mow2.towerdefense.controller
 import android.content.res.Resources
 import android.graphics.*
 import de.mow2.towerdefense.R
-import de.mow2.towerdefense.controller.gameobjects.Enemy
-import de.mow2.towerdefense.controller.gameobjects.Target
-import de.mow2.towerdefense.model.actors.Tower
-import de.mow2.towerdefense.model.actors.TowerTypes
+import de.mow2.towerdefense.model.gameobjects.Enemy
+import de.mow2.towerdefense.model.gameobjects.Target
+import de.mow2.towerdefense.model.gameobjects.actors.Tower
+import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.pathfinding.Astar
 
