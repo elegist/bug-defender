@@ -1,4 +1,4 @@
-package de.mow2.towerdefense.controller.gameobjects
+package de.mow2.towerdefense.model.gameobjects
 
 import de.mow2.towerdefense.controller.GameLoop
 import de.mow2.towerdefense.controller.GameView.Companion.gameHeight
@@ -10,13 +10,13 @@ import kotlin.random.nextInt
 class Enemy(var target: Target, coordX: Float = (Random.nextInt(1 until gameWidth).toFloat()), coordY: Float = 0f
 ): GameObject(coordX, coordY) {
     /**
-     * link movement speed to gam
      * calc pixels per update and init speed
      */
     private var speedPixelsPerSecond: Float = (gameWidth+gameHeight)*0.02f
         set(value){
             field = (gameWidth+gameHeight)*value
         }
+    
     private val speed = speedPixelsPerSecond / GameLoop.targetUPS
 
     override fun update(){
