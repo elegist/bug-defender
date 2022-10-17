@@ -1,50 +1,64 @@
 package de.mow2.towerdefense.controller
 
 import android.graphics.Canvas
+import android.util.Log
 import android.view.SurfaceHolder
-import java.lang.Exception
+import androidx.core.view.doOnPreDraw
 
-class GameLoop(private val gameView: GameView, private val surfaceHolder: SurfaceHolder) : Thread() {
+
+class GameLoop(private val gameView: GameView, private val surfaceHolder: SurfaceHolder) :
+    Thread() {
     private var running = false
-
+    private var avgUps: Double = 0.0
+    private var avgFps: Double = 0.0
+    
     fun setRunning(isRunning: Boolean) {
         this.running = isRunning
     }
-    override fun run() {
-        var startTime: Long
-        var timeMillis: Long
-        var waitTime: Long
-        val targetTime = (1000 / targetUPS).toLong()
 
+    override fun run() {
+        var startTime: Long = System.currentTimeMillis()
+        var elapsedTime: Long
+        var waitTime: Long
+        var updateCount = 0
+        var frameCount = 0
         /* Game Loop */
         while (running) {
-            startTime = System.nanoTime()
-            try {
-                startTime = System.nanoTime()
-                //locking canvas to draw onto
-                //synchronize threads, so this is the only one to draw onto canvas
+            try{
                 synchronized(surfaceHolder) {
-                    //updating gameview
                     GameManager.updateLogic()
+                    updateCount++
+                    gameView.invalidate()
                 }
-            } catch (e: Exception) {
+            }catch(e : Exception){
                 e.printStackTrace()
+            }finally {
+                frameCount++
             }
-
-            //calculate elapsed time, then wait
-            timeMillis = (System.nanoTime() - startTime) / 1_000_000
-            waitTime = targetTime - timeMillis
-
-            if(waitTime >= 0) {
+            //pause gameLoop if targetUPS could be exceeded
+            elapsedTime = System.currentTimeMillis() - startTime
+            waitTime = ((updateCount * targetTime) - elapsedTime).toLong()
+            if (waitTime > 0) {
                 try {
                     sleep(waitTime)
-                } catch (e: Exception) {
+                } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
+            }
+            //calc avg ups and fps
+            elapsedTime = System.currentTimeMillis() - startTime
+            if (elapsedTime >= 1000) {
+                avgUps = (updateCount) / (1E-3 * elapsedTime)
+                avgFps = (frameCount) / (1E-3 * elapsedTime)
+                updateCount = 0
+                frameCount = 0
+                startTime = System.currentTimeMillis()
+                //Log.i("UPSandFPS", "UPS:${avgUps} FPS:${avgFps}")
             }
         }
     }
     companion object {
-        const val targetUPS = 60
+        const val targetUPS = 30
+        const val targetTime: Double = 1E+3 / targetUPS
     }
 }

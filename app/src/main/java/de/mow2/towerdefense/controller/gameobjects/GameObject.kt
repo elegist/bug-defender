@@ -24,7 +24,6 @@ abstract class GameObject(coordX: Float, coordY: Float) {
     fun getPositionX(): Float{ return coordX }
     fun getPositionY(): Float{ return coordY }
 
-    abstract fun draw(canvas: Canvas, bitmap: Bitmap)
     abstract fun update()
 
     companion object{

@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.controller
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -65,11 +66,18 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     /**
-     * use onDraw to render anything on the canvas
+     * method to update game objects data
+     * should only call GameManager and similar classes update methods
+     */
+    fun update() {
+        GameManager.updateLogic()
+    }
+
+    /**
+     * use onDraw to render on the canvas
      */
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
         //drawing background
         canvas!!.drawPaint(bgPaint)
 
@@ -85,8 +93,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if(this::buildMenu.isInitialized && buildMenu.active) {
             GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y)
         }
-        //redraw canvas
-        this.postInvalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -117,7 +123,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             MotionEvent.ACTION_UP -> {
                 x = ev.x
                 y = ev.y
-                invalidate()
+                //invalidate()
 
                 if(x == lastX && y == lastY) {
                     if(!blockInput && !getSquareAt(x, y).isBlocked) {
@@ -155,12 +161,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         }
         return true
     }
-    // impl this for screen reader friendly approach
+
     override fun performClick(): Boolean {
         super.performClick()
         return false
     }
-
     private fun getSquareAt(x: Float, y: Float): SquareField {
         var indexOfSelected = 0
         playGround.squareArray.forEachIndexed { i, it ->

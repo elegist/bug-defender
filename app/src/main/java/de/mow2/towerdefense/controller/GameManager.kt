@@ -2,7 +2,6 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
-import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.gameobjects.Enemy
 import de.mow2.towerdefense.controller.gameobjects.Target
@@ -19,11 +18,13 @@ object GameManager {
     //game variables
     var lives: Int = 3
     var coins: Int = 100
+
     //currently as array, should be a matrix (map or list)
-    var towerList = emptyArray<Tower>()
-    var creepList = emptyArray<Enemy>()
+    private var towerList = emptyArray<Tower>()
+    private var creepList = emptyArray<Enemy>()
     lateinit var sprite: Sprite
     lateinit var spriteSheet: SpriteSheet
+
     //nodes test
     lateinit var path: MutableSet<Astar.Node>
     var compoundPath: MutableList<SquareField> = mutableListOf()
@@ -95,33 +96,35 @@ object GameManager {
             offsetX += 120
         }
     }
+
     /**
      * decides which objects to draw
      */
     fun drawObjects(canvas: Canvas, resources: Resources) {
-                //draw towers
-                towerList.forEach {
-                    when(it.type) {
-                        TowerTypes.BLOCK -> {
-                            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), it.w, it.h), it.x, it.y)
-                        }
-                        TowerTypes.SLOW -> {
-                            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), it.w, it.h), it.x, it.y)
-                        }
-                        TowerTypes.AOE -> {
-                            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), it.w, it.h), it.x, it.y)
-                        }
-                    }
+        //draw towers
+        towerList.forEach {
+            when (it.type) {
+                TowerTypes.BLOCK -> {
+                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), it.w, it.h), it.x, it.y)
                 }
-                //draw creeps TODO: unhandled ConcurrentModificationException (1/2)
-                creepList.forEach {
-                    draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), it.getPositionX(), it.getPositionY())
+                TowerTypes.SLOW -> {
+                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), it.w, it.h), it.x, it.y)
                 }
-                //for testing purposes
-/*                compoundPath.forEach{
-                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
-                }*/
+                TowerTypes.AOE -> {
+                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), it.w, it.h), it.x, it.y)
+                }
+            }
+        }
+        //draw creeps
+        creepList.forEach {
+            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), it.getPositionX(), it.getPositionY())
+        }
+/*        //for testing purposes
+        compoundPath.forEach {
+            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
+        }*/
     }
+
     /**
      * updates to game logic related values
      */
@@ -129,11 +132,11 @@ object GameManager {
         //add enemies to the spawn
         if (Enemy.canSpawn()) { //wait for update timer
             //add creeps/enemies
-            creepList = creepList.plus(Enemy(target)) // TODO: unhandled ConcurrentModificationException (2/2)
-            Log.i(TAG, "${creepList.size} enemies spawned")
+            creepList = creepList.plus(Enemy(target))
+            //Log.i(TAG, "${creepList.size} enemies spawned")
         }
         //update creeps
-        creepList.forEach{
+        creepList.forEach {
             it.update()
         }
     }
