@@ -65,8 +65,8 @@ object GameManager {
     }
 
     fun initBuildMenu(resources: Resources) {
-        val dimensionX = 100
-        val dimensionY = 200
+        val dimensionX = 100 //TODO: BuildUpgradeMenu.width divided by no. of menu options
+        val dimensionY = BuildUpgradeMenu.height.toInt()
         var drawable: Int
         enumValues<TowerTypes>().forEach {
             drawable = when(it) {
@@ -87,8 +87,9 @@ object GameManager {
     fun drawBuildMenu(canvas: Canvas, x: Float, y: Float) {
         buildMenuButtonRanges = emptyArray()
         var offsetX = 0
-        //var offsetY = -GameView.bottomGuiHeight * 2
-        var offsetY = 200 + GameView.bottomGuiHeight
+        var offsetY = BuildUpgradeMenu.height
+        //TODO: beautify
+        canvas.drawRect(0f, y - offsetY, GameView.gameWidth.toFloat(), y, Paint())
         buildMenuButtons.forEach {
             draw(canvas, it, x + offsetX, y - offsetY)
             val range = ((x+offsetX)..(x+offsetX+it.width))
@@ -130,7 +131,7 @@ object GameManager {
      */
     fun updateLogic() {
         //add enemies to the spawn
-        if (Enemy.canSpawn()) { //wait for update timer
+/*        if (Enemy.canSpawn()) { //wait for update timer
             //add creeps/enemies
             creepList = creepList.plus(Enemy(target))
             //Log.i(TAG, "${creepList.size} enemies spawned")
@@ -138,7 +139,7 @@ object GameManager {
         //update creeps
         creepList.forEach {
             it.update()
-        }
+        }*/
     }
 
     /**

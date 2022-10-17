@@ -6,8 +6,6 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 class BuildUpgradeMenu(val x: Float, val y: Float) {
     var active = false
-    val width = GameView.gameWidth.toFloat()
-    val height = 200f
 
     fun getRangeX(): ClosedFloatingPointRange<Float> {
         //Log.i("Get Range", " x ${0f..width}")
@@ -15,9 +13,9 @@ class BuildUpgradeMenu(val x: Float, val y: Float) {
     }
 
     fun getRangeY(): ClosedFloatingPointRange<Float> {
-        val start = GameView.bottomEnd - GameView.bottomGuiHeight
+        val start = GameView.bottomEnd - height
         val end = GameView.bottomEnd
-        Log.i("Get Range", " y ${start..end} Bottom GUI Height: ${GameView.bottomGuiHeight}")
+        Log.i("Get Range", " y ${start..end}")
         return start..end
     }
 
@@ -29,5 +27,10 @@ class BuildUpgradeMenu(val x: Float, val y: Float) {
             }
         }
         return towerType
+    }
+
+    companion object {
+        val width = GameView.gameWidth.toFloat()
+        const val height = 200f
     }
 }

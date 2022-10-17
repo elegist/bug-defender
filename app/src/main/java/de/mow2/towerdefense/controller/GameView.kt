@@ -66,14 +66,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     /**
-     * method to update game objects data
-     * should only call GameManager and similar classes update methods
-     */
-    fun update() {
-        GameManager.updateLogic()
-    }
-
-    /**
      * use onDraw to render on the canvas
      */
     override fun onDraw(canvas: Canvas?) {
@@ -93,6 +85,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if(this::buildMenu.isInitialized && buildMenu.active) {
             GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y)
         }
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -106,8 +99,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     /**
      * handling user inputs
      */
-    private var lastX: Float = 0.0f
-    private var lastY: Float = 0.0f
+    private var lastX: Float = 0f
+    private var lastY: Float = 0f
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         var x: Float; var y: Float
 
@@ -162,6 +155,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         return true
     }
 
+    private var yScrollOffset: Float = 0f
+    override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
+        super.onScrollChanged(l, t, oldl, oldt)
+        //TODO: when build upgrade menu is active, change its position according to users scroll behaviour
+        Log.i("User Scrolling: ", "Old: $oldl $oldt - New: $l $t")
+    }
+
     override fun performClick(): Boolean {
         super.performClick()
         return false
@@ -183,7 +183,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         var gameHeight = 2 * gameWidth
         val playGround = PlayGround(gameWidth, gameHeight)
         var bottomEnd = 0f
-        var bottomGuiHeight = 0f
         //path finding algorithm
         var astar = Astar()
     }

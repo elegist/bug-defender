@@ -5,38 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@+id/bottomGUI"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <de.mow2.towerdefense.controller.GameView
-                android:id="@+id/gameView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </de.mow2.towerdefense.controller.GameView>
-
-        </LinearLayout>
-    </ScrollView>
-
     <LinearLayout
         android:id="@+id/bottomGUI"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Chronometer
             android:id="@+id/timeView"
@@ -63,6 +39,31 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/coin_01" />
     </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/gameContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomGUI">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <de.mow2.towerdefense.controller.GameView
+                android:id="@+id/gameView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </de.mow2.towerdefense.controller.GameView>
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

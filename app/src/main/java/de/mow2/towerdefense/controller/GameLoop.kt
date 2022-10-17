@@ -25,7 +25,6 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
         while (running) {
             GameManager.updateLogic()
             updateCount++
-            gameView.invalidate()
 
             //pause gameLoop if targetUPS could be exceeded
             elapsedTime = System.currentTimeMillis() - startTime
@@ -43,7 +42,7 @@ class GameLoop(private val gameView: GameView, private val surfaceHolder: Surfac
                 avgUps = (updateCount) / (1E-3 * elapsedTime)
                 updateCount = 0
                 startTime = System.currentTimeMillis()
-                Log.i("UPSandFPS", "UPS:${avgUps}")
+                //Log.i("UPSandFPS", "UPS:${avgUps}")
             }
         }
     }

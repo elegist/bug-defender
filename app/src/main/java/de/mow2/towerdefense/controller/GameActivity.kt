@@ -1,18 +1,18 @@
 package de.mow2.towerdefense.controller
 
-import android.graphics.Insets
+import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.WindowInsets
 import android.widget.Chronometer
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import de.mow2.towerdefense.R
-import kotlinx.android.synthetic.main.activity_game.*
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
+import kotlinx.android.synthetic.main.activity_game.*
 
 
 /**
@@ -23,6 +23,7 @@ import de.mow2.towerdefense.controller.SoundManager.musicSetting
 class GameActivity : AppCompatActivity() {
     lateinit var chrono: Chronometer
     lateinit var coinsTxt: TextView
+    var buildMenuExists = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +34,13 @@ class GameActivity : AppCompatActivity() {
 
         coinsTxt = findViewById(R.id.coinsText)
         SoundManager.loadPreferences(this)
+        hideSystemBars()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-        defineBuildUpgradeMenu()
+        if(!buildMenuExists) {
+            defineBuildUpgradeMenu()
+        }
     }
 
     // stops MediaPlayer while not being in activity
@@ -62,17 +66,20 @@ class GameActivity : AppCompatActivity() {
      */
     private fun defineBuildUpgradeMenu() {
         //initializing build and upgrade menu positioning
-        var menuPosArray = IntArray(2)
-        findViewById<LinearLayout>(R.id.bottomGUI).getLocationOnScreen(menuPosArray)
-        GameView.bottomEnd = menuPosArray[1].toFloat()
-        GameView.bottomGuiHeight = bottomGUI.height.toFloat()
-
-        Log.i("Get Range: ", "bottomEnd: ${GameView.bottomEnd}")
-        Log.i("Get Range: ", "bottomGuiHeight: ${GameView.bottomGuiHeight}")
-        Log.i("Get Range: ", "Coin image height: ${coinImg.height}")
+        val offsetY = gameView.height - gameContainer.height
+        GameView.bottomEnd = gameView.bottom.toFloat() - offsetY
 
         //initialize bitmaps for each tower type
         GameManager.initBuildMenu(resources)
+        buildMenuExists = true
+    }
+
+    private fun hideSystemBars() {
+        val windowInsetsController = ViewCompat.getWindowInsetsController(window.decorView) ?: return
+        // Configure the behavior of the hidden system bars
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        // Hide both the status bar and the navigation bar
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 }
 
