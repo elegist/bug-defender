@@ -1,13 +1,13 @@
 package de.mow2.towerdefense.controller
 
+import android.graphics.Insets
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
-import android.view.View
-import android.widget.Button
+import android.view.WindowInsets
 import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.TextView
-
 import androidx.appcompat.app.AppCompatActivity
 import de.mow2.towerdefense.R
 import kotlinx.android.synthetic.main.activity_game.*
@@ -53,6 +53,10 @@ class GameActivity : AppCompatActivity() {
         findViewById<LinearLayout>(R.id.bottomGUI).getLocationOnScreen(menuPosArray)
         GameView.bottomEnd = menuPosArray[1].toFloat()
         GameView.bottomGuiHeight = bottomGUI.height.toFloat()
+
+        Log.i("Get Range: ", "bottomEnd: ${GameView.bottomEnd}")
+        Log.i("Get Range: ", "bottomGuiHeight: ${GameView.bottomGuiHeight}")
+        Log.i("Get Range: ", "Coin image height: ${coinImg.height}")
 
         //initialize bitmaps for each tower type
         GameManager.initBuildMenu(resources)

@@ -17,7 +17,7 @@ class BuildUpgradeMenu(val x: Float, val y: Float) {
     fun getRangeY(): ClosedFloatingPointRange<Float> {
         val start = GameView.bottomEnd - GameView.bottomGuiHeight
         val end = GameView.bottomEnd
-        //Log.i("Get Range", " y ${start..end}")
+        Log.i("Get Range", " y ${start..end} Bottom GUI Height: ${GameView.bottomGuiHeight}")
         return start..end
     }
 

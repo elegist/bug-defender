@@ -86,9 +86,10 @@ object GameManager {
     fun drawBuildMenu(canvas: Canvas, x: Float, y: Float) {
         buildMenuButtonRanges = emptyArray()
         var offsetX = 0
-        var offsetY = -GameView.bottomGuiHeight * 2
+        //var offsetY = -GameView.bottomGuiHeight * 2
+        var offsetY = 200 + GameView.bottomGuiHeight
         buildMenuButtons.forEach {
-            draw(canvas, it, x + offsetX, y + offsetY)
+            draw(canvas, it, x + offsetX, y - offsetY)
             val range = ((x+offsetX)..(x+offsetX+it.width))
             buildMenuButtonRanges = buildMenuButtonRanges.plus(range)
             offsetX += 120
