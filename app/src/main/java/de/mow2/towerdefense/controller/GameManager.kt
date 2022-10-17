@@ -9,6 +9,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.pathfinding.Astar
+import java.util.concurrent.ConcurrentHashMap
 
 
 object GameManager {
@@ -21,7 +22,7 @@ object GameManager {
 
     //currently as array, should be a matrix (map or list)
     private var towerList = emptyArray<Tower>()
-    private var creepList = emptyArray<Enemy>()
+    private var creepList: ConcurrentHashMap<Enemy, Target> = ConcurrentHashMap()
     lateinit var sprite: Sprite
     lateinit var spriteSheet: SpriteSheet
 
@@ -116,8 +117,8 @@ object GameManager {
             }
         }
         //draw creeps
-        creepList.forEach {
-            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), it.getPositionX(), it.getPositionY())
+        creepList.forEach { (enemy) ->
+            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), enemy.getPositionX(), enemy.getPositionY())
         }
 /*        //for testing purposes
         compoundPath.forEach {
@@ -131,13 +132,24 @@ object GameManager {
     fun updateLogic() {
         //add enemies to the spawn
         if (Enemy.canSpawn()) { //wait for update timer
-            //add creeps/enemies
-            creepList = creepList.plus(Enemy(target))
+            //add creeps and their individual target to concurrentHashMap
+            creepList[Enemy(target)] = target //creepList.put(Enemy(target), target)
+
             //Log.i(TAG, "${creepList.size} enemies spawned")
         }
-        //update creeps
-        creepList.forEach {
-            it.update()
+
+        /**
+         * update movement, update target or remove enemy
+         */
+        creepList.forEach{ (enemy) ->
+            if(enemy.getPositionY().toInt() >= GameView.gameHeight){
+                creepList.remove(enemy)
+                //Log.i("enemyUpdater", "enemy removed")
+            }else{
+                //update movement
+                enemy.update()
+            }
+            //TODO: update enemy target
         }
     }
 
