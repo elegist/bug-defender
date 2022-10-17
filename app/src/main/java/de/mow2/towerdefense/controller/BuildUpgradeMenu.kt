@@ -1,7 +1,7 @@
 package de.mow2.towerdefense.controller
 
 import android.util.Log
-import de.mow2.towerdefense.model.actors.TowerTypes
+import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 
 class BuildUpgradeMenu(val x: Float, val y: Float) {
