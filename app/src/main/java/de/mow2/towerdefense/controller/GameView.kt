@@ -1,6 +1,6 @@
 package de.mow2.towerdefense.controller
 
-import android.annotation.SuppressLint
+
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -9,8 +9,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -29,7 +27,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     init {
         holder.addCallback(this)
-        gameLoop = GameLoop(this, holder)
+        gameLoop = GameLoop()
 
         //initializing background tiles
         bgPaint = Paint()
@@ -93,6 +91,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         if(this::buildMenu.isInitialized && buildMenu.active) {
             GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y)
         }
+        //redraw canvas if canvas has changed
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

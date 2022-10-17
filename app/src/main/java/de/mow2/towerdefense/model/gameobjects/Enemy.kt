@@ -12,11 +12,11 @@ class Enemy(var target: Target, coordX: Float = (Random.nextInt(1 until gameWidt
     /**
      * calc pixels per update and init speed
      */
-    private var speedPixelsPerSecond: Float = (gameWidth+gameHeight)*0.02f
+    private var speedPixelsPerSecond: Float = (gameWidth+gameHeight)*0.05f
         set(value){
             field = (gameWidth+gameHeight)*value
         }
-    
+    //init speed
     private val speed = speedPixelsPerSecond / GameLoop.targetUPS
 
     override fun update(){
@@ -49,9 +49,9 @@ class Enemy(var target: Target, coordX: Float = (Random.nextInt(1 until gameWidt
         //set spawn rate
         var spawnsPerMinute: Float = 200f
         var spawnsPerSecond: Float = spawnsPerMinute / 60
-        //link with updates per second
+        //link with target updates per second to convert to updates per spawn
         private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond
-        private var waitUpdates: Float = updateCycle
+        private var waitUpdates: Float = 0f
 
         fun canSpawn() :Boolean{
             return if(waitUpdates <= 0f) {
