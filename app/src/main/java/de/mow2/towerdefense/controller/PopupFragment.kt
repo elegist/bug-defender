@@ -45,14 +45,6 @@ class PopupFragment: DialogFragment() {
             }
         }
 
-/*        popUpView.musicOnOff.setOnClickListener {
-            if(!musicOnOff.isChecked){
-                SoundManager.pauseMusic()
-            } else {
-                SoundManager.resumeMusic()
-            }
-        }*/
-
         popUpView.buttonPopup.setOnClickListener{
             dismiss()
         }

@@ -9,8 +9,10 @@ import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.R
 import kotlinx.android.synthetic.main.activity_game.*
+import de.mow2.towerdefense.controller.SoundManager.musicSetting
 
 
 /**
@@ -30,8 +32,7 @@ class GameActivity : AppCompatActivity() {
         chrono.start()
 
         coinsTxt = findViewById(R.id.coinsText)
-        
-        SoundManager.initMediaPlayer(this, R.raw.song3)
+        SoundManager.loadPreferences(this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -39,6 +40,18 @@ class GameActivity : AppCompatActivity() {
     }
 
     // stops MediaPlayer while not being in activity
+    // background music in main activity
+    // initialize MediaPlayer
+    override fun onResume(){
+        super.onResume()
+        SoundManager.loadPreferences(this)
+        SoundManager.initMediaPlayer(this, R.raw.song3)
+        if(!musicSetting) {
+            SoundManager.pauseMusic()
+        }
+    }
+
+    // 4. stops MediaPlayer while not being in activity
     override fun onPause() {
         super.onPause()
         SoundManager.mediaPlayer.release()
