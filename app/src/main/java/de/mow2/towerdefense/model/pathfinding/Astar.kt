@@ -1,6 +1,7 @@
 package de.mow2.towerdefense.model.pathfinding
 
 import android.util.Log
+import de.mow2.towerdefense.controller.GameView
 import java.util.PriorityQueue
 import kotlin.math.abs
 
@@ -29,22 +30,24 @@ class Astar {
             val neighbors = currentNode.getNeighbors(playGroundRows, playGroundCols)
 
             neighbors.forEach {
-                if (!closedSet.contains(it)) {
-                    val tempG = currentNode.g + 1
+                if (!GameView.playGround.squareArray[it.x][it.y].isBlocked){
+                    if (!closedSet.contains(it)) {
+                        val tempG = currentNode.g + 1
 
-                    if (openSet.contains(it)) {
-                        if (tempG < it.g) {
+                        if (openSet.contains(it)) {
+                            if (tempG < it.g) {
+                                it.g = tempG
+                            }
+                        } else {
                             it.g = tempG
+                            openSet.add(it)
                         }
-                    } else {
-                        it.g = tempG
-                        openSet.add(it)
+
+                        it.h = abs(currentNode.x - targetNode.x) + abs(currentNode.y - targetNode.y)
+                        it.f = it.g + it.h
+
+                        it.parent = currentNode
                     }
-
-                    it.h = abs(it.x - targetNode.x) + abs(it.y - targetNode.y)
-                    it.f = it.g + it.h
-
-                    it.parent = currentNode
                 }
             }
         }
@@ -69,19 +72,21 @@ class Astar {
         fun getNeighbors(maxRows: Int, maxCols: Int): MutableSet<Node> {
             val neighbors = mutableSetOf<Node>()
 
-            if (x - 1 >= 0) neighbors.add(Node(x - 1, y))
-            if (x + 1 < maxCols) neighbors.add(Node(x + 1, y))
-            if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
-            if (y + 1 < maxRows) neighbors.add(Node(x, y + 1))
+            if (x - 1 > 0) neighbors.add(Node(x - 1, y))
+            if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
+            if (y - 1 > 0) neighbors.add(Node(x, y - 1))
+            if (y + 1 < maxCols) neighbors.add(Node(x, y + 1))
 
             return neighbors
         }
 
         override fun compareTo(other: Node): Int {
-            if (this.x > other.x) return 1
-            if (this.x < other.x) return -1
-            if (this.y > other.y) return 1
-            if (this.y < other.y) return -1
+            if(this.f > other.f) return 1
+            if(this.f < other.f) return -1
+//            if (this.x > other.x) return 1
+//            if (this.x < other.x) return -1
+//            if (this.y > other.y) return 1
+//            if (this.y < other.y) return -1
 
             return 0
         }

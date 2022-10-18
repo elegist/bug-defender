@@ -25,6 +25,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private lateinit var selectedSquare: SquareField
     private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
 
+    //testing of the astar
+    val startNode = Astar.Node(0,0)
+    val endNode = Astar.Node(GameManager.squaresX - 1, GameManager.squaresY - 1)
+
     init {
         holder.addCallback(this)
         gameLoop = GameLoop()
@@ -36,8 +40,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
 
-        GameManager.path = astar.findPath(Astar.Node(0, 0), Astar.Node(4, 4), 5, 5)!!
-        GameManager.comparePathCoords()
+//        playGround.squareArray[0][1].isBlocked = true
+//        playGround.squareArray[1][1].isBlocked = true
+//        playGround.squareArray[2][1].isBlocked = true
+//        playGround.squareArray[3][1].isBlocked = true
+//
+//        GameManager.path = astar.findPath(Astar.Node(0, 0), Astar.Node(4, 4), 9, 18)!!
+//        GameManager.comparePathCoords()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -46,6 +55,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //start game loop
         gameLoop.setRunning(true)
         gameLoop.start()
+
+        Log.i("SquareArray:", "${playGround.squareArray.size}, ${playGround.squareArray[0].size}")
+        Log.i("Field:", "${playGround.squareArray[8][17].mapPos["x"]}, ${playGround.squareArray[8][17].mapPos["y"]}")
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -135,6 +147,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             val towerType = buildMenu.getTowerType(x)
                             GameManager.buildTower(selectedSquare, towerType)
                             selectedSquare.isBlocked = true
+
+                            Log.i("ArrayInfo", "START: $startNode, END: $endNode, WIDTH: ${GameManager.squaresX}, HEIGHT: ${GameManager.squaresY}")
+
+                            GameManager.path = astar.findPath(startNode, endNode, GameManager.squaresX, GameManager.squaresY )!!
+                            GameManager.comparePathCoords()
                         } else {
                             selectedSquare.clearSquare()
                         }

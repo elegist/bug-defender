@@ -2,6 +2,7 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
+import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.gameobjects.Enemy
 import de.mow2.towerdefense.model.gameobjects.Target
@@ -42,6 +43,7 @@ object GameManager {
     fun comparePathCoords() {
         path.forEach {
             compoundPath.add(GameView.playGround.squareArray[it.x][it.y])
+            Log.i("Infos:", "$it, ${it.f}")
         }
     }
 
@@ -114,13 +116,13 @@ object GameManager {
             }
         }
         //draw creeps
-        creepList.forEach { (enemy) ->
-            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), enemy.getPositionX(), enemy.getPositionY())
-        }
-/*        //for testing purposes
+//        creepList.forEach { (enemy) ->
+//            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), enemy.getPositionX(), enemy.getPositionY())
+//        }
+        //for testing purposes
         compoundPath.forEach {
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
-        }*/
+        }
     }
 
     /**

@@ -10,10 +10,10 @@ class PlayGround(val width: Int, val height: Int) {
     init {
         var posX = 0
         var posY: Int
-        for(i in 0..squaresX) {
+        for(i in 0 until squaresX) {
             var cols = emptyArray<SquareField>()
             posY = 0
-            for(j in 0..squaresY) {
+            for(j in 0 until squaresY) {
                 val mapPos = mapOf("x" to i, "y" to j)
                 cols = cols.plus(SquareField(posX.toFloat(), posY.toFloat(), squareSize, squareSize, mapPos))
                 posY += squareSize
