@@ -8,7 +8,6 @@ class SquareField(val coordX: Float, val coordY: Float, val width: Int, val heig
 
     //var for blocking this field (tower built) can be used e.g. for routing
     var isBlocked = false
-    var isPath = false
 
     override fun toString(): String {
         return "${javaClass.name} - posX: $coordX, posY: $coordY, width: $width, height: $height"
@@ -18,7 +17,7 @@ class SquareField(val coordX: Float, val coordY: Float, val width: Int, val heig
      * locks this square. TODO: display half-transparent image of tower to be built
      */
     fun selectSquare() {
-        Log.i(TAG, "Hallo Welt! Ich bin ein Quadrat auf dem Spielfeld. Meine Koordinaten sind: ${mapPos.toString()}")
+        Log.i(TAG, "Hallo Welt! Ich bin ein Quadrat auf dem Spielfeld. Meine Koordinaten sind: $mapPos")
         //TODO: visuals
     }
 
@@ -26,7 +25,7 @@ class SquareField(val coordX: Float, val coordY: Float, val width: Int, val heig
      * unlock if user selects another square
      */
     fun clearSquare() {
-        Log.i(TAG, "Hallo Welt! Ich wurde wieder freigegeben! ${mapPos.toString()}")
+        Log.i(TAG, "Hallo Welt! Ich wurde wieder freigegeben! $mapPos")
         //TODO: remove visuals
     }
 }

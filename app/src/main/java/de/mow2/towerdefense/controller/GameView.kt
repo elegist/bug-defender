@@ -36,7 +36,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
 
-        GameManager.path = astar.findPath(Astar.Node(0, 0), Astar.Node(15, 15), 16, 16)!!
+        GameManager.path = astar.findPath(Astar.Node(0, 0), Astar.Node(4, 4), 5, 5)!!
         GameManager.comparePathCoords()
     }
 
@@ -109,29 +109,22 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastY = ev.y
                 invalidate()
                 Log.i("Get Range", "user input x: $lastX , y: $lastY")
+                Log.i("Array Pos 2 :", "x : ${playGround.squareArray[3][5].isBlocked} y : ${playGround.squareArray[3][5].mapPos["y"]}")
+                Log.i("Array Pos:", "x: ${getTouchedSquare(lastX, lastY).mapPos["x"]} y: ${getTouchedSquare(lastX, lastY).mapPos["y"]}")
             }
             MotionEvent.ACTION_MOVE -> {}
 
             MotionEvent.ACTION_UP -> {
                 x = ev.x
                 y = ev.y
-                //invalidate()
+                invalidate()
 
                 if(x == lastX && y == lastY) {
-                    if(!blockInput && !getSquareAt(x, y).isBlocked) {
-                        if(getSquareAt(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                            selectedSquare = getSquareAt(x, y)
+                    if(!blockInput && !getTouchedSquare(x, y).isBlocked) {
+                        if(getTouchedSquare(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                            selectedSquare = getTouchedSquare(x, y)
                             selectedSquare.selectSquare()
                             //open up build and upgrade menu
-                            //detect distance to screen edge
-                            var menuDirection = if(x < gameWidth / 2) {
-                                if(y < gameHeight / 2)
-                                { "rightBottom" }
-                                else { "rightTop" }
-                            } else {
-                                if(y < gameHeight / 2) { "leftBottom" }
-                                else { "leftTop" }
-                            }
                             Log.i("Location BottomGUI", bottomEnd.toString())
                             buildMenu = BuildUpgradeMenu(0f, bottomEnd)
                             buildMenu.active = true
@@ -165,16 +158,20 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         super.performClick()
         return false
     }
-    private fun getSquareAt(x: Float, y: Float): SquareField {
-        var indexOfSelected = 0
-        playGround.squareArray.forEachIndexed { i, it ->
-            val coordRangeX = it.coordX..(it.coordX+it.width)
-            val coordRangeY = it.coordY..(it.coordY+it.height)
-            if(x in coordRangeX && y in coordRangeY) {
-                indexOfSelected = i
+    private fun getTouchedSquare(x: Float, y: Float): SquareField {
+        var xPos = 0
+        var yPos = 0
+        playGround.squareArray.forEachIndexed {i, it ->
+            it.forEachIndexed {j, element ->
+                val coordRangeX = element.coordX..(element.coordX+element.width)
+                val coordRangeY = element.coordY..(element.coordY+element.height)
+                if(x in coordRangeX && y in coordRangeY) {
+                    xPos = i
+                    yPos = j
+                }
             }
         }
-        return playGround.squareArray[indexOfSelected]
+        return playGround.squareArray[xPos][yPos]
     }
 
     companion object {

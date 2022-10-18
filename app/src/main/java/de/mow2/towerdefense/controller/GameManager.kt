@@ -40,12 +40,8 @@ object GameManager {
     }
 
     fun comparePathCoords() {
-        GameView.playGround.squareArray.forEach { square ->
-            path.forEach { node ->
-                if (square.mapPos["x"] == node.x && square.mapPos["y"] == node.y) {
-                    compoundPath.add(square)
-                }
-            }
+        path.forEach {
+            compoundPath.add(GameView.playGround.squareArray[it.x][it.y])
         }
     }
 
