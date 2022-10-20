@@ -24,7 +24,6 @@ class PopupFragment: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("Test", tag.toString())
 
         //decide which fragment will be inflated
         when(tag.toString()) {

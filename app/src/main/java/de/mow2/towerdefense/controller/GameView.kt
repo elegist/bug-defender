@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.ScrollView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -25,10 +26,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private lateinit var selectedSquare: SquareField
     private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
 
-    //testing of the astar
-    val startNode = Astar.Node(0,0)
-    val endNode = Astar.Node(GameManager.squaresX - 1, GameManager.squaresY - 1)
-
     init {
         holder.addCallback(this)
         gameLoop = GameLoop()
@@ -39,14 +36,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         val bgTileDimension = playGround.squareSize * 2
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-
-//        playGround.squareArray[0][1].isBlocked = true
-//        playGround.squareArray[1][1].isBlocked = true
-//        playGround.squareArray[2][1].isBlocked = true
-//        playGround.squareArray[3][1].isBlocked = true
-//
-//        GameManager.path = astar.findPath(Astar.Node(0, 0), Astar.Node(4, 4), 9, 18)!!
-//        GameManager.comparePathCoords()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -55,9 +44,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //start game loop
         gameLoop.setRunning(true)
         gameLoop.start()
-
-        Log.i("SquareArray:", "${playGround.squareArray.size}, ${playGround.squareArray[0].size}")
-        Log.i("Field:", "${playGround.squareArray[8][17].mapPos["x"]}, ${playGround.squareArray[8][17].mapPos["y"]}")
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -93,7 +79,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         //build menu should always draw on top
         if(this::buildMenu.isInitialized && buildMenu.active) {
-            GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y)
+            GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y + GameActivity.scrollOffset)
         }
         //redraw canvas if canvas has changed
         invalidate()
@@ -110,8 +96,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     /**
      * handling user inputs
      */
-    private var lastX: Float = 0f
-    private var lastY: Float = 0f
+    private var lastX = 0f
+    private var lastY = 0f
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         var x: Float; var y: Float
 
@@ -120,9 +106,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastX = ev.x
                 lastY = ev.y
                 invalidate()
-                Log.i("Get Range", "user input x: $lastX , y: $lastY")
-                Log.i("Array Pos 2 :", "x : ${playGround.squareArray[3][5].isBlocked} y : ${playGround.squareArray[3][5].mapPos["y"]}")
-                Log.i("Array Pos:", "x: ${getTouchedSquare(lastX, lastY).mapPos["x"]} y: ${getTouchedSquare(lastX, lastY).mapPos["y"]}")
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -135,9 +118,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     if(!blockInput && !getTouchedSquare(x, y).isBlocked) {
                         if(getTouchedSquare(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
                             selectedSquare = getTouchedSquare(x, y)
-                            selectedSquare.selectSquare()
                             //open up build and upgrade menu
-                            Log.i("Location BottomGUI", bottomEnd.toString())
                             buildMenu = BuildUpgradeMenu(0f, bottomEnd)
                             buildMenu.active = true
                             blockInput = true
@@ -148,12 +129,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             GameManager.buildTower(selectedSquare, towerType)
                             selectedSquare.isBlocked = true
 
-                            Log.i("ArrayInfo", "START: $startNode, END: $endNode, WIDTH: ${GameManager.squaresX}, HEIGHT: ${GameManager.squaresY}")
-
-                            GameManager.path = astar.findPath(startNode, endNode, GameManager.squaresX, GameManager.squaresY )!!
-                            GameManager.comparePathCoords()
-                        } else {
-                            selectedSquare.clearSquare()
+/*                            GameManager.path = astar.findPath(startNode, endNode, GameManager.squaresX, GameManager.squaresY )!!
+                            GameManager.comparePathCoords()*/
                         }
                         blockInput = false
                         buildMenu.active = false
@@ -162,13 +139,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
         }
         return true
-    }
-
-    private var yScrollOffset: Float = 0f
-    override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
-        super.onScrollChanged(l, t, oldl, oldt)
-        //TODO: when build upgrade menu is active, change its position according to users scroll behaviour
-        Log.i("User Scrolling: ", "Old: $oldl $oldt - New: $l $t")
     }
 
     override fun performClick(): Boolean {
@@ -194,7 +164,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     companion object {
         var gameWidth = Resources.getSystem().displayMetrics.widthPixels
         var gameHeight = 2 * gameWidth
-        val playGround = PlayGround(gameWidth, gameHeight)
+        val playGround = PlayGround(gameWidth)
         var bottomEnd = 0f
         //path finding algorithm
         var astar = Astar()

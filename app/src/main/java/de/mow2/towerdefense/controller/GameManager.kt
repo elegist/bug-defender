@@ -17,6 +17,7 @@ object GameManager {
     //playground variables
     const val squaresX = 9
     const val squaresY = 18
+
     //game variables
     var lives: Int = 3
     var coins: Int = 100
@@ -64,7 +65,7 @@ object GameManager {
     }
 
     fun initBuildMenu(resources: Resources) {
-        val dimensionX = 100 //TODO: BuildUpgradeMenu.width divided by no. of menu options
+        val dimensionX = 100 //TODO: BuildUpgradeMenu.width divided by no. of menu options??
         val dimensionY = BuildUpgradeMenu.height.toInt()
         var drawable: Int
         enumValues<TowerTypes>().forEach {
@@ -115,14 +116,14 @@ object GameManager {
                 }
             }
         }
-        //draw creeps
-//        creepList.forEach { (enemy) ->
-//            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), enemy.getPositionX(), enemy.getPositionY())
-//        }
-        //for testing purposes
+/*        //draw creeps
+        creepList.forEach { (enemy) ->
+            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), enemy.getPositionX(), enemy.getPositionY())
+        }*/
+/*        //astar visualization
         compoundPath.forEach {
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
-        }
+        }*/
     }
 
     /**
@@ -130,16 +131,16 @@ object GameManager {
      */
     fun updateLogic() {
         //add enemies to the spawn
-        if (Enemy.canSpawn()) { //wait for update timer
+/*        if (Enemy.canSpawn()) { //wait for update timer
             //add creeps and their individual target to concurrentHashMap
             creepList[Enemy(target)] = target //creepList.put(Enemy(target), target)
 
             //Log.i(TAG, "${creepList.size} enemies spawned")
         }
 
-        /**
+        *//**
          * update movement, update target or remove enemy
-         */
+         *//*
         creepList.forEach{ (enemy) ->
             if(enemy.getPositionY().toInt() >= GameView.gameHeight){
                 creepList.remove(enemy)
@@ -149,7 +150,7 @@ object GameManager {
                 enemy.update()
             }
             //TODO: update enemy target
-        }
+        }*/
     }
 
     /**

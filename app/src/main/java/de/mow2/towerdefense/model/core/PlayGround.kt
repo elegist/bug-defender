@@ -2,7 +2,7 @@ package de.mow2.towerdefense.model.core
 
 import de.mow2.towerdefense.controller.GameManager
 
-class PlayGround(val width: Int, val height: Int) {
+class PlayGround(val width: Int) {
     var squareArray = emptyArray<Array<SquareField>>()
     private val squaresX = GameManager.squaresX
     private val squaresY = GameManager.squaresY

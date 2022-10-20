@@ -47,7 +47,7 @@ class Enemy(var target: Target, coordX: Float = (Random.nextInt(1 until gameWidt
 
     companion object{
         //set spawn rate
-        var spawnsPerMinute: Float = 200f
+        var spawnsPerMinute: Float = 60f
         var spawnsPerSecond: Float = spawnsPerMinute / 60
         //link with target updates per second to convert to updates per spawn
         private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond

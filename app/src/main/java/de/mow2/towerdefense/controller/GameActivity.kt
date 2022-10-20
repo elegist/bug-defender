@@ -1,53 +1,57 @@
 package de.mow2.towerdefense.controller
 
-import android.annotation.SuppressLint
-import android.content.res.Resources
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.Chronometer
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import kotlinx.android.synthetic.main.activity_game.*
 
-
-/**
- * Remove comment before Release!!!
- * This class joins game view and model
- * TODO: Create and include GameView? Could be an instance of GLSurfaceView or similar...
- */
 class GameActivity : AppCompatActivity() {
     lateinit var chrono: Chronometer
     lateinit var coinsTxt: TextView
+    lateinit var scrollView: ScrollView
     var buildMenuExists = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        //initializing in-game gui
-        chrono = findViewById(R.id.timeView)
-        chrono.start()
 
-        coinsTxt = findViewById(R.id.coinsText)
+        //initialize in-game gui
+        //time measurement
+        chrono = timeView
+        chrono.start()
+        //coins display
+        coinsTxt = coinsText
+        coinsTxt.text = GameManager.coins.toString()
+
         SoundManager.loadPreferences(this)
+
+        //get vertical scroll offset for build menu
+        scrollView = gameContainer
+        gameContainer.viewTreeObserver.addOnScrollChangedListener {
+            scrollOffset = scrollView.scrollY
+        }
+        //immersive mode
         hideSystemBars()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
+        //define display of build menu, if it hasn't already been done
         if(!buildMenuExists) {
             defineBuildUpgradeMenu()
         }
     }
 
-    // stops MediaPlayer while not being in activity
-    // background music in main activity
-    // initialize MediaPlayer
     override fun onResume(){
         super.onResume()
+        // re-initialize MediaPlayer with correct settings
         SoundManager.loadPreferences(this)
         SoundManager.initMediaPlayer(this, R.raw.song3)
         if(!musicSetting) {
@@ -55,9 +59,9 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    // 4. stops MediaPlayer while not being in activity
     override fun onPause() {
         super.onPause()
+        // 4. stops MediaPlayer while not being in activity
         SoundManager.mediaPlayer.release()
     }
 
@@ -74,12 +78,19 @@ class GameActivity : AppCompatActivity() {
         buildMenuExists = true
     }
 
+    /**
+     * immersive mode (hide system bars)
+     */
     private fun hideSystemBars() {
-        val windowInsetsController = ViewCompat.getWindowInsetsController(window.decorView) ?: return
-        // Configure the behavior of the hidden system bars
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         // Hide both the status bar and the navigation bar
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+    }
+
+    companion object {
+        //scroll offset for build menu
+        var scrollOffset = 0
     }
 }
 
