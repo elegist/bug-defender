@@ -18,10 +18,6 @@ object GameManager {
     const val squaresX = 9
     const val squaresY = 18
 
-    //game variables
-    var lives: Int = 3
-    var coins: Int = 100
-
     //currently as array, should be a matrix (map or list)
     private var towerList = emptyArray<Tower>()
     private var creepList: ConcurrentHashMap<Enemy, Target> = ConcurrentHashMap()

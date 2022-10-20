@@ -1,7 +1,5 @@
 package de.mow2.towerdefense.controller
 
-
-import android.util.Log
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 
@@ -26,6 +24,15 @@ class BuildUpgradeMenu(val x: Float, val y: Float) {
             }
         }
         return towerType
+    }
+
+    fun getTowerCost(type: TowerTypes): Int {
+        var cost = when(type) {
+            TowerTypes.BLOCK -> 100
+            TowerTypes.SLOW -> 200
+            TowerTypes.AOE -> 300
+        }
+        return cost
     }
 
     companion object {

@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.widget.ScrollView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
@@ -17,6 +15,7 @@ import de.mow2.towerdefense.model.pathfinding.Astar
 
 class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
+    lateinit var levelGenerator: LevelGenerator
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
@@ -126,8 +125,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                     } else { // build and upgrade menu is opened
                         if(x in buildMenu.getRangeX() && y in buildMenu.getRangeY()) {
                             val towerType = buildMenu.getTowerType(x)
-                            GameManager.buildTower(selectedSquare, towerType)
-                            selectedSquare.isBlocked = true
+                            if(levelGenerator.decreaseCoins(buildMenu.getTowerCost(towerType))) {
+                                GameManager.buildTower(selectedSquare, towerType)
+                                selectedSquare.isBlocked = true
+                            }
 
 /*                            GameManager.path = astar.findPath(startNode, endNode, GameManager.squaresX, GameManager.squaresY )!!
                             GameManager.comparePathCoords()*/

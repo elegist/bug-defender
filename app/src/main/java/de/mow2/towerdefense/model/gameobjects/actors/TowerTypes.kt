@@ -5,7 +5,7 @@ package de.mow2.towerdefense.model.gameobjects.actors
  * Could be used to obtain tower attributes (health, powers, and so on)
  * Currently in use to decide which Bitmap will be drawn
  */
-enum class TowerTypes {
+enum class TowerTypes() {
     BLOCK, SLOW, AOE
 }
 
