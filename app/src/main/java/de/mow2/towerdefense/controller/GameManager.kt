@@ -3,6 +3,7 @@ package de.mow2.towerdefense.controller
 import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
+import androidx.core.content.ContextCompat
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.gameobjects.Enemy
 import de.mow2.towerdefense.model.gameobjects.Target
@@ -84,8 +85,10 @@ object GameManager {
         buildMenuButtonRanges = emptyArray()
         var offsetX = 0
         var offsetY = BuildUpgradeMenu.height
+        val paint = Paint()
+        paint.color = Color.parseColor("#43240f")
         //TODO: beautify
-        canvas.drawRect(0f, y - offsetY, GameView.gameWidth.toFloat(), y, Paint())
+        canvas.drawRect(0f, y - offsetY, GameView.gameWidth.toFloat(), y, paint)
         buildMenuButtons.forEach {
             draw(canvas, it, x + offsetX, y - offsetY)
             val range = ((x+offsetX)..(x+offsetX+it.width))

@@ -11,5 +11,6 @@
     <string name="preferences_text">set your preferences:</string>
     <string name="info_text">This is a Tower Defense Game, where u need to place Towers in order to defend your base.</string>
     <string name="preference_music">music</string>
+    <string name="menuBtn">Menu</string>
 
 </resources>

@@ -9,20 +9,21 @@ class LevelGenerator(): ViewModel() {
     val coinAmnt: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
-    private var livesAmnt = 0
-
+    val livesAmnt: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
     fun initLevel(level: Int) {
         when(level) {
             0 -> {
                 /* Endless mode */
-                livesAmnt = 3
+                livesAmnt.value = 3
                 coinAmnt.value = 1000
             }
             1 -> {/* Level 1 */}
             2 -> {/* Level 2 */}
             else -> {
                 /* Endless mode */
-                livesAmnt = 3
+                livesAmnt.value = 3
                 coinAmnt.value = 2000
             }
         }
