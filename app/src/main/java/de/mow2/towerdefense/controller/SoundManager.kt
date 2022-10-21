@@ -8,7 +8,7 @@ import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.R
 
 enum class Sounds(var id: Int){
-    HITSOUND(1), SLAMSOUND(2)
+    HITSOUND(0), SLAMSOUND(0)
 }
 
 object SoundManager {

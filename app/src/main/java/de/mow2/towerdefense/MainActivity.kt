@@ -9,6 +9,7 @@ import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
+import de.mow2.towerdefense.controller.SoundManager.soundSetting
 import de.mow2.towerdefense.controller.Sounds
 
 /**

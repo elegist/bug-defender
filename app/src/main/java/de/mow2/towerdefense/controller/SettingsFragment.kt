@@ -24,7 +24,7 @@ class SettingsFragment: PreferenceFragmentCompat() {
             if(!(newValue as Boolean)){
                 SoundManager.soundPool.release()
             } else {
-                SoundManager.playSounds()
+
             }
             true
         }
