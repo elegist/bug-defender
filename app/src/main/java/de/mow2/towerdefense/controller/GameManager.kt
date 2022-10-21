@@ -3,7 +3,6 @@ package de.mow2.towerdefense.controller
 import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
-import androidx.core.content.ContextCompat
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.gameobjects.Enemy
 import de.mow2.towerdefense.model.gameobjects.Target
@@ -26,7 +25,6 @@ object GameManager {
     lateinit var spriteSheet: SpriteSheet
 
     //nodes test
-    lateinit var path: MutableSet<Astar.Node>
     var compoundPath: MutableList<SquareField> = mutableListOf()
     private var target: Target = Target(GameView.gameWidth/2.toFloat(), GameView.gameHeight.toFloat())
     //build and upgrade menu
@@ -34,12 +32,10 @@ object GameManager {
     var buildMenuButtonRanges = emptyArray<ClosedFloatingPointRange<Float>>()
     private val TAG = javaClass.name
 
-    init {
-        //TODO: get actual lives and coins
-    }
-
-    fun comparePathCoords() {
-        path.forEach {
+    fun comparePathCoords(path: MutableSet<Astar.Node>) {
+        val pathList = path.reversed()
+        compoundPath.clear()
+        pathList.forEach {
             compoundPath.add(GameView.playGround.squareArray[it.x][it.y])
             Log.i("Infos:", "$it, ${it.f}")
         }
@@ -119,10 +115,10 @@ object GameManager {
         creepList.forEach { (enemy) ->
             draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), enemy.getPositionX(), enemy.getPositionY())
         }*/
-/*        //astar visualization
+        //astar visualization
         compoundPath.forEach {
-            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), 50, 50), it.coordX, it.coordY)
-        }*/
+            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.path), 50, 50), it.coordX, it.coordY)
+        }
     }
 
     /**

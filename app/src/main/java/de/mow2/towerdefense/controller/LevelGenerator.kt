@@ -1,7 +1,9 @@
 package de.mow2.towerdefense.controller
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import de.mow2.towerdefense.model.pathfinding.Astar
 
 
 class LevelGenerator(): ViewModel() {
@@ -42,7 +44,42 @@ class LevelGenerator(): ViewModel() {
             coinAmnt.value = oldVal - newValue
             true
         } else {
+            startWave()
+            coinAmnt.value = 200
             false
         }
+    }
+
+    fun increaseLives(newValue: Int){
+        val oldVal = livesAmnt.value!!
+        livesAmnt.value = oldVal + newValue
+    }
+    //TODO: Trigger function when enemy reaches finish line
+    fun decreaseLives(newValue: Int) : Boolean {
+        val oldVal = livesAmnt.value!!
+        return if(livesAmnt.value!! >= (0 + newValue)) {
+            livesAmnt.value = oldVal - newValue
+            true
+        } else {
+            false
+        }
+    }
+
+    val alg = Astar()
+    fun startWave() {
+        //define creeps
+        //define timer
+        //find path
+        val creepNode = Astar.Node(5, 0)
+        val path = alg.findPath(creepNode, Astar.Node(5, 17), GameManager.squaresX, GameManager.squaresY)
+        if(path != null) {
+            //weg gefunden!
+            GameManager.comparePathCoords(path)
+            Log.i("Path: ", "$path")
+        } else {
+            //weg blockiert!
+            Log.i("Path: ", "Pfad blockiert")
+        }
+        //start wave
     }
 }

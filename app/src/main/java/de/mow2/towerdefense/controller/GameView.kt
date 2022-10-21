@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -105,6 +106,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastX = ev.x
                 lastY = ev.y
                 invalidate()
+                Log.i("Quadrat angeklickt: ", "${getTouchedSquare(lastX, lastY)}")
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -129,9 +131,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                                 GameManager.buildTower(selectedSquare, towerType)
                                 selectedSquare.isBlocked = true
                             }
-
-/*                            GameManager.path = astar.findPath(startNode, endNode, GameManager.squaresX, GameManager.squaresY )!!
-                            GameManager.comparePathCoords()*/
                         }
                         blockInput = false
                         buildMenu.active = false

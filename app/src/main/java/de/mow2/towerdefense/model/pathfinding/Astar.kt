@@ -2,18 +2,25 @@ package de.mow2.towerdefense.model.pathfinding
 
 import android.util.Log
 import de.mow2.towerdefense.controller.GameView
-import java.util.PriorityQueue
-import kotlin.math.abs
 
 class Astar {
     fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {
-        val openSet = PriorityQueue<Node>()
+        val openSet = mutableSetOf<Node>()
         val closedSet = mutableSetOf<Node>()
 
         openSet.add(startNode)
 
         while (openSet.any()) {
-            val currentNode = openSet.first()
+            var currentNode = openSet.first()
+
+            for(i in openSet) {
+                if(i.f < currentNode.f) {
+                    currentNode = i
+
+                    Log.i("Currentnode: ", "$currentNode")
+                }
+            }
+
             openSet.remove(currentNode)
             closedSet.add(currentNode)
 
@@ -21,7 +28,7 @@ class Astar {
                 val path = mutableSetOf<Node>()
                 var tempNode = currentNode
                 while (tempNode.parent != null) {
-                    path.add(tempNode.parent!!)
+                    path.add(tempNode)
                     tempNode = tempNode.parent!!
                 }
                 return path
@@ -29,29 +36,32 @@ class Astar {
 
             val neighbors = currentNode.getNeighbors(playGroundRows, playGroundCols)
 
-            neighbors.forEach {
-                if (!GameView.playGround.squareArray[it.x][it.y].isBlocked){
-                    if (!closedSet.contains(it)) {
-                        val tempG = currentNode.g + 1
+            neighbors.forEach neighbors@{ node ->
 
-                        if (openSet.contains(it)) {
-                            if (tempG < it.g) {
-                                it.g = tempG
-                            }
-                        } else {
-                            it.g = tempG
-                            openSet.add(it)
-                        }
+                if (GameView.playGround.squareArray[node.x][node.y].isBlocked) {
+                    Log.i("Path: ", "Feld blockiert: $node")
+                    return@neighbors
+                }
 
-                        it.h = abs(currentNode.x - targetNode.x) + abs(currentNode.y - targetNode.y)
-                        it.f = it.g + it.h
-
-                        it.parent = currentNode
+                for(closed_child in closedSet){
+                    if(closed_child.x == node.x && closed_child.y == node.y) {
+                        return@neighbors
                     }
                 }
+
+                node.parent = currentNode
+                node.g = currentNode.g + 1
+                node.h = ((node.x - targetNode.x)) + ((node.y - targetNode.y))
+                node.f = node.g + node.h
+
+                openSet.forEach { openNode ->
+                    if(node == openNode && node.g > openNode.g) {
+                        return@neighbors
+                    }
+                }
+                openSet.add(node)
             }
         }
-
         return null
     }
 
@@ -59,36 +69,29 @@ class Astar {
     data class Node(val x: Int, val y: Int) : Comparable<Node> {
         // parent is the node that came previous to the current one
         var parent: Node? = null
-
         // g = distance from selected node to start node
         var g: Int = 0
-
         // h = distance from selected node to end node -> optimistic assignment: either equal or less than real distance
         var h: Int = 0
-
         // f = g + h -> the lower the value the more attractive it is as a path option
         var f: Int = g + h
 
         fun getNeighbors(maxRows: Int, maxCols: Int): MutableSet<Node> {
             val neighbors = mutableSetOf<Node>()
 
-            if (x - 1 > 0) neighbors.add(Node(x - 1, y))
+            //TODO: richtige Gewichtung berechnen
+            if (x - 1 >= 0) neighbors.add(Node(x - 1, y))
+/*            if (x - 1 > 0 && y - 1 > 0) neighbors.add(Node(x - 1, y - 1))
+            if (x - 1 > 0 && y + 1 < maxCols) neighbors.add(Node(x - 1, y + 1))*/
             if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
-            if (y - 1 > 0) neighbors.add(Node(x, y - 1))
+            if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
             if (y + 1 < maxCols) neighbors.add(Node(x, y + 1))
+/*            if (x + 1 < maxRows && y - 1 > 0) neighbors.add(Node(x + 1, y - 1))
+            if (x + 1 < maxRows && y + 1 < maxCols) neighbors.add(Node(x + 1, y + 1))*/
 
             return neighbors
         }
 
-        override fun compareTo(other: Node): Int {
-            if(this.f > other.f) return 1
-            if(this.f < other.f) return -1
-//            if (this.x > other.x) return 1
-//            if (this.x < other.x) return -1
-//            if (this.y > other.y) return 1
-//            if (this.y < other.y) return -1
-
-            return 0
-        }
+        override fun compareTo(other: Node): Int = this.f.compareTo(other.f)
     }
 }
