@@ -5,6 +5,11 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.SoundPool
 import androidx.preference.PreferenceManager
+import de.mow2.towerdefense.R
+
+enum class Sounds(var id: Int){
+    HITSOUND(1), SLAMSOUND(2)
+}
 
 object SoundManager {
     lateinit var mediaPlayer: MediaPlayer
@@ -24,8 +29,9 @@ object SoundManager {
             .build()
     }
 
-    fun loadSounds(){
-        soundPool.load("res/raw/hit_04.ogg", 1)
+    fun loadSounds(context: Context) {
+        Sounds.HITSOUND.id = soundPool.load(context, R.raw.hit_04, 1)
+        Sounds.SLAMSOUND.id = soundPool.load(context, R.raw.slam_02, 1)
     }
 
     // Music player for background music

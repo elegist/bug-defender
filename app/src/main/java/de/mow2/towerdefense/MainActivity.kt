@@ -9,6 +9,7 @@ import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
+import de.mow2.towerdefense.controller.Sounds
 
 /**
  * Remove comment before Release!!!
@@ -34,10 +35,11 @@ class MainActivity : AppCompatActivity() {
         when (view.id) {
             R.id.info_button -> {
                 dialogPopup.show(fm, "infoDialog")
-                soundPool.play(1, 1F, 1F, 1, 0, 1F)
+                soundPool.play(Sounds.HITSOUND.id, 1F, 1F, 1, 0, 1F)
             }
             R.id.about_button -> {
                 dialogPopup.show(fm, "aboutDialog")
+                soundPool.play(Sounds.SLAMSOUND.id, 1F, 1F, 1, 0, 1F)
             }
             R.id.preference_button -> {
                 dialogPopup.show(fm, "settingsDialog")
@@ -49,10 +51,10 @@ class MainActivity : AppCompatActivity() {
     // initialize MediaPlayer
     override fun onResume(){
         super.onResume()
-        SoundManager.loadPreferences(this)
         SoundManager.initMediaPlayer(this, R.raw.sound1)
+        SoundManager.loadPreferences(this)
         SoundManager.playSounds()
-        SoundManager.loadSounds()
+        SoundManager.loadSounds(this)
         if(!musicSetting) {
             SoundManager.pauseMusic()
         }

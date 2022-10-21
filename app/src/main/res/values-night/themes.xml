@@ -17,7 +17,7 @@
         <item name="fullscreenBackgroundColor">@color/dark_green</item>
         <item name="fullscreenTextColor">@color/white</item>
     </style>
-    <style name="Theme.AppCompat.NoActionBar" parent="Theme.AppCompat">
+    <style name="Theme.AppCompat.NoActionBar.Main" parent="Theme.AppCompat.NoActionBar">
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlNormal">@color/white</item>
     </style>
