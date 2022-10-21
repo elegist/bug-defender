@@ -52,10 +52,13 @@ class MainActivity : AppCompatActivity() {
     // initialize MediaPlayer
     override fun onResume(){
         super.onResume()
-        SoundManager.initMediaPlayer(this, R.raw.sound1)
         SoundManager.loadPreferences(this)
+        SoundManager.initMediaPlayer(this, R.raw.sound1)
         SoundManager.playSounds()
         SoundManager.loadSounds(this)
+        if(!soundSetting){
+            soundPool.release()
+        }
         if(!musicSetting) {
             SoundManager.pauseMusic()
         }
