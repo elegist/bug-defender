@@ -19,5 +19,14 @@ class SettingsFragment: PreferenceFragmentCompat() {
             true
         }
 
+        val soundCheck = findPreference<CheckBoxPreference>("sound_pref")!!
+        soundCheck.setOnPreferenceChangeListener { _, newValue ->
+            if(!(newValue as Boolean)){
+                SoundManager.soundPool.release()
+            } else {
+                SoundManager.playSounds()
+            }
+            true
+        }
     }
 }

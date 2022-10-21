@@ -6,11 +6,11 @@ import android.media.MediaPlayer
 import android.media.SoundPool
 import androidx.preference.PreferenceManager
 
-
 object SoundManager {
     lateinit var mediaPlayer: MediaPlayer
-    var musicSetting: Boolean = true
     lateinit var soundPool: SoundPool
+    var musicSetting: Boolean = true
+    var soundSetting: Boolean = true
 
     // SoundPool for Soundbites
     fun playSounds() {
@@ -24,6 +24,10 @@ object SoundManager {
             .build()
     }
 
+    fun loadSounds(){
+        soundPool.load("res/raw/hit_04.ogg", 1)
+    }
+
     // Music player for background music
     // init function
     fun initMediaPlayer(context: Context, song: Int) {
@@ -34,8 +38,10 @@ object SoundManager {
 
     // preference function for checkbox functionality
     fun loadPreferences(context: Context) {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        musicSetting = preferences.getBoolean("music_pref", true)
+        val musicPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val soundPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        musicSetting = musicPreferences.getBoolean("music_pref", true)
+        soundSetting = soundPreferences.getBoolean("sound_pref", true)
     }
 
     // function to pauses music

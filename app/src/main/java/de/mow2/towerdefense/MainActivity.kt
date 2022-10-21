@@ -1,8 +1,6 @@
 package de.mow2.towerdefense
 
 import android.content.Intent
-import android.media.AudioAttributes
-import android.media.SoundPool
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -20,12 +18,11 @@ import de.mow2.towerdefense.controller.SoundManager.soundPool
 class MainActivity : AppCompatActivity() {
     private val TAG: String = javaClass.name
     private val fm = supportFragmentManager
-    var dialogPopup = PopupFragment()
+    private var dialogPopup = PopupFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        SoundManager.playSounds()
     }
 
     fun startGame(view: View) {
@@ -34,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     fun popUpButton(view: View) {
         // how to play sound with onClick
-        soundPool.load(this, R.raw.hit_04, 1)
         when (view.id) {
             R.id.info_button -> {
                 dialogPopup.show(fm, "infoDialog")
@@ -55,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         SoundManager.loadPreferences(this)
         SoundManager.initMediaPlayer(this, R.raw.sound1)
+        SoundManager.playSounds()
+        SoundManager.loadSounds()
         if(!musicSetting) {
             SoundManager.pauseMusic()
         }

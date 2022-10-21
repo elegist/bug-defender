@@ -6,16 +6,6 @@
     style="@style/popUp.View"
     android:scrollIndicators="right">
 
-    <!--<androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:name="de.mow2.towerdefense.controller.SettingsFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/buttonPopup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout="@layout/popup_view" />-->
-
     <TextView
         android:id="@+id/popupText"
         android:layout_width="wrap_content"
@@ -33,7 +23,7 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout="@android:layout/simple_gallery_item" />
+        tools:layout="@android:layout/preference_category" />
 
     <Button
         android:id="@+id/buttonPopup"
