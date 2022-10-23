@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.about_button -> {
                 dialogPopup.show(fm, "aboutDialog")
-                soundPool.play(Sounds.SLAMSOUND.id, 1F, 1F, 1, 0, 1F)
             }
             R.id.preference_button -> {
                 dialogPopup.show(fm, "settingsDialog")

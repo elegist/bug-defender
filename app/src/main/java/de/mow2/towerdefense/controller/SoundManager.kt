@@ -43,7 +43,6 @@ object SoundManager {
 
     fun loadSounds(context: Context) {
         Sounds.HITSOUND.id = soundPool.load(context, R.raw.hit_04, 1)
-        Sounds.SLAMSOUND.id = soundPool.load(context, R.raw.slam_02, 1)
     }
 
     // MediaPlayer
