@@ -32,9 +32,9 @@ class GameActivity : AppCompatActivity() {
         coinsTxt = coinsText
         //get vertical scroll offset for build menu
         scrollView = gameContainer
-/*        gameContainer.viewTreeObserver.addOnScrollChangedListener {
+        gameContainer.viewTreeObserver.addOnScrollChangedListener {
             scrollOffset = scrollView.scrollY
-        }*/
+        }
         //immersive mode
         hideSystemBars()
         //all built up: finally initialize level
