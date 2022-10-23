@@ -59,6 +59,9 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+
+    // background music in main activity
+    // initialize MediaPlayer, load settings
     override fun onResume(){
         super.onResume()
         // re-initialize MediaPlayer with correct settings
@@ -69,6 +72,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    // stops MediaPlayer while not being in activity
     override fun onPause() {
         super.onPause()
         // 4. stops MediaPlayer while not being in activity

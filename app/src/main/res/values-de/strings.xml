@@ -13,4 +13,8 @@
     <string name="preference_music">music</string>
     <string name="menuBtn">Menu</string>
 
+    <string name="preference_file_key">false</string>
+    <string name="order_confirmation">bla</string>
+    <string name="ok">ok</string>
+    <string name="sound">sounds</string>
 </resources>

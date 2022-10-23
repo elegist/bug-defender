@@ -10,6 +10,12 @@ import de.mow2.towerdefense.R
 import kotlinx.android.synthetic.main.popup_view.*
 import kotlinx.android.synthetic.main.popup_view.view.*
 
+/**
+ * Dialog Fragment for popup window in mainActivity (about, info, prefs)
+ * inflates view onCreate, sets Settings for each popup window
+ * gets preferences through childFragment
+ * functionality for close button in popup view
+ * */
 
 class PopupFragment: DialogFragment() {
     private lateinit var popUpView: View
