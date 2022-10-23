@@ -2,7 +2,10 @@ package de.mow2.towerdefense.model.gameobjects.actors
 
 import de.mow2.towerdefense.model.core.SquareField
 
-class Tower(var squareField: SquareField, var type: TowerTypes) : Comparable<Tower> {
+/**
+ *
+ */
+class Tower(squareField: SquareField, var type: TowerTypes) : Comparable<Tower> {
     //position
     var x: Float = squareField.coordX
     var y: Float

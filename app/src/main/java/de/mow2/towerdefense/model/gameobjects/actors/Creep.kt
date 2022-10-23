@@ -1,22 +1,76 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import de.mow2.towerdefense.controller.GameLoop
+import de.mow2.towerdefense.controller.GameManager
+import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.gameobjects.GameObject
+import de.mow2.towerdefense.model.pathfinding.Astar
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 /**
- * for later use
+ * 
  */
 
-class Creep(var squareField: SquareField, var type: CreepTypes) {
-    var x: Float = squareField.coordX
-    var y: Float = squareField.coordY
+class Creep(target: Astar.Node, type: CreepTypes, squareField: SquareField = GameView.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]
+): GameObject(squareField) {
     var w: Int = squareField.width
-    var h: Int = (2*w)
+    var h: Int = squareField.height
+    var targetX: Float = GameView.playGround.squareArray[target.x][target.y].coordX
+    var targetY: Float = GameView.playGround.squareArray[target.x][target.y].coordY
+    /**
+     * calc pixels per update and init speed
+     */
+    private var speedPixelsPerSecond: Float = (GameView.gameWidth + GameView.gameHeight)*0.03f
+        set(value){
+            field = (GameView.gameWidth + GameView.gameHeight)*value
+        }
+    //init speed
+    private val speed = speedPixelsPerSecond / GameLoop.targetUPS
 
-    init {
-
+    override fun update(){
+        /**
+         * math for the movement calculation:
+         * https://www.codeproject.com/articles/990452/interception-of-two-moving-objects-in-d-space
+         */
+        //vector between enemy and target
+        var distanceToTargetX: Float = targetX - positionX()
+        var distanceToTargetY: Float = targetY - positionY()
+        //absolute distance
+        var distanceToTargetAbs: Float = findDistance(this.positionX(), this.positionY(), targetX, targetY)
+        //direction
+        var directionX: Float = distanceToTargetX/distanceToTargetAbs
+        var directionY: Float = distanceToTargetY/distanceToTargetAbs
+        //check if target has been reached
+        if(distanceToTargetAbs > 0f){
+            velocityX = directionX*speed
+            velocityY = directionY*speed
+        }else{
+            velocityX = 0f
+            velocityY = 0f
+        }
+        //update coordinates
+        coordX += velocityX
+        coordY += velocityY
     }
 
+    companion object{
+        //set spawn rate
+        var spawnsPerMinute: Float = 30f
+        private var spawnsPerSecond: Float = spawnsPerMinute / 60
+        //link with target updates per second to convert to updates per spawn
+        private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond
+        private var waitUpdates: Float = 0f
 
-
-
+        fun canSpawn() :Boolean{
+            return if(waitUpdates <= 0f) {
+                waitUpdates += updateCycle
+                true
+            }else{
+                waitUpdates--
+                false
+            }
+        }
+    }
 }

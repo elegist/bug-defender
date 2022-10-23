@@ -4,11 +4,8 @@ import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
 import de.mow2.towerdefense.R
-import de.mow2.towerdefense.model.gameobjects.Enemy
-import de.mow2.towerdefense.model.gameobjects.Target
-import de.mow2.towerdefense.model.gameobjects.actors.Tower
-import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
 import java.util.concurrent.ConcurrentHashMap
 
@@ -20,13 +17,12 @@ object GameManager {
 
     //currently as array, should be a matrix (map or list)
     private var towerList = emptyArray<Tower>()
-    private var creepList: ConcurrentHashMap<Enemy, Target> = ConcurrentHashMap()
-    lateinit var sprite: Sprite
+    private var creepList: ConcurrentHashMap<Creep, Astar.Node> = ConcurrentHashMap()
     lateinit var spriteSheet: SpriteSheet
 
     //nodes test
     var compoundPath: MutableList<SquareField> = mutableListOf()
-    private var target: Target = Target(GameView.gameWidth/2.toFloat(), GameView.gameHeight.toFloat())
+    private var target: Astar.Node = Astar.Node(5, 5)
     //build and upgrade menu
     var buildMenuButtons = emptyArray<Bitmap>()
     var buildMenuButtonRanges = emptyArray<ClosedFloatingPointRange<Float>>()
@@ -97,6 +93,7 @@ object GameManager {
      * decides which objects to draw
      */
     fun drawObjects(canvas: Canvas, resources: Resources) {
+        var sprite = SpriteSheet(resources, BitmapFactory.decodeResource(resources, R.drawable.leafbug)).cutSprite()
         //draw towers
         towerList.forEach {
             when (it.type) {
@@ -111,14 +108,17 @@ object GameManager {
                 }
             }
         }
-/*        //draw creeps
-        creepList.forEach { (enemy) ->
-            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.leafbug_down1), enemy.getPositionX(), enemy.getPositionY())
-        }*/
-        //astar visualization
+
+        creepList.forEach{ (enemy) ->
+            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down), enemy.w, enemy.h), enemy.positionX(), enemy.positionY())
+
+        }
+
+
+/*        //astar visualization
         compoundPath.forEach {
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.path), 50, 50), it.coordX, it.coordY)
-        }
+        }*/
     }
 
     /**
@@ -126,18 +126,18 @@ object GameManager {
      */
     fun updateLogic() {
         //add enemies to the spawn
-/*        if (Enemy.canSpawn()) { //wait for update timer
+        if (Creep.canSpawn()) { //wait for update timer
             //add creeps and their individual target to concurrentHashMap
-            creepList[Enemy(target)] = target //creepList.put(Enemy(target), target)
+            creepList[Creep(target, CreepTypes.LEAFBUG)] = target
 
             //Log.i(TAG, "${creepList.size} enemies spawned")
         }
 
-        *//**
+        /**
          * update movement, update target or remove enemy
-         *//*
+         */
         creepList.forEach{ (enemy) ->
-            if(enemy.getPositionY().toInt() >= GameView.gameHeight){
+            if(enemy.positionY().toInt() >= GameView.playGround.squareArray[0][squaresY-1].coordY.toInt()){
                 creepList.remove(enemy)
                 //Log.i("enemyUpdater", "enemy removed")
             }else{
@@ -145,7 +145,7 @@ object GameManager {
                 enemy.update()
             }
             //TODO: update enemy target
-        }*/
+        }
     }
 
     /**
