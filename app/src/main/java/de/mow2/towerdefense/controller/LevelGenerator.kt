@@ -3,6 +3,8 @@ package de.mow2.towerdefense.controller
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import de.mow2.towerdefense.model.gameobjects.actors.Creep
+import de.mow2.towerdefense.model.gameobjects.actors.CreepTypes
 import de.mow2.towerdefense.model.pathfinding.Astar
 
 
@@ -66,20 +68,28 @@ class LevelGenerator(): ViewModel() {
     }
 
     val alg = Astar()
-    fun startWave() {
-        //define creeps
+    private fun startWave() {
+/*        //define creeps
         //define timer
         //find path
-        val creepNode = Astar.Node(5, 0)
-        val path = alg.findPath(creepNode, Astar.Node(5, 17), GameManager.squaresX, GameManager.squaresY)
+        val target = Astar.Node(8, 17)
+        //target needs to change dynamically along the path
+        val creep = Creep(CreepTypes.LEAFBUG)
+        val posX = creep.squareField.mapPos["x"]!!
+        val posY = creep.squareField.mapPos["y"]!!
+        val creepNode = Astar.Node(posX, posY)
+        val path = alg.findPath(creepNode, Astar.Node(8, 17), GameManager.squaresX, GameManager.squaresY)
         if(path != null) {
+            val sortedPath = path.reversed()
+            creep.path = sortedPath
+            Log.i("Sorted path first: ", "${sortedPath.first()}")
+            GameManager.creepList[creep] = sortedPath.first()
             //weg gefunden!
-            GameManager.comparePathCoords(path)
             Log.i("Path: ", "$path")
         } else {
             //weg blockiert!
             Log.i("Path: ", "Pfad blockiert")
         }
-        //start wave
+        //start wave*/
     }
 }

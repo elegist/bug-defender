@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import android.util.Log
 import de.mow2.towerdefense.controller.GameLoop
 import de.mow2.towerdefense.controller.GameManager
 import de.mow2.towerdefense.controller.GameView
@@ -12,13 +13,23 @@ import kotlin.random.nextInt
 /**
  * 
  */
-
-class Creep(target: Astar.Node, type: CreepTypes, squareField: SquareField = GameView.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]
+//TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
+class Creep(type: CreepTypes, squareField: SquareField = GameView.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]
 ): GameObject(squareField) {
     var w: Int = squareField.width
     var h: Int = squareField.height
-    var targetX: Float = GameView.playGround.squareArray[target.x][target.y].coordX
-    var targetY: Float = GameView.playGround.squareArray[target.x][target.y].coordY
+    //path finding
+    var path: List<Astar.Node> = emptyList()
+    set(value) {
+        field = value
+        findNextTarget()
+        GameManager.comparePathCoords(value)
+    }
+    var target: Astar.Node = Astar.Node(this.squareField.mapPos["x"]!!, this.squareField.mapPos["y"]!!)
+    var targetIndex: Int = 0
+    var targetX = GameView.playGround.squareArray[target.x][target.y].coordX
+    var targetY = GameView.playGround.squareArray[target.x][target.y].coordY
+
     /**
      * calc pixels per update and init speed
      */
@@ -39,6 +50,7 @@ class Creep(target: Astar.Node, type: CreepTypes, squareField: SquareField = Gam
         var distanceToTargetY: Float = targetY - positionY()
         //absolute distance
         var distanceToTargetAbs: Float = findDistance(this.positionX(), this.positionY(), targetX, targetY)
+        if(distanceToTargetAbs.toInt() <= 1) findNextTarget()
         //direction
         var directionX: Float = distanceToTargetX/distanceToTargetAbs
         var directionY: Float = distanceToTargetY/distanceToTargetAbs
@@ -53,6 +65,18 @@ class Creep(target: Astar.Node, type: CreepTypes, squareField: SquareField = Gam
         //update coordinates
         coordX += velocityX
         coordY += velocityY
+    }
+
+    private fun findNextTarget() {
+        target = path[targetIndex]
+        if(target != path.last()) {
+            targetX = GameView.playGround.squareArray[target.x][target.y].coordX
+            targetY = GameView.playGround.squareArray[target.x][target.y].coordY
+            targetIndex++
+        } else {
+            targetX = GameView.playGround.squareArray[target.x][target.y].coordX
+            targetY = GameView.playGround.squareArray[target.x][target.y].coordY
+        }
     }
 
     companion object{

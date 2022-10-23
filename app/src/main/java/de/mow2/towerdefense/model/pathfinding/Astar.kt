@@ -16,8 +16,6 @@ class Astar {
             for(i in openSet) {
                 if(i.f < currentNode.f) {
                     currentNode = i
-
-                    Log.i("Currentnode: ", "$currentNode")
                 }
             }
 

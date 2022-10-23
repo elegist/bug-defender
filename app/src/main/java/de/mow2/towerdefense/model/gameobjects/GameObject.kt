@@ -11,7 +11,7 @@ import kotlin.math.sqrt
  * TODO: Tower could be a GameObject. Would be easier to make creeps attack towers
  */
 
-abstract class GameObject(squareField: SquareField) {
+abstract class GameObject(var squareField: SquareField) {
     protected var coordX = squareField.coordX
     protected var coordY = squareField.coordY
     protected var velocityX: Float = 0.0f

@@ -28,6 +28,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     init {
         holder.addCallback(this)
+        holder.setFormat(0x00000004)
         gameLoop = GameLoop()
 
         //initializing background tiles

@@ -17,7 +17,7 @@ object GameManager {
 
     //currently as array, should be a matrix (map or list)
     private var towerList = emptyArray<Tower>()
-    private var creepList: ConcurrentHashMap<Creep, Astar.Node> = ConcurrentHashMap()
+    var creepList: ConcurrentHashMap<Creep, Astar.Node> = ConcurrentHashMap()
     lateinit var spriteSheet: SpriteSheet
 
     //nodes test
@@ -28,10 +28,9 @@ object GameManager {
     var buildMenuButtonRanges = emptyArray<ClosedFloatingPointRange<Float>>()
     private val TAG = javaClass.name
 
-    fun comparePathCoords(path: MutableSet<Astar.Node>) {
-        val pathList = path.reversed()
+    fun comparePathCoords(path: List<Astar.Node>) {
         compoundPath.clear()
-        pathList.forEach {
+        path.forEach {
             compoundPath.add(GameView.playGround.squareArray[it.x][it.y])
             Log.i("Infos:", "$it, ${it.f}")
         }
@@ -108,17 +107,9 @@ object GameManager {
                 }
             }
         }
-
         creepList.forEach{ (enemy) ->
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down), enemy.w, enemy.h), enemy.positionX(), enemy.positionY())
-
         }
-
-
-/*        //astar visualization
-        compoundPath.forEach {
-            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.path), 50, 50), it.coordX, it.coordY)
-        }*/
     }
 
     /**
@@ -127,11 +118,21 @@ object GameManager {
     fun updateLogic() {
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
-            //add creeps and their individual target to concurrentHashMap
-            creepList[Creep(target, CreepTypes.LEAFBUG)] = target
-
-            //Log.i(TAG, "${creepList.size} enemies spawned")
+            val creep = Creep(CreepTypes.LEAFBUG)
+            val posX = creep.squareField.mapPos["x"]!!
+            val posY = creep.squareField.mapPos["y"]!!
+            val creepNode = Astar.Node(posX, posY)
+            val targetNode = Astar.Node(posX, 17)
+            val alg = Astar()
+            val path = alg.findPath(creepNode, targetNode, squaresX, squaresY)
+            if(path != null) {
+                val sortedPath = path.reversed()
+                creep.path = sortedPath
+                //add creeps and their individual target to concurrentHashMap
+                creepList[creep] = target
+            }
         }
+
 
         /**
          * update movement, update target or remove enemy
