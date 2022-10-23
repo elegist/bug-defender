@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, GameActivity::class.java))
     }
 
+    // loads Dialog Fragment popUpWindow on button Click based on button id
     fun popUpButton(view: View) {
-        // how to play sound with onClick
         when (view.id) {
             R.id.info_button -> {
                 dialogPopup.show(fm, "infoDialog")
@@ -48,8 +48,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // background music in main activity
-    // initialize MediaPlayer
+    // loads music and sounds and sets them based on saved preferences
     override fun onResume(){
         super.onResume()
         SoundManager.loadPreferences(this)
@@ -64,12 +63,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 4. stops MediaPlayer while not being in activity
+    // stops MediaPlayer while not being in activity to change music
     override fun onPause() {
         super.onPause()
         SoundManager.mediaPlayer.release()
     }
 
+    // releases MediaPlayer and SoundPool onDestroy
     override fun onDestroy() {
         super.onDestroy()
         soundPool.release()

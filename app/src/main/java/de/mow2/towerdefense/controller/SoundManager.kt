@@ -7,6 +7,18 @@ import android.media.SoundPool
 import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.R
 
+/**
+ * class SoundManager
+ * for playing background music and in-game Sound Sprites
+ * contains MediaPlayer and SoundPool and initializes music & sound settings
+ * SoundPool functions: playSounds -> initializes SoundPool with settings
+ *                      loadSounds -> load audio streams from R
+ *                      variables in enum class with integer for ID to make code readable
+ * MediaPlayer functions: initMediaPlayer -> initializes MediaPlayer, starts it with setting for Loop
+ *                      pauseMusic & resumeMusic enables to start and stop background music
+ * function loadPreferences sets music and soundSettings as Preferences for checkbox
+ * */
+
 enum class Sounds(var id: Int){
     HITSOUND(0), SLAMSOUND(0)
 }
@@ -17,7 +29,7 @@ object SoundManager {
     var musicSetting: Boolean = true
     var soundSetting: Boolean = true
 
-    // SoundPool for Soundbites
+    // SoundPool
     fun playSounds() {
         var audioattributes: AudioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -34,12 +46,23 @@ object SoundManager {
         Sounds.SLAMSOUND.id = soundPool.load(context, R.raw.slam_02, 1)
     }
 
-    // Music player for background music
-    // init function
+    // MediaPlayer
     fun initMediaPlayer(context: Context, song: Int) {
         mediaPlayer = MediaPlayer.create(context, song)
         mediaPlayer.isLooping = true
         mediaPlayer.start()
+    }
+
+    fun pauseMusic() {
+        if(mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
+    }
+
+    fun resumeMusic() {
+        if(!mediaPlayer.isPlaying) {
+            mediaPlayer.start()
+        }
     }
 
     // preference function for checkbox functionality
@@ -50,17 +73,4 @@ object SoundManager {
         soundSetting = soundPreferences.getBoolean("sound_pref", true)
     }
 
-    // function to pauses music
-    fun pauseMusic() {
-        if(mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-        }
-    }
-
-    // function to resume music
-    fun resumeMusic() {
-        if(!mediaPlayer.isPlaying) {
-            mediaPlayer.start()
-        }
-    }
 }

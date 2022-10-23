@@ -39,9 +39,9 @@ class GameActivity : AppCompatActivity() {
         defineBuildUpgradeMenu()
     }
 
-    // stops MediaPlayer while not being in activity
+
     // background music in main activity
-    // initialize MediaPlayer
+    // initialize MediaPlayer, load settings
     override fun onResume(){
         super.onResume()
         SoundManager.loadPreferences(this)
@@ -51,7 +51,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    // 4. stops MediaPlayer while not being in activity
+    // stops MediaPlayer while not being in activity
     override fun onPause() {
         super.onPause()
         SoundManager.mediaPlayer.release()
