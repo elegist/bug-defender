@@ -4,13 +4,5 @@ import android.graphics.Rect
 
 
 data class Sprite(private val spriteSheet: SpriteSheet, private val rect: Rect) {
-
-
-
-
-
-
-/*    fun draw(canvas: Canvas, x: Int, y: Int){
-        canvas.drawBitmap(spriteSheet.image, rect, Rect(x, y, x+64, y+64), null)
-    }*/
+    
 }
