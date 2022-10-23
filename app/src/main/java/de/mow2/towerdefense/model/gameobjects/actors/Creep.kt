@@ -50,7 +50,7 @@ class Creep(type: CreepTypes, squareField: SquareField = GameView.playGround.squ
         var distanceToTargetY: Float = targetY - positionY()
         //absolute distance
         var distanceToTargetAbs: Float = findDistance(this.positionX(), this.positionY(), targetX, targetY)
-        if(distanceToTargetAbs.toInt() <= 1) findNextTarget()
+        if(distanceToTargetAbs.toInt() <= GameView.playGround.squareSize*0.10) findNextTarget()
         //direction
         var directionX: Float = distanceToTargetX/distanceToTargetAbs
         var directionY: Float = distanceToTargetY/distanceToTargetAbs
