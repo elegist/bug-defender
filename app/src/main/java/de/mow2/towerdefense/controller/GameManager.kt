@@ -32,7 +32,6 @@ object GameManager {
         compoundPath.clear()
         path.forEach {
             compoundPath.add(GameView.playGround.squareArray[it.x][it.y])
-            Log.i("Infos:", "$it, ${it.f}")
         }
     }
 

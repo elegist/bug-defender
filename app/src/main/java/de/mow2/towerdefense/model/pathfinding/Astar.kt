@@ -37,7 +37,6 @@ class Astar {
             neighbors.forEach neighbors@{ node ->
 
                 if (GameView.playGround.squareArray[node.x][node.y].isBlocked) {
-                    Log.i("Path: ", "Feld blockiert: $node")
                     return@neighbors
                 }
 

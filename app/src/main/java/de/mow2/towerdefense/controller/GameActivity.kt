@@ -14,11 +14,12 @@ import androidx.lifecycle.Observer
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.model.core.GUICallBack
+import de.mow2.towerdefense.model.core.SquareField
 import kotlinx.android.synthetic.main.activity_game.*
 
 class GameActivity : AppCompatActivity(), GUICallBack {
     private val levelGenerator: LevelGenerator by viewModels()
-    lateinit var chrono: Chronometer
+    private lateinit var chrono: Chronometer
     lateinit var coinsTxt: TextView
     lateinit var scrollView: ScrollView
     private var buildMenuExists = false
@@ -109,9 +110,13 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         var scrollOffset = 0
     }
 
-    override fun openBuildMenu() {
+    override fun openBuildMenu(squareField: SquareField) {
         // TODO: make build menu visible / invisible
-        Log.i("Callback: ", "I've been called back!")
+        Log.i("Callback: ", "I've been called back on squareField: $squareField")
+    }
+
+    override fun buildTower() {
+        //TODO: build tower of specific type on given coordinates
     }
 }
 

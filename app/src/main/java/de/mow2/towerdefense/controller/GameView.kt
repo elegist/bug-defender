@@ -112,7 +112,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastY = ev.y
                 invalidate()
                 Log.i("Quadrat angeklickt: ", "${getTouchedSquare(lastX, lastY)}")
-                caller.openBuildMenu(callBack)
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -126,6 +125,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                         if(getTouchedSquare(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
                             selectedSquare = getTouchedSquare(x, y)
                             //open up build and upgrade menu
+                            caller.openBuildMenu(selectedSquare, callBack)
                             buildMenu = BuildUpgradeMenu(0f, bottomEnd)
                             buildMenu.active = true
                             blockInput = true
@@ -167,8 +167,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         return playGround.squareArray[xPos][yPos]
     }
 
-    fun openBuildMenu(callback: GUICallBack) {
-        callback.openBuildMenu()
+    private fun openBuildMenu(squareField: SquareField, callback: GUICallBack) {
+        callback.openBuildMenu(squareField)
     }
 
     companion object {
