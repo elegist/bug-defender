@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.pathfinding.Astar
@@ -25,6 +26,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     private lateinit var selectedSquare: SquareField
     private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
+
+    private val caller = this
+    private val callBack = GameActivity()
 
     init {
         holder.addCallback(this)
@@ -108,6 +112,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastY = ev.y
                 invalidate()
                 Log.i("Quadrat angeklickt: ", "${getTouchedSquare(lastX, lastY)}")
+                caller.openBuildMenu(callBack)
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -160,6 +165,10 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
         }
         return playGround.squareArray[xPos][yPos]
+    }
+
+    fun openBuildMenu(callback: GUICallBack) {
+        callback.openBuildMenu()
     }
 
     companion object {

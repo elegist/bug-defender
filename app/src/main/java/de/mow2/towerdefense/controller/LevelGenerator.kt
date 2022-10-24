@@ -1,10 +1,7 @@
 package de.mow2.towerdefense.controller
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import de.mow2.towerdefense.model.gameobjects.actors.Creep
-import de.mow2.towerdefense.model.gameobjects.actors.CreepTypes
 import de.mow2.towerdefense.model.pathfinding.Astar
 
 

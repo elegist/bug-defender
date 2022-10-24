@@ -1,6 +1,7 @@
 package de.mow2.towerdefense.controller
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Chronometer
 import android.widget.ScrollView
 import android.widget.TextView
@@ -12,9 +13,10 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Observer
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
+import de.mow2.towerdefense.model.core.GUICallBack
 import kotlinx.android.synthetic.main.activity_game.*
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity(), GUICallBack {
     private val levelGenerator: LevelGenerator by viewModels()
     lateinit var chrono: Chronometer
     lateinit var coinsTxt: TextView
@@ -105,6 +107,11 @@ class GameActivity : AppCompatActivity() {
     companion object {
         //scroll offset for build menu
         var scrollOffset = 0
+    }
+
+    override fun openBuildMenu() {
+        // TODO: make build menu visible / invisible
+        Log.i("Callback: ", "I've been called back!")
     }
 }
 
