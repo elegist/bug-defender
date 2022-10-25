@@ -43,8 +43,6 @@ class LevelGenerator(): ViewModel() {
             coinAmnt.value = oldVal - newValue
             true
         } else {
-            startWave()
-            coinAmnt.value = 200
             false
         }
     }

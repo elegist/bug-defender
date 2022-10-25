@@ -15,20 +15,12 @@ import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.pathfinding.Astar
 
-class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
+class GameView(context: Context, private val callBack: GUICallBack) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     lateinit var levelGenerator: LevelGenerator
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
-    //build and upgrade menu
-    private lateinit var buildMenu: BuildUpgradeMenu
-
-    private lateinit var selectedSquare: SquareField
-    private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
-
-    private val caller = this
-    private val callBack = GameActivity()
 
     init {
         holder.addCallback(this)
@@ -82,10 +74,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //object draw area end//
         ///////////////////////
 
-        //build menu should always draw on top
-        if(this::buildMenu.isInitialized && buildMenu.active) {
-            GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y + GameActivity.scrollOffset)
-        }
         //redraw canvas if canvas has changed
         invalidate()
     }
@@ -111,7 +99,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastX = ev.x
                 lastY = ev.y
                 invalidate()
-                Log.i("Quadrat angeklickt: ", "${getTouchedSquare(lastX, lastY)}")
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -119,27 +106,14 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 x = ev.x
                 y = ev.y
                 invalidate()
-
                 if(x == lastX && y == lastY) {
-                    if(!blockInput && !getTouchedSquare(x, y).isBlocked) {
-                        if(getTouchedSquare(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                            selectedSquare = getTouchedSquare(x, y)
-                            //open up build and upgrade menu
-                            caller.openBuildMenu(selectedSquare, callBack)
-                            buildMenu = BuildUpgradeMenu(0f, bottomEnd)
-                            buildMenu.active = true
-                            blockInput = true
-                        }
-                    } else { // build and upgrade menu is opened
-                        if(x in buildMenu.getRangeX() && y in buildMenu.getRangeY()) {
-                            val towerType = buildMenu.getTowerType(x)
-                            if(levelGenerator.decreaseCoins(buildMenu.getTowerCost(towerType))) {
-                                GameManager.buildTower(selectedSquare, towerType)
-                                selectedSquare.isBlocked = true
-                            }
-                        }
-                        blockInput = false
-                        buildMenu.active = false
+                    //open up build and upgrade menu for selected square
+                    //TODO: show upgrade or build options, depending on state of isBlocked
+                    val selectedField = getTouchedSquare(x, y)
+                    if(selectedField.isBlocked) {
+                        //TODO: Open upgrade menu
+                    } else {
+                        callBack.toggleBuildMenu(selectedField)
                     }
                 }
             }
@@ -151,6 +125,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         super.performClick()
         return false
     }
+
     private fun getTouchedSquare(x: Float, y: Float): SquareField {
         var xPos = 0
         var yPos = 0
@@ -167,16 +142,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         return playGround.squareArray[xPos][yPos]
     }
 
-    private fun openBuildMenu(squareField: SquareField, callback: GUICallBack) {
-        callback.openBuildMenu(squareField)
-    }
-
     companion object {
         var gameWidth = Resources.getSystem().displayMetrics.widthPixels
         var gameHeight = 2 * gameWidth
         val playGround = PlayGround(gameWidth)
-        var bottomEnd = 0f
-        //path finding algorithm
-        var astar = Astar()
     }
 }
