@@ -2,6 +2,8 @@ package de.mow2.towerdefense.model.pathfinding
 
 import android.util.Log
 import de.mow2.towerdefense.controller.GameView
+import kotlin.math.abs
+import kotlin.math.min
 
 class Astar {
     fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {
@@ -49,7 +51,8 @@ class Astar {
 
                 node.parent = currentNode
                 node.g = currentNode.g + 1
-                node.h = ((node.x - targetNode.x)) + ((node.y - targetNode.y))
+//                node.h = ((node.x - targetNode.x)) + ((node.y - targetNode.y))
+                node.h = calculateHeuristics(node, targetNode)
                 node.f = node.g + node.h
 
                 openSet.forEach { openNode ->
@@ -79,17 +82,27 @@ class Astar {
 
             //TODO: richtige Gewichtung berechnen
             if (x - 1 >= 0) neighbors.add(Node(x - 1, y))
-/*            if (x - 1 > 0 && y - 1 > 0) neighbors.add(Node(x - 1, y - 1))
-            if (x - 1 > 0 && y + 1 < maxCols) neighbors.add(Node(x - 1, y + 1))*/
+            if (x - 1 >= 0 && y - 1 >= 0) neighbors.add(Node(x - 1, y - 1))
+            if (x - 1 >= 0 && y + 1 < maxCols) neighbors.add(Node(x - 1, y + 1))
             if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
             if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
             if (y + 1 < maxCols) neighbors.add(Node(x, y + 1))
-/*            if (x + 1 < maxRows && y - 1 > 0) neighbors.add(Node(x + 1, y - 1))
-            if (x + 1 < maxRows && y + 1 < maxCols) neighbors.add(Node(x + 1, y + 1))*/
+            if (x + 1 < maxRows && y - 1 >= 0) neighbors.add(Node(x + 1, y - 1))
+            if (x + 1 < maxRows && y + 1 < maxCols) neighbors.add(Node(x + 1, y + 1))
 
             return neighbors
         }
 
         override fun compareTo(other: Node): Int = this.f.compareTo(other.f)
+    }
+
+    fun calculateHeuristics(from: Node, to: Node): Int {
+        val diagonalCost = 14
+        val straightCost = 10
+
+        val xDist = abs(from.x - to.x)
+        val yDist = abs(from.y - to.y)
+        val remaining = abs(xDist - yDist)
+        return diagonalCost * min(xDist, yDist) + straightCost * remaining
     }
 }
