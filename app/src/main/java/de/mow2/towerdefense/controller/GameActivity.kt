@@ -32,7 +32,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     private lateinit var buildMenuScrollView: HorizontalScrollView
     private lateinit var buildMenuLayout: LinearLayout
     private val buildMenu = BuildUpgradeMenu()
-    private var buildMenuExists = false
+    var buildMenuExists = false
     //observers
     private lateinit var coinObserver: Observer<Int>
 
@@ -73,7 +73,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //reference build menu container
         buildMenuScrollView = buildMenuWrapper
         buildMenuLayout = buildMenuContainer
-        initializeBuildMenu()
     }
 
     private fun defineObservers() {
@@ -111,42 +110,57 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    override fun buildTower(type: TowerTypes) {
-        val cost = buildMenu.getTowerCost(type)
+    override fun buildTower(type: TowerTypes, level: Int) {
+        val cost = buildMenu.getTowerCost(type, level)
         if(levelGenerator.decreaseCoins(cost)) {
             //build tower
-            buildMenu.buildTower(selectedField, type)
+            if(level != 0) {
+                buildMenu.upgradeTower(selectedField)
+            } else {
+                buildMenu.buildTower(selectedField, type)
+            }
         } else {
             //not enough money! message player
         }
-        toggleBuildMenu(selectedField)
     }
 
     private lateinit var selectedField: SquareField
     override fun toggleBuildMenu(squareField: SquareField) {
+        buildMenuLayout.removeAllViews()
         selectedField = squareField
-        //toggle visibility based on boolean flag
+        //create build menu or make it disappear
         if(!buildMenuExists) {
+            //if field already contains tower, display delete tower button
+            val level = if(selectedField.hasTower != null) {
+                val tower = selectedField.hasTower!! //reference tower
+                //add delete tower button
+                val deleteBtn = ImageButton(this, null, R.style.ImageButton_Main)
+                deleteBtn.setImageResource(R.drawable.tower_destroy)
+                buildMenuLayout.addView(deleteBtn)
+                deleteBtn.setOnClickListener {
+                    buildMenu.destroyTower(tower)
+                    toggleBuildMenu(selectedField)
+                }
+                tower.level + 1
+            } else {
+                0
+            }
+            TowerTypes.values().forEachIndexed { i, type ->
+                val towerBtn = BuildButton(this, null, R.style.ImageButton_Main, type, level)
+                towerBtn.id = i
+                towerBtn.setOnClickListener {
+                    buildTower(type, level)
+                    toggleBuildMenu(selectedField)
+                }
+                buildMenuLayout.addView(towerBtn)
+            }
+
             buildMenuScrollView.visibility = View.VISIBLE
         } else {
             buildMenuScrollView.visibility = View.GONE
         }
         //swap boolean flag
         buildMenuExists = !buildMenuExists
-    }
-
-    override fun initializeBuildMenu() {
-        TowerTypes.values().forEachIndexed { i, type ->
-            var towerBtn = ImageButton(this, null, R.style.ImageButton_Main)
-            when(type) {
-                TowerTypes.BLOCK -> towerBtn.setImageResource(R.drawable.tower_block)
-                TowerTypes.SLOW -> towerBtn.setImageResource(R.drawable.tower_slow)
-                TowerTypes.AOE -> towerBtn.setImageResource(R.drawable.tower_aoe)
-            }
-            towerBtn.id = i
-            towerBtn.setOnClickListener {buildTower(type)}
-            buildMenuLayout.addView(towerBtn)
-        }
     }
 }
 

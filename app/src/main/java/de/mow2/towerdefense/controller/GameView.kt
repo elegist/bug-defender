@@ -1,11 +1,11 @@
 package de.mow2.towerdefense.controller
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -13,8 +13,8 @@ import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
-import de.mow2.towerdefense.model.pathfinding.Astar
 
+@SuppressLint("ViewConstructor")
 class GameView(context: Context, private val callBack: GUICallBack) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     lateinit var levelGenerator: LevelGenerator
@@ -108,13 +108,7 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
                 invalidate()
                 if(x == lastX && y == lastY) {
                     //open up build and upgrade menu for selected square
-                    //TODO: show upgrade or build options, depending on state of isBlocked
-                    val selectedField = getTouchedSquare(x, y)
-                    if(selectedField.isBlocked) {
-                        //TODO: Open upgrade menu
-                    } else {
-                        callBack.toggleBuildMenu(selectedField)
-                    }
+                    callBack.toggleBuildMenu(getTouchedSquare(x, y))
                 }
             }
         }

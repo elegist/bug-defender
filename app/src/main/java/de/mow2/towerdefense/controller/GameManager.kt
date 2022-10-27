@@ -44,17 +44,7 @@ object GameManager {
         var sprite = SpriteSheet(resources, BitmapFactory.decodeResource(resources, R.drawable.leafbug)).cutSprite()
         //draw towers
         towerList.forEach {
-            when (it.type) {
-                TowerTypes.BLOCK -> {
-                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), it.w, it.h), it.x, it.y)
-                }
-                TowerTypes.SLOW -> {
-                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), it.w, it.h), it.x, it.y)
-                }
-                TowerTypes.AOE -> {
-                    draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), it.w, it.h), it.x, it.y)
-                }
-            }
+            draw(canvas, getTowerBitmap(it, resources), it.x, it.y)
         }
         creepList.forEach{ (enemy) ->
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down), enemy.w, enemy.h), enemy.positionX(), enemy.positionY())
@@ -111,5 +101,34 @@ object GameManager {
      */
     private fun resizeImage(bitmap: Bitmap, width: Int, height: Int): Bitmap {
         return Bitmap.createScaledBitmap(bitmap, width, height, false)
+    }
+
+    /**
+     * takes a tower and return its specific, already scaled image
+     * @param tower a specific existing tower
+     * @param resources reference to android resources
+     */
+    private fun getTowerBitmap(tower: Tower, resources: Resources): Bitmap {
+        val image = when (tower.type) {
+            TowerTypes.BLOCK -> {
+                when(tower.level) {
+                    1 -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block1), tower.w, tower.h)
+                    else -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), tower.w, tower.h)
+                }
+            }
+            TowerTypes.SLOW -> {
+                when(tower.level) {
+                    1 -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow1), tower.w, tower.h)
+                    else -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), tower.w, tower.h)
+                }
+            }
+            TowerTypes.AOE -> {
+                when(tower.level) {
+                    1 -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe1), tower.w, tower.h)
+                    else -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), tower.w, tower.h)
+                }
+            }
+        }
+        return image
     }
 }

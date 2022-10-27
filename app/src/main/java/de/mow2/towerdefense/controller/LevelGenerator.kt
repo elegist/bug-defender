@@ -18,14 +18,14 @@ class LevelGenerator(): ViewModel() {
             0 -> {
                 /* Endless mode */
                 livesAmnt.value = 3
-                coinAmnt.value = 1000
+                coinAmnt.value = 100000
             }
             1 -> {/* Level 1 */}
             2 -> {/* Level 2 */}
             else -> {
                 /* Endless mode */
                 livesAmnt.value = 3
-                coinAmnt.value = 2000
+                coinAmnt.value = 200000
             }
         }
     }

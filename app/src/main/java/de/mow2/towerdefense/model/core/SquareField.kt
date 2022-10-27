@@ -1,12 +1,17 @@
 package de.mow2.towerdefense.model.core
 
-import android.util.Log
+import de.mow2.towerdefense.model.gameobjects.actors.Tower
 
-//TODO: remove log after "real" methods are implemented
 class SquareField(val coordX: Float, val coordY: Float, val width: Int, val height: Int, val mapPos: Map<String, Int>) {
 
     //var for blocking this field (tower built)
     var isBlocked = false
+    var hasTower: Tower? = null
+
+    fun removeTower() {
+        isBlocked = false
+        hasTower = null
+    }
 
     override fun toString(): String {
         return "${javaClass.name} - posX: $coordX, posY: $coordY, width: $width, height: $height"
