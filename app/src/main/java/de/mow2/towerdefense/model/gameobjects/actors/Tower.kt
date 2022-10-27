@@ -3,7 +3,9 @@ package de.mow2.towerdefense.model.gameobjects.actors
 import de.mow2.towerdefense.model.core.SquareField
 
 /**
- *
+ * A specific tower
+ * @param squareField references the field on which the tower has been built
+ * @param type the towers type
  */
 class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower> {
     //position

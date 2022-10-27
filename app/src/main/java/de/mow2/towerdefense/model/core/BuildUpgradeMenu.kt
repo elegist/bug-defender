@@ -16,6 +16,11 @@ class BuildUpgradeMenu {
         return cost * (level + 1)
     }
 
+    /**
+     * Adds a specific tower to the drawing list and blocks the underlying field for enemy movement
+     * @param selectedField the field at which the tower is to be placed
+     * @param towerType the specific type of the tower to be built
+     */
     fun buildTower(selectedField: SquareField, towerType: TowerTypes) {
         val tower = when(towerType) {
             TowerTypes.BLOCK -> {

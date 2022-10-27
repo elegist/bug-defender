@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
@@ -17,24 +18,23 @@ object GameManager {
     //playground variables
     const val squaresX = 9
     const val squaresY = 18
+    var playGround = PlayGround(GameView.gameWidth)
 
     //currently as array, should be a matrix (map or list)
     var towerList = emptyArray<Tower>()
     var creepList: ConcurrentHashMap<Creep, Astar.Node> = ConcurrentHashMap()
     lateinit var spriteSheet: SpriteSheet
 
-    //nodes test
-    var compoundPath: MutableList<SquareField> = mutableListOf()
-    private var target: Astar.Node = Astar.Node(5, 5)
-
     //debug
     private val TAG = javaClass.name
 
-    fun comparePathCoords(path: List<Astar.Node>) {
-        compoundPath.clear()
-        path.forEach {
-            compoundPath.add(GameView.playGround.squareArray[it.x][it.y])
-        }
+    /**
+     * call to hard-reset GameManager (remove any remaining towers, creeps, etc.) e.g. Leaving a Game, starting a new one
+     */
+    fun resetManager() {
+        playGround = PlayGround(GameView.gameWidth)
+        towerList = emptyArray()
+        creepList = ConcurrentHashMap()
     }
 
     /**
@@ -68,16 +68,14 @@ object GameManager {
                 val sortedPath = path.reversed()
                 creep.path = sortedPath
                 //add creeps and their individual target to concurrentHashMap
-                creepList[creep] = target
+                creepList[creep] = Astar.Node(8, 17)
             }
         }
-
-
         /**
          * update movement, update target or remove enemy
          */
         creepList.forEach{ (enemy) ->
-            if(enemy.positionY().toInt() >= GameView.playGround.squareArray[0][squaresY-1].coordY.toInt()){
+            if(enemy.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
                 creepList.remove(enemy)
                 //Log.i("enemyUpdater", "enemy removed")
             }else{
@@ -89,15 +87,18 @@ object GameManager {
     }
 
     /**
-     * actually draws objects
+     * draws a bitmap onto canvas
      */
     @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap, posX: Float, posY: Float) {
         canvas.drawBitmap(bitmap, posX, posY, null)
     }
 
     /**
-     * placeholder for the time being.
+     * Takes a Bitmap and resizes its dimensions
      * could be expanded to perform various action such as change color, alpha etc.
+     * @param bitmap The bitmap to resize
+     * @param width desired width
+     * @param height desired height
      */
     private fun resizeImage(bitmap: Bitmap, width: Int, height: Int): Bitmap {
         return Bitmap.createScaledBitmap(bitmap, width, height, false)

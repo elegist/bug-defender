@@ -30,6 +30,9 @@ import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import kotlinx.android.synthetic.main.activity_game.*
 
+/**
+ * This Activity starts the game
+ */
 class GameActivity : AppCompatActivity(), GUICallBack {
     //game content and gui
     private val levelGenerator: LevelGenerator by viewModels()
@@ -74,6 +77,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
 
     fun leaveGame(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
+        GameManager.resetManager()
     }
 
     private fun loadPrefs() {
@@ -100,11 +104,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         }
     }
 
-    // background music in main activity
-    // initialize MediaPlayer, load settings
     override fun onResume(){
         super.onResume()
-        // re-initialize MediaPlayer with correct settings
+        // (re-)initialize MediaPlayer with correct settings
         SoundManager.loadPreferences(this)
         SoundManager.initMediaPlayer(this, R.raw.song3)
         if(!musicSetting) {
@@ -112,7 +114,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         }
     }
 
-    // stops MediaPlayer while not being in activity
     override fun onPause() {
         super.onPause()
         // 4. stops MediaPlayer while not being in activity
@@ -139,8 +140,8 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 buildMenu.buildTower(selectedField, type)
             }
         } else {
-            FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.DEFAULT, false ).show()
             //not enough money! message player
+            FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
         }
     }
 
@@ -166,6 +167,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 buildMenuLayout.addView(deleteBtn)
                 deleteBtn.setOnClickListener {
                     buildMenu.destroyTower(tower)
+                    levelGenerator.increaseCoins(buildMenu.getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
                     toggleBuildMenu(selectedField)
                 }
                 tower.level + 1

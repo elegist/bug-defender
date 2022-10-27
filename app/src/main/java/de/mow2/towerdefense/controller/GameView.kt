@@ -30,7 +30,7 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
         //initializing background tiles
         bgPaint = Paint()
         bgPaint.style = Paint.Style.FILL
-        val bgTileDimension = playGround.squareSize * 2
+        val bgTileDimension = GameManager.playGround.squareSize * 2
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
@@ -115,15 +115,15 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
         return true
     }
 
-    override fun performClick(): Boolean {
-        super.performClick()
-        return false
-    }
-
+    /**
+     * Takes x and y position of a touch event and returns the specific SquareField to work with
+     * @param x The horizontal position on screen in pixels
+     * @param y The vertical position on screen in pixels
+     */
     private fun getTouchedSquare(x: Float, y: Float): SquareField {
         var xPos = 0
         var yPos = 0
-        playGround.squareArray.forEachIndexed {i, it ->
+        GameManager.playGround.squareArray.forEachIndexed { i, it ->
             it.forEachIndexed {j, element ->
                 val coordRangeX = element.coordX..(element.coordX+element.width)
                 val coordRangeY = element.coordY..(element.coordY+element.height)
@@ -133,12 +133,16 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
                 }
             }
         }
-        return playGround.squareArray[xPos][yPos]
+        return GameManager.playGround.squareArray[xPos][yPos]
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return false
     }
 
     companion object {
         var gameWidth = Resources.getSystem().displayMetrics.widthPixels
         var gameHeight = 2 * gameWidth
-        val playGround = PlayGround(gameWidth)
     }
 }
