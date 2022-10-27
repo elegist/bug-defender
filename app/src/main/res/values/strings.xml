@@ -12,9 +12,6 @@
     <string name="info_text">This is a Tower Defense Game, where u need to place Towers in order to defend your base.</string>
     <string name="preference_music">music</string>
     <string name="menuBtn">Menu</string>
-
-    <string name="preference_file_key">true</string>
-    <string name="order_confirmation">bla</string>
-    <string name="ok">ok</string>
     <string name="sound">sounds</string>
+    <string name="leaveGame">leave Game</string>
 </resources>

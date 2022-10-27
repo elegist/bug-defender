@@ -10,11 +10,8 @@
     <string name="about_text">This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributers are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.</string>
     <string name="preferences_text">set your preferences:</string>
     <string name="info_text">This is a Tower Defense Game, where u need to place Towers in order to defend your base.</string>
-    <string name="preference_music">music</string>
-    <string name="menuBtn">Menu</string>
-
-    <string name="preference_file_key">false</string>
-    <string name="order_confirmation">bla</string>
-    <string name="ok">ok</string>
-    <string name="sound">sounds</string>
+    <string name="preference_music">Musik</string>
+    <string name="menuBtn">Menü</string>
+    <string name="sound">Sounds</string>
+    <string name="leaveGame">verlasse Spiel</string>
 </resources>

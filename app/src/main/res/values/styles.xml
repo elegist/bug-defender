@@ -26,14 +26,20 @@
         <item name="android:layout_height">58dp</item>
         <item name="android:layout_marginBottom">16dp</item>
     </style>
-    <style name="popUp.View" parent="">
+    <style name="MenuButton.Button" parent="Widget.AppCompat.ImageButton">
+        <item name="android:contentDescription">@string/menuBtn</item>
+    </style>
+    <style name="PopUp.View" parent="">
         <item name="android:backgroundTint">@color/middle_brown</item>
-        <item name="android:padding">24dp</item>
         <item name="android:background">@color/white</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingRight">24dp</item>
+        <item name="android:paddingLeft">24dp</item>
+        <item name="android:paddingBottom">20dp</item>
     </style>
-    <style name="popup.Button" parent="Widget.AppCompat.Button">
+    <style name="Popup.Button" parent="Widget.AppCompat.Button">
         <item name="android:backgroundTint">@color/dark_brown</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">monospace</item>
