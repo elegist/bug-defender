@@ -5,13 +5,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
-import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GUICallBack
-import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
 
 @SuppressLint("ViewConstructor")
@@ -59,12 +57,12 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
     }
 
     /**
-     * use onDraw to render on the canvas
+     * use onDraw to render onto canvas
      */
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         //drawing background
-        canvas!!.drawPaint(bgPaint)
+        canvas.drawPaint(bgPaint)
 
         ////////////////////
         //object draw area//
@@ -91,8 +89,8 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
      */
     private var lastX = 0f
     private var lastY = 0f
-    override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        var x: Float; var y: Float
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val x: Float; val y: Float
 
         when (ev?.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -134,11 +132,6 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
             }
         }
         return GameManager.playGround.squareArray[xPos][yPos]
-    }
-
-    override fun performClick(): Boolean {
-        super.performClick()
-        return false
     }
 
     companion object {

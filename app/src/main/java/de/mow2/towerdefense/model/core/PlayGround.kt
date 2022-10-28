@@ -19,7 +19,7 @@ class PlayGround(width: Int) {
             posY = 0
             for(j in 0 until squaresY) {
                 val mapPos = mapOf("x" to i, "y" to j)
-                cols = cols.plus(SquareField(posX.toFloat(), posY.toFloat(), squareSize, squareSize, mapPos))
+                cols = cols.plus(SquareField(posX.toFloat(), posY.toFloat(), mapPos, squareSize))
                 posY += squareSize
             }
             posX += squareSize

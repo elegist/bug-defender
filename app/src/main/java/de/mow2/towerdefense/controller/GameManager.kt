@@ -2,6 +2,7 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
@@ -19,10 +20,11 @@ object GameManager {
     const val squaresX = 9
     const val squaresY = 18
     var playGround = PlayGround(GameView.gameWidth)
+    lateinit var resources: Resources
 
     //currently as array, should be a matrix (map or list)
-    var towerList = emptyArray<Tower>()
-    var creepList: ConcurrentHashMap<Creep, Astar.Node> = ConcurrentHashMap()
+    var towerList = ConcurrentHashMap<Tower, Bitmap?>()
+    private var creepList = ConcurrentHashMap<Creep, Bitmap?>()
     lateinit var spriteSheet: SpriteSheet
 
     //debug
@@ -33,8 +35,26 @@ object GameManager {
      */
     fun resetManager() {
         playGround = PlayGround(GameView.gameWidth)
-        towerList = emptyArray()
+        towerList = ConcurrentHashMap()
         creepList = ConcurrentHashMap()
+    }
+
+    /**
+     * Adds a tower and its customized bitmap to the drawing list
+     * @param tower the tower to be added
+     */
+    fun addTowerToMap(tower: Tower) {
+        towerList[tower] = ScaledImage(resources, tower.w, tower.h, tower.type).getImage()
+        towerList.toSortedMap()
+    }
+    // TODO: create one map out of all things to draw and sort it to get a good drawing order?
+    /**
+     * Adds a creep and its customized bitmap to the drawing list
+     * @param creep the creep to be added
+     */
+    private fun addCreepToMap(creep: Creep) {
+        //TODO: maybe sort map for drawing order? Also: CreepTypes
+        creepList[creep] = ScaledImage(resources, creep.w, creep.h, null, CreepTypes.LEAFBUG).getImage()
     }
 
     /**
@@ -43,11 +63,11 @@ object GameManager {
     fun drawObjects(canvas: Canvas, resources: Resources) {
         var sprite = SpriteSheet(resources, BitmapFactory.decodeResource(resources, R.drawable.leafbug)).cutSprite()
         //draw towers
-        towerList.forEach {
-            draw(canvas, getTowerBitmap(it, resources), it.x, it.y)
+        towerList.forEach { (tower, image) ->
+            draw(canvas, image, tower.x, tower.y)
         }
-        creepList.forEach{ (enemy) ->
-            draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down), enemy.w, enemy.h), enemy.positionX(), enemy.positionY())
+        creepList.forEach{ (enemy, image) ->
+            draw(canvas, image, enemy.positionX(), enemy.positionY())
         }
     }
 
@@ -67,8 +87,7 @@ object GameManager {
             if(path != null) {
                 val sortedPath = path.reversed()
                 creep.path = sortedPath
-                //add creeps and their individual target to concurrentHashMap
-                creepList[creep] = Astar.Node(8, 17)
+                addCreepToMap(creep) //add creeps to concurrentHashMap
             }
         }
         /**
@@ -89,47 +108,9 @@ object GameManager {
     /**
      * draws a bitmap onto canvas
      */
-    @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap, posX: Float, posY: Float) {
-        canvas.drawBitmap(bitmap, posX, posY, null)
-    }
-
-    /**
-     * Takes a Bitmap and resizes its dimensions
-     * could be expanded to perform various action such as change color, alpha etc.
-     * @param bitmap The bitmap to resize
-     * @param width desired width
-     * @param height desired height
-     */
-    private fun resizeImage(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-        return Bitmap.createScaledBitmap(bitmap, width, height, false)
-    }
-
-    /**
-     * takes a tower and return its specific, already scaled image
-     * @param tower a specific existing tower
-     * @param resources reference to android resources
-     */
-    private fun getTowerBitmap(tower: Tower, resources: Resources): Bitmap {
-        val image = when (tower.type) {
-            TowerTypes.BLOCK -> {
-                when(tower.level) {
-                    1 -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block1), tower.w, tower.h)
-                    else -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_block), tower.w, tower.h)
-                }
-            }
-            TowerTypes.SLOW -> {
-                when(tower.level) {
-                    1 -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow1), tower.w, tower.h)
-                    else -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_slow), tower.w, tower.h)
-                }
-            }
-            TowerTypes.AOE -> {
-                when(tower.level) {
-                    1 -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe1), tower.w, tower.h)
-                    else -> resizeImage(BitmapFactory.decodeResource(resources, R.drawable.tower_aoe), tower.w, tower.h)
-                }
-            }
+    @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap?, posX: Float, posY: Float) {
+        if (bitmap != null) {
+            canvas.drawBitmap(bitmap, posX, posY, null)
         }
-        return image
     }
 }

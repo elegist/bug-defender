@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import de.mow2.towerdefense.model.pathfinding.Astar
 
-
+/**
+ * ViewModel class to observe value changes to be displayed in GUI and manage Level related logic
+ */
 class LevelGenerator(): ViewModel() {
     //variables
     val coinAmnt: MutableLiveData<Int> by lazy {

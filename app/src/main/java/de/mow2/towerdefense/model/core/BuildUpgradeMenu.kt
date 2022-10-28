@@ -34,13 +34,12 @@ class BuildUpgradeMenu {
             }
         }
         selectedField.isBlocked = true //important!! block field for path finding
-        GameManager.towerList = GameManager.towerList.plus(tower)
-        GameManager.towerList.sort() //sorting array to avoid overlapped drawing
+        GameManager.addTowerToMap(tower)
     }
 
     fun destroyTower(tower: Tower) {
         tower.squareField.removeTower() //free square
-        GameManager.towerList = GameManager.towerList.filter { it != tower }.toTypedArray() //remove tower from drawing list
+        GameManager.towerList.remove(tower) //remove tower from drawing list
     }
 
     fun upgradeTower(selectedField: SquareField) {
