@@ -6,6 +6,7 @@ import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
 import java.util.concurrent.ConcurrentHashMap
@@ -23,6 +24,7 @@ object GameManager {
     //currently as array, should be a matrix (map or list)
     var towerList = emptyArray<Tower>()
     var creepList: ConcurrentHashMap<Creep, Astar.Node> = ConcurrentHashMap()
+    var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
     lateinit var spriteSheet: SpriteSheet
 
     //debug
@@ -35,6 +37,7 @@ object GameManager {
         playGround = PlayGround(GameView.gameWidth)
         towerList = emptyArray()
         creepList = ConcurrentHashMap()
+        projectileList = ConcurrentHashMap()
     }
 
     /**
@@ -49,12 +52,25 @@ object GameManager {
         creepList.forEach{ (enemy) ->
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down), enemy.w, enemy.h), enemy.positionX(), enemy.positionY())
         }
+        projectileList.forEach{ (projectile) ->
+            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.projectile), projectile.positionX(), projectile.positionY())
+        }
     }
 
     /**
      * updates to game logic related values
      */
     fun updateLogic() {
+        if(Projectile.canSpawn()){
+            towerList.forEach { tower ->
+                creepList.forEach{ (creep) ->
+                    if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < 2000){
+                        projectileList[Projectile(tower.squareField, tower, creep)] = tower
+                    }
+                }
+            }
+        }
+
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
             val creep = Creep(CreepTypes.LEAFBUG)
@@ -83,6 +99,10 @@ object GameManager {
                 enemy.update()
             }
             //TODO: update enemy target
+        }
+
+        projectileList.forEach{ (projectile) ->
+            projectile.update()
         }
     }
 
