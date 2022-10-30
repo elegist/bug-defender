@@ -82,7 +82,7 @@ object GameManager {
      */
     fun updateLogic() {
         if(Projectile.canSpawn()){
-            towerList.forEach { tower ->
+            towerList.forEach { (tower) ->
                 creepList.forEach{ (creep) ->
                     if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < 2000){
                         projectileList[Projectile(tower.squareField, tower, creep)] = tower
@@ -109,9 +109,9 @@ object GameManager {
         /**
          * update movement, update target or remove enemy
          */
-        creepList.forEach{ (enemy) ->
-            if(enemy.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
-                creepList.remove(enemy)
+        creepList.forEach{ (creep) ->
+            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
+                creepList.remove(creep)
                 //Log.i("enemyUpdater", "enemy removed")
             }else{
                 creep.update()

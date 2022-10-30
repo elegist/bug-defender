@@ -3,7 +3,6 @@ package de.mow2.towerdefense.model.gameobjects.actors
 import android.util.Log
 import de.mow2.towerdefense.controller.GameLoop
 import de.mow2.towerdefense.controller.GameManager
-import de.mow2.towerdefense.controller.GameManager.creepList
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
@@ -27,8 +26,6 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
         if(targetIndex == path.size){
             targetIndex = 0
         }
-        //findNextTarget()
-        GameManager.comparePathCoords(value)
     }
     var target: Astar.Node = Astar.Node(this.squareField.mapPos["x"]!!, this.squareField.mapPos["y"]!!)
     var targetIndex: Int = 0
@@ -84,8 +81,8 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
     private fun findNextTarget() {
         target = path[targetIndex]
         if(target != path.last()) {
-                targetY = GameView.playGround.squareArray[target.x][target.y].coordY
-                targetX = GameView.playGround.squareArray[target.x][target.y].coordX
+                targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
+                targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
                 targetIndex++
         } else {
             targetX = GameManager.playGround.squareArray[target.x][target.y].coordX

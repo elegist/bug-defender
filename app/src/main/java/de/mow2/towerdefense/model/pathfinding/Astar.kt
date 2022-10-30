@@ -2,8 +2,7 @@ package de.mow2.towerdefense.model.pathfinding
 
 import android.util.Log
 import de.mow2.towerdefense.controller.GameManager
-import de.mow2.towerdefense.controller.GameView
-import kotlin.math.abs
+import kotlin.math.*
 
 /**
  * Astar search algorithm, used by creeps to find the fastest way across the map
