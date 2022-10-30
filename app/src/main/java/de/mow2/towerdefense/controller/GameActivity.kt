@@ -54,16 +54,18 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //create view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        //loading preferences
+        GameManager.resources = resources //GameManager needs to know resources for drawing
         loadPrefs()
+
         //create new game view
         gameLayout = gameViewContainer
         gameView = GameView(this, this)
         gameLayout.addView(gameView)
-        //init display and gui
+
         initGUI()
         hideSystemBars()
         defineObservers()
+
         //build level
         //TODO: dynamically decide which level to build
         levelGenerator.initLevel(0)
@@ -75,11 +77,17 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         chrono.start()
     }
 
+    /**
+     * Button-triggered reset (return to main menu)
+     */
     fun leaveGame(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
         GameManager.resetManager()
     }
 
+    /**
+     * Load all saved user preferences
+     */
     private fun loadPrefs() {
         //load preferences
         SoundManager.loadPreferences(this)
@@ -89,6 +97,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         menuPopup.show(fm, "menuDialog")
     }
 
+    /**
+     * Initialize all game GUI references (findViewById)
+     */
     private fun initGUI() {
         //reference game gui
         chrono = timeView
@@ -98,6 +109,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         buildMenuLayout = buildMenuContainer
     }
 
+    /**
+     * Define value observers for coins, lives etc.
+     */
     private fun defineObservers() {
         coinObserver = Observer<Int> { newCoinVal ->
             coinsTxt.text = newCoinVal.toString()
@@ -130,6 +144,11 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
+    /**
+     * BuildMenu buttons trigger this function to build a tower
+     * @param type type of the tower
+     * @param level the towers level (base = 0, upgraded = 1-2)
+     */
     override fun buildTower(type: TowerTypes, level: Int) {
         val cost = buildMenu.getTowerCost(type, level)
         if(levelGenerator.decreaseCoins(cost)) {
@@ -146,6 +165,11 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     }
 
     private lateinit var selectedField: SquareField
+    /**
+     * Generates a individual build tower menu depending on the touched SquareField
+     * If a tower has already been built, it displays a delete tower / upgrade menu
+     * @param squareField chosen field on the playground (by touch event)
+     */
     override fun toggleBuildMenu(squareField: SquareField) {
         buildMenuLayout.removeAllViews()
         selectedField = squareField
