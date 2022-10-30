@@ -109,6 +109,7 @@ object GameManager {
         creepList.forEach{ (enemy) ->
             draw(canvas, resizeImage(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down), enemy.w, enemy.h), enemy.positionX(), enemy.positionY())
         }
+
     }
 
     /**
@@ -118,31 +119,20 @@ object GameManager {
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
             val creep = Creep(CreepTypes.LEAFBUG)
-            val posX = creep.squareField.mapPos["x"]!!
-            val posY = creep.squareField.mapPos["y"]!!
-            val creepNode = Astar.Node(posX, posY)
-            val targetNode = Astar.Node(posX, 17)
-            val alg = Astar()
-            val path = alg.findPath(creepNode, targetNode, squaresX, squaresY)
-            if(path != null) {
-                val sortedPath = path.reversed()
-                creep.path = sortedPath
-                //add creeps and their individual target to concurrentHashMap
-                creepList[creep] = target
-            }
+            creepList[creep] = target
         }
+
 
 
         /**
          * update movement, update target or remove enemy
          */
-        creepList.forEach{ (enemy) ->
-            if(enemy.positionY().toInt() >= GameView.playGround.squareArray[0][squaresY-1].coordY.toInt()){
-                creepList.remove(enemy)
+        creepList.forEach{ (creep) ->
+            if(creep.positionY() >= GameView.playGround.squareArray[0][squaresY-1].coordY.toInt()){
+                creepList.remove(creep)
                 //Log.i("enemyUpdater", "enemy removed")
             }else{
-                //update movement
-                enemy.update()
+                creep.update()
             }
             //TODO: update enemy target
         }

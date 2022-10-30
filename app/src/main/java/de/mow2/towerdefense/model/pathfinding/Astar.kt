@@ -2,12 +2,12 @@ package de.mow2.towerdefense.model.pathfinding
 
 import android.util.Log
 import de.mow2.towerdefense.controller.GameView
+import kotlin.math.abs
 
 class Astar {
     fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {
         val openSet = mutableSetOf<Node>()
         val closedSet = mutableSetOf<Node>()
-
         openSet.add(startNode)
 
         while (openSet.any()) {
@@ -46,9 +46,10 @@ class Astar {
                     }
                 }
 
+
                 node.parent = currentNode
                 node.g = currentNode.g + 1
-                node.h = ((node.x - targetNode.x)) + ((node.y - targetNode.y))
+                node.h = (abs(node.x - targetNode.x)) + (abs(node.y - targetNode.y))
                 node.f = node.g + node.h
 
                 openSet.forEach { openNode ->
@@ -78,13 +79,18 @@ class Astar {
 
             //TODO: richtige Gewichtung berechnen
             if (x - 1 >= 0) neighbors.add(Node(x - 1, y))
-/*            if (x - 1 > 0 && y - 1 > 0) neighbors.add(Node(x - 1, y - 1))
-            if (x - 1 > 0 && y + 1 < maxCols) neighbors.add(Node(x - 1, y + 1))*/
-            if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
             if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
+            if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
             if (y + 1 < maxCols) neighbors.add(Node(x, y + 1))
-/*            if (x + 1 < maxRows && y - 1 > 0) neighbors.add(Node(x + 1, y - 1))
-            if (x + 1 < maxRows && y + 1 < maxCols) neighbors.add(Node(x + 1, y + 1))*/
+
+            if (x - 1 > 0 && y - 1 > 0) neighbors.add(Node(x - 1, y - 1))
+            if (x - 1 > 0 && y + 1 < maxCols) neighbors.add(Node(x - 1, y + 1))
+
+
+
+            if (x + 1 < maxRows && y - 1 > 0) neighbors.add(Node(x + 1, y - 1))
+            if (x + 1 < maxRows && y + 1 < maxCols) neighbors.add(Node(x + 1, y + 1))
+
 
             return neighbors
         }
