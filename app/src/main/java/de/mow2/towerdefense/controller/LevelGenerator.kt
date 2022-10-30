@@ -25,26 +25,32 @@ class LevelGenerator(): ViewModel() {
             else -> {
                 /* Endless mode */
                 livesAmnt.value = 3
-                coinAmnt.value = 2000
+                coinAmnt.value = 200000
             }
         }
     }
 
     //TODO: Trigger function when enemy is defeated / wave is completed / default income etc.
-    fun increaseCoins(newValue: Int){
+    /**
+     * Method to call when increasing coins (e.g. defeating an enemy creature or destroying a tower)
+     * @param increaseValue the value to be added to the total coin amount
+     */
+    fun increaseCoins(increaseValue: Int){
         val oldVal = coinAmnt.value!!
-        coinAmnt.value = oldVal + newValue
+        coinAmnt.value = oldVal + increaseValue
     }
 
     //TODO: Different values for different TowerTypes
-    fun decreaseCoins(newValue: Int) : Boolean {
+    /**
+     * Method to call when decreasing coins (e.g. Building or upgrading a tower)
+     * @param decreaseValue the value to subtract from the total amount
+     */
+    fun decreaseCoins(decreaseValue: Int) : Boolean {
         val oldVal = coinAmnt.value!!
-        return if(coinAmnt.value!! >= (0 + newValue)) {
-            coinAmnt.value = oldVal - newValue
+        return if(coinAmnt.value!! >= (0 + decreaseValue)) {
+            coinAmnt.value = oldVal - decreaseValue
             true
         } else {
-            startWave()
-            coinAmnt.value = 200
             false
         }
     }
@@ -64,7 +70,6 @@ class LevelGenerator(): ViewModel() {
         }
     }
 
-    val alg = Astar()
     private fun startWave() {
 /*        //define creeps
         //define timer

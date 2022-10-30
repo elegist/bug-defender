@@ -35,13 +35,23 @@ class PopupFragment: DialogFragment() {
         when(tag.toString()) {
             "aboutDialog" -> {
                 popupFragmentContainer.visibility = View.GONE
+                buttonPopup.visibility = View.GONE
                 popupText.setText(R.string.about_text)
             }
             "infoDialog" -> {
                 popupFragmentContainer.visibility = View.GONE
+                buttonPopup.visibility = View.GONE
                 popupText.setText(R.string.info_text)
             }
             "settingsDialog" -> {
+                popupText.setText(R.string.preferences_text)
+                buttonPopup.visibility = View.GONE
+                childFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.popupFragmentContainer, SettingsFragment())
+                    .commit()
+            }
+            "menuDialog" -> {
                 popupText.setText(R.string.preferences_text)
                 childFragmentManager
                     .beginTransaction()
@@ -50,7 +60,7 @@ class PopupFragment: DialogFragment() {
             }
         }
 
-        popUpView.buttonPopup.setOnClickListener{
+        popUpView.closeBtn.setOnClickListener{
             dismiss()
         }
     }

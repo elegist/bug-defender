@@ -15,7 +15,7 @@ import kotlin.random.nextInt
  * 
  */
 //TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
-class Creep(type: CreepTypes, squareField: SquareField = GameView.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]
+class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]
 ): GameObject(squareField) {
     val alg = Astar()
     var w: Int = squareField.width
@@ -32,8 +32,8 @@ class Creep(type: CreepTypes, squareField: SquareField = GameView.playGround.squ
     }
     var target: Astar.Node = Astar.Node(this.squareField.mapPos["x"]!!, this.squareField.mapPos["y"]!!)
     var targetIndex: Int = 0
-    var targetX = GameView.playGround.squareArray[target.x][target.y].coordX
-    var targetY = GameView.playGround.squareArray[target.x][target.y].coordY
+    var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
+    var targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
 
     /**
      * calc pixels per update and init speed
@@ -64,7 +64,7 @@ class Creep(type: CreepTypes, squareField: SquareField = GameView.playGround.squ
         var distanceToTargetY: Float = targetY - positionY()
         //absolute distance
         var distanceToTargetAbs: Float = findDistance(this.positionX(), this.positionY(), targetX, targetY)
-        if(distanceToTargetAbs.toInt() <= GameView.playGround.squareSize*0.10) findNextTarget()
+        if(distanceToTargetAbs.toInt() <= GameManager.playGround.squareSize*0.10) findNextTarget()
         //direction
         var directionX: Float = distanceToTargetX/distanceToTargetAbs
         var directionY: Float = distanceToTargetY/distanceToTargetAbs
@@ -88,8 +88,8 @@ class Creep(type: CreepTypes, squareField: SquareField = GameView.playGround.squ
                 targetX = GameView.playGround.squareArray[target.x][target.y].coordX
                 targetIndex++
         } else {
-            targetX = GameView.playGround.squareArray[target.x][target.y].coordX
-            targetY = GameView.playGround.squareArray[target.x][target.y].coordY
+            targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
+            targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
         }
     }
 

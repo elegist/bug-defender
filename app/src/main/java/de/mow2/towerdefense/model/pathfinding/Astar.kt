@@ -1,9 +1,13 @@
 package de.mow2.towerdefense.model.pathfinding
 
 import android.util.Log
+import de.mow2.towerdefense.controller.GameManager
 import de.mow2.towerdefense.controller.GameView
 import kotlin.math.abs
 
+/**
+ * Astar search algorithm, used by creeps to find the fastest way across the map
+ */
 class Astar {
     fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {
         val openSet = mutableSetOf<Node>()
@@ -36,7 +40,7 @@ class Astar {
 
             neighbors.forEach neighbors@{ node ->
 
-                if (GameView.playGround.squareArray[node.x][node.y].isBlocked) {
+                if (GameManager.playGround.squareArray[node.x][node.y].isBlocked) {
                     return@neighbors
                 }
 
@@ -63,7 +67,11 @@ class Astar {
         return null
     }
 
-    //node represents a single coordinate on the playground holding important information for the algorithm to work
+    /**
+     * Represents a node on the playground holding important information for the algorithm to work
+     * @param x horizontal position
+     * @param y vertical position
+     */
     data class Node(val x: Int, val y: Int) : Comparable<Node> {
         // parent is the node that came previous to the current one
         var parent: Node? = null
@@ -98,7 +106,10 @@ class Astar {
         override fun compareTo(other: Node): Int = this.f.compareTo(other.f)
     }
 
-    fun calculateHeuristics(from: Node, to: Node): Int {
+    /**
+     * calculates the correct values to decide which way should be preferred (straight or diagonal)
+     */
+    private fun calculateHeuristics(from: Node, to: Node): Int {
         val diagonalCost = 14
         val straightCost = 10
 

@@ -2,7 +2,11 @@ package de.mow2.towerdefense.model.core
 
 import de.mow2.towerdefense.controller.GameManager
 
-class PlayGround(val width: Int) {
+/**
+ * Represents the whole playGround consisting of single squareFields which are initialized in a 2D-array
+ * @param width the screen width to make everything fit on devices screen and to calculate the height (ratio 1:2)
+ */
+class PlayGround(width: Int) {
     var squareArray = emptyArray<Array<SquareField>>()
     private val squaresX = GameManager.squaresX
     private val squaresY = GameManager.squaresY

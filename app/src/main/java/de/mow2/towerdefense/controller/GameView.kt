@@ -1,11 +1,11 @@
 package de.mow2.towerdefense.controller
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -13,22 +13,14 @@ import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.core.SquareField
-import de.mow2.towerdefense.model.pathfinding.Astar
 
-class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
+@SuppressLint("ViewConstructor")
+class GameView(context: Context, private val callBack: GUICallBack) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     lateinit var levelGenerator: LevelGenerator
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
-    //build and upgrade menu
-    private lateinit var buildMenu: BuildUpgradeMenu
-
-    private lateinit var selectedSquare: SquareField
-    private var blockInput = false //flag to block comparing coordinates (when construction menu is open)
-
-    private val caller = this
-    private val callBack = GameActivity()
 
     init {
         holder.addCallback(this)
@@ -38,7 +30,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //initializing background tiles
         bgPaint = Paint()
         bgPaint.style = Paint.Style.FILL
-        val bgTileDimension = playGround.squareSize * 2
+        val bgTileDimension = GameManager.playGround.squareSize * 2
         bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
@@ -82,10 +74,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         //object draw area end//
         ///////////////////////
 
-        //build menu should always draw on top
-        if(this::buildMenu.isInitialized && buildMenu.active) {
-            GameManager.drawBuildMenu(canvas, buildMenu.x, buildMenu.y + GameActivity.scrollOffset)
-        }
         //redraw canvas if canvas has changed
         invalidate()
     }
@@ -111,7 +99,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 lastX = ev.x
                 lastY = ev.y
                 invalidate()
-                Log.i("Quadrat angeklickt: ", "${getTouchedSquare(lastX, lastY)}")
             }
             MotionEvent.ACTION_MOVE -> {}
 
@@ -119,42 +106,24 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 x = ev.x
                 y = ev.y
                 invalidate()
-
                 if(x == lastX && y == lastY) {
-                    if(!blockInput && !getTouchedSquare(x, y).isBlocked) {
-                        if(getTouchedSquare(x, y).mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                            selectedSquare = getTouchedSquare(x, y)
-                            //open up build and upgrade menu
-                            caller.openBuildMenu(selectedSquare, callBack)
-                            buildMenu = BuildUpgradeMenu(0f, bottomEnd)
-                            buildMenu.active = true
-                            blockInput = true
-                        }
-                    } else { // build and upgrade menu is opened
-                        if(x in buildMenu.getRangeX() && y in buildMenu.getRangeY()) {
-                            val towerType = buildMenu.getTowerType(x)
-                            if(levelGenerator.decreaseCoins(buildMenu.getTowerCost(towerType))) {
-                                GameManager.buildTower(selectedSquare, towerType)
-                                selectedSquare.isBlocked = true
-                            }
-                        }
-                        blockInput = false
-                        buildMenu.active = false
-                    }
+                    //open up build and upgrade menu for selected square
+                    callBack.toggleBuildMenu(getTouchedSquare(x, y))
                 }
             }
         }
         return true
     }
 
-    override fun performClick(): Boolean {
-        super.performClick()
-        return false
-    }
+    /**
+     * Takes x and y position of a touch event and returns the specific SquareField to work with
+     * @param x The horizontal position on screen in pixels
+     * @param y The vertical position on screen in pixels
+     */
     private fun getTouchedSquare(x: Float, y: Float): SquareField {
         var xPos = 0
         var yPos = 0
-        playGround.squareArray.forEachIndexed {i, it ->
+        GameManager.playGround.squareArray.forEachIndexed { i, it ->
             it.forEachIndexed {j, element ->
                 val coordRangeX = element.coordX..(element.coordX+element.width)
                 val coordRangeY = element.coordY..(element.coordY+element.height)
@@ -164,19 +133,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                 }
             }
         }
-        return playGround.squareArray[xPos][yPos]
+        return GameManager.playGround.squareArray[xPos][yPos]
     }
 
-    private fun openBuildMenu(squareField: SquareField, callback: GUICallBack) {
-        callback.openBuildMenu(squareField)
+    override fun performClick(): Boolean {
+        super.performClick()
+        return false
     }
 
     companion object {
         var gameWidth = Resources.getSystem().displayMetrics.widthPixels
         var gameHeight = 2 * gameWidth
-        val playGround = PlayGround(gameWidth)
-        var bottomEnd = 0f
-        //path finding algorithm
-        var astar = Astar()
     }
 }

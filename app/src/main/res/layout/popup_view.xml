@@ -3,12 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/popUpLayout"
-    style="@style/popUp.View"
+    style="@style/PopUp.View"
     android:scrollIndicators="right">
+
+    <ImageButton
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/middle_brown"
+        app:layout_constraintBottom_toTopOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_clear_black_24dp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="2dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@id/popupText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/popupText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/popupFragmentContainer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +38,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/popupFragmentContainer"
         android:name="de.mow2.towerdefense.controller.SettingsFragment"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/buttonPopup"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,9 +47,9 @@
 
     <Button
         android:id="@+id/buttonPopup"
-        style="@style/popup.Button"
-        android:onClick="playSound"
-        android:text="@string/close_button"
+        style="@style/Popup.Button"
+        android:onClick="leaveGame"
+        android:text="@string/leaveGame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
