@@ -97,4 +97,14 @@ class Astar {
 
         override fun compareTo(other: Node): Int = this.f.compareTo(other.f)
     }
+
+    fun calculateHeuristics(from: Node, to: Node): Int {
+        val diagonalCost = 14
+        val straightCost = 10
+
+        val xDist = abs(from.x - to.x)
+        val yDist = abs(from.y - to.y)
+        val remaining = abs(xDist - yDist)
+        return diagonalCost * min(xDist, yDist) + straightCost * remaining
+    }
 }
