@@ -94,18 +94,8 @@ object GameManager {
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
             val creep = Creep(CreepTypes.LEAFBUG)
-            val posX = creep.squareField.mapPos["x"]!!
-            val posY = creep.squareField.mapPos["y"]!!
-            val creepNode = Astar.Node(posX, posY)
-            val targetNode = Astar.Node(posX, 17)
-            val alg = Astar()
-            val path = alg.findPath(creepNode, targetNode, squaresX, squaresY)
-            if(path != null) {
-                val sortedPath = path.reversed()
-                creep.path = sortedPath
                 addCreepToMap(creep) //add creeps to concurrentHashMap
             }
-        }
         /**
          * update movement, update target or remove enemy
          */
