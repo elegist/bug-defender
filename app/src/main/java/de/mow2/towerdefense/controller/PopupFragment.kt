@@ -1,7 +1,6 @@
 package de.mow2.towerdefense.controller
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,24 +34,34 @@ class PopupFragment: DialogFragment() {
         when(tag.toString()) {
             "aboutDialog" -> {
                 popupFragmentContainer.visibility = View.GONE
-                buttonPopup.visibility = View.GONE
+                leaveGameBtn.visibility = View.GONE
+                pauseGameBtn.visibility = View.GONE
+                menuDivider.visibility = View.GONE
                 popupText.setText(R.string.about_text)
+                popupTitleText.setText(R.string.about_button)
             }
             "infoDialog" -> {
                 popupFragmentContainer.visibility = View.GONE
-                buttonPopup.visibility = View.GONE
+                leaveGameBtn.visibility = View.GONE
+                pauseGameBtn.visibility = View.GONE
+                menuDivider.visibility = View.GONE
                 popupText.setText(R.string.info_text)
+                popupTitleText.setText(R.string.info_button)
             }
             "settingsDialog" -> {
-                popupText.setText(R.string.preferences_text)
-                buttonPopup.visibility = View.GONE
+                popupTitleText.setText(R.string.preference_button)
+                leaveGameBtn.visibility = View.GONE
+                pauseGameBtn.visibility = View.GONE
+                popupText.visibility = View.GONE
+                menuDivider.visibility = View.GONE
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
                     .commit()
             }
             "menuDialog" -> {
-                popupText.setText(R.string.preferences_text)
+                popupTitleText.setText(R.string.preference_button)
+                popupText.visibility = View.GONE
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())

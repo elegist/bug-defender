@@ -121,10 +121,14 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     override fun onResume(){
         super.onResume()
         // (re-)initialize MediaPlayer with correct settings
-        SoundManager.loadPreferences(this)
         SoundManager.initMediaPlayer(this, R.raw.song3)
+        SoundManager.playSounds()
+        SoundManager.loadSounds(this)
         if(!musicSetting) {
             SoundManager.pauseMusic()
+        }
+        if(!SoundManager.soundSetting){
+            SoundManager.soundPool.release()
         }
     }
 
@@ -157,6 +161,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 buildMenu.upgradeTower(selectedField)
             } else {
                 buildMenu.buildTower(selectedField, type)
+                SoundManager.soundPool.play(Sounds.PUNCHSOUND.id, 1F, 1F, 1, 0, 1F)
             }
         } else {
             //not enough money! message player

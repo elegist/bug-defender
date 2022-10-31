@@ -4,6 +4,7 @@
     <string name="startGame_button">Starte Spiel</string>
     <string name="info_button">Spielanleitung</string>
     <string name="preference_button">Präferenzen</string>
+    <string name="about_button">Über das Spiel</string>
     <string name="game_icon">Spiel Icon</string>
     <string name="close_button">Schließen</string>
     <string name="game_name">Tower Defense</string>
@@ -14,4 +15,6 @@
     <string name="menuBtn">Menü</string>
     <string name="sound">Sounds</string>
     <string name="leaveGame">verlasse Spiel</string>
+    <string name="pause">Spiel pausieren</string>
+    <string name="resumeGame">resume game</string>
 </resources>
