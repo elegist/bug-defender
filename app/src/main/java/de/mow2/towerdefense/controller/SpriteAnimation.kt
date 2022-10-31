@@ -2,11 +2,11 @@ package de.mow2.towerdefense.controller
 
 import android.graphics.Bitmap
 
-
+//TODO: get movement direction, frame count etc.
 class SpriteAnimation(private val bitmap: Bitmap, val width: Int, val height: Int) {
-    var animation = arrayOf<Bitmap>()
+    private var animation = arrayOf<Bitmap>()
 
-    val frameCount = 7
+    private val frameCount = 7
     var frameCounter = 0
 
     init {
@@ -24,13 +24,13 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, val height: In
         var i = 0
         while (i < frameCount) {
             val cutImg = Bitmap.createBitmap(bitmap, cutW * i, 0, cutW, cutH)
-            //val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
-            animation = animation.plus(cutImg)
+            val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
+            animation = animation.plus(scaled)
             i++
         }
     }
 
-    fun update() {
+    private fun update() {
         if(frameCounter < animation.size - 1) {
             frameCounter++
         } else {
