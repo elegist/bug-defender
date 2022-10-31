@@ -9,7 +9,7 @@ class Projectile(squareField: SquareField, val tower: Tower, val creep: Creep) :
     /**
      * calc pixels per update and init speed
      */
-    private var speedPixelsPerSecond: Float = (GameView.gameWidth + GameView.gameHeight)*0.03f
+    private var speedPixelsPerSecond: Float = (GameView.gameWidth + GameView.gameHeight)*0.1f
         set(value){
             field = (GameView.gameWidth + GameView.gameHeight)*value
         }

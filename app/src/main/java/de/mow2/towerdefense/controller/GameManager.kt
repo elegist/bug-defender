@@ -2,14 +2,10 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
-import android.graphics.drawable.Drawable
-import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
-import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.gameobjects.actors.*
-import de.mow2.towerdefense.model.pathfinding.Astar
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -26,7 +22,10 @@ object GameManager {
     //currently as array, should be a matrix (map or list)
     var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
     var towerList = ConcurrentHashMap<Tower, Bitmap?>()
-    private var creepList = ConcurrentHashMap<Creep, Bitmap?>()
+    private var creepList = ConcurrentHashMap<Creep, SpriteAnimation?>()
+
+    //animation
+    //spritesheet test
     lateinit var spriteSheet: SpriteSheet
 
     //debug
@@ -57,20 +56,22 @@ object GameManager {
      */
     private fun addCreepToMap(creep: Creep) {
         //TODO: maybe sort map for drawing order? Also: CreepTypes
-        creepList[creep] = ScaledImage(resources, creep.w, creep.h, null, CreepTypes.LEAFBUG).getImage()
+        //creepList[creep] = ScaledImage(resources, creep.w, creep.h, null, CreepTypes.LEAFBUG).getImage()
+        //val spritesheet = ScaledImage(resources, creep.w, creep.h, null, CreepTypes.LEAFBUG).getImage()
+        val spriteSheet = SpriteAnimation(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down_anim), creep.w, creep.h)
+        creepList[creep] = spriteSheet
     }
 
     /**
      * decides which objects to draw
      */
     fun drawObjects(canvas: Canvas, resources: Resources) {
-        var sprite = SpriteSheet(resources, BitmapFactory.decodeResource(resources, R.drawable.leafbug)).cutSprite()
         //draw towers
         towerList.forEach { (tower, image) ->
             draw(canvas, image, tower.x, tower.y)
         }
-        creepList.forEach{ (enemy, image) ->
-            draw(canvas, image, enemy.positionX(), enemy.positionY())
+        creepList.forEach{ (enemy, animation) ->
+            draw(canvas, animation!!.nextFrame(), enemy.positionX(), enemy.positionY())
         }
         projectileList.forEach{ (projectile) ->
             draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.projectile), projectile.positionX(), projectile.positionY())
@@ -94,7 +95,7 @@ object GameManager {
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
             val creep = Creep(CreepTypes.LEAFBUG)
-                addCreepToMap(creep) //add creeps to concurrentHashMap
+            addCreepToMap(creep) //add creeps to concurrentHashMap
             }
         /**
          * update movement, update target or remove enemy

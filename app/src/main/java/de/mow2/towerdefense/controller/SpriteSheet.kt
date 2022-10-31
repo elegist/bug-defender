@@ -15,7 +15,7 @@ class SpriteSheet(var resources: Resources, var image: Bitmap) {
         image = BitmapFactory.decodeResource(resources, R.drawable.leafbug, bitmapOptions)
     }
 
-    fun cutSprite(): Sprite{
+/*    fun cutSprite(): Sprite{
         return Sprite(this, Rect(0,0, 64, 64))
-    }
+    }*/
 }
