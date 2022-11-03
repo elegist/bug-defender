@@ -10,6 +10,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GUICallBack
+import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.SquareField
 
 @SuppressLint("ViewConstructor")

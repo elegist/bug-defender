@@ -1,9 +1,6 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.model.core
 
-import android.content.res.Resources
-import android.os.Build
-import android.view.SurfaceHolder
-import androidx.annotation.RequiresApi
+import de.mow2.towerdefense.controller.GameManager
 
 /**
  * Opens up a new thread to run scheduled updates on game logic (e.g. updating enemy creature positions and so on)
@@ -17,7 +14,6 @@ class GameLoop : Thread() {
         this.running = isRunning
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun run() {
         var startTime: Long = System.currentTimeMillis()
         var elapsedTime: Long

@@ -19,8 +19,8 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, val height: In
     }
 
     private fun cutSpriteSheet() {
-        var cutW = bitmap.width / frameCount
-        var cutH = bitmap.height
+        val cutW = bitmap.width / frameCount
+        val cutH = bitmap.height
         var i = 0
         while (i < frameCount) {
             val cutImg = Bitmap.createBitmap(bitmap, cutW * i, 0, cutW, cutH)

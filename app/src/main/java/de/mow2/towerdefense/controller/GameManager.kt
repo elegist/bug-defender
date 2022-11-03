@@ -24,10 +24,6 @@ object GameManager {
     var towerList = ConcurrentHashMap<Tower, Bitmap?>()
     private var creepList = ConcurrentHashMap<Creep, SpriteAnimation?>()
 
-    //animation
-    //spritesheet test
-    lateinit var spriteSheet: SpriteSheet
-
     //debug
     private val TAG = javaClass.name
 

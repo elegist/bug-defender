@@ -1,7 +1,6 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import android.util.Log
-import de.mow2.towerdefense.controller.GameLoop
+import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.controller.GameManager
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.SquareField
