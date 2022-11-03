@@ -84,9 +84,18 @@ object GameManager {
         if(Projectile.canSpawn()){
             towerList.forEach { (tower) ->
                 creepList.forEach{ (creep) ->
-                    if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < 2000){
+                    if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){
                         projectileList[Projectile(tower.squareField, tower, creep)] = tower
                     }
+                }
+            }
+        }
+
+        projectileList.forEach { (projectile) ->
+            creepList.forEach{ (creep) ->
+                if(GameObject.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
+                    projectileList.remove(projectile)
+                    creep.takeDamage(1)
                 }
             }
         }
@@ -94,13 +103,13 @@ object GameManager {
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
             val creep = Creep(CreepTypes.LEAFBUG)
-                addCreepToMap(creep) //add creeps to concurrentHashMap
+            addCreepToMap(creep) //add creeps to concurrentHashMap
             }
         /**
          * update movement, update target or remove enemy
          */
         creepList.forEach{ (creep) ->
-            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
+            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt() || creep.healthPoints <= 0){
                 creepList.remove(creep)
                 //Log.i("enemyUpdater", "enemy removed")
             }else{

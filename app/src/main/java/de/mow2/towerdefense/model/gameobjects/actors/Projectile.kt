@@ -9,7 +9,7 @@ class Projectile(squareField: SquareField, val tower: Tower, val creep: Creep) :
     /**
      * calc pixels per update and init speed
      */
-    private var speedPixelsPerSecond: Float = (GameView.gameWidth + GameView.gameHeight)*0.03f
+    private var speedPixelsPerSecond: Float = (GameView.gameWidth + GameView.gameHeight)*0.2f
         set(value){
             field = (GameView.gameWidth + GameView.gameHeight)*value
         }
@@ -39,7 +39,7 @@ class Projectile(squareField: SquareField, val tower: Tower, val creep: Creep) :
 
     companion object{
         //set spawn rate
-        var spawnsPerMinute: Float = 10f
+        var spawnsPerMinute: Float = 40f
         private var spawnsPerSecond: Float = spawnsPerMinute / 60
         //link with target updates per second to convert to updates per spawn
         private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond
