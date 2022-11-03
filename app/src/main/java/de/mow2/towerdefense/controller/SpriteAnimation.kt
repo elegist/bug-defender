@@ -3,21 +3,39 @@ package de.mow2.towerdefense.controller
 import android.graphics.Bitmap
 
 //TODO: get movement direction, frame count etc.
-class SpriteAnimation(private val bitmap: Bitmap, val width: Int, val height: Int) {
+/**
+ * Takes a Bitmap containing all frames of an animation.
+ * Call nextFrame() each time to get the current frame to be drawn onto a canvas.
+ * @param bitmap A bitmap containing all frames
+ * @param width The desired outcome width
+ * @param height The desired outcome height
+ * @param frameCount Number of Frames contained in given bitmap
+ * @param frameDuration Time duration of one frame in milliseconds
+ */
+class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val height: Int, private val frameCount: Int = 7, private val frameDuration: Int = 30) {
     private var animation = arrayOf<Bitmap>()
+    private var startFrameTime = System.currentTimeMillis()
 
-    private val frameCount = 7
     var frameCounter = 0
 
     init {
         cutSpriteSheet()
     }
 
+    /**
+     * Returns the next frame of the animation, based on elapsed time since the last frame was called
+     */
     fun nextFrame(): Bitmap {
-        update()
+        if(System.currentTimeMillis() - startFrameTime >= frameDuration) {
+            update()
+            startFrameTime = System.currentTimeMillis()
+        }
         return animation[frameCounter]
     }
 
+    /**
+     * Cuts the given Bitmap into single frames, based on parameter frameCount
+     */
     private fun cutSpriteSheet() {
         val cutW = bitmap.width / frameCount
         val cutH = bitmap.height

@@ -130,7 +130,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
 
     override fun onPause() {
         super.onPause()
-        // 4. stops MediaPlayer while not being in activity
+        // stops MediaPlayer while not being in activity
         SoundManager.mediaPlayer.release()
     }
 

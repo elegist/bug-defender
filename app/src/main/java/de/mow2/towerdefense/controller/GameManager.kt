@@ -9,7 +9,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * GameManager holds static access to game variables like bitmaps, ingame values and such
+ * GameManager holds static access to game variables like bitmaps, in-game values and such
  * it also manages drawing onto canvas
  */
 object GameManager {
@@ -52,8 +52,6 @@ object GameManager {
      */
     private fun addCreepToMap(creep: Creep) {
         //TODO: maybe sort map for drawing order? Also: CreepTypes
-        //creepList[creep] = ScaledImage(resources, creep.w, creep.h, null, CreepTypes.LEAFBUG).getImage()
-        //val spritesheet = ScaledImage(resources, creep.w, creep.h, null, CreepTypes.LEAFBUG).getImage()
         val spriteSheet = SpriteAnimation(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down_anim), creep.w, creep.h)
         creepList[creep] = spriteSheet
     }
@@ -99,7 +97,6 @@ object GameManager {
         creepList.forEach{ (creep) ->
             if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
                 creepList.remove(creep)
-                //Log.i("enemyUpdater", "enemy removed")
             }else{
                 creep.update()
             }
