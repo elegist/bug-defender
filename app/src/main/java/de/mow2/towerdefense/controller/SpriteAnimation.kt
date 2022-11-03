@@ -13,7 +13,8 @@ import android.graphics.Bitmap
  * @param frameDuration Time duration of one frame in milliseconds
  */
 class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val height: Int, private val frameCount: Int = 7, private val frameDuration: Int = 30) {
-    private var animation = arrayOf<Bitmap>()
+    private lateinit var animation: Array<Bitmap>
+    private var animationMap = HashMap<Int, Array<Bitmap>>() //holds all different animations for this type
     private var startFrameTime = System.currentTimeMillis()
 
     var frameCounter = 0
@@ -25,7 +26,9 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
     /**
      * Returns the next frame of the animation, based on elapsed time since the last frame was called
      */
-    fun nextFrame(): Bitmap {
+    fun nextFrame(orientation: Int): Bitmap {
+        animation = animationMap[orientation]!!
+        //TODO: different orientations (e.g. walking direction of creep)
         if(System.currentTimeMillis() - startFrameTime >= frameDuration) {
             update()
             startFrameTime = System.currentTimeMillis()
@@ -37,14 +40,17 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
      * Cuts the given Bitmap into single frames, based on parameter frameCount
      */
     private fun cutSpriteSheet() {
+        val rows = 3 //TODO: make dynamic
         val cutW = bitmap.width / frameCount
-        val cutH = bitmap.height
-        var i = 0
-        while (i < frameCount) {
-            val cutImg = Bitmap.createBitmap(bitmap, cutW * i, 0, cutW, cutH)
-            val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
-            animation = animation.plus(scaled)
-            i++
+        val cutH = bitmap.height / rows
+        for(i in 0 until rows) {
+            var addAnimation = arrayOf<Bitmap>()
+            for(j in 0 until frameCount) {
+                val cutImg = Bitmap.createBitmap(bitmap, cutW * j, cutH * i, cutW, cutH)
+                val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
+                addAnimation = addAnimation.plus(scaled)
+            }
+            animationMap[i] = addAnimation
         }
     }
 

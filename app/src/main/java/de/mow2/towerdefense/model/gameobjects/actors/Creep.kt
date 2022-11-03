@@ -18,6 +18,8 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
     val alg = Astar()
     var w: Int = squareField.width
     var h: Int = squareField.height
+    //walking direction
+   var orientation: Int = 2 //TODO: Change value based on walking direction! (0 = down, 1 = up, 2 = left/right) maybe develop a better solution??
     //path finding
     var path: List<Astar.Node> = emptyList()
     set(value) {

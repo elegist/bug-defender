@@ -52,7 +52,7 @@ object GameManager {
      */
     private fun addCreepToMap(creep: Creep) {
         //TODO: maybe sort map for drawing order? Also: CreepTypes
-        val spriteSheet = SpriteAnimation(BitmapFactory.decodeResource(resources, R.drawable.leafbug_down_anim), creep.w, creep.h)
+        val spriteSheet = SpriteAnimation(BitmapFactory.decodeResource(resources, R.drawable.leafbug_anim), creep.w, creep.h)
         creepList[creep] = spriteSheet
     }
 
@@ -65,7 +65,7 @@ object GameManager {
             draw(canvas, image, tower.x, tower.y)
         }
         creepList.forEach{ (enemy, animation) ->
-            draw(canvas, animation!!.nextFrame(), enemy.positionX(), enemy.positionY())
+            draw(canvas, animation!!.nextFrame(enemy.orientation), enemy.positionX(), enemy.positionY())
         }
         projectileList.forEach{ (projectile) ->
             draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.projectile), projectile.positionX(), projectile.positionY())
