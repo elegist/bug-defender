@@ -57,9 +57,6 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
         }
     }
 
-    /**
-     * use onDraw to render onto canvas
-     */
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         //drawing background

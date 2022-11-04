@@ -8,40 +8,19 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 /**
  * Takes a Bitmap and resizes its dimensions
- * !! Important: call with at least 1 optional argument !!
- * could be expanded to perform various action such as change color, alpha etc.
  * @param resources resources that hold a reference to the drawable
  * @param width desired width
  * @param height desired height
- * @param towerType (optional) type of tower (from TowerTypes)
- * @param bitmapR (optional) needed if theres no tower -> bitmap resource identifier
+ * @param bitmapR bitmap resource identifier
  */
-data class ScaledImage(val resources: Resources, val width: Int, val height: Int, val towerType: TowerTypes? = null, val bitmapR: Int? = null) {
+data class ScaledImage(val resources: Resources, val width: Int, val height: Int, val bitmapR: Int) {
     private val options = BitmapFactory.Options()
+    private val bitmap: Bitmap = BitmapFactory.decodeResource(resources, bitmapR)
+    val scaledImage: Bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false)
 
     init {
         options.inScaled = false //prevent "rescaling"
         options.inPreferredConfig = Bitmap.Config.RGB_565 //low quality bitmaps
-    }
-
-    fun getImage(): Bitmap? {
-        val bitmap = if(towerType != null) {
-            BitmapFactory.decodeResource(resources, getTowerImageResource(), options)
-        } else if(bitmapR != null) {
-            BitmapFactory.decodeResource(resources, bitmapR)
-        } else {
-            return null
-        }
-        return Bitmap.createScaledBitmap(bitmap, width, height, false)
-    }
-
-    private fun getTowerImageResource(): Int {
-        return when(towerType) {
-            TowerTypes.BLOCK -> R.drawable.tower_block
-            TowerTypes.SLOW -> R.drawable.tower_slow
-            TowerTypes.AOE -> R.drawable.tower_aoe
-            null -> R.drawable.tower_destroy
-        }
     }
 }
 

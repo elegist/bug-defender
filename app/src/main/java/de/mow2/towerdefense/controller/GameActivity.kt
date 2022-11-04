@@ -55,6 +55,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         GameManager.resources = resources //GameManager needs to know resources for drawing
+        GameManager.initImages()
         loadPrefs()
 
         //create new game view

@@ -15,8 +15,7 @@ import kotlinx.android.synthetic.main.popup_view.view.*
  * inflates view onCreate, sets Settings for each popup window
  * gets preferences through childFragment
  * functionality for close button in popup view
- * */
-
+ **/
 class PopupFragment: DialogFragment() {
     private lateinit var popUpView: View
     override fun onCreateView(

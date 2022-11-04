@@ -8,9 +8,7 @@ import kotlin.math.sqrt
 
 /**
  * GameObject is the foundation of any moving object in the game
- * TODO: Tower could be a GameObject. Would be easier to make creeps attack towers
  */
-
 abstract class GameObject(var squareField: SquareField) {
     protected var coordX = squareField.coordX
     protected var coordY = squareField.coordY

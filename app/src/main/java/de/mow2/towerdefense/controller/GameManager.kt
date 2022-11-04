@@ -2,6 +2,7 @@ package de.mow2.towerdefense.controller
 
 import android.content.res.Resources
 import android.graphics.*
+import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.GameObject
@@ -19,11 +20,12 @@ object GameManager {
     var playGround = PlayGround(GameView.gameWidth)
     lateinit var resources: Resources
 
-    //currently as array, should be a matrix (map or list)
-    var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
-    var towerList = ConcurrentHashMap<Tower, Bitmap?>()
+    //all various lists and maps for game objects and their respective bitmaps or animations
+    private var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
+    var towerList = mutableListOf<Tower>()
+    var towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
     private var creepList = ConcurrentHashMap<Creep, SpriteAnimation?>()
-
+    private var weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation?>()
     //debug
     private val TAG = javaClass.name
 
@@ -32,18 +34,52 @@ object GameManager {
      */
     fun resetManager() {
         playGround = PlayGround(GameView.gameWidth)
-        towerList = ConcurrentHashMap()
+        towerList = mutableListOf()
         creepList = ConcurrentHashMap()
         projectileList = ConcurrentHashMap()
     }
 
     /**
+     * Initialize all images and hold references for further use
+     * Should improve performance comparing to decoding bitmaps while drawing
+     */
+    fun initImages() {
+        //TODO: do the same with creeps and all other images,
+        // result should be one Map each holding its type as key and animation as value for all creeps, towers, projectiles, weapons and so on
+        val width = playGround.squareArray[0][0].width
+        val height = playGround.squareArray[0][0].height
+        TowerTypes.values().forEach { key ->
+            val towerR: Int
+            val weaponAnimR: Int
+            val frameCount: Int
+            when(key) {
+                TowerTypes.BLOCK -> {
+                    towerR = R.drawable.tower_block
+                    weaponAnimR = R.drawable.tower_block_weapon_anim_1
+                    frameCount = 6
+                }
+                TowerTypes.SLOW -> {
+                    towerR = R.drawable.tower_slow
+                    weaponAnimR = R.drawable.tower_slow_weapon_anim_1
+                    frameCount = 16
+                }
+                TowerTypes.AOE -> {
+                    towerR = R.drawable.tower_aoe
+                    weaponAnimR = R.drawable.tower_block_weapon_anim_1
+                    frameCount = 6
+                }
+            }
+            towerImages[key] = ScaledImage(resources, width, height * 2, towerR).scaledImage
+            weaponAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), width, height, 1, frameCount, 100)
+        }
+    }
+    /**
      * Adds a tower and its customized bitmap to the drawing list
      * @param tower the tower to be added
      */
     fun addTowerToMap(tower: Tower) {
-        towerList[tower] = ScaledImage(resources, tower.w, tower.h, tower.type).getImage()
-        towerList.toSortedMap()
+        towerList += tower
+        towerList.sort()
     }
     // TODO: create one map out of all things to draw and sort it to get a good drawing order?
     /**
@@ -60,12 +96,16 @@ object GameManager {
      * decides which objects to draw
      */
     fun drawObjects(canvas: Canvas, resources: Resources) {
-        //draw towers
-        towerList.forEach { (tower, image) ->
-            draw(canvas, image, tower.x, tower.y)
-        }
         creepList.forEach{ (enemy, animation) ->
             draw(canvas, animation!!.nextFrame(enemy.orientation), enemy.positionX(), enemy.positionY())
+        }
+        towerList.forEach { tower ->
+            draw(canvas, towerImages[tower.type], tower.x, tower.y)
+            if(tower.isShooting) {
+                draw(canvas, weaponAnims[tower.type]!!.nextFrame(0), tower.x, tower.y)
+            } else {
+                draw(canvas, weaponAnims[tower.type]!!.idleImage, tower.x, tower.y)
+            }
         }
         projectileList.forEach{ (projectile) ->
             draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.projectile), projectile.positionX(), projectile.positionY())
@@ -77,9 +117,11 @@ object GameManager {
      */
     fun updateLogic() {
         if(Projectile.canSpawn()){
-            towerList.forEach { (tower) ->
+            towerList.forEach { tower ->
+                tower.isShooting = false
                 creepList.forEach{ (creep) ->
                     if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < 2000){
+                        tower.isShooting = true
                         projectileList[Projectile(tower.squareField, tower, creep)] = tower
                     }
                 }
