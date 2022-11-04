@@ -41,7 +41,7 @@ object GameManager {
 
     /**
      * Initialize all images and hold references for further use
-     * Should improve performance comparing to decoding bitmaps while drawing
+     * Should improve performance compared to decoding bitmaps while drawing
      */
     fun initImages() {
         //TODO: do the same with creeps and all other images,
