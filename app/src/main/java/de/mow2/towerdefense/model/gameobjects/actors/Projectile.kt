@@ -5,7 +5,8 @@ import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
 
-class Projectile(squareField: SquareField, val tower: Tower, val creep: Creep) : GameObject(squareField) {
+class Projectile(squareField: SquareField, val tower: Tower, val creep: Creep
+) : GameObject() {
     /**
      * calc pixels per update and init speed
      */
