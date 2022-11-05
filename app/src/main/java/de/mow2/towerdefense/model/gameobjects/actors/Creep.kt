@@ -1,7 +1,6 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import android.util.Log
-import de.mow2.towerdefense.controller.GameLoop
+import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.controller.GameManager
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.SquareField
@@ -11,14 +10,17 @@ import kotlin.random.Random
 import kotlin.random.nextInt
 
 /**
- * 
+ * An instance of this class represents one specific enemy.
+ * @param type One value of CreepTypes (e.g. leafbug, firebug...)
+ * @param squareField The squareField on which this creep will spawn
  */
-//TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
 class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]
 ): GameObject(squareField) {
     val alg = Astar()
     var w: Int = squareField.width
     var h: Int = squareField.height
+    //walking direction
+   var orientation: Int = 0 //TODO: Change value based on walking direction! (0 = down, 1 = up, 2 = left/right) maybe develop a better solution??
     //path finding
     var path: List<Astar.Node> = emptyList()
     set(value) {
@@ -59,14 +61,24 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
          * https://www.codeproject.com/articles/990452/interception-of-two-moving-objects-in-d-space
          */
         //vector between enemy and target
-        var distanceToTargetX: Float = targetX - positionX()
-        var distanceToTargetY: Float = targetY - positionY()
+        val distanceToTargetX: Float = targetX - positionX()
+        val distanceToTargetY: Float = targetY - positionY()
+        //update direction variable for animation purposes
+        orientation = if(distanceToTargetX < -5) {
+            3 //left
+        } else if(distanceToTargetX > 5) {
+            2 //right
+        } else if(distanceToTargetY < 0) {
+            1 //up
+        } else {
+            0 //down (default)
+        }
         //absolute distance
-        var distanceToTargetAbs: Float = findDistance(this.positionX(), this.positionY(), targetX, targetY)
+        val distanceToTargetAbs: Float = findDistance(this.positionX(), this.positionY(), targetX, targetY)
         if(distanceToTargetAbs.toInt() <= GameManager.playGround.squareSize*0.10) findNextTarget()
         //direction
-        var directionX: Float = distanceToTargetX/distanceToTargetAbs
-        var directionY: Float = distanceToTargetY/distanceToTargetAbs
+        val directionX: Float = distanceToTargetX/distanceToTargetAbs
+        val directionY: Float = distanceToTargetY/distanceToTargetAbs
         //check if target has been reached
         if(distanceToTargetAbs > 0){
             velocityX = directionX*speed

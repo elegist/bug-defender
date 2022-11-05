@@ -55,6 +55,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
         GameManager.resources = resources //GameManager needs to know resources for drawing
+        GameManager.initImages()
         loadPrefs()
 
         //create new game view
@@ -130,7 +131,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
 
     override fun onPause() {
         super.onPause()
-        // 4. stops MediaPlayer while not being in activity
+        // stops MediaPlayer while not being in activity
         SoundManager.mediaPlayer.release()
     }
 

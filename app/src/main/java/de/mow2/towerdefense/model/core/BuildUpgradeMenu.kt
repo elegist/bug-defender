@@ -7,6 +7,11 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 class BuildUpgradeMenu {
 
+    /**
+     * Calculates tower value based on its type and level
+     * @param type value of TowerTypes
+     * @param level this towers level
+     */
     fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
         var cost = when(type) {
             TowerTypes.BLOCK -> 100
@@ -37,11 +42,17 @@ class BuildUpgradeMenu {
         GameManager.addTowerToMap(tower)
     }
 
+    /**
+     * Destroys a tower and resets the squareField
+     */
     fun destroyTower(tower: Tower) {
         tower.squareField.removeTower() //free square
         GameManager.towerList.remove(tower) //remove tower from drawing list
     }
 
+    /**
+     * Upgrades a tower
+     */
     fun upgradeTower(selectedField: SquareField) {
         val tower = selectedField.hasTower
         if(tower != null) {
