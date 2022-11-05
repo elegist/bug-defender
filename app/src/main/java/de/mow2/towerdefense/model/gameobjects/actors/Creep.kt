@@ -14,8 +14,7 @@ import kotlin.random.nextInt
  * @param type One value of CreepTypes (e.g. leafbug, firebug...)
  * @param squareField The squareField on which this creep will spawn
  */
-class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]
-): GameObject(squareField) {
+class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]): GameObject(squareField) {
     val alg = Astar()
     var w: Int = squareField.width
     var h: Int = squareField.height

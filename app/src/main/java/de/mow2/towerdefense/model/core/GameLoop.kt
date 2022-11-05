@@ -6,7 +6,7 @@ import de.mow2.towerdefense.controller.GameManager
  * Opens up a new thread to run scheduled updates on game logic (e.g. updating enemy creature positions and so on)
  * Times its updates at a desired rate and therefore tries to trigger a canvas drawing at the same speed (resulting in fps)
  */
-class GameLoop : Thread() {
+class GameLoop(val gameManager: GameManager) : Thread() {
     private var running = false
     private var avgUps: Double = 0.0
 
@@ -23,7 +23,7 @@ class GameLoop : Thread() {
         /* Game Loop */
         while (running) {
 
-            GameManager.updateLogic()
+            gameManager.updateLogic()
             updateCount++
 
             //pause gameLoop if targetUPS could be exceeded

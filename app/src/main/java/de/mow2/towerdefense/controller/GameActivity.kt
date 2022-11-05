@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.activity_game.*
  */
 class GameActivity : AppCompatActivity(), GUICallBack {
     //game content and gui
-    private val levelGenerator: LevelGenerator by viewModels()
+    private val gameManager: GameManager by viewModels()
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
     private lateinit var chrono: Chronometer
@@ -54,13 +54,13 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //create view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        GameManager.resources = resources //GameManager needs to know resources for drawing
-        GameManager.initImages()
+        gameManager.resources = resources //GameManager needs to know resources for drawing
+        gameManager.initImages()
         loadPrefs()
 
         //create new game view
         gameLayout = gameViewContainer
-        gameView = GameView(this, this)
+        gameView = GameView(this, this, gameManager)
         gameLayout.addView(gameView)
 
         initGUI()
@@ -69,11 +69,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
 
         //build level
         //TODO: dynamically decide which level to build
-        levelGenerator.initLevel(0)
+        gameManager.initLevel(0)
         //bind observers to views
-        levelGenerator.coinAmnt.observe(this, coinObserver)
-        //pass levelGenerator to gameView
-        gameView.levelGenerator = levelGenerator
+        gameManager.coinAmnt.observe(this, coinObserver)
         //start level timer
         chrono.start()
     }
@@ -83,7 +81,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      */
     fun leaveGame(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
-        GameManager.resetManager()
     }
 
     /**
@@ -152,7 +149,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      */
     override fun buildTower(type: TowerTypes, level: Int) {
         val cost = buildMenu.getTowerCost(type, level)
-        if(levelGenerator.decreaseCoins(cost)) {
+        if(gameManager.decreaseCoins(cost)) {
             //build tower
             if(level != 0) {
                 buildMenu.upgradeTower(selectedField)
@@ -192,7 +189,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 buildMenuLayout.addView(deleteBtn)
                 deleteBtn.setOnClickListener {
                     buildMenu.destroyTower(tower)
-                    levelGenerator.increaseCoins(buildMenu.getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
+                    gameManager.increaseCoins(buildMenu.getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
                     toggleBuildMenu(selectedField)
                 }
                 tower.level + 1

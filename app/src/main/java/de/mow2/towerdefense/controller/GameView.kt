@@ -14,9 +14,8 @@ import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.SquareField
 
 @SuppressLint("ViewConstructor")
-class GameView(context: Context, private val callBack: GUICallBack) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, private val callBack: GUICallBack, val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
-    lateinit var levelGenerator: LevelGenerator
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
@@ -24,7 +23,7 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
     init {
         holder.addCallback(this)
         holder.setFormat(0x00000004)
-        gameLoop = GameLoop()
+        gameLoop = GameLoop(gameManager)
 
         //initializing background tiles
         bgPaint = Paint()
@@ -65,7 +64,7 @@ class GameView(context: Context, private val callBack: GUICallBack) : SurfaceVie
         ////////////////////
         //object draw area//
 
-        GameManager.drawObjects(canvas, resources)
+        gameManager.drawObjects(canvas, resources)
 
         //object draw area end//
         ///////////////////////
