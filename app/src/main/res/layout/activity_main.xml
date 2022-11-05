@@ -11,25 +11,11 @@
     android:theme="@style/ThemeOverlay.TowerDefense.FullscreenContainer"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="82dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="96dp"
-        android:contentDescription="@string/game_icon"
-        android:paddingBottom="?attr/dialogPreferredPadding"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_main" />
-
     <TextView
         android:id="@+id/gameName_text"
         android:layout_width="227dp"
         android:layout_height="81dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="232dp"
         android:fontFamily="monospace"
         android:gravity="center"
         android:text="@string/game_name"
@@ -39,7 +25,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/startGameBtn"

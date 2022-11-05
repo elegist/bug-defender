@@ -1,34 +1,26 @@
 package de.mow2.towerdefense.controller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.print.PrintAttributes.Margins
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
-import android.widget.Chronometer
-import android.widget.HorizontalScrollView
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toolbar.LayoutParams
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.MarginLayoutParamsCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Observer
-import com.shashank.sony.fancytoastlib.FancyToast
+import com.google.android.material.snackbar.Snackbar
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
+import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
-import kotlinx.android.synthetic.main.activity_game.*
+
 
 /**
  * This Activity starts the game
@@ -49,16 +41,20 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     var buildMenuExists = false
     //observers
     private lateinit var coinObserver: Observer<Int>
+    // View Binding
+    private lateinit var binding: ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //create view
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game)
+        binding = ActivityGameBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         GameManager.resources = resources //GameManager needs to know resources for drawing
         loadPrefs()
 
         //create new game view
-        gameLayout = gameViewContainer
+        gameLayout = binding.gameViewContainer
         gameView = GameView(this, this)
         gameLayout.addView(gameView)
 
@@ -102,11 +98,11 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      */
     private fun initGUI() {
         //reference game gui
-        chrono = timeView
-        coinsTxt = coinsText
+        chrono = binding.timeView
+        coinsTxt = binding.coinsText
         //reference build menu container
-        buildMenuScrollView = buildMenuWrapper
-        buildMenuLayout = buildMenuContainer
+        buildMenuScrollView = binding.buildMenuWrapper
+        buildMenuLayout = binding.buildMenuContainer
     }
 
     /**
@@ -153,6 +149,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      * @param type type of the tower
      * @param level the towers level (base = 0, upgraded = 1-2)
      */
+    @SuppressLint("RestrictedApi")
     override fun buildTower(type: TowerTypes, level: Int) {
         val cost = buildMenu.getTowerCost(type, level)
         if(levelGenerator.decreaseCoins(cost)) {
@@ -164,8 +161,16 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 SoundManager.soundPool.play(Sounds.PUNCHSOUND.id, 1F, 1F, 1, 0, 1F)
             }
         } else {
-            //not enough money! message player
-            FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
+            //not enough money! message player _> Snackbar oder Toast??
+            val snackbar = Snackbar
+                .make(gameView, R.string.moneyWarning, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.toastAction) {
+                    // Toast nicht mehr anzeigen
+                }
+                .setActionTextColor(getColor(R.color.white))
+                .setBackgroundTint(getColor(R.color.dark_brown))
+                .show()
+            //FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
         }
     }
 
@@ -186,12 +191,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 //add delete tower button
                 val deleteBtn = ImageButton(this, null, R.style.MenuButton_Button)
                 deleteBtn.setImageResource(R.drawable.tower_destroy)
-                deleteBtn.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.green_overlay
-                    )
-                )
+                deleteBtn.setBackgroundColor(getColor(R.color.green_overlay))
                 deleteBtn.setPadding(0,0, 0, 30)
                 buildMenuLayout.addView(deleteBtn)
                 deleteBtn.setOnClickListener {

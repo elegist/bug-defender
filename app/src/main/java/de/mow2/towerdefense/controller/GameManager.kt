@@ -3,14 +3,10 @@ package de.mow2.towerdefense.controller
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.*
-import android.graphics.drawable.Drawable
-import android.util.Log
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
-import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.gameobjects.actors.*
-import de.mow2.towerdefense.model.pathfinding.Astar
 import java.util.concurrent.ConcurrentHashMap
 
 /**
