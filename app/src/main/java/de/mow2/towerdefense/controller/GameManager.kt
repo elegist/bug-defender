@@ -120,10 +120,25 @@ object GameManager {
             towerList.forEach { tower ->
                 tower.isShooting = false
                 creepList.forEach{ (creep) ->
-                    if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < 2000){
+                    if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){
                         tower.isShooting = true
                         projectileList[Projectile(tower.squareField, tower, creep)] = tower
                     }
+                }
+            }
+        }
+
+        projectileList.forEach { (projectile) ->
+//            creepList.forEach{ (creep) ->
+//                if(GameObject.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
+//                    projectileList.remove(projectile)
+//                    creep.takeDamage(projectile.baseDamage)
+//                }
+//            }
+            for ((creep) in creepList){
+                if(GameObject.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
+                    projectileList.remove(projectile)
+                    creep.takeDamage(projectile.baseDamage)
                 }
             }
         }
@@ -137,7 +152,7 @@ object GameManager {
          * update movement, update target or remove enemy
          */
         creepList.forEach{ (creep) ->
-            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
+            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt() || creep.healthPoints <= 0){
                 creepList.remove(creep)
             }else{
                 creep.update()

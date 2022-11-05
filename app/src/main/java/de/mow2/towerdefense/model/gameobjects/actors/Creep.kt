@@ -34,6 +34,8 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
     var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
     var targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
 
+    var healthPoints = 2
+
     /**
      * calc pixels per update and init speed
      */
@@ -100,6 +102,10 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
             targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
             targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
         }
+    }
+
+    fun takeDamage(damageAmount: Int){
+        healthPoints -= damageAmount
     }
 
     companion object{

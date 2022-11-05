@@ -21,6 +21,8 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     private val sortingNr: Int = squareField.mapPos["y"]!!
     override fun compareTo(other: Tower): Int = this.sortingNr.compareTo(other.sortingNr)
 
+    val baseRange = 200
+
     init {
         squareField.hasTower = this
         y = squareField.coordY - w
