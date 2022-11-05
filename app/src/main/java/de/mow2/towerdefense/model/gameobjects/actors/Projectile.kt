@@ -16,6 +16,8 @@ class Projectile(squareField: SquareField, val tower: Tower, val creep: Creep) :
     //init speed
     private val speed = speedPixelsPerSecond / GameLoop.targetUPS
 
+    val baseDamage = 1
+
     override fun update() {
         var distanceToTargetX: Float = creep.positionX() - positionX()
         var distanceToTargetY: Float = creep.positionY() - positionY()

@@ -92,10 +92,16 @@ object GameManager {
         }
 
         projectileList.forEach { (projectile) ->
-            creepList.forEach{ (creep) ->
+//            creepList.forEach{ (creep) ->
+//                if(GameObject.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
+//                    projectileList.remove(projectile)
+//                    creep.takeDamage(projectile.baseDamage)
+//                }
+//            }
+            for ((creep) in creepList){
                 if(GameObject.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
                     projectileList.remove(projectile)
-                    creep.takeDamage(1)
+                    creep.takeDamage(projectile.baseDamage)
                 }
             }
         }
