@@ -17,7 +17,6 @@ abstract class GameObject(var squareField: SquareField) {
     protected var velocityX: Float = 0.0f
     protected var velocityY: Float = 0.0f
 
-
     fun positionX(): Float{ return coordX }
     fun positionY(): Float{ return coordY }
 
