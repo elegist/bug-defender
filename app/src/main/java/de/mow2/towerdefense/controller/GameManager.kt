@@ -3,6 +3,8 @@ package de.mow2.towerdefense.controller
 import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.GameObject
@@ -13,32 +15,73 @@ import java.util.concurrent.ConcurrentHashMap
  * GameManager holds static access to game variables like bitmaps, in-game values and such
  * it also manages drawing onto canvas
  */
-object GameManager {
-    //playground variables
-    const val squaresX = 9
-    const val squaresY = 18
-    var playGround = PlayGround(GameView.gameWidth)
+class GameManager: ViewModel() {
     lateinit var resources: Resources
 
-    //all various lists and maps for game objects and their respective bitmaps or animations
-    private var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
-    var towerList = mutableListOf<Tower>()
-    var towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
-    private var creepList = ConcurrentHashMap<Creep, SpriteAnimation?>()
-    private var weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation?>()
     //debug
     private val TAG = javaClass.name
-
-    /**
-     * call to hard-reset GameManager (remove any remaining towers, creeps, etc.) e.g. Leaving a Game, starting a new one
-     */
-    fun resetManager() {
-        playGround = PlayGround(GameView.gameWidth)
-        towerList = mutableListOf()
-        creepList = ConcurrentHashMap()
-        projectileList = ConcurrentHashMap()
+    //variables
+    val coinAmnt: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+    val livesAmnt: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
     }
 
+    //TODO: Trigger function when enemy is defeated / wave is completed / default income etc.
+    /**
+     * Method to call when increasing coins (e.g. defeating an enemy creature or destroying a tower)
+     * @param increaseValue the value to be added to the total coin amount
+     */
+    fun increaseCoins(increaseValue: Int){
+        val oldVal = coinAmnt.value!!
+        coinAmnt.value = oldVal + increaseValue
+    }
+
+    //TODO: Different values for different TowerTypes
+    /**
+     * Method to call when decreasing coins (e.g. Building or upgrading a tower)
+     * @param decreaseValue the value to subtract from the total amount
+     */
+    fun decreaseCoins(decreaseValue: Int) : Boolean {
+        val oldVal = coinAmnt.value!!
+        return if(coinAmnt.value!! >= (0 + decreaseValue)) {
+            coinAmnt.value = oldVal - decreaseValue
+            true
+        } else {
+            false
+        }
+    }
+    fun increaseLives(newValue: Int){
+        val oldVal = livesAmnt.value!!
+        livesAmnt.value = oldVal + newValue
+    }
+    //TODO: Trigger function when enemy reaches finish line
+    fun decreaseLives(newValue: Int) : Boolean {
+        val oldVal = livesAmnt.value!!
+        return if(livesAmnt.value!! >= (0 + newValue)) {
+            livesAmnt.value = oldVal - newValue
+            true
+        } else {
+            false
+        }
+    }
+    fun initLevel(level: Int) {
+        when(level) {
+            0 -> {
+                /* Endless mode */
+                livesAmnt.value = 3
+                coinAmnt.value = 1000
+            }
+            1 -> {/* Level 1 */}
+            2 -> {/* Level 2 */}
+            else -> {
+                /* Endless mode */
+                livesAmnt.value = 3
+                coinAmnt.value = 200000
+            }
+        }
+    }
     /**
      * Initialize all images and hold references for further use
      * Should improve performance compared to decoding bitmaps while drawing
@@ -73,14 +116,7 @@ object GameManager {
             weaponAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), width, height, 1, frameCount, 100)
         }
     }
-    /**
-     * Adds a tower and its customized bitmap to the drawing list
-     * @param tower the tower to be added
-     */
-    fun addTowerToMap(tower: Tower) {
-        towerList += tower
-        towerList.sort()
-    }
+
     // TODO: create one map out of all things to draw and sort it to get a good drawing order?
     /**
      * Adds a creep and its customized bitmap to the drawing list
@@ -91,7 +127,6 @@ object GameManager {
         val spriteSheet = SpriteAnimation(BitmapFactory.decodeResource(resources, R.drawable.leafbug_anim), creep.w, creep.h)
         creepList[creep] = spriteSheet
     }
-
     /**
      * decides which objects to draw
      */
@@ -171,6 +206,31 @@ object GameManager {
     @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap?, posX: Float, posY: Float) {
         if (bitmap != null) {
             canvas.drawBitmap(bitmap, posX, posY, null)
+        }
+    }
+
+
+    companion object {
+        //playground variables
+        const val squaresX = 9
+        const val squaresY = 18
+        var playGround = PlayGround(GameView.gameWidth)
+
+        var towerList = mutableListOf<Tower>()
+        var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
+        private var creepList = ConcurrentHashMap<Creep, SpriteAnimation?>()
+        //all various lists and maps for game objects and their respective bitmaps or animations
+        var towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
+        private var weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation?>()
+
+
+        /**
+         * Adds a tower and its customized bitmap to the drawing list
+         * @param tower the tower to be added
+         */
+        fun addTowerToMap(tower: Tower) {
+            towerList += tower
+            towerList.sort()
         }
     }
 }
