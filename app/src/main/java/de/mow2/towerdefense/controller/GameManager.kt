@@ -35,7 +35,7 @@ class GameManager: ViewModel() {
      */
     fun increaseCoins(increaseValue: Int){
         val oldVal = coinAmnt.value!!
-        coinAmnt.value = oldVal + increaseValue
+        coinAmnt.postValue(oldVal + increaseValue)
     }
 
     //TODO: Different values for different TowerTypes
@@ -46,7 +46,7 @@ class GameManager: ViewModel() {
     fun decreaseCoins(decreaseValue: Int) : Boolean {
         val oldVal = coinAmnt.value!!
         return if(coinAmnt.value!! >= (0 + decreaseValue)) {
-            coinAmnt.value = oldVal - decreaseValue
+            coinAmnt.postValue(oldVal - decreaseValue)
             true
         } else {
             false
@@ -54,13 +54,13 @@ class GameManager: ViewModel() {
     }
     fun increaseLives(newValue: Int){
         val oldVal = livesAmnt.value!!
-        livesAmnt.value = oldVal + newValue
+        livesAmnt.postValue(oldVal + newValue)
     }
     //TODO: Trigger function when enemy reaches finish line
     fun decreaseLives(newValue: Int) : Boolean {
         val oldVal = livesAmnt.value!!
         return if(livesAmnt.value!! >= (0 + newValue)) {
-            livesAmnt.value = oldVal - newValue
+            livesAmnt.postValue(oldVal - newValue)
             true
         } else {
             false
@@ -187,7 +187,13 @@ class GameManager: ViewModel() {
          * update movement, update target or remove enemy
          */
         creepList.forEach{ (creep) ->
-            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt() || creep.healthPoints <= 0){
+            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
+                //TODO: update health
+                decreaseLives(creep.baseDamage)
+                creepList.remove(creep)
+            }else if(creep.healthPoints <= 0){
+                //TODO: update coins
+                increaseCoins(100)
                 creepList.remove(creep)
             }else{
                 creep.update()

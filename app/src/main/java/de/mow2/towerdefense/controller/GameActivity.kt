@@ -10,6 +10,7 @@ import android.widget.Chronometer
 import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toolbar.LayoutParams
 import androidx.activity.viewModels
@@ -40,6 +41,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     private lateinit var gameView: GameView
     private lateinit var chrono: Chronometer
     private lateinit var coinsTxt: TextView
+    private lateinit var healthBar: ProgressBar
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
     //buildmenu
@@ -49,6 +51,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     var buildMenuExists = false
     //observers
     private lateinit var coinObserver: Observer<Int>
+    private lateinit var lifeObserver: Observer<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //create view
@@ -72,6 +75,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         gameManager.initLevel(0)
         //bind observers to views
         gameManager.coinAmnt.observe(this, coinObserver)
+        gameManager.livesAmnt.observe(this, lifeObserver)
         //start level timer
         chrono.start()
     }
@@ -102,6 +106,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //reference game gui
         chrono = timeView
         coinsTxt = coinsText
+        healthBar = healthProgressBar
         //reference build menu container
         buildMenuScrollView = buildMenuWrapper
         buildMenuLayout = buildMenuContainer
@@ -113,6 +118,10 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     private fun defineObservers() {
         coinObserver = Observer<Int> { newCoinVal ->
             coinsTxt.text = newCoinVal.toString()
+        }
+        lifeObserver = Observer<Int> { newLifeVal ->
+            healthBar.progress = newLifeVal
+            if (newLifeVal <= 0) leaveGame(gameView)
         }
     }
 

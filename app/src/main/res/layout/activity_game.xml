@@ -34,6 +34,15 @@
             android:onClick="popUpMenu"
             android:text="@string/menuBtn" />
 
+        <ProgressBar
+            android:id="@+id/healthProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:max="3"
+            android:progress="3" />
+
         <TextView
             android:id="@+id/coinsText"
             android:layout_width="wrap_content"

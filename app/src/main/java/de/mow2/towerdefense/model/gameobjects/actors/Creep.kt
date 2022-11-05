@@ -34,6 +34,7 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
     var targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
 
     var healthPoints = 2
+    var baseDamage = 1
 
     /**
      * calc pixels per update and init speed
