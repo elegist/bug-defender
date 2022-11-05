@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
+import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
@@ -162,15 +163,15 @@ class GameActivity : AppCompatActivity(), GUICallBack {
             }
         } else {
             //not enough money! message player _> Snackbar oder Toast??
-            val snackbar = Snackbar
+            /*val snackbar = Snackbar
                 .make(gameView, R.string.moneyWarning, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.toastAction) {
                     // Toast nicht mehr anzeigen
                 }
                 .setActionTextColor(getColor(R.color.white))
                 .setBackgroundTint(getColor(R.color.dark_brown))
-                .show()
-            //FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
+                .show()*/
+            FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
         }
     }
 

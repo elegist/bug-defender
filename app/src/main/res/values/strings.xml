@@ -7,7 +7,7 @@
     <string name="about_button">about the game</string>
     <string name="game_icon">game icon</string>
     <string name="close_button">Close</string>
-    <string name="game_name">Tower Defense</string>
+    <string name="game_name">Bug Defender</string>
     <string name="about_text">This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributors are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.</string>
     <string name="preferences_text">set your preferences:</string>
     <string name="info_text">This is a Tower Defense Game, where u need to place Towers in order to defend your base.</string>
