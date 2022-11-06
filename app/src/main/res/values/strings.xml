@@ -2,16 +2,22 @@
     <string name="app_name">TowerDefense</string>
     <string name="title_activity_main">Tower Defense</string>
     <string name="startGame_button">Start Game</string>
-    <string name="info_button">Game Instructions</string>
-    <string name="preference_button">Preferences</string>
+    <string name="info_button">game instructions</string>
+    <string name="preference_button">preferences</string>
+    <string name="about_button">about the game</string>
     <string name="game_icon">game icon</string>
     <string name="close_button">Close</string>
-    <string name="game_name">Tower Defense</string>
+    <string name="game_name">Bug Defender</string>
     <string name="about_text">This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributors are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.</string>
     <string name="preferences_text">set your preferences:</string>
     <string name="info_text">This is a Tower Defense Game, where u need to place Towers in order to defend your base.</string>
     <string name="preference_music">music</string>
     <string name="menuBtn">Menu</string>
     <string name="sound">sounds</string>
-    <string name="leaveGame">leave Game</string>
+    <string name="leaveGame">leave game</string>
+    <string name="pause">pause game</string>
+    <string name="resumeGame">resume game</string>
+    <string name="moneyWarning">not enough money</string>
+    <string name="toastAction">don\'t show again</string>
+    <string name="coins">coins</string>
 </resources>

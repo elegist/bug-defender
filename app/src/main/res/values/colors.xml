@@ -7,6 +7,7 @@
     <color name="dark_brown">#43240f</color>
     <color name="middle_brown">#6b472e</color>
     <color name="light_brown">#7d5336</color>
+    <color name="brown_overlay">#727D5336</color>
 
     <color name="green_overlay">#AD31421F</color>
     <color name="dark_green">#31421f</color>

@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.controller
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
@@ -150,6 +151,7 @@ class GameManager: ViewModel() {
     /**
      * updates to game logic related values
      */
+    @SuppressLint("SuspiciousIndentation")
     fun updateLogic() {
         if(Projectile.canSpawn()){
             towerList.forEach { tower ->

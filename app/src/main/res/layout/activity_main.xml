@@ -5,29 +5,17 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_brown"
+    android:background="@drawable/background_td"
+    android:backgroundTint="@color/light_brown"
+    android:backgroundTintMode="multiply"
     android:theme="@style/ThemeOverlay.TowerDefense.FullscreenContainer"
     tools:context=".MainActivity">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="82dp"
-        android:layout_height="156dp"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="112dp"
-        android:contentDescription="@string/game_icon"
-        android:paddingBottom="?attr/dialogPreferredPadding"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_main" />
 
     <TextView
         android:id="@+id/gameName_text"
         android:layout_width="227dp"
         android:layout_height="81dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="232dp"
         android:fontFamily="monospace"
         android:gravity="center"
         android:text="@string/game_name"
@@ -37,10 +25,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/startGame_button"
+        android:id="@+id/startGameBtn"
         style="@style/Button.Main"
         android:layout_marginBottom="36dp"
         android:layout_weight="1"
@@ -51,7 +39,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gameName_text"
-        app:layout_constraintVertical_bias="0.377" />
+        app:layout_constraintVertical_bias="0.11" />
+
+    <Button
+        android:id="@+id/resumeGameBtn"
+        style="@style/Button.Main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_border"
+        android:text="@string/resumeGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startGameBtn" />
 
     <ImageButton
         android:id="@+id/preference_button"
@@ -61,7 +60,7 @@
         android:onClick="popUpButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_preferences" />
+        app:srcCompat="@android:drawable/ic_menu_manage" />
 
     <ImageButton
         android:id="@+id/about_button"
@@ -71,7 +70,7 @@
         android:onClick="popUpButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_menu_add" />
 
     <ImageButton
         android:id="@+id/info_button"
@@ -81,6 +80,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/preference_button"
         app:layout_constraintStart_toEndOf="@+id/about_button"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
+        app:srcCompat="@drawable/ic_info_outline_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

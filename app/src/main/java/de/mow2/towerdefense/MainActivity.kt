@@ -11,6 +11,7 @@ import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.SoundManager.soundSetting
 import de.mow2.towerdefense.controller.Sounds
+import de.mow2.towerdefense.databinding.ActivityMainBinding
 
 /**
  * This class is the main entry point
@@ -19,10 +20,12 @@ class MainActivity : AppCompatActivity() {
     private val TAG: String = javaClass.name
     private val fm = supportFragmentManager
     private var dialogPopup = PopupFragment()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onResume(){
