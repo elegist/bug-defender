@@ -61,7 +61,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //create new game view
         binding = ActivityGameBinding.inflate(layoutInflater)
         gameLayout = binding.gameViewContainer
-        gameView = GameView(this, this)
+        gameView = GameView(this,this, gameManager)
         gameLayout.addView(gameView)
         setContentView(binding.root)
 
