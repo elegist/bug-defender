@@ -4,23 +4,18 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Chronometer
 import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toolbar.LayoutParams
-import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
@@ -43,6 +38,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     private lateinit var chrono: Chronometer
     private lateinit var coinsTxt: TextView
     private lateinit var healthBar: ProgressBar
+    private lateinit var waveBar: ProgressBar
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
     //buildmenu
@@ -53,33 +49,30 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     //observers
     private lateinit var coinObserver: Observer<Int>
     private lateinit var lifeObserver: Observer<Int>
+    private lateinit var killObserver: Observer<Int>
     // View Binding
     private lateinit var binding: ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //create new game view
         binding = ActivityGameBinding.inflate(layoutInflater)
+        //define observers and bind them
+        initObservers()
+        //create new game view
         gameLayout = binding.gameViewContainer
         gameView = GameView(this,this, gameManager)
         gameLayout.addView(gameView)
         setContentView(binding.root)
-
-        //create view
-        gameManager.resources = resources //GameManager needs to know resources for drawing
-        gameManager.initImages()
+        //load settings and GUI
         loadPrefs()
-
         initGUI()
         hideSystemBars()
-        defineObservers()
-
+        //init resources and game manager
+        gameManager.resources = resources //GameManager needs to know resources for drawing
+        gameManager.initImages()
+        gameManager.initLevel(0, healthBar, waveBar)
         //build level
         //TODO: dynamically decide which level to build
-        gameManager.initLevel(0)
-        //bind observers to views
-        gameManager.coinAmnt.observe(this, coinObserver)
-        gameManager.livesAmnt.observe(this, lifeObserver)
         //start level timer
         chrono.start()
     }
@@ -111,6 +104,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         chrono = binding.timeView
         coinsTxt = binding.coinsText
         healthBar = binding.healthProgressBar
+        waveBar = binding.waveProgressBar
         //reference build menu container
         buildMenuScrollView = binding.buildMenuWrapper
         buildMenuLayout = binding.buildMenuContainer
@@ -119,14 +113,27 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     /**
      * Define value observers for coins, lives etc.
      */
-    private fun defineObservers() {
+    private fun initObservers() {
         coinObserver = Observer<Int> { newCoinVal ->
             coinsTxt.text = newCoinVal.toString()
         }
+        gameManager.coinAmnt.observe(this, coinObserver)
+
         lifeObserver = Observer<Int> { newLifeVal ->
             healthBar.progress = newLifeVal
             if (newLifeVal <= 0) leaveGame(gameView)
         }
+        gameManager.livesAmnt.observe(this, lifeObserver)
+
+        killObserver = Observer<Int> { newKillVal ->
+            waveBar.progress = newKillVal
+            if(newKillVal >= waveBar.max) {
+                GameManager.gameLevel++
+                gameManager.initLevel(GameManager.gameLevel, healthBar, waveBar)
+                FancyToast.makeText(this, "Wave ${GameManager.gameLevel}", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false ).show()
+            }
+        }
+        gameManager.killCounter.observe(this, killObserver)
     }
 
     override fun onResume(){

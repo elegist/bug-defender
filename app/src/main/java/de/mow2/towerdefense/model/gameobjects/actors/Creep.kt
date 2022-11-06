@@ -34,7 +34,7 @@ class Creep(type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nextInt
     private var target = currentPath!!.first()
 
     //health points
-    var healthPoints = 5
+    var healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
 
     //basedamage
     var baseDamage = 1

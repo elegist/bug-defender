@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
+import android.widget.ProgressBar
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import de.mow2.towerdefense.R
@@ -28,8 +29,10 @@ class GameManager: ViewModel() {
     val livesAmnt: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
+    val killCounter: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
 
-    //TODO: Trigger function when enemy is defeated / wave is completed / default income etc.
     /**
      * Method to call when increasing coins (e.g. defeating an enemy creature or destroying a tower)
      * @param increaseValue the value to be added to the total coin amount
@@ -38,8 +41,6 @@ class GameManager: ViewModel() {
         val oldVal = coinAmnt.value!!
         coinAmnt.postValue(oldVal + increaseValue)
     }
-
-    //TODO: Different values for different TowerTypes
     /**
      * Method to call when decreasing coins (e.g. Building or upgrading a tower)
      * @param decreaseValue the value to subtract from the total amount
@@ -57,8 +58,7 @@ class GameManager: ViewModel() {
         val oldVal = livesAmnt.value!!
         livesAmnt.postValue(oldVal + newValue)
     }
-    //TODO: Trigger function when enemy reaches finish line
-    fun decreaseLives(newValue: Int) : Boolean {
+    private fun decreaseLives(newValue: Int) : Boolean {
         val oldVal = livesAmnt.value!!
         return if(livesAmnt.value!! >= (0 + newValue)) {
             livesAmnt.postValue(oldVal - newValue)
@@ -67,21 +67,37 @@ class GameManager: ViewModel() {
             false
         }
     }
-    fun initLevel(level: Int) {
+
+    /**
+     * Increases the value of killCounter. This serves as an indicator for when to start a new / stronger wave of creeps
+     */
+    private fun increaseKills(newValue: Int){
+        val oldVal = killCounter.value!!
+        killCounter.postValue(oldVal + newValue)
+    }
+
+    private var killsToProgress = 0
+    fun initLevel(level: Int, healthBar: ProgressBar, waveBar: ProgressBar) {
         when(level) {
             0 -> {
-                /* Endless mode */
+                /* Start game */
                 livesAmnt.value = 30
                 coinAmnt.value = 1000
+                killsToProgress = 10
+                healthBar.max = livesAmnt.value!!
             }
-            1 -> {/* Level 1 */}
-            2 -> {/* Level 2 */}
             else -> {
-                /* Endless mode */
-                livesAmnt.value = 3
-                coinAmnt.value = 200000
+                if(level % 10 == 0) {
+                    //spawn boss wave
+                }
+                /* Define next wave */
+                killsToProgress = killCounter.value!!.times(level)
             }
         }
+        killCounter.value = 0
+        waveBar.max = killsToProgress
+        //TODO:
+        // make creeps stronger, could be a multiplier or defined values for each wave
     }
     /**
      * Initialize all images and hold references for further use
@@ -186,13 +202,12 @@ class GameManager: ViewModel() {
          */
         creepList.forEach{ (creep) ->
             if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
-                //TODO: update health
                 decreaseLives(creep.baseDamage)
                 creepList.remove(creep)
             }else if(creep.healthPoints <= 0){
-                //TODO: update coins
-                increaseCoins(100)
+                increaseCoins(10)
                 creepList.remove(creep)
+                increaseKills(1) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
                 creep.update()
             }
@@ -218,7 +233,8 @@ class GameManager: ViewModel() {
         const val squaresX = 9
         const val squaresY = 18
         var playGround = PlayGround(GameView.gameWidth)
-
+        //static game variables
+        var gameLevel = 0
         var towerList = mutableListOf<Tower>()
         var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
         private var creepList = ConcurrentHashMap<Creep, SpriteAnimation?>()
