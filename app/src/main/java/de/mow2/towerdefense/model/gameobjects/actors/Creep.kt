@@ -6,6 +6,7 @@ import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.pathfinding.Astar
+import kotlin.properties.Delegates
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -14,24 +15,31 @@ import kotlin.random.nextInt
  * @param type One value of CreepTypes (e.g. leafbug, firebug...)
  * @param squareField The squareField on which this creep will spawn
  */
-class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.squareArray[(Random.nextInt(0 until GameManager.squaresX))][0]): GameObject(squareField) {
-    val alg = Astar()
-    var w: Int = squareField.width
-    var h: Int = squareField.height
+class Creep(type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
+): GameObject() {
+    // set width and height of the bitmap
+    var w: Int = GameManager.playGround.squareSize
+    var h: Int = w
+
     //walking direction
-   var orientation: Int = 0 //TODO: Change value based on walking direction! (0 = down, 1 = up, 2 = left/right) maybe develop a better solution??
+    var orientation: Int = 0 //TODO: Change value based on walking direction! (0 = down, 1 = up, 2 = left/right) maybe develop a better solution??
     //path finding
-    var path: List<Astar.Node> = emptyList()
-    set(value) {
-        field = value
-        if(targetIndex == path.size){
-            targetIndex = 0
-        }
+    private val alg = Astar()
+    private var targetIndex: Int = 0
+    private var targetNode = Astar.Node(spawnPoint.x, GameManager.squaresY-1)
+    private var path = alg.findPath(spawnPoint, targetNode, GameManager.squaresX, GameManager.squaresY)
+    private var sortedPath = path?.reversed()
+    private var currentPath = sortedPath
+    private var target = currentPath!!.first()
+
+    init{
+        coordX = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordX
+        coordY = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordY
     }
-    var target: Astar.Node = Astar.Node(this.squareField.mapPos["x"]!!, this.squareField.mapPos["y"]!!)
-    var targetIndex: Int = 0
-    var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
-    var targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
+
+    //init coordinates of first target
+    private var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
+    private var targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
 
     var healthPoints = 2
     var baseDamage = 1
@@ -47,15 +55,6 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
     private val speed = speedPixelsPerSecond / GameLoop.targetUPS
 
     override fun update(){
-        val posX: Int = this.squareField.mapPos["x"]!!
-        val posY: Int = this.squareField.mapPos["y"]!!
-        val creepNode = Astar.Node(posX, posY)
-        val targetNode = Astar.Node(posX, 17)
-        val path = alg.findPath(creepNode, targetNode, GameManager.squaresX, GameManager.squaresY)
-        if(path != null) {
-            val sortedPath = path.reversed()
-            this.path = sortedPath
-        }
         /**
          * math for the movement calculation:
          * https://www.codeproject.com/articles/990452/interception-of-two-moving-objects-in-d-space
@@ -90,14 +89,28 @@ class Creep(type: CreepTypes, squareField: SquareField = GameManager.playGround.
         //update coordinates
         coordX += velocityX
         coordY += velocityY
+
+        //TODO: distance check might break on different screen sizes
+        //check if creep distance is close enough to the target so it can create a new path
+        if(distanceToTargetAbs.toInt() <= GameManager.playGround.squareSize*0.10){
+            targetNode = Astar.Node(target.x, GameManager.squaresY-1)
+            path = alg.findPath(target, targetNode, GameManager.squaresX, GameManager.squaresY)
+            sortedPath = path?.reversed()
+            currentPath = sortedPath
+            findNextTarget()
+        }
     }
 
+    /**
+     * Finds the device coordinates of the next node inside current path array of this creep and
+     * updates targetX and targetY
+     */
     private fun findNextTarget() {
-        target = path[targetIndex]
-        if(target != path.last()) {
-                targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
-                targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
-                targetIndex++
+        target = currentPath!![targetIndex]
+        if (target != currentPath!!.last()) {
+            targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
+            targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
+            targetIndex++
         } else {
             targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
             targetY = GameManager.playGround.squareArray[target.x][target.y].coordY

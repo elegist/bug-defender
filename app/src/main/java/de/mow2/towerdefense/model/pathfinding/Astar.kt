@@ -49,10 +49,9 @@ class Astar {
                     }
                 }
 
-
                 node.parent = currentNode
                 node.g = currentNode.g + 1
-                node.h = (abs(node.x - targetNode.x)) + (abs(node.y - targetNode.y))
+                node.h = calculateHeuristics(node, targetNode)
                 node.f = node.g + node.h
 
                 openSet.forEach { openNode ->
@@ -81,23 +80,32 @@ class Astar {
         // f = g + h -> the lower the value the more attractive it is as a path option
         var f: Int = g + h
 
+        /**
+         * returns all neighbor nodes of this node in a MutableSet
+         * @param maxRows max rows on the 2D grid
+         * @param maxCols max columns on the 2D grid
+         * @return neighbors
+         */
         fun getNeighbors(maxRows: Int, maxCols: Int): MutableSet<Node> {
             val neighbors = mutableSetOf<Node>()
 
-            //TODO: richtige Gewichtung berechnen
+            //left
             if (x - 1 >= 0) neighbors.add(Node(x - 1, y))
-            if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
-            if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
+            //top
             if (y + 1 < maxCols) neighbors.add(Node(x, y + 1))
+            //right
+            if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
+            //bottom
+            if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
 
+            //diagonal bottom left
             if (x - 1 > 0 && y - 1 > 0) neighbors.add(Node(x - 1, y - 1))
+            //diagonal top left
             if (x - 1 > 0 && y + 1 < maxCols) neighbors.add(Node(x - 1, y + 1))
-
-
-
+            //diagonal bottom right
             if (x + 1 < maxRows && y - 1 > 0) neighbors.add(Node(x + 1, y - 1))
+            //diagonal top right
             if (x + 1 < maxRows && y + 1 < maxCols) neighbors.add(Node(x + 1, y + 1))
-
 
             return neighbors
         }
@@ -106,15 +114,13 @@ class Astar {
     }
 
     /**
-     * calculates the correct values to decide which way should be preferred (straight or diagonal)
+     * Calculates the correct values to decide which way should be preferred (straight or diagonal).
+     * 8 directions, diagonal cost and straight cost are the same.
      */
     private fun calculateHeuristics(from: Node, to: Node): Int {
-        val diagonalCost = 14
-        val straightCost = 10
-
         val xDist = abs(from.x - to.x)
         val yDist = abs(from.y - to.y)
-        val remaining = abs(xDist - yDist)
-        return diagonalCost * min(xDist, yDist) + straightCost * remaining
+
+        return max(xDist, yDist)
     }
 }
