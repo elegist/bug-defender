@@ -153,33 +153,29 @@ class GameManager: ViewModel() {
      */
     @SuppressLint("SuspiciousIndentation")
     fun updateLogic() {
-        if(Projectile.canSpawn()){
-            towerList.forEach { tower ->
+
+        towerList.forEach { tower ->
+            if(tower.cooldown()){
                 tower.isShooting = false
                 creepList.forEach{ (creep) ->
-                    if (GameObject.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){
+                    if (tower.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){
                         tower.isShooting = true
-                        projectileList[Projectile(tower.squareField, tower, creep)] = tower
+                        projectileList[Projectile(tower, creep)] = tower
                     }
                 }
             }
         }
 
         projectileList.forEach { (projectile) ->
-//            creepList.forEach{ (creep) ->
-//                if(GameObject.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
-//                    projectileList.remove(projectile)
-//                    creep.takeDamage(projectile.baseDamage)
-//                }
-//            }
-            for ((creep) in creepList){
-                if(GameObject.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
+            creepList.forEach{ (creep) ->
+                if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
                     projectileList.remove(projectile)
                     creep.takeDamage(projectile.baseDamage)
                 }
             }
-        }
 
+        }
+        //TODO(): different spawn rates for different creepTypes
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
             val creep = Creep(CreepTypes.LEAFBUG)
@@ -217,7 +213,6 @@ class GameManager: ViewModel() {
         }
     }
 
-
     companion object {
         //playground variables
         const val squaresX = 9
@@ -230,7 +225,6 @@ class GameManager: ViewModel() {
         //all various lists and maps for game objects and their respective bitmaps or animations
         var towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
         private var weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation?>()
-
 
         /**
          * Adds a tower and its customized bitmap to the drawing list
