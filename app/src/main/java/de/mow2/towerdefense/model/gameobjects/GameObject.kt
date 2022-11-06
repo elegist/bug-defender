@@ -40,9 +40,13 @@ abstract class GameObject() {
 
     //set spawn rate
     var actionsPerMinute: Float = 0f
-    var spawnsPerSecond: Float = actionsPerMinute / 60
-    //link with target updates per second to convert to updates per spawn
-    private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond
+        set(value){
+            field = value
+            val actionsPerSecond: Float = field / 60
+            //link with target updates per second to convert to updates per spawn
+            updateCycle = GameLoop.targetUPS / actionsPerSecond
+        }
+    private var updateCycle: Float = 0f
     var waitUpdates: Float = 0f
 
     open fun update() {}

@@ -71,7 +71,7 @@ class GameManager: ViewModel() {
         when(level) {
             0 -> {
                 /* Endless mode */
-                livesAmnt.value = 3
+                livesAmnt.value = 30
                 coinAmnt.value = 1000
             }
             1 -> {/* Level 1 */}
