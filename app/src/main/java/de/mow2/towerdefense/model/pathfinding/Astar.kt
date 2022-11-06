@@ -94,21 +94,27 @@ class Astar {
             //bottom
             if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
 
-            if ((x > 0 && y > 0) && (x < 8 && y < 17)){
-
+            //diagonal bottom left
+            if (x - 1 > 0 && y - 1 > 0){
                 if(!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked){
                     neighbors.add(Node(x - 1, y - 1))
-                }
-
-                if(!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked){
-                    neighbors.add(Node(x + 1, y + 1))
-                }
-
-                if(!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked){
+                    }
+            }
+            //diagonal top left
+            if (x - 1 > 0 && y + 1 < maxCols) {
+                if (!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked) {
                     neighbors.add(Node(x - 1, y + 1))
                 }
-
-                if(!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked){
+            }
+            //diagonal top right
+            if (x + 1 < maxRows && y + 1 < maxCols) {
+                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked) {
+                    neighbors.add(Node(x + 1, y + 1))
+                }
+            }
+            //diagonal bottom right
+            if (x + 1 < maxRows && y - 1 > 0) {
+                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked) {
                     neighbors.add(Node(x + 1, y - 1))
                 }
             }
@@ -130,8 +136,8 @@ class Astar {
         val xDist = abs(from.x - to.x)
         val yDist = abs(from.y - to.y)
 
-        return weightS * (xDist + yDist) + (weightD - 2 * weightS) * min(xDist, yDist)
+        //return weightS * (xDist + yDist) + (weightD - 2 * weightS) * min(xDist, yDist)
         //return weightS * sqrt((xDist * xDist + yDist * yDist).toDouble())
-        //return max(xDist, yDist)
+        return max(xDist, yDist)
     }
 }
