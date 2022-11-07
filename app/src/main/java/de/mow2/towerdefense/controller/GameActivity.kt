@@ -4,23 +4,18 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Chronometer
 import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toolbar.LayoutParams
-import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
@@ -38,12 +33,13 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  */
 class GameActivity : AppCompatActivity(), GUICallBack {
     //game content and gui
-    private val gameManager: GameManager by viewModels()
+    private val gameManager = GameManager(this)
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
     private lateinit var chrono: Chronometer
-    private lateinit var coinsTxt: TextView
-    private lateinit var healthBar: ProgressBar
+    lateinit var coinsTxt: TextView
+    lateinit var healthBar: ProgressBar
+    lateinit var waveBar: ProgressBar
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
     //buildmenu
@@ -51,36 +47,25 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     private lateinit var buildMenuLayout: LinearLayout
     private val buildMenu = BuildUpgradeMenu()
     var buildMenuExists = false
-    //observers
-    private lateinit var coinObserver: Observer<Int>
-    private lateinit var lifeObserver: Observer<Int>
     // View Binding
     private lateinit var binding: ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //create new game view
         binding = ActivityGameBinding.inflate(layoutInflater)
+        //create new game view
         gameLayout = binding.gameViewContainer
         gameView = GameView(this,this, gameManager)
         gameLayout.addView(gameView)
         setContentView(binding.root)
-
-        //create view
-        gameManager.resources = resources //GameManager needs to know resources for drawing
-        gameManager.initImages()
+        //load settings and GUI
         loadPrefs()
-
         initGUI()
         hideSystemBars()
-        defineObservers()
-
-        //build level
-        //TODO: dynamically decide which level to build
-        gameManager.initLevel(0)
-        //bind observers to views
-        gameManager.coinAmnt.observe(this, coinObserver)
-        gameManager.livesAmnt.observe(this, lifeObserver)
+        //init resources and game manager
+        gameManager.resources = resources //GameManager needs to know resources for drawing
+        gameManager.initImages()
+        gameManager.initLevel(0) //TODO: Load saved game
         //start level timer
         chrono.start()
     }
@@ -112,26 +97,10 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         chrono = binding.timeView
         coinsTxt = binding.coinsText
         healthBar = binding.healthProgressBar
+        waveBar = binding.waveProgressBar
         //reference build menu container
         buildMenuScrollView = binding.buildMenuWrapper
         buildMenuLayout = binding.buildMenuContainer
-    }
-
-    /**
-     * Define value observers for coins, lives etc.
-     */
-    private fun defineObservers() {
-        coinObserver = Observer<Int> { newCoinVal ->
-            coinsTxt.text = newCoinVal.toString()
-        }
-        lifeObserver = Observer<Int> { newLifeVal ->
-            healthBar.progress = newLifeVal
-            //if (newLifeVal <= 0) leaveGame(gameView)
-            if (newLifeVal <= 0) {
-                setContentView(R.layout.gameover_view)
-                soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
-            }
-        }
     }
 
     override fun onResume(){
