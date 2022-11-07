@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         when (view.id) {
             R.id.info_button -> {
                 dialogPopup.show(fm, "infoDialog")
-                soundPool.play(Sounds.HITSOUND.id, 1F, 1F, 1, 0, 1F)
             }
             R.id.about_button -> {
                 dialogPopup.show(fm, "aboutDialog")

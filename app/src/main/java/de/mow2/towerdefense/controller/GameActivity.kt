@@ -25,6 +25,7 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
+import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GUICallBack
@@ -125,7 +126,11 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         }
         lifeObserver = Observer<Int> { newLifeVal ->
             healthBar.progress = newLifeVal
-            if (newLifeVal <= 0) leaveGame(gameView)
+            //if (newLifeVal <= 0) leaveGame(gameView)
+            if (newLifeVal <= 0) {
+                setContentView(R.layout.gameover_view)
+                soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
+            }
         }
     }
 
@@ -139,7 +144,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
             SoundManager.pauseMusic()
         }
         if(!SoundManager.soundSetting){
-            SoundManager.soundPool.release()
+            soundPool.release()
         }
     }
 
@@ -164,7 +169,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      * @param type type of the tower
      * @param level the towers level (base = 0, upgraded = 1-2)
      */
-    @SuppressLint("RestrictedApi")
+
     override fun buildTower(type: TowerTypes, level: Int) {
         val cost = buildMenu.getTowerCost(type, level)
         if(gameManager.decreaseCoins(cost)) {
@@ -173,16 +178,12 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 buildMenu.upgradeTower(selectedField)
             } else {
                 buildMenu.buildTower(selectedField, type)
-                SoundManager.soundPool.play(Sounds.PUNCHSOUND.id, 1F, 1F, 1, 0, 1F)
+                soundPool.play(Sounds.PUNCHSOUND.id, 1F, 1F, 1, 0, 1F)
             }
         } else {
-            //not enough money! message player _> Snackbar oder Toast??
+            //not enough money!
             /*val snackbar = Snackbar
                 .make(gameView, R.string.moneyWarning, Snackbar.LENGTH_SHORT)
-                .setAction(R.string.toastAction) {
-                    // Toast nicht mehr anzeigen
-                }
-                .setActionTextColor(getColor(R.color.white))
                 .setBackgroundTint(getColor(R.color.dark_brown))
                 .show()*/
             FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()

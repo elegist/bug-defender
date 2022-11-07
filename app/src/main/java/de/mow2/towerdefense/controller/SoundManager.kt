@@ -20,7 +20,7 @@ import de.mow2.towerdefense.R
  * */
 
 enum class Sounds(var id: Int){
-    HITSOUND(0), PUNCHSOUND(0)
+    HITSOUND(0), PUNCHSOUND(0), GAMEOVER(0)
 }
 
 object SoundManager {
@@ -44,6 +44,7 @@ object SoundManager {
     fun loadSounds(context: Context) {
         Sounds.HITSOUND.id = soundPool.load(context, R.raw.hit_04, 1)
         Sounds.PUNCHSOUND.id = soundPool.load(context, R.raw.punch, 1)
+        Sounds.GAMEOVER.id = soundPool.load(context, R.raw.gameover, 1)
     }
 
     // MediaPlayer

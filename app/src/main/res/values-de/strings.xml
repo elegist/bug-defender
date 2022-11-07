@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">TurmVerteidigung</string>
-    <string name="title_activity_main">Tower Defense</string>
+    <string name="app_name">Bug Defender</string>
+    <string name="title_activity_main">Bug Defender</string>
     <string name="startGame_button">Starte Spiel</string>
     <string name="info_button">Spielanleitung</string>
     <string name="preference_button">Präferenzen</string>
@@ -20,4 +20,7 @@
     <string name="moneyWarning">nicht genug Geld</string>
     <string name="toastAction">nicht mehr anzeigen</string>
     <string name="coins">coins</string>
+    <string name="back">back to main manu</string>
+    <string name="restart">restart game</string>
+    <string name="lostText">u lost, try again!</string>
 </resources>
