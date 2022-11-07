@@ -1,12 +1,14 @@
 package de.mow2.towerdefense.controller
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
 import android.widget.ProgressBar
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.GameObject
@@ -17,85 +19,93 @@ import java.util.concurrent.ConcurrentHashMap
  * GameManager holds static access to game variables like bitmaps, in-game values and such
  * it also manages drawing onto canvas
  */
-class GameManager: ViewModel() {
+class GameManager(private val callBack: GameActivity) {
     lateinit var resources: Resources
 
     //debug
     private val TAG = javaClass.name
     //variables
-    val coinAmnt: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
-    val livesAmnt: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
-    val killCounter: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
+    var coinAmnt: Int = 0
+    var livesAmnt: Int = 0
+    var killCounter: Int = 0
 
+    private fun updateGUI() {
+        callBack.runOnUiThread {
+            callBack.coinsTxt.text = coinAmnt.toString()
+            callBack.healthBar.progress = livesAmnt
+            callBack.waveBar.progress = killCounter
+        }
+    }
     /**
      * Method to call when increasing coins (e.g. defeating an enemy creature or destroying a tower)
      * @param increaseValue the value to be added to the total coin amount
      */
     fun increaseCoins(increaseValue: Int){
-        val oldVal = coinAmnt.value!!
-        coinAmnt.postValue(oldVal + increaseValue)
+        coinAmnt += increaseValue
+        updateGUI()
     }
     /**
      * Method to call when decreasing coins (e.g. Building or upgrading a tower)
      * @param decreaseValue the value to subtract from the total amount
      */
     fun decreaseCoins(decreaseValue: Int) : Boolean {
-        val oldVal = coinAmnt.value!!
-        return if(coinAmnt.value!! >= (0 + decreaseValue)) {
-            coinAmnt.postValue(oldVal - decreaseValue)
+        return if(coinAmnt >= (0 + decreaseValue)) {
+            coinAmnt -= decreaseValue
+            updateGUI()
             true
         } else {
             false
         }
     }
     fun increaseLives(newValue: Int){
-        val oldVal = livesAmnt.value!!
-        livesAmnt.postValue(oldVal + newValue)
+        livesAmnt += newValue
+        updateGUI()
     }
     private fun decreaseLives(newValue: Int) : Boolean {
-        val oldVal = livesAmnt.value!!
-        return if(livesAmnt.value!! >= (0 + newValue)) {
-            livesAmnt.postValue(oldVal - newValue)
+        return if(livesAmnt >= (0 + newValue)) {
+            livesAmnt -= newValue
+            updateGUI()
             true
         } else {
             false
         }
     }
-
     /**
      * Increases the value of killCounter. This serves as an indicator for when to start a new / stronger wave of creeps
      */
     private fun increaseKills(newValue: Int){
-        val oldVal = killCounter.value!!
-        killCounter.postValue(oldVal + newValue)
+        killCounter += newValue
+        if(killCounter >= callBack.waveBar.max) {
+            initLevel(gameLevel++)
+        }
+        updateGUI()
     }
 
     private var killsToProgress = 0
-    fun initLevel(level: Int, healthBar: ProgressBar, waveBar: ProgressBar) {
+    fun initLevel(level: Int) {
         when(level) {
             0 -> {
                 /* Start game */
-                livesAmnt.value = 30
-                coinAmnt.value = 1000
+                livesAmnt = 10
+                coinAmnt = 200
                 killsToProgress = 10
-                healthBar.max = livesAmnt.value!!
+                callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
             }
             else -> {
                 if(level % 10 == 0) {
-                    //spawn boss wave
+                    //TODO: spawn boss wave
+                    increaseLives(5)
                 }
                 /* Define next wave */
-                killsToProgress = killCounter.value!!.times(level)
+                killsToProgress = killCounter * level
             }
         }
-        killCounter.value = 0
-        waveBar.max = killsToProgress
+        callBack.runOnUiThread {
+            callBack.waveBar.max = killsToProgress
+            FancyToast.makeText(callBack, "Welle: $gameLevel", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false ).show()
+        }
+        killCounter = 0
+        updateGUI()
         //TODO:
         // make creeps stronger, could be a multiplier or defined values for each wave
     }

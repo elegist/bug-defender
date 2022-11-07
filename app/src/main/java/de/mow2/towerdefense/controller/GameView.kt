@@ -84,6 +84,8 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
     /**
      * handling user inputs
      */
+
+
     private var lastX = 0f
     private var lastY = 0f
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -100,10 +102,13 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
             MotionEvent.ACTION_UP -> {
                 x = ev.x
                 y = ev.y
+                val selectedField = getTouchedSquare(x, y)
                 invalidate()
                 if(x == lastX && y == lastY) {
-                    //open up build and upgrade menu for selected square
-                    callBack.toggleBuildMenu(getTouchedSquare(x, y))
+                    if(selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                        //open up build and upgrade menu for selected square
+                        callBack.toggleBuildMenu(selectedField)
+                    }
                 }
             }
         }

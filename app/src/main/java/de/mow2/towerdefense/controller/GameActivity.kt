@@ -32,13 +32,13 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  */
 class GameActivity : AppCompatActivity(), GUICallBack {
     //game content and gui
-    private val gameManager: GameManager by viewModels()
+    private val gameManager = GameManager(this)
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
     private lateinit var chrono: Chronometer
-    private lateinit var coinsTxt: TextView
-    private lateinit var healthBar: ProgressBar
-    private lateinit var waveBar: ProgressBar
+    lateinit var coinsTxt: TextView
+    lateinit var healthBar: ProgressBar
+    lateinit var waveBar: ProgressBar
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
     //buildmenu
@@ -46,18 +46,12 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     private lateinit var buildMenuLayout: LinearLayout
     private val buildMenu = BuildUpgradeMenu()
     var buildMenuExists = false
-    //observers
-    private lateinit var coinObserver: Observer<Int>
-    private lateinit var lifeObserver: Observer<Int>
-    private lateinit var killObserver: Observer<Int>
     // View Binding
     private lateinit var binding: ActivityGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
-        //define observers and bind them
-        initObservers()
         //create new game view
         gameLayout = binding.gameViewContainer
         gameView = GameView(this,this, gameManager)
@@ -70,9 +64,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //init resources and game manager
         gameManager.resources = resources //GameManager needs to know resources for drawing
         gameManager.initImages()
-        gameManager.initLevel(0, healthBar, waveBar)
-        //build level
-        //TODO: dynamically decide which level to build
+        gameManager.initLevel(0) //TODO: Load saved game
         //start level timer
         chrono.start()
     }
@@ -108,32 +100,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //reference build menu container
         buildMenuScrollView = binding.buildMenuWrapper
         buildMenuLayout = binding.buildMenuContainer
-    }
-
-    /**
-     * Define value observers for coins, lives etc.
-     */
-    private fun initObservers() {
-        coinObserver = Observer<Int> { newCoinVal ->
-            coinsTxt.text = newCoinVal.toString()
-        }
-        gameManager.coinAmnt.observe(this, coinObserver)
-
-        lifeObserver = Observer<Int> { newLifeVal ->
-            healthBar.progress = newLifeVal
-            if (newLifeVal <= 0) leaveGame(gameView)
-        }
-        gameManager.livesAmnt.observe(this, lifeObserver)
-
-        killObserver = Observer<Int> { newKillVal ->
-            waveBar.progress = newKillVal
-            if(newKillVal >= waveBar.max) {
-                GameManager.gameLevel++
-                gameManager.initLevel(GameManager.gameLevel, healthBar, waveBar)
-                FancyToast.makeText(this, "Wave ${GameManager.gameLevel}", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false ).show()
-            }
-        }
-        gameManager.killCounter.observe(this, killObserver)
     }
 
     override fun onResume(){
