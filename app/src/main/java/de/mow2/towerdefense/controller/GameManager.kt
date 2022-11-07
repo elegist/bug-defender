@@ -87,7 +87,7 @@ class GameManager(private val callBack: GameActivity) {
             0 -> {
                 /* Start game */
                 livesAmnt = 10
-                coinAmnt = 200
+                coinAmnt = 400
                 killsToProgress = 10
                 callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
             }
