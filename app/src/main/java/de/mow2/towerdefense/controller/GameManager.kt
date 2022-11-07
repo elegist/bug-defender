@@ -57,16 +57,17 @@ class GameManager(private val callBack: GameActivity) {
             false
         }
     }
-    fun increaseLives(newValue: Int){
+    private fun increaseLives(newValue: Int){
         livesAmnt += newValue
         updateGUI()
     }
     private fun decreaseLives(newValue: Int) : Boolean {
-        return if(livesAmnt >= (0 + newValue)) {
+        return if(livesAmnt > (0 + newValue)) {
             livesAmnt -= newValue
             updateGUI()
             true
         } else {
+            callBack.runOnUiThread { callBack.onGameOver() }
             false
         }
     }

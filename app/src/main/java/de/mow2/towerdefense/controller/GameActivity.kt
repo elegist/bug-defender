@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.controller
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,12 +9,10 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.lifecycle.Observer
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
@@ -68,6 +65,11 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         gameManager.initLevel(0) //TODO: Load saved game
         //start level timer
         chrono.start()
+    }
+
+    fun onGameOver() {
+        setContentView(R.layout.gameover_view)
+        soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
     }
 
     /**
