@@ -76,28 +76,37 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
     }
 
     /**
-     * decides which objects to draw
+     * Iterates through game objects and calls draw method
+     *
+     * ! Use iterators for lists, or use ConcurrentHashMaps to avoid ConcurrentModificationException !
      */
-    fun drawObjects(canvas: Canvas) {
-        GameManager.creepList.forEach{ creep ->
-            draw(canvas, BitmapPreloader.creepAnims[creep.type]!!.nextFrame(creep.orientation), creep.positionX(), creep.positionY())
-        }
-        GameManager.towerList.forEach { tower ->
+    private fun drawObjects(canvas: Canvas) {
+        //towers
+        val towerIterator = GameManager.towerList.iterator()
+        while(towerIterator.hasNext()) {
+            val tower = towerIterator.next()
             draw(canvas, BitmapPreloader.towerImages[tower.type], tower.x, tower.y)
-            if(tower.isShooting) {
+            if(tower.hasTarget) {
                 draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.x, tower.y)
             } else {
                 draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.x, tower.y)
             }
         }
+        //creeps
+        val creepIterator = GameManager.creepList.iterator()
+        while(creepIterator.hasNext()) {
+            val creep = creepIterator.next()
+            draw(canvas, BitmapPreloader.creepAnims[creep.type]!!.nextFrame(creep.orientation), creep.positionX(), creep.positionY())
+        }
+        //projectiles
         GameManager.projectileList.forEach{ (projectile) ->
-            draw(canvas, BitmapPreloader.projectileAnims[TowerTypes.BLOCK]!!.nextFrame(0), projectile.positionX(), projectile.positionY())
+            draw(canvas, BitmapPreloader.projectileAnims[projectile.tower.type]!!.nextFrame(0), projectile.positionX(), projectile.positionY())
         }
     }
     /**
      * draws a bitmap onto canvas
      */
-    @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap?, posX: Float, posY: Float) {
+    private fun draw(canvas: Canvas, bitmap: Bitmap?, posX: Float, posY: Float) {
         if (bitmap != null) {
             canvas.drawBitmap(bitmap, posX, posY, null)
         }

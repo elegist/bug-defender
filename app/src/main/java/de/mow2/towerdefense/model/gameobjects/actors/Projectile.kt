@@ -2,16 +2,15 @@ package de.mow2.towerdefense.model.gameobjects.actors
 
 import de.mow2.towerdefense.model.gameobjects.GameObject
 
-class Projectile(val tower: Tower, val creep: Creep
-) : GameObject() {
+class Projectile(val tower: Tower, val creep: Creep) : GameObject() {
 
     val baseDamage = 1
 
     init{
-        coordX = tower.squareField.coordX
-        coordY = tower.squareField.coordY
+        coordX = tower.x
+        coordY = tower.y
         // TODO(): each tower could have different projectile speeds
-        speed = 0.3f
+        speed = 0.2f
     }
 
     override fun update() {

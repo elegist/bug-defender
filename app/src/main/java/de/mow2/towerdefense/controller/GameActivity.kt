@@ -78,6 +78,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      */
     fun leaveGame(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
+        GameManager.reset()
     }
 
     /**
@@ -141,7 +142,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      * @param type type of the tower
      * @param level the towers level (base = 0, upgraded = 1-2)
      */
-
     override fun buildTower(type: TowerTypes, level: Int) {
         val cost = buildMenu.getTowerCost(type, level)
         if(gameManager.decreaseCoins(cost)) {
@@ -164,7 +164,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
 
     private lateinit var selectedField: SquareField
     /**
-     * Generates a individual build tower menu depending on the touched SquareField
+     * Generates an individual build tower menu depending on the touched SquareField
      * If a tower has already been built, it displays a delete tower / upgrade menu
      * @param squareField chosen field on the playground (by touch event)
      */

@@ -104,25 +104,32 @@ class GameManager(private val callBack: GameActivity) {
      */
     fun updateLogic() {
         towerList.forEach { tower ->
+            //TODO: apply different damage types and effects
             if(tower.cooldown()){
-                tower.isShooting = false
+                tower.hasTarget = false
                 creepList.forEach{ creep ->
-                    if (tower.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){
-                        tower.isShooting = true
-                        projectileList[Projectile(tower, creep)] = tower
+                    if (tower.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){//if creep is in range of tower
+                        if(tower.target == null) {//if tower has no target
+                            tower.target = creep
+                            tower.hasTarget = true
+                        } else {//tower already has a target: shoot
+                            projectileList[Projectile(tower, tower.target!!)] = tower
+                        }
+                    } else {//target is lost: stop shooting
+                        tower.target = null
                     }
                 }
             }
         }
 
         projectileList.forEach { (projectile) ->
-            creepList.forEach{ creep ->
-                if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
+                val creep = projectile.creep
+                //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
+                if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) <= 15){
                     projectileList.remove(projectile)
                     creep.takeDamage(projectile.baseDamage)
                 }
-            }
-
+            projectile.update()
         }
         //TODO(): different spawn rates for different creepTypes
         //add enemies to the spawn
@@ -136,7 +143,7 @@ class GameManager(private val callBack: GameActivity) {
         val creepIterator = creepList.iterator()
         while(creepIterator.hasNext()) {
             val creep = creepIterator.next()
-            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY -1].coordY.toInt()){
+            if(creep.positionY() >= playGround.squareArray[0][squaresY - 1].coordY){
                 decreaseLives(creep.baseDamage)
                 creepIterator.remove()
                 creepList.remove(creep)
@@ -147,10 +154,6 @@ class GameManager(private val callBack: GameActivity) {
             }else{
                 creep.update()
             }
-        }
-
-        projectileList.forEach{ (projectile) ->
-            projectile.update()
         }
     }
 
@@ -165,6 +168,11 @@ class GameManager(private val callBack: GameActivity) {
         var creepList = mutableListOf<Creep>()
         var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
 
+        fun reset() {
+            towerList = mutableListOf()
+            creepList = mutableListOf()
+            projectileList.clear()
+        }
         /**
          * Adds a tower and its customized bitmap to the drawing list
          * @param tower the tower to be added

@@ -20,7 +20,7 @@ class BitmapPreloader(val resources: Resources) {
         preloadCreeps()
     }
 
-    fun preloadTowers() {
+    private fun preloadTowers() {
         val width = GameManager.playGround.squareSize
         val height = width
         TowerTypes.values().forEach { key ->
@@ -49,10 +49,10 @@ class BitmapPreloader(val resources: Resources) {
                     towerR = R.drawable.tower_slow
                     weaponAnimR = R.drawable.tower_slow_weapon_anim_1
                     frameCountWeapon = 16
-                    projectileAnimR = R.drawable.tower_block_projectile_1 //TODO: replace with correct values for specific projectile
-                    frameCountProjectile = 3 //TODO: replace with correct values for specific projectile
-                    widthProjectile = 20 //TODO: replace with correct values for specific projectile
-                    heightProjectile = 80 //TODO: replace with correct values for specific projectile
+                    projectileAnimR = R.drawable.tower_slow_projectile_1
+                    frameCountProjectile = 5
+                    widthProjectile = 64
+                    heightProjectile = 64
                 }
                 TowerTypes.AOE -> {
                     towerR = R.drawable.tower_aoe
@@ -66,18 +66,18 @@ class BitmapPreloader(val resources: Resources) {
             }
             towerImages[key] = ScaledImage(resources, width, height * 2, towerR).scaledImage
             weaponAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), width, height, 1, frameCountWeapon, 100)
-            projectileAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, projectileAnimR), widthProjectile, heightProjectile, 1, frameCountProjectile, 50)
+            projectileAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, projectileAnimR), widthProjectile, heightProjectile, 1, frameCountProjectile, 100)
         }
     }
 
-    fun preloadCreeps() {
+    private fun preloadCreeps() {
         val width = GameManager.playGround.squareSize
         val height = width
         CreepTypes.values().forEach { key ->
             val creepR: Int
-            var frameCount: Int
-            var rowCount = 4 // 4 rows = 4 animation types (0=down, 1=up, 2=right, 3= left), sprite sheet has to be in that order!
-            var frameDuration: Int
+            val frameCount: Int
+            val rowCount = 4 // 4 rows = 4 animation types (0=down, 1=up, 2=right, 3= left), sprite sheet has to be in that order!
+            val frameDuration: Int
             when(key) {
                 CreepTypes.LEAFBUG -> {
                     creepR = R.drawable.leafbug_anim

@@ -17,7 +17,8 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     var h: Int = (2*w)
     //game variables
     var level: Int = 0
-    var isShooting = false
+    var hasTarget = false
+    var target: Creep? = null
     //array sorting
     private val sortingNr: Int = squareField.mapPos["y"]!!
     override fun compareTo(other: Tower): Int = this.sortingNr.compareTo(other.sortingNr)
@@ -27,10 +28,6 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     init {
         squareField.hasTower = this
         y = squareField.coordY - w
-        actionsPerMinute = 30f
-    }
-
-    override fun update() {
-
+        actionsPerMinute = 60f
     }
 }
