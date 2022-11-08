@@ -37,13 +37,10 @@ class Astar {
             val neighbors = currentNode.getNeighbors(playGroundRows, playGroundCols)
 
             neighbors.forEach neighbors@{ node ->
+                if (GameManager.playGround.squareArray[node.x][node.y].isBlocked) { return@neighbors }
 
-                if (GameManager.playGround.squareArray[node.x][node.y].isBlocked) {
-                    return@neighbors
-                }
-
-                for(closed_child in closedSet){
-                    if(closed_child.x == node.x && closed_child.y == node.y) {
+                for(closedNode in closedSet){
+                    if(closedNode.x == node.x && closedNode.y == node.y) {
                         return@neighbors
                     }
                 }
@@ -98,13 +95,29 @@ class Astar {
             if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
 
             //diagonal bottom left
-            if (x - 1 > 0 && y - 1 > 0) neighbors.add(Node(x - 1, y - 1))
+            if (x - 1 > 0 && y - 1 > 0){
+                if(!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked){
+                    neighbors.add(Node(x - 1, y - 1))
+                }
+            }
             //diagonal top left
-            if (x - 1 > 0 && y + 1 < maxCols) neighbors.add(Node(x - 1, y + 1))
-            //diagonal bottom right
-            if (x + 1 < maxRows && y - 1 > 0) neighbors.add(Node(x + 1, y - 1))
+            if (x - 1 > 0 && y + 1 < maxCols) {
+                if (!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked) {
+                    neighbors.add(Node(x - 1, y + 1))
+                }
+            }
             //diagonal top right
-            if (x + 1 < maxRows && y + 1 < maxCols) neighbors.add(Node(x + 1, y + 1))
+            if (x + 1 < maxRows && y + 1 < maxCols) {
+                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked) {
+                    neighbors.add(Node(x + 1, y + 1))
+                }
+            }
+            //diagonal bottom right
+            if (x + 1 < maxRows && y - 1 > 0) {
+                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked) {
+                    neighbors.add(Node(x + 1, y - 1))
+                }
+            }
 
             return neighbors
         }
@@ -117,9 +130,14 @@ class Astar {
      * 8 directions, diagonal cost and straight cost are the same.
      */
     private fun calculateHeuristics(from: Node, to: Node): Int {
+        //10, 14 is faster than 1, sqrt(2) but can provoke weird behavior
+        val weightS = 1
+        val weightD = 1//sqrt(2.0)
         val xDist = abs(from.x - to.x)
         val yDist = abs(from.y - to.y)
 
+        //return weightS * (xDist + yDist) + (weightD - 2 * weightS) * min(xDist, yDist)
+        //return weightS * sqrt((xDist * xDist + yDist * yDist).toDouble())
         return max(xDist, yDist)
     }
 }
