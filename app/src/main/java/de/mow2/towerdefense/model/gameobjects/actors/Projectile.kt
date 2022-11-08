@@ -1,8 +1,5 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import de.mow2.towerdefense.model.core.GameLoop
-import de.mow2.towerdefense.controller.GameView
-import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
 
 class Projectile(val tower: Tower, val creep: Creep
@@ -21,5 +18,4 @@ class Projectile(val tower: Tower, val creep: Creep
         moveTo(creep.positionX(), creep.positionY())
         cooldown()
     }
-
 }

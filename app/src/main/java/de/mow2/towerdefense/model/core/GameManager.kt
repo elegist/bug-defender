@@ -1,27 +1,15 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.model.core
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.res.Resources
-import android.graphics.*
-import android.util.Log
-import android.widget.ProgressBar
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.shashank.sony.fancytoastlib.FancyToast
-import de.mow2.towerdefense.R
-import de.mow2.towerdefense.model.core.PlayGround
-import de.mow2.towerdefense.model.gameobjects.GameObject
+import de.mow2.towerdefense.controller.GameActivity
+import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * GameManager holds static access to game variables like bitmaps, in-game values and such
- * it also manages drawing onto canvas
+ * GameManager handles the game logic, updates game objects and calls updates on UI Thread
  */
 class GameManager(private val callBack: GameActivity) {
-    lateinit var resources: Resources
-
     //debug
     private val TAG = javaClass.name
     //variables
@@ -77,7 +65,7 @@ class GameManager(private val callBack: GameActivity) {
     private fun increaseKills(newValue: Int){
         killCounter += newValue
         if(killCounter >= callBack.waveBar.max) {
-            initLevel(gameLevel++)
+            initLevel(++gameLevel)
         }
         updateGUI()
     }
@@ -110,81 +98,15 @@ class GameManager(private val callBack: GameActivity) {
         //TODO:
         // make creeps stronger, could be a multiplier or defined values for each wave
     }
-    /**
-     * Initialize all images and hold references for further use
-     * Should improve performance compared to decoding bitmaps while drawing
-     */
-    fun initImages() {
-        //TODO: do the same with creeps and all other images,
-        // result should be one Map each holding its type as key and animation as value for all creeps, towers, projectiles, weapons and so on
-        val width = playGround.squareArray[0][0].width
-        val height = playGround.squareArray[0][0].height
-        TowerTypes.values().forEach { key ->
-            val towerR: Int
-            val weaponAnimR: Int
-            val frameCount: Int
-            when(key) {
-                TowerTypes.BLOCK -> {
-                    towerR = R.drawable.tower_block
-                    weaponAnimR = R.drawable.tower_block_weapon_anim_1
-                    frameCount = 6
-                }
-                TowerTypes.SLOW -> {
-                    towerR = R.drawable.tower_slow
-                    weaponAnimR = R.drawable.tower_slow_weapon_anim_1
-                    frameCount = 16
-                }
-                TowerTypes.AOE -> {
-                    towerR = R.drawable.tower_aoe
-                    weaponAnimR = R.drawable.tower_block_weapon_anim_1
-                    frameCount = 6
-                }
-            }
-            towerImages[key] = ScaledImage(resources, width, height * 2, towerR).scaledImage
-            weaponAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), width, height, 1, frameCount, 100)
-        }
-    }
-
-    // TODO: create one map out of all things to draw and sort it to get a good drawing order?
-    /**
-     * Adds a creep and its customized bitmap to the drawing list
-     * @param creep the creep to be added
-     */
-    private fun addCreepToMap(creep: Creep) {
-        //TODO: maybe sort map for drawing order? Also: CreepTypes
-        val spriteSheet = SpriteAnimation(BitmapFactory.decodeResource(resources, R.drawable.leafbug_anim), creep.w, creep.h)
-        creepList[creep] = spriteSheet
-    }
-    /**
-     * decides which objects to draw
-     */
-    fun drawObjects(canvas: Canvas, resources: Resources) {
-        creepList.forEach{ (enemy, animation) ->
-            draw(canvas, animation!!.nextFrame(enemy.orientation), enemy.positionX(), enemy.positionY())
-        }
-        towerList.forEach { tower ->
-            draw(canvas, towerImages[tower.type], tower.x, tower.y)
-            if(tower.isShooting) {
-                draw(canvas, weaponAnims[tower.type]!!.nextFrame(0), tower.x, tower.y)
-            } else {
-                draw(canvas, weaponAnims[tower.type]!!.idleImage, tower.x, tower.y)
-            }
-        }
-        projectileList.forEach{ (projectile) ->
-            draw(canvas, BitmapFactory.decodeResource(resources, R.drawable.projectile), projectile.positionX(), projectile.positionY())
-        }
-    }
 
     /**
      * updates to game logic related values
      */
-    @SuppressLint("SuspiciousIndentation")
     fun updateLogic() {
-
         towerList.forEach { tower ->
             if(tower.cooldown()){
                 tower.isShooting = false
-                creepList.forEach{ (creep) ->
+                creepList.forEach{ creep ->
                     if (tower.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){
                         tower.isShooting = true
                         projectileList[Projectile(tower, creep)] = tower
@@ -194,7 +116,7 @@ class GameManager(private val callBack: GameActivity) {
         }
 
         projectileList.forEach { (projectile) ->
-            creepList.forEach{ (creep) ->
+            creepList.forEach{ creep ->
                 if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) < 50){
                     projectileList.remove(projectile)
                     creep.takeDamage(projectile.baseDamage)
@@ -211,31 +133,24 @@ class GameManager(private val callBack: GameActivity) {
         /**
          * update movement, update target or remove enemy
          */
-        creepList.forEach{ (creep) ->
-            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY-1].coordY.toInt()){
+        val creepIterator = creepList.iterator()
+        while(creepIterator.hasNext()) {
+            val creep = creepIterator.next()
+            if(creep.positionY().toInt() >= playGround.squareArray[0][squaresY -1].coordY.toInt()){
                 decreaseLives(creep.baseDamage)
+                creepIterator.remove()
                 creepList.remove(creep)
             }else if(creep.healthPoints <= 0){
                 increaseCoins(10)
-                creepList.remove(creep)
+                creepIterator.remove()
                 increaseKills(1) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
                 creep.update()
             }
-            //TODO: update enemy target
         }
 
         projectileList.forEach{ (projectile) ->
             projectile.update()
-        }
-    }
-
-    /**
-     * draws a bitmap onto canvas
-     */
-    @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap?, posX: Float, posY: Float) {
-        if (bitmap != null) {
-            canvas.drawBitmap(bitmap, posX, posY, null)
         }
     }
 
@@ -247,11 +162,8 @@ class GameManager(private val callBack: GameActivity) {
         //static game variables
         var gameLevel = 0
         var towerList = mutableListOf<Tower>()
+        var creepList = mutableListOf<Creep>()
         var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
-        private var creepList = ConcurrentHashMap<Creep, SpriteAnimation?>()
-        //all various lists and maps for game objects and their respective bitmaps or animations
-        var towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
-        private var weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation?>()
 
         /**
          * Adds a tower and its customized bitmap to the drawing list
@@ -260,6 +172,14 @@ class GameManager(private val callBack: GameActivity) {
         fun addTowerToMap(tower: Tower) {
             towerList += tower
             towerList.sort()
+        }
+        // TODO: create one map out of all things to draw and sort it to get a good drawing order?
+        /**
+         * Adds a creep and its customized bitmap to the drawing list
+         * @param creep the creep to be added
+         */
+        private fun addCreepToMap(creep: Creep) {
+            creepList += creep
         }
     }
 }

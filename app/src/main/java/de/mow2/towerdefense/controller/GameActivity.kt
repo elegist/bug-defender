@@ -21,6 +21,7 @@ import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GUICallBack
+import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
@@ -50,6 +51,8 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
+        //preload all images
+        BitmapPreloader(resources).preloadImages()
         //create new game view
         gameLayout = binding.gameViewContainer
         gameView = GameView(this,this, gameManager)
@@ -59,9 +62,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         loadPrefs()
         initGUI()
         hideSystemBars()
-        //init resources and game manager
-        gameManager.resources = resources //GameManager needs to know resources for drawing
-        gameManager.initImages()
+        //init game manager
         gameManager.initLevel(0) //TODO: Load saved game
         //start level timer
         chrono.start()

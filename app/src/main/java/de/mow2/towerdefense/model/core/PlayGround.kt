@@ -1,7 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-import de.mow2.towerdefense.controller.GameManager
-
 /**
  * Represents the whole playGround consisting of single squareFields which are initialized in a 2D-array
  * @param width the screen width to make everything fit on devices screen and to calculate the height (ratio 1:2)

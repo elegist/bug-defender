@@ -3,8 +3,6 @@ package de.mow2.towerdefense.controller
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import de.mow2.towerdefense.R
-import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 /**
  * Takes a Bitmap and resizes its dimensions

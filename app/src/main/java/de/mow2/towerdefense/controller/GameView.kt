@@ -11,7 +11,9 @@ import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.GameLoop
+import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 @SuppressLint("ViewConstructor")
 class GameView(context: Context, private val callBack: GUICallBack, val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
@@ -64,13 +66,41 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
         ////////////////////
         //object draw area//
 
-        gameManager.drawObjects(canvas, resources)
+        drawObjects(canvas)
 
         //object draw area end//
         ///////////////////////
 
         //redraw canvas if canvas has changed
         invalidate()
+    }
+
+    /**
+     * decides which objects to draw
+     */
+    fun drawObjects(canvas: Canvas) {
+        GameManager.creepList.forEach{ creep ->
+            draw(canvas, BitmapPreloader.creepAnims[creep.type]!!.nextFrame(creep.orientation), creep.positionX(), creep.positionY())
+        }
+        GameManager.towerList.forEach { tower ->
+            draw(canvas, BitmapPreloader.towerImages[tower.type], tower.x, tower.y)
+            if(tower.isShooting) {
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.x, tower.y)
+            } else {
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.x, tower.y)
+            }
+        }
+        GameManager.projectileList.forEach{ (projectile) ->
+            draw(canvas, BitmapPreloader.projectileAnims[TowerTypes.BLOCK]!!.nextFrame(0), projectile.positionX(), projectile.positionY())
+        }
+    }
+    /**
+     * draws a bitmap onto canvas
+     */
+    @Synchronized private fun draw(canvas: Canvas, bitmap: Bitmap?, posX: Float, posY: Float) {
+        if (bitmap != null) {
+            canvas.drawBitmap(bitmap, posX, posY, null)
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

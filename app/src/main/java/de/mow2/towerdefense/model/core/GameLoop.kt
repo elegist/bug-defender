@@ -1,7 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-import de.mow2.towerdefense.controller.GameManager
-
 /**
  * Opens up a new thread to run scheduled updates on game logic (e.g. updating enemy creature positions and so on)
  * Times its updates at a desired rate and therefore tries to trigger a canvas drawing at the same speed (resulting in fps)

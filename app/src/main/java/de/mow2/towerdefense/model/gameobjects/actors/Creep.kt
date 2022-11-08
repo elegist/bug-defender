@@ -1,13 +1,9 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import android.util.Log
 import de.mow2.towerdefense.model.core.GameLoop
-import de.mow2.towerdefense.controller.GameManager
-import de.mow2.towerdefense.controller.GameView
-import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.pathfinding.Astar
-import kotlin.properties.Delegates
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -17,7 +13,7 @@ import kotlin.random.nextInt
  * @param squareField The squareField on which this creep will spawn
  */
 //TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
-class Creep(type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
+class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
 ): GameObject() {
     // set width and height of the bitmap
     var w: Int = GameManager.playGround.squareSize

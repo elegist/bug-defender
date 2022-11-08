@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-import de.mow2.towerdefense.controller.GameManager
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
