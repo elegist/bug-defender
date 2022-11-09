@@ -1,5 +1,7 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import android.util.Log
+import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
@@ -18,6 +20,16 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
     // set width and height of the bitmap
     var w: Int = GameManager.playGround.squareSize
     var h: Int = w
+    /**
+     * Pixels per update for movement.
+     * Will be multiplied with direction to get a velocity.
+     * @see moveTo(target: GameObject)
+     */
+    override var speed: Float = 0f
+        set(value){
+            val rawPixels = (GameView.gameWidth + GameView.gameHeight) * value
+            field = rawPixels / GameLoop.targetUPS
+        }
     //walking direction
     var orientation: Int = 0 //TODO: Change value based on walking direction! (0 = down, 1 = up, 2 = left/right) maybe develop a better solution??
     //path finding
@@ -29,21 +41,20 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
     private var currentPath = sortedPath
     private var target = currentPath!!.first()
 
-    //health points
+    //game variables
     var healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
-
-    //basedamage
     var baseDamage = 1
+    var slowDown = 1f
 
     //coordinates of first target
     private var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
     private var targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
 
     init{
-        //spawnpoint of the creep
+        //spawn point
         coordX = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordX
         coordY = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordY
-        //speed of a creep
+        //movement
         speed = 0.03f
     }
 

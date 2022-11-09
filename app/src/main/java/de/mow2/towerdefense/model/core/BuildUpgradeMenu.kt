@@ -12,7 +12,7 @@ class BuildUpgradeMenu {
      * @param level this towers level
      */
     fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
-        var cost = when(type) {
+        val cost = when(type) {
             TowerTypes.BLOCK -> 100
             TowerTypes.SLOW -> 200
             TowerTypes.AOE -> 300
@@ -38,7 +38,7 @@ class BuildUpgradeMenu {
             }
         }
         selectedField.isBlocked = true //important!! block field for path finding
-        GameManager.addTowerToMap(tower)
+        GameManager.addTower(tower)
     }
 
     /**

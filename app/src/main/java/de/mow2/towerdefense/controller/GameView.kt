@@ -82,9 +82,7 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
      */
     private fun drawObjects(canvas: Canvas) {
         //towers
-        val towerIterator = GameManager.towerList.iterator()
-        while(towerIterator.hasNext()) {
-            val tower = towerIterator.next()
+        GameManager.towerList.forEach { tower ->
             draw(canvas, BitmapPreloader.towerImages[tower.type], tower.x, tower.y)
             if(tower.hasTarget) {
                 draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.x, tower.y)
@@ -93,13 +91,11 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
             }
         }
         //creeps
-        val creepIterator = GameManager.creepList.iterator()
-        while(creepIterator.hasNext()) {
-            val creep = creepIterator.next()
+        GameManager.creepList.forEach { creep ->
             draw(canvas, BitmapPreloader.creepAnims[creep.type]!!.nextFrame(creep.orientation), creep.positionX(), creep.positionY())
         }
         //projectiles
-        GameManager.projectileList.forEach{ (projectile) ->
+        GameManager.projectileList.forEach { projectile ->
             draw(canvas, BitmapPreloader.projectileAnims[projectile.tower.type]!!.nextFrame(0), projectile.positionX(), projectile.positionY())
         }
     }
