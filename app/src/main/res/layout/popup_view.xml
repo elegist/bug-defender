@@ -78,6 +78,7 @@
         style="@style/Popup.Button"
         android:layout_width="match_parent"
         android:contentDescription="@string/pause"
+        android:onClick="pauseGame"
         android:text="@string/pause"
         app:layout_constraintBottom_toTopOf="@id/leaveGameBtn"
         app:layout_constraintEnd_toEndOf="parent"

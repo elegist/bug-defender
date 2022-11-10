@@ -3,12 +3,7 @@ package de.mow2.towerdefense.controller
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Chronometer
-import android.widget.HorizontalScrollView
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -67,9 +62,19 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //start level timer
         chrono.start()
     }
+    /**
+     * pauses Game and goes back to main menu
+     */
+    fun pauseGame(view: View) {
+        startActivity(Intent(this, MainActivity::class.java))
+    }
 
+    /**
+     * Triggered if liveAmt = 0, sets game over screen
+     */
     fun onGameOver() {
         setContentView(R.layout.gameover_view)
+        SoundManager.mediaPlayer.release()
         soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
     }
 
@@ -89,6 +94,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         SoundManager.loadPreferences(this)
     }
 
+    /**
+     * opens menu as pop up window if menu button is clicked
+     */
     fun popUpMenu(view: View) {
         menuPopup.show(fm, "menuDialog")
     }
@@ -153,7 +161,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 soundPool.play(Sounds.PUNCHSOUND.id, 1F, 1F, 1, 0, 1F)
             }
         } else {
-            //not enough money!
+            // Alternative zu FancyToast
             /*val snackbar = Snackbar
                 .make(gameView, R.string.moneyWarning, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(getColor(R.color.dark_brown))

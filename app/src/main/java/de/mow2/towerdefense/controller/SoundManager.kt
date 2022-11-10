@@ -32,11 +32,11 @@ object SoundManager {
     // SoundPool
     fun playSounds() {
         var audioattributes: AudioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_GAME)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
         soundPool = SoundPool.Builder()
-            .setMaxStreams(1)
+            .setMaxStreams(5)
             .setAudioAttributes(audioattributes)
             .build()
     }

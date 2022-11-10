@@ -12,6 +12,7 @@ import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.SoundManager.soundSetting
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.databinding.ActivityMainBinding
+import de.mow2.towerdefense.model.core.GameManager
 
 /**
  * This class is the main entry point
@@ -30,6 +31,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume(){
         super.onResume()
+        // decides if resume game button should be shown
+        /*if(spielstand vorhanden){
+            binding.resumeGameBtn.visibility = View.GONE
+        }*/
         // loads music and sounds and sets them based on saved preferences
         SoundManager.loadPreferences(this)
         SoundManager.initMediaPlayer(this, R.raw.sound1)
@@ -61,6 +66,7 @@ class MainActivity : AppCompatActivity() {
      */
     fun startGame(view: View) {
         startActivity(Intent(this, GameActivity::class.java))
+        GameManager.reset()
     }
 
     /**
@@ -78,5 +84,12 @@ class MainActivity : AppCompatActivity() {
                 dialogPopup.show(fm, "settingsDialog")
             }
         }
+    }
+
+    /**
+     * resumes game with on click
+     */
+    fun resumeGame(view: View) {
+        startActivity(Intent(this, GameActivity::class.java))
     }
 }
