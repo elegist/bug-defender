@@ -25,7 +25,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  * This Activity starts the game
  */
 class GameActivity : AppCompatActivity(), GUICallBack {
-    //game content and gui
+     //game content and gui
     private val gameManager = GameManager(this)
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
@@ -135,6 +135,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
 
     override fun onPause() {
         super.onPause()
+
         // stops MediaPlayer while not being in activity
         SoundManager.mediaPlayer.release()
     }
@@ -220,5 +221,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //swap boolean flag
         buildMenuExists = !buildMenuExists
     }
+
 }
 

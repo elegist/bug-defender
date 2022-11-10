@@ -4,13 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import de.mow2.towerdefense.controller.PopupFragment
-import de.mow2.towerdefense.controller.GameActivity
-import de.mow2.towerdefense.controller.SoundManager
+import de.mow2.towerdefense.controller.*
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.SoundManager.soundSetting
-import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.databinding.ActivityMainBinding
 import de.mow2.towerdefense.model.core.GameManager
 
@@ -65,8 +62,8 @@ class MainActivity : AppCompatActivity() {
      * Starts GameActivity called by a Button
      */
     fun startGame(view: View) {
-        startActivity(Intent(this, GameActivity::class.java))
         GameManager.reset()
+        startActivity(Intent(this, GameActivity::class.java))
     }
 
     /**
