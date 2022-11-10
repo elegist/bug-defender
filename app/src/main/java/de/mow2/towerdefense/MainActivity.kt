@@ -25,8 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        gameState.testGameState(this)
     }
 
     override fun onResume(){
@@ -90,6 +88,7 @@ class MainActivity : AppCompatActivity() {
      * resumes game with on click
      */
     fun resumeGame(view: View) {
+        gameState.readGameState(this)
         startActivity(Intent(this, GameActivity::class.java))
     }
 }

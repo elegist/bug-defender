@@ -6,7 +6,7 @@ import kotlin.math.*
 /**
  * Astar search algorithm, used by creeps to find the fastest way across the map
  */
-class Astar {
+class Astar : java.io.Serializable {
     fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {
         val openSet = mutableSetOf<Node>()
         val closedSet = mutableSetOf<Node>()
@@ -66,7 +66,7 @@ class Astar {
      * @param x horizontal position
      * @param y vertical position
      */
-    data class Node(val x: Int, val y: Int) : Comparable<Node> {
+    data class Node(val x: Int, val y: Int) : Comparable<Node>, java.io.Serializable {
         // parent is the node that came previous to the current one
         var parent: Node? = null
         // g = distance from selected node to start node

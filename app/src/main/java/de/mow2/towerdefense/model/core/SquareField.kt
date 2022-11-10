@@ -10,7 +10,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.Tower
  * @param height height of the field
  * @param mapPos a map representing x and y coordinates based on its position on screen / in 2D-array
  */
-class SquareField(val coordX: Float, val coordY: Float, val mapPos: Map<String, Int>, val width: Int, val height: Int = width) {
+class SquareField(val coordX: Float, val coordY: Float, val mapPos: Map<String, Int>, val width: Int, val height: Int = width): java.io.Serializable {
 
     //var for blocking this field (tower built)
     var isBlocked = false

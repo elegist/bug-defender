@@ -17,10 +17,6 @@ import java.util.concurrent.PriorityBlockingQueue
 class GameManager(private val callBack: GameActivity) {
     //debug
     private val TAG = javaClass.name
-    //variables
-    var coinAmnt: Int = 0
-    var livesAmnt: Int = 0
-    var killCounter: Int = 0
 
     private fun updateGUI() {
         callBack.runOnUiThread {
@@ -79,6 +75,7 @@ class GameManager(private val callBack: GameActivity) {
         updateGUI()
     }
 
+    //TODO: GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
     private var killsToProgress = 0
     fun initLevel(level: Int) {
         when(level) {
@@ -169,17 +166,23 @@ class GameManager(private val callBack: GameActivity) {
         const val squaresY = 18
         var playGround = PlayGround(GameView.gameWidth)
         //static game variables
+        var coinAmnt: Int = 0
+        var livesAmnt: Int = 0
+        var killCounter: Int = 0
         var gameLevel = 0
         var towerList = PriorityBlockingQueue<Tower>()
         var creepList = LinkedBlockingQueue<Creep>()
         var projectileList = LinkedBlockingQueue<Projectile>()
 
         fun reset() {
+            playGround = PlayGround(GameView.gameWidth)
             towerList = PriorityBlockingQueue()
             creepList = LinkedBlockingQueue()
             projectileList = LinkedBlockingQueue()
             gameLevel = 0
-            playGround = PlayGround(GameView.gameWidth)
+            coinAmnt = 0
+            livesAmnt = 0
+            killCounter = 0
         }
         fun addTower(tower: Tower) {
             towerList += tower

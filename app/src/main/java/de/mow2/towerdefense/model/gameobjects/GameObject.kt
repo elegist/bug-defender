@@ -15,8 +15,8 @@ abstract class GameObject() {
 
     //device coordinates for drawing and moving
     // TODO(): replace with vector2D utils
-    protected var coordX: Float = 0f
-    protected var coordY: Float = 0f
+    var coordX: Float = 0f
+    var coordY: Float = 0f
     private var velocityX: Float = 0f
     private var velocityY: Float = 0f
 

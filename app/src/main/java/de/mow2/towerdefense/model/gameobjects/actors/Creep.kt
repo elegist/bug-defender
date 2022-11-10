@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import android.util.Log
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
@@ -39,7 +38,7 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
     private var path = alg.findPath(spawnPoint, targetNode, GameManager.squaresX, GameManager.squaresY)
     private var sortedPath= path?.reversed()
     private var currentPath = sortedPath
-    private var target = currentPath!!.first()
+    var target = currentPath!!.first()
 
     //game variables
     var healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5

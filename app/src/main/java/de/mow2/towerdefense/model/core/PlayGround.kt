@@ -4,7 +4,7 @@ package de.mow2.towerdefense.model.core
  * Represents the whole playGround consisting of single squareFields which are initialized in a 2D-array
  * @param width the screen width to make everything fit on devices screen and to calculate the height (ratio 1:2)
  */
-class PlayGround(width: Int) {
+class PlayGround(width: Int): java.io.Serializable {
     var squareArray = emptyArray<Array<SquareField>>()
     private val squaresX = GameManager.squaresX
     private val squaresY = GameManager.squaresY

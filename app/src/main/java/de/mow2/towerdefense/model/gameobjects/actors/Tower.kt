@@ -8,7 +8,7 @@ import de.mow2.towerdefense.model.gameobjects.GameObject
  * @param squareField references the field on which the tower has been built
  * @param type the towers type
  */
-class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject() {
+class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(), java.io.Serializable {
     override val speed: Float = 0f
     //position
     var x: Float = squareField.coordX

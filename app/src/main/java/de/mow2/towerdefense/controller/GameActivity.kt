@@ -25,6 +25,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  * This Activity starts the game
  */
 class GameActivity : AppCompatActivity(), GUICallBack {
+    private val gameState = GameState()
      //game content and gui
     private val gameManager = GameManager(this)
     private lateinit var gameLayout: LinearLayout
@@ -60,7 +61,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         initGUI()
         hideSystemBars()
         //init game manager
-        gameManager.initLevel(0) //TODO: Load saved game
+        gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
         //start level timer
         chrono.start()
     }
@@ -68,6 +69,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
      * pauses Game and goes back to main menu
      */
     fun pauseGame(view: View) {
+        //TODO: save game state and return to main menu
+        gameState.saveGameState(this)
+
         startActivity(Intent(this, MainActivity::class.java))
     }
 
