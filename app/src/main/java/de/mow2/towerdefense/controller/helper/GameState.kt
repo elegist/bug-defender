@@ -1,14 +1,11 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.controller.helper
 
 import android.content.Context
 import android.util.Log
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.PlayGround
-import de.mow2.towerdefense.model.gameobjects.actors.Creep
-import de.mow2.towerdefense.model.gameobjects.actors.Projectile
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import java.io.*
-import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.PriorityBlockingQueue
 
 

@@ -82,7 +82,9 @@ class GameManager(private val callBack: GameActivity) {
             0 -> {
                 /* Start game */
                 livesAmnt = 10
-                coinAmnt = 400
+                if(coinAmnt == 0) { //prevents save game cheating
+                    coinAmnt = 400
+                }
                 killsToProgress = 10
                 callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
             }
