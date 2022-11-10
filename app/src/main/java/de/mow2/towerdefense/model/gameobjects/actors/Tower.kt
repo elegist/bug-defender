@@ -9,6 +9,7 @@ import de.mow2.towerdefense.model.gameobjects.GameObject
  * @param type the towers type
  */
 class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject() {
+    override val speed: Float = 0f
     //position
     var x: Float = squareField.coordX
     var y: Float

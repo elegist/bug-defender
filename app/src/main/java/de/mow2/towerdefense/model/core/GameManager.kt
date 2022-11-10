@@ -4,7 +4,12 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.gameobjects.actors.*
+import java.util.concurrent.BlockingQueue
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.PriorityBlockingQueue
 
 /**
  * GameManager handles the game logic, updates game objects and calls updates on UI Thread
@@ -22,6 +27,10 @@ class GameManager(private val callBack: GameActivity) {
             callBack.coinsTxt.text = coinAmnt.toString()
             callBack.healthBar.progress = livesAmnt
             callBack.waveBar.progress = killCounter
+            val livesText = "$livesAmnt / ${callBack.healthBar.max}"
+            callBack.healthText.text = livesText
+            val waveText = "$killCounter / ${callBack.waveBar.max}"
+            callBack.waveText.text = waveText
         }
     }
     /**
@@ -109,11 +118,11 @@ class GameManager(private val callBack: GameActivity) {
                 tower.hasTarget = false
                 creepList.forEach{ creep ->
                     if (tower.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){//if creep is in range of tower
-                        if(tower.target == null) {//if tower has no target
+                        if(tower.target == null) {//select new target if tower has none
                             tower.target = creep
                             tower.hasTarget = true
                         } else {//tower already has a target: shoot
-                            projectileList[Projectile(tower, tower.target!!)] = tower
+                            addProjectile(Projectile(tower, tower.target!!))
                         }
                     } else {//target is lost: stop shooting
                         tower.target = null
@@ -122,34 +131,31 @@ class GameManager(private val callBack: GameActivity) {
             }
         }
 
-        projectileList.forEach { (projectile) ->
-                val creep = projectile.creep
-                //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
-                if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) <= 15){
-                    projectileList.remove(projectile)
-                    creep.takeDamage(projectile.baseDamage)
-                }
+        projectileList.forEach { projectile ->
+            val creep = projectile.creep
+            //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
+            if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) <= 15){
+                creep.takeDamage(projectile.baseDamage)
+                projectileList.remove(projectile)
+            }
             projectile.update()
         }
         //TODO(): different spawn rates for different creepTypes
         //add enemies to the spawn
         if (Creep.canSpawn()) { //wait for update timer
             val creep = Creep(CreepTypes.LEAFBUG)
-            addCreepToMap(creep) //add creeps to concurrentHashMap
+            addCreep(creep) //add creeps to concurrentHashMap
             }
         /**
          * update movement, update target or remove enemy
          */
-        val creepIterator = creepList.iterator()
-        while(creepIterator.hasNext()) {
-            val creep = creepIterator.next()
+        creepList.forEach { creep ->
             if(creep.positionY() >= playGround.squareArray[0][squaresY - 1].coordY){
                 decreaseLives(creep.baseDamage)
-                creepIterator.remove()
                 creepList.remove(creep)
             }else if(creep.healthPoints <= 0){
                 increaseCoins(10)
-                creepIterator.remove()
+                creepList.remove(creep)
                 increaseKills(1) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
                 creep.update()
@@ -164,30 +170,26 @@ class GameManager(private val callBack: GameActivity) {
         var playGround = PlayGround(GameView.gameWidth)
         //static game variables
         var gameLevel = 0
-        var towerList = mutableListOf<Tower>()
-        var creepList = mutableListOf<Creep>()
-        var projectileList: ConcurrentHashMap<Projectile, Tower> = ConcurrentHashMap()
+        var towerList = PriorityBlockingQueue<Tower>()
+        var creepList = LinkedBlockingQueue<Creep>()
+        var projectileList = LinkedBlockingQueue<Projectile>()
 
         fun reset() {
-            towerList = mutableListOf()
-            creepList = mutableListOf()
-            projectileList.clear()
+            towerList = PriorityBlockingQueue()
+            creepList = LinkedBlockingQueue()
+            projectileList = LinkedBlockingQueue()
+            gameLevel = 0
+            playGround = PlayGround(GameView.gameWidth)
         }
-        /**
-         * Adds a tower and its customized bitmap to the drawing list
-         * @param tower the tower to be added
-         */
-        fun addTowerToMap(tower: Tower) {
+        fun addTower(tower: Tower) {
             towerList += tower
-            towerList.sort()
         }
         // TODO: create one map out of all things to draw and sort it to get a good drawing order?
-        /**
-         * Adds a creep and its customized bitmap to the drawing list
-         * @param creep the creep to be added
-         */
-        private fun addCreepToMap(creep: Creep) {
+        private fun addCreep(creep: Creep) {
             creepList += creep
+        }
+        private fun addProjectile(projectile: Projectile) {
+            projectileList += projectile
         }
     }
 }

@@ -11,20 +11,12 @@ import kotlin.math.sqrt
  * GameObject is the foundation of any moving or static actor in the game
  */
 abstract class GameObject() {
+    abstract val speed: Float
+
     //device coordinates for drawing and moving
     // TODO(): replace with vector2D utils
     protected var coordX: Float = 0f
     protected var coordY: Float = 0f
-    /**
-     * Pixels per update for movement.
-     * Will be multiplied with direction to get a velocity.
-     * @see moveTo(target: GameObject)
-     */
-    var speed: Float = 0f
-        set(value){
-            val rawPixels = (GameView.gameWidth + GameView.gameHeight)*value
-            field = rawPixels / GameLoop.targetUPS
-        }
     private var velocityX: Float = 0f
     private var velocityY: Float = 0f
 

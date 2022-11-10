@@ -7,88 +7,110 @@
     android:background="@color/dark_brown">
 
     <LinearLayout
-        android:id="@+id/topGUIContainer"
-        android:layout_width="0dp"
+        android:id="@+id/topGUI"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="5dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/gameContainer"
+        android:background="@drawable/top_menu_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/topGUI"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="0dp"
-            android:background="@color/dark_brown"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+        <Chronometer
+            android:id="@+id/timeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="center" />
 
-            <Chronometer
-                android:id="@+id/timeView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:textAlignment="center" />
+        <Button
+            android:id="@+id/menuBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_border"
+            android:onClick="popUpMenu"
+            android:text="@string/menuBtn" />
 
-            <Button
-                android:id="@+id/menuBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_border"
-                android:onClick="popUpMenu"
-                android:text="@string/menuBtn" />
+        <TextView
+            android:id="@+id/coinsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAlignment="textEnd" />
 
-            <TextView
-                android:id="@+id/coinsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:textAlignment="textEnd" />
-
-            <ImageView
-                android:id="@+id/coinImg"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/coins"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/coin_01" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/progressBarContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#00FFFFFF"
-            android:orientation="horizontal"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp">
-
-            <ProgressBar
-                android:id="@+id/healthProgressBar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="2dp"
-                android:progressDrawable="@drawable/healthbar" />
-
-            <ProgressBar
-                android:id="@+id/waveProgressBar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="2dp"
-                android:progressDrawable="@drawable/wavebar" />
-        </LinearLayout>
-
+        <ImageView
+            android:id="@+id/coinImg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/coins"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/coin_01" />
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progressBarContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:elevation="5dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topGUI">
+
+        <TextView
+            android:id="@+id/healthText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/healthProgressBar"
+            app:layout_constraintEnd_toEndOf="@+id/healthProgressBar"
+            app:layout_constraintStart_toStartOf="@+id/healthProgressBar"
+            app:layout_constraintTop_toTopOf="@+id/healthProgressBar" />
+
+        <ProgressBar
+            android:id="@+id/healthProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="2dp"
+            android:progressDrawable="@drawable/healthbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/waveProgressBar"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/waveProgressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:progressDrawable="@drawable/wavebar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/healthProgressBar"
+            app:layout_constraintTop_toTopOf="@+id/healthProgressBar" />
+
+        <TextView
+            android:id="@+id/waveText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/waveProgressBar"
+            app:layout_constraintEnd_toEndOf="@+id/waveProgressBar"
+            app:layout_constraintStart_toStartOf="@+id/waveProgressBar"
+            app:layout_constraintTop_toTopOf="@+id/waveProgressBar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:id="@+id/gameContainer"
@@ -99,7 +121,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topGUIContainer">
+        app:layout_constraintTop_toBottomOf="@+id/topGUI">
 
         <LinearLayout
             android:id="@+id/gameViewContainer"
