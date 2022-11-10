@@ -12,10 +12,14 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.PriorityBlockingQueue
 
 
-class GameState (context: Context){
-    private val dir = context.filesDir.path.toString()
-    private val file = File(dir, "gameState.json")
-    fun saveGameState() {
+class GameState{
+
+    fun testGameState(context: Context) {
+        val dir = context.filesDir
+        Log.i("Directory: ", "$dir")
+    }
+
+/*    fun saveGameState() {
         val file = File(dir, "gameState.json")
         try {
             if(file.createNewFile()) {
@@ -47,5 +51,5 @@ class GameState (context: Context){
         GameManager.playGround = input.readObject() as PlayGround
 
         input.close()
-    }
+    }*/
 }

@@ -16,6 +16,7 @@ import de.mow2.towerdefense.model.core.GameManager
  */
 class MainActivity : AppCompatActivity() {
     private val TAG: String = javaClass.name
+    private val gameState = GameState()
     private val fm = supportFragmentManager
     private var dialogPopup = PopupFragment()
     private lateinit var binding: ActivityMainBinding
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        gameState.testGameState(this)
     }
 
     override fun onResume(){
