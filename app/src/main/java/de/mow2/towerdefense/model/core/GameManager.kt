@@ -27,6 +27,10 @@ class GameManager(private val callBack: GameActivity) {
             callBack.coinsTxt.text = coinAmnt.toString()
             callBack.healthBar.progress = livesAmnt
             callBack.waveBar.progress = killCounter
+            val livesText = "$livesAmnt / ${callBack.healthBar.max}"
+            callBack.healthText.text = livesText
+            val waveText = "$killCounter / ${callBack.waveBar.max}"
+            callBack.waveText.text = waveText
         }
     }
     /**

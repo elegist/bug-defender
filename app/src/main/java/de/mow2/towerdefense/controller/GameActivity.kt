@@ -37,7 +37,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     private lateinit var chrono: Chronometer
     lateinit var coinsTxt: TextView
     lateinit var healthBar: ProgressBar
+    lateinit var healthText: TextView
     lateinit var waveBar: ProgressBar
+    lateinit var waveText: TextView
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
     //buildmenu
@@ -101,7 +103,9 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         chrono = binding.timeView
         coinsTxt = binding.coinsText
         healthBar = binding.healthProgressBar
+        healthText = binding.healthText
         waveBar = binding.waveProgressBar
+        waveText = binding.waveText
         //reference build menu container
         buildMenuScrollView = binding.buildMenuWrapper
         buildMenuLayout = binding.buildMenuContainer
