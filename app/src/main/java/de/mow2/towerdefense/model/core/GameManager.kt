@@ -131,6 +131,7 @@ class GameManager(private val callBack: GameActivity) {
             val creep = projectile.creep
             //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
             if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) <= 15){
+                creep.takeDamage(projectile.baseDamage)
                 projectileList.remove(projectile)
             }
             projectile.update()
