@@ -17,7 +17,8 @@ class GameState{
      * Call this to save game data to local file
      * @param context App context
      */
-    fun saveGameState(context: Context) {
+    fun saveGameState(context: Context): Boolean {
+        var gameStateExists = false
         val dir = context.filesDir
         val file = File(dir, "/gameState.json")
         //detects if file exists, creates one if not and calls saveGame to store game variables and objects
@@ -26,6 +27,7 @@ class GameState{
                 if(file.createNewFile()) {
                     Log.i("SaveGame: ", "Neue Datei erstellt")
                     saveGame(file)
+                    gameStateExists = true
                 } else {
                     Log.i("SaveGame: ", "Datei konnte nicht erstellt werden")
                 }
@@ -35,7 +37,9 @@ class GameState{
         } else {
             Log.i("SaveGame: ", "Vorhandene Datei wird beschrieben")
             saveGame(file)
+            gameStateExists = true
         }
+        return gameStateExists
     }
     /**
      * Saves game data to specified file

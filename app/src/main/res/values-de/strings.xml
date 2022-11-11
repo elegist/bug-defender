@@ -14,13 +14,12 @@
     <string name="preference_music">Musik</string>
     <string name="menuBtn">Menü</string>
     <string name="sound">Sounds</string>
-    <string name="leaveGame">verlasse Spiel</string>
-    <string name="pause">Spiel pausieren</string>
+    <string name="pauseGame">Spiel speichern &amp; pausieren</string>
     <string name="resumeGame">Spiel fortsetzen</string>
     <string name="moneyWarning">nicht genug Geld</string>
     <string name="toastAction">nicht mehr anzeigen</string>
-    <string name="coins">coins</string>
-    <string name="back">back to main manu</string>
+    <string name="coins">Münzen</string>
+    <string name="back">zurück zu Hauptmenü</string>
     <string name="restart">restart game</string>
-    <string name="lostText">u lost, try again!</string>
+    <string name="lostText">Du hast verloren, das war wohl einer zu viel, schade. Versuch\'s doch nochmal!</string>
 </resources>

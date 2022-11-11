@@ -14,13 +14,12 @@
     <string name="preference_music">music</string>
     <string name="menuBtn">Menu</string>
     <string name="sound">sounds</string>
-    <string name="leaveGame">leave game</string>
-    <string name="pause">pause game</string>
+    <string name="pauseGame">save &amp; pause game</string>
     <string name="resumeGame">resume game</string>
     <string name="moneyWarning">not enough money</string>
     <string name="toastAction">don\'t show again</string>
     <string name="coins">coins</string>
     <string name="back">back to main menu</string>
     <string name="restart">restart game</string>
-    <string name="lostText">u lost, try again!</string>
+    <string name="lostText">You lost, that was probably one too many, too bad. Try again!</string>
 </resources>

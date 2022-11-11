@@ -27,7 +27,7 @@
         </activity>
         <activity android:name=".controller.GameActivity"
             android:label="GameActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar.Main" />
     </application>
 
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />

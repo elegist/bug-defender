@@ -50,6 +50,7 @@
         android:background="@drawable/button_border"
         android:onClick="resumeGame"
         android:text="@string/resumeGame"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startGameBtn" />

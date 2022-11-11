@@ -71,7 +71,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     fun pauseGame(view: View) {
         //TODO: save game state and return to main menu
         gameState.saveGameState(this)
-
         startActivity(Intent(this, MainActivity::class.java))
     }
 
@@ -82,15 +81,16 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         setContentView(R.layout.gameover_view)
         SoundManager.mediaPlayer.release()
         soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
+        GameManager.reset()
     }
 
     /**
      * Button-triggered reset (return to main menu)
      */
-    fun leaveGame(view: View) {
+    /*fun leaveGame(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
         GameManager.reset()
-    }
+    }*/
 
     /**
      * Load all saved user preferences
