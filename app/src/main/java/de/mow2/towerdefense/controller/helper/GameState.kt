@@ -6,27 +6,31 @@ import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import java.io.*
-import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.PriorityBlockingQueue
 
 
 class GameState{
+
+    /**
+     * Returns save game file
+     * @param context App context
+     */
+    fun defineFile(context: Context): File {
+        val dir = context.filesDir
+        return File(dir, "/gameState.json")
+    }
     /**
      * Call this to save game data to local file
      * @param context App context
      */
-    fun saveGameState(context: Context): Boolean {
-        var gameStateExists = false
-        val dir = context.filesDir
-        val file = File(dir, "/gameState.json")
+    fun saveGameState(context: Context) {
+        val file = defineFile(context)
         //detects if file exists, creates one if not and calls saveGame to store game variables and objects
         if(!file.exists()) {
             try {
                 if(file.createNewFile()) {
                     Log.i("SaveGame: ", "Neue Datei erstellt")
                     saveGame(file)
-                    gameStateExists = true
                 } else {
                     Log.i("SaveGame: ", "Datei konnte nicht erstellt werden")
                 }
@@ -36,9 +40,7 @@ class GameState{
         } else {
             Log.i("SaveGame: ", "Vorhandene Datei wird beschrieben")
             saveGame(file)
-            gameStateExists = true
         }
-        return gameStateExists
     }
     /**
      * Saves game data to specified file
@@ -68,9 +70,7 @@ class GameState{
      * @param context App context
      */
     fun readGameState(context: Context) {
-        //get path and file
-        val dir = context.filesDir
-        val file = File(dir, "/gameState.json")
+        val file = defineFile(context)
         //load from file if it exists
         if(file.exists()) {
             val input = ObjectInputStream(FileInputStream(file))

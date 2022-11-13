@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume(){
         super.onResume()
         // decides if resume game button should be shown
-        if(gameState.saveGameState(this)){
+        if(gameState.defineFile(this).exists()){
             binding.resumeGameBtn.visibility = View.VISIBLE
         }
         // loads music and sounds and sets them based on saved preferences
