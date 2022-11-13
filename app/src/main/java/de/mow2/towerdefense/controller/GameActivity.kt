@@ -90,10 +90,10 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     /**
      * Button-triggered reset (return to main menu)
      */
-    /*fun leaveGame(view: View) {
+    fun leaveGame(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
         GameManager.reset()
-    }*/
+    }
 
     /**
      * Load all saved user preferences
