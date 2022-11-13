@@ -20,9 +20,8 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     var level: Int = 0
     var hasTarget = false
     var target: Creep? = null
-    //array sorting
-    private val sortingNr: Int = squareField.mapPos["y"]!!
-    override fun compareTo(other: Tower): Int = this.sortingNr.compareTo(other.sortingNr)
+    //queue sorting
+    override fun compareTo(other: Tower): Int = this.y.compareTo(other.y)
 
     val baseRange = 500
 

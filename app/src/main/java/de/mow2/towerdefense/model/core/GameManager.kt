@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.core
 
+import android.util.Log
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.GameView
@@ -7,6 +8,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.*
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.PriorityBlockingQueue
@@ -82,7 +84,9 @@ class GameManager(private val callBack: GameActivity) {
             0 -> {
                 /* Start game */
                 livesAmnt = 10
-                coinAmnt = 400
+                if(coinAmnt == 0) { //prevents save game cheating
+                    coinAmnt = 400
+                }
                 killsToProgress = 10
                 callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
             }
@@ -115,7 +119,7 @@ class GameManager(private val callBack: GameActivity) {
                 tower.hasTarget = false
                 creepList.forEach{ creep ->
                     if (tower.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){//if creep is in range of tower
-                        if(tower.target == null) {//select new target if tower has none
+                        if(tower.target == null || tower.target!!.isDead) {//select new target if tower has none
                             tower.target = creep
                             tower.hasTarget = true
                         } else {//tower already has a target: shoot
@@ -153,6 +157,7 @@ class GameManager(private val callBack: GameActivity) {
             }else if(creep.healthPoints <= 0){
                 increaseCoins(10)
                 creepList.remove(creep)
+                creep.isDead = true
                 increaseKills(1) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
                 creep.update()
@@ -170,15 +175,15 @@ class GameManager(private val callBack: GameActivity) {
         var livesAmnt: Int = 0
         var killCounter: Int = 0
         var gameLevel = 0
-        var towerList = PriorityBlockingQueue<Tower>()
-        var creepList = LinkedBlockingQueue<Creep>()
-        var projectileList = LinkedBlockingQueue<Projectile>()
+        var towerList = CopyOnWriteArrayList<Tower>()
+        var creepList = CopyOnWriteArrayList<Creep>()
+        var projectileList = CopyOnWriteArrayList<Projectile>()
 
         fun reset() {
             playGround = PlayGround(GameView.gameWidth)
-            towerList = PriorityBlockingQueue()
-            creepList = LinkedBlockingQueue()
-            projectileList = LinkedBlockingQueue()
+            towerList = CopyOnWriteArrayList<Tower>()
+            creepList = CopyOnWriteArrayList()
+            projectileList = CopyOnWriteArrayList()
             gameLevel = 0
             coinAmnt = 0
             livesAmnt = 0
@@ -186,6 +191,11 @@ class GameManager(private val callBack: GameActivity) {
         }
         fun addTower(tower: Tower) {
             towerList += tower
+            towerList.sort()
+            Log.i("TowerSet: ", "----")
+            towerList.forEachIndexed { i, tower ->
+                Log.i("TowerSet: ", "$i -> ${tower.y}")
+            }
         }
         // TODO: create one map out of all things to draw and sort it to get a good drawing order?
         private fun addCreep(creep: Creep) {

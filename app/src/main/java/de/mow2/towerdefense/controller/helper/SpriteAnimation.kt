@@ -1,8 +1,7 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.controller.helper
 
 import android.graphics.Bitmap
 
-//TODO: get movement direction, frame count etc.
 /**
  * Takes a Bitmap containing all frames of an animation.
  * Call nextFrame() each time to get the current frame to be drawn onto a canvas.

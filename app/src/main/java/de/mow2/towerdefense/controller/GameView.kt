@@ -9,11 +9,11 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.controller.helper.BitmapPreloader
 import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.SquareField
-import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 @SuppressLint("ViewConstructor")
 class GameView(context: Context, private val callBack: GUICallBack, val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {

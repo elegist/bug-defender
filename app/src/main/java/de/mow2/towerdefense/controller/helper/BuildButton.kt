@@ -1,4 +1,4 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.controller.helper
 
 import android.content.Context
 import android.util.AttributeSet

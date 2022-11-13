@@ -1,14 +1,13 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.controller.helper
 
 import android.content.Context
 import android.util.Log
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.PlayGround
-import de.mow2.towerdefense.model.gameobjects.actors.Creep
-import de.mow2.towerdefense.model.gameobjects.actors.Projectile
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import java.io.*
-import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ConcurrentSkipListSet
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.PriorityBlockingQueue
 
 
@@ -80,7 +79,7 @@ class GameState{
             val lives = input.readObject() as Int
             val coins = input.readObject() as Int
             val kills = input.readObject() as Int
-            val towerList = input.readUnshared() as PriorityBlockingQueue<Tower>
+            val towerList = input.readUnshared() as CopyOnWriteArrayList<Tower>
             val playGround = input.readObject() as PlayGround
             //reset tower objects
             towerList.forEach {
