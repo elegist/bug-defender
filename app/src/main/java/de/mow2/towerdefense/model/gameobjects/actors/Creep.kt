@@ -15,7 +15,7 @@ import kotlin.random.nextInt
  */
 //TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
 class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
-): GameObject() {
+): GameObject(), java.io.Serializable {
     // set width and height of the bitmap
     var w: Int = GameManager.playGround.squareSize
     var h: Int = w
@@ -43,7 +43,7 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
     //game variables
     var healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
     var baseDamage = 1
-    var slowDown = 1f
+    var isDead = false
 
     //coordinates of first target
     private var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX

@@ -6,6 +6,8 @@ import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import java.io.*
+import java.util.concurrent.ConcurrentSkipListSet
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.PriorityBlockingQueue
 
 
@@ -73,7 +75,7 @@ class GameState{
             val lives = input.readObject() as Int
             val coins = input.readObject() as Int
             val kills = input.readObject() as Int
-            val towerList = input.readUnshared() as PriorityBlockingQueue<Tower>
+            val towerList = input.readUnshared() as CopyOnWriteArrayList<Tower>
             val playGround = input.readObject() as PlayGround
             //reset tower objects
             towerList.forEach {
