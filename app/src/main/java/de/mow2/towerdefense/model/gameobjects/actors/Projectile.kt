@@ -15,7 +15,7 @@ class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
             val rawPixels = (GameView.gameWidth + GameView.gameHeight)*value
             field = rawPixels / GameLoop.targetUPS
         }
-    val baseDamage = 1
+    val baseDamage = tower.baseDamage
 
     init{
         coordX = tower.x

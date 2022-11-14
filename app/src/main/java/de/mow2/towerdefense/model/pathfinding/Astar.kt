@@ -4,7 +4,7 @@ import de.mow2.towerdefense.model.core.GameManager
 import kotlin.math.*
 
 /**
- * Astar search algorithm, used by enemies to find the fastest way across the map
+ * A-star search algorithm, used by enemies to find the fastest way across the map
  */
 class Astar : java.io.Serializable {
     fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {

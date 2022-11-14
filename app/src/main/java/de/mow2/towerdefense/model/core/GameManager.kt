@@ -8,16 +8,15 @@ import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
-import java.lang.Math.random
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * GameManager handles the game logic, updates game objects and calls updates on UI Thread
  */
 class GameManager(private val callBack: GameActivity) {
-    //debug
-    private val TAG = javaClass.name
-
+    /**
+     * Method to write all GUI-related data into their respective layout element
+     */
     private fun updateGUI() {
         callBack.runOnUiThread {
             callBack.coinsTxt.text = coinAmnt.toString()
@@ -162,11 +161,11 @@ class GameManager(private val callBack: GameActivity) {
                 SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
                 enemyList.remove(enemy)
             }else if(enemy.healthPoints <= 0){
-                increaseCoins(10)
+                increaseCoins(enemy.coinValue)
                 enemyList.remove(enemy)
                 enemy.isDead = true
                 SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 1F, 1F, 1, 0, 1F)
-                increaseKills(1) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+                increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
                 enemy.update()
             }

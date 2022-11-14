@@ -26,10 +26,10 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     //queue sorting
     override fun compareTo(other: Tower): Int = this.y.compareTo(other.y)
 
-    val baseRange = 500
+    var baseRange = 0
+    var baseDamage = 0
 
     override fun update() {
-        TODO("Not yet implemented")
     }
 
     init {
@@ -38,5 +38,20 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
         actionsPerMinute = 120f
         coordX = x
         coordY = y
+
+        when(type) {
+            TowerTypes.BLOCK -> {
+                baseRange = 2 * w + level * 100
+                baseDamage = 1 + level
+            }
+            TowerTypes.SLOW -> {
+                baseRange = (2.5 * w + level * 100).toInt()
+                baseDamage = 0
+            }
+            TowerTypes.AOE -> {
+                baseRange = w + level * 50
+                baseDamage = 2 + level * 2
+            }
+        }
     }
 }

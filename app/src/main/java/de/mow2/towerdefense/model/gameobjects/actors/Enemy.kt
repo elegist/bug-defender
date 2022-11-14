@@ -47,6 +47,8 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
     var healthPoints = 0
     var baseDamage = 0
     var isDead = false
+    var killValue = 0
+    var coinValue = 0
 
     //coordinates of first target
     private var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
@@ -67,28 +69,38 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
                 speed = 0.03f
                 healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
                 baseDamage = 1
+                killValue = 1
+                coinValue = 10
             }
             EnemyType.FIREBUG -> {
                 //TODO()
                 speed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
+                killValue = 1
+                coinValue = 10
             }
             EnemyType.MAGMACRAB -> {
                 speed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
+                killValue = 2
+                coinValue = 20
             }
             EnemyType.SKELETONKNIGHT -> {
                 //TODO()
                 speed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
+                killValue = 3
+                coinValue = 30
             }
             EnemyType.SKELETONKING -> {
                 speed = 0.005f
                 healthPoints = if(GameManager.gameLevel != 0) 20 * GameManager.gameLevel else 20
                 baseDamage = 10
+                killValue = 5
+                coinValue = 50
             }
         }
 
@@ -143,6 +155,7 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
         }
     }
 
+    //TODO: Damagetype (slow, poison, burn) as parameter?
     fun takeDamage(damageAmount: Int){
         healthPoints -= damageAmount
     }
