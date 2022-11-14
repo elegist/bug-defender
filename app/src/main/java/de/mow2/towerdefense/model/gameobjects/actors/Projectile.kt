@@ -4,7 +4,7 @@ import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.gameobjects.GameObject
 
-class Projectile(val tower: Tower, val creep: Creep) : GameObject() {
+class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
     /**
      * Pixels per update for movement.
      * Will be multiplied with direction to get a velocity.
@@ -25,7 +25,6 @@ class Projectile(val tower: Tower, val creep: Creep) : GameObject() {
     }
 
     override fun update() {
-        moveTo(creep.positionX(), creep.positionY())
-        cooldown()
+        moveTo(enemy.positionX(), enemy.positionY())
     }
 }

@@ -90,9 +90,9 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
                 draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.x, tower.y)
             }
         }
-        //creeps
-        GameManager.creepList.forEach { creep ->
-            draw(canvas, BitmapPreloader.creepAnims[creep.type]!!.nextFrame(creep.orientation), creep.positionX(), creep.positionY())
+        //enemies
+        GameManager.enemyList.forEach { enemy ->
+            draw(canvas, BitmapPreloader.enemyAnims[enemy.type]!!.nextFrame(enemy.orientation), enemy.positionX(), enemy.positionY())
         }
         //projectiles
         GameManager.projectileList.forEach { projectile ->

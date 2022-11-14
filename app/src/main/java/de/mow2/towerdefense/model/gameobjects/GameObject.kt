@@ -15,8 +15,8 @@ abstract class GameObject() {
 
     //device coordinates for drawing and moving
     // TODO(): replace with vector2D utils
-    var coordX: Float = 0f
-    var coordY: Float = 0f
+    protected var coordX: Float = 0f
+    protected var coordY: Float = 0f
     private var velocityX: Float = 0f
     private var velocityY: Float = 0f
 
@@ -30,18 +30,20 @@ abstract class GameObject() {
     private var directionX: Float = distanceToTargetX/distanceToTargetAbs
     private var directionY: Float = distanceToTargetY/distanceToTargetAbs
 
+    private var updateCycle: Float = 0f
     //set spawn rate
     var actionsPerMinute: Float = 0f
         set(value){
             field = value
-            val actionsPerSecond: Float = field / 60
-            //link with target updates per second to convert to updates per spawn
-            updateCycle = GameLoop.targetUPS / actionsPerSecond
+            if(field != 0f){
+                val actionsPerSecond: Float = field / 60
+                //link with target updates per second to convert to updates per spawn
+                updateCycle = GameLoop.targetUPS / actionsPerSecond
+            }
         }
-    private var updateCycle: Float = 0f
     var waitUpdates: Float = 0f
 
-    open fun update() {}
+    abstract fun update()
 
     /**
      * Moves a GameObject to another. Has to be called from a subclass of GameObject.
@@ -113,7 +115,7 @@ abstract class GameObject() {
      * @see spawnsPerMinute
      * @return true || false
      */
-    fun cooldown() :Boolean{
+    open fun cooldown() :Boolean{
         return if(waitUpdates <= 0f) {
             waitUpdates += updateCycle
             true
