@@ -2,6 +2,7 @@ package de.mow2.towerdefense.model.gameobjects
 
 
 
+import android.util.Log
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import kotlin.math.pow
@@ -89,7 +90,7 @@ abstract class GameObject() {
      * @param obj2 GameObject that will provide x- and y-coordinates as a destination
      * @return Float
      */
-    fun findDistance (obj1: GameObject, obj2: GameObject): Float {
+    open fun findDistance (obj1: GameObject, obj2: GameObject): Float {
         return sqrt(
             (obj2.coordX - obj1.coordX).pow(2) + (obj2.coordY - obj1.coordY).pow(2)
         )

@@ -15,7 +15,7 @@ import kotlin.random.nextInt
  */
 //TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
 class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
-): GameObject(), java.io.Serializable {
+): GameObject(), Comparable<Enemy>, java.io.Serializable {
     // set width and height of the bitmap
     var w: Int = GameManager.playGround.squareSize
     var h: Int = w
@@ -39,6 +39,9 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
     private var sortedPath= path?.reversed()
     private var currentPath = sortedPath
     private var target = currentPath!!.first()
+
+    //queue sorting
+    override fun compareTo(other: Enemy): Int = this.coordY.compareTo(other.coordY)
 
     //game variables
     var healthPoints = 0
