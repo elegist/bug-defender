@@ -2,6 +2,8 @@ package de.mow2.towerdefense.model.gameobjects.actors
 
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * A specific tower
@@ -25,13 +27,16 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     override fun compareTo(other: Tower): Int = this.y.compareTo(other.y)
 
     val baseRange = 500
+
     override fun update() {
-        //TODO("Not yet implemented")
+        TODO("Not yet implemented")
     }
 
     init {
         squareField.hasTower = this
         y = squareField.coordY - w
         actionsPerMinute = 120f
+        coordX = x
+        coordY = y
     }
 }

@@ -84,7 +84,7 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
         //towers
         GameManager.towerList.forEach { tower ->
             draw(canvas, BitmapPreloader.towerImages[tower.type], tower.x, tower.y)
-            if(tower.hasTarget) {
+            if(tower.target != null) {
                 draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.x, tower.y)
             } else {
                 draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.x, tower.y)

@@ -111,28 +111,23 @@ class GameManager(private val callBack: GameActivity) {
      * updates to game logic related values
      */
     fun updateLogic() {
-        towerList.forEach { tower ->
-            //TODO: apply different damage types and effects
-            if(tower.cooldown()){
-                enemyList.forEach{ enemy ->
-/*                    if (tower.findDistance(enemy.positionX(), enemy.positionY(), tower.coordX, tower.coordY) <= tower.baseRange){//if enemy is in range of tower
-                        if(tower.target == null || tower.target!!.isDead) {//select new target if tower has none
-                            tower.target = enemy
-                            tower.hasTarget = true
-                        } else {//tower already has a target: shoot
-                            addProjectile(Projectile(tower, tower.target!!))
-                        }
-                    } else {//target is lost: stop shooting
-                        tower.target = null
-                    }*/
-                    //TODO: fix range check
-                    if(tower.target == null || tower.target!!.isDead) {//select new target if tower has none
-                        tower.target = enemy
-                        tower.hasTarget = true
-                    } else {//tower already has a target: shoot
+        //TODO: apply different damage types and effects
+        towerList.forEach towerIteration@{ tower ->
+            if(tower.cooldown()) {
+                if(tower.target != null) {//tower already has a target
+                    val distance = tower.findDistance(tower, tower.target!!)
+                    if(!tower.target!!.isDead && distance < tower.baseRange) {
                         addProjectile(Projectile(tower, tower.target!!))
+                    } else {
+                        tower.target = null
                     }
-
+                } else {//look for new target
+                    enemyList.forEach{ enemy ->
+                        if(tower.findDistance(tower, enemy) < tower.baseRange) {
+                            tower.target = enemy
+                            return@towerIteration
+                        }
+                    }
                 }
             }
         }
@@ -213,6 +208,8 @@ class GameManager(private val callBack: GameActivity) {
         // TODO: create one map out of all things to draw and sort it to get a good drawing order?
         private fun addEnemy(enemy: Enemy) {
             enemyList += enemy
+            enemyList.sort()
+            enemyList.reverse()
         }
         private fun addProjectile(projectile: Projectile) {
             projectileList += projectile
