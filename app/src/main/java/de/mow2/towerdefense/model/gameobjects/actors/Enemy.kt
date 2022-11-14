@@ -14,7 +14,7 @@ import kotlin.random.nextInt
  * @param squareField The squareField on which this creep will spawn
  */
 //TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
-class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
+class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
 ): GameObject(), java.io.Serializable {
     // set width and height of the bitmap
     var w: Int = GameManager.playGround.squareSize
@@ -22,10 +22,10 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
     /**
      * Pixels per update for movement.
      * Will be multiplied with direction to get a velocity.
-     * @see moveTo(target: GameObject)
+     * @see moveTo()
      */
     override var speed: Float = 0f
-        set(value){
+        set(value) {
             val rawPixels = (GameView.gameWidth + GameView.gameHeight) * value
             field = rawPixels / GameLoop.targetUPS
         }
@@ -38,11 +38,11 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
     private var path = alg.findPath(spawnPoint, targetNode, GameManager.squaresX, GameManager.squaresY)
     private var sortedPath= path?.reversed()
     private var currentPath = sortedPath
-    var target = currentPath!!.first()
+    private var target = currentPath!!.first()
 
     //game variables
-    var healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
-    var baseDamage = 1
+    var healthPoints = 0
+    var baseDamage = 0
     var isDead = false
 
     //coordinates of first target
@@ -53,8 +53,42 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
         //spawn point
         coordX = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordX
         coordY = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordY
-        //movement
-        speed = 0.03f
+        //spawn frequency
+        actionsPerMinute = 120f
+
+        /**
+         * set speed, health and baseDamage depending on the type of the creep instance
+         */
+        when(type){
+            EnemyType.LEAFBUG -> {
+                speed = 0.03f
+                healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
+                baseDamage = 1
+            }
+            EnemyType.FIREBUG -> {
+                //TODO()
+                speed = 0.02f
+                healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
+                baseDamage = 3
+            }
+            EnemyType.MAGMACRAB -> {
+                speed = 0.02f
+                healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
+                baseDamage = 3
+            }
+            EnemyType.SKELETONKNIGHT -> {
+                //TODO()
+                speed = 0.02f
+                healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
+                baseDamage = 3
+            }
+            EnemyType.SKELETONKING -> {
+                speed = 0.005f
+                healthPoints = if(GameManager.gameLevel != 0) 20 * GameManager.gameLevel else 20
+                baseDamage = 10
+            }
+        }
+
     }
 
     override fun update(){
@@ -62,7 +96,6 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
          * math for the movement calculation:
          * https://www.codeproject.com/articles/990452/interception-of-two-moving-objects-in-d-space
          */
-        cooldown()
         moveTo(targetX, targetY)
         orientation = if(distanceToTargetX < -5) {
             3 //left
@@ -111,32 +144,12 @@ class Creep(val type: CreepTypes, spawnPoint: Astar.Node = Astar.Node(Random.nex
         healthPoints -= damageAmount
     }
 
-    companion object{
-        //TODO(): Put spawn logic inside GameManager
-        /**
-         * maximum amount of creeps that are spawned per minute
-         */
-        var spawnsPerMinute: Float = 30f
-        var spawnsPerSecond: Float = spawnsPerMinute / 60
-        //link with target updates per second to convert to updates per spawn
-        private val updateCycle: Float = GameLoop.targetUPS / spawnsPerSecond
-        var waitUpdates: Float = 0f
-
-        /**
-         * Cycles between true and false.
-         * Supposed to be used with a creep spawner.
-         * Frequency can be controlled by the spawnsPerMinute inside Creep class
-         * @see spawnsPerMinute
-         */
-        fun canSpawn() :Boolean{
-            return if(waitUpdates <= 0f) {
-                waitUpdates += updateCycle
-                true
-            }else{
-                waitUpdates--
-                false
-            }
-        }
+    /**
+     * list of all enemies
+     */
+    enum class EnemyType {
+        LEAFBUG, FIREBUG, MAGMACRAB, SKELETONKNIGHT, SKELETONKING
     }
 
 }
+

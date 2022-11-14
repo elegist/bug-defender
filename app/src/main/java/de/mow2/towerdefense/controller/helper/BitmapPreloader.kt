@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GameManager
-import de.mow2.towerdefense.model.gameobjects.actors.CreepTypes
+import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import java.util.concurrent.ConcurrentHashMap
 
@@ -17,7 +17,7 @@ class BitmapPreloader(val resources: Resources) {
      */
     fun preloadImages() {
         preloadTowers()
-        preloadCreeps()
+        preloadEnemies()
     }
 
     private fun preloadTowers() {
@@ -70,35 +70,51 @@ class BitmapPreloader(val resources: Resources) {
         }
     }
 
-    private fun preloadCreeps() {
+    private fun preloadEnemies() {
         val width = GameManager.playGround.squareSize
         val height = width
-        CreepTypes.values().forEach { key ->
-            val creepR: Int
+        EnemyType.values().forEach { key ->
+            val enemyR: Int
             val frameCount: Int
             val rowCount = 4 // 4 rows = 4 animation types (0=down, 1=up, 2=right, 3= left), sprite sheet has to be in that order!
             val frameDuration: Int
             when(key) {
-                CreepTypes.LEAFBUG -> {
-                    creepR = R.drawable.leafbug_anim
+                EnemyType.LEAFBUG -> {
+                    enemyR = R.drawable.leafbug_anim
+                    frameCount = 7
+                    frameDuration = 45
+                }
+                EnemyType.FIREBUG -> {
+                    //TODO: replace with actual fire bug values
+                    enemyR = R.drawable.leafbug_anim
                     frameCount = 7
                     frameDuration = 30
                 }
-                CreepTypes.FIREBUG -> {
-                    //TODO: replace with actual fire bug values
-                    creepR = R.drawable.leafbug_anim
-                    frameCount = 7
+                EnemyType.MAGMACRAB -> {
+                    enemyR = R.drawable.magacrab_anim
+                    frameCount = 8
+                    frameDuration = 60
+                }
+                EnemyType.SKELETONKNIGHT -> {
+                    //TODO: replace with skeletonknight_anim
+                    enemyR = R.drawable.magacrab_anim
+                    frameCount = 8
                     frameDuration = 30
+                }
+                EnemyType.SKELETONKING -> {
+                    enemyR = R.drawable.skeletonking_anim
+                    frameCount = 10
+                    frameDuration = 120
                 }
             }
-            creepAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, creepR), width, height, rowCount, frameCount, frameDuration)
+            enemyAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, enemyR), width, height, rowCount, frameCount, frameDuration)
         }
     }
 
     companion object {
         //all various lists and maps for game objects and their respective bitmaps or animations
         var towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
-        var creepAnims = ConcurrentHashMap<CreepTypes, SpriteAnimation>()
+        var enemyAnims = ConcurrentHashMap<EnemyType, SpriteAnimation>()
         var weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation>()
         var projectileAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation>()
     }

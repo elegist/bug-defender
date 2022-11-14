@@ -5,13 +5,9 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.gameobjects.actors.*
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.ConcurrentSkipListSet
+import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
+import java.lang.Math.random
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.PriorityBlockingQueue
 
 /**
  * GameManager handles the game logic, updates game objects and calls updates on UI Thread
@@ -67,7 +63,7 @@ class GameManager(private val callBack: GameActivity) {
         }
     }
     /**
-     * Increases the value of killCounter. This serves as an indicator for when to start a new / stronger wave of creeps
+     * Increases the value of killCounter. This serves as an indicator for when to start a new / stronger wave of enemies
      */
     private fun increaseKills(newValue: Int){
         killCounter += newValue
@@ -106,7 +102,7 @@ class GameManager(private val callBack: GameActivity) {
         killCounter = 0
         updateGUI()
         //TODO:
-        // make creeps stronger, could be a multiplier or defined values for each wave
+        // make enemies stronger, could be a multiplier or defined values for each wave
     }
 
     /**
@@ -116,51 +112,63 @@ class GameManager(private val callBack: GameActivity) {
         towerList.forEach { tower ->
             //TODO: apply different damage types and effects
             if(tower.cooldown()){
-                tower.hasTarget = false
-                creepList.forEach{ creep ->
-                    if (tower.findDistance(creep.positionX(), creep.positionY(), tower.x, tower.y) < tower.baseRange){//if creep is in range of tower
+                enemyList.forEach{ enemy ->
+/*                    if (tower.findDistance(enemy.positionX(), enemy.positionY(), tower.coordX, tower.coordY) <= tower.baseRange){//if enemy is in range of tower
                         if(tower.target == null || tower.target!!.isDead) {//select new target if tower has none
-                            tower.target = creep
+                            tower.target = enemy
                             tower.hasTarget = true
                         } else {//tower already has a target: shoot
                             addProjectile(Projectile(tower, tower.target!!))
                         }
                     } else {//target is lost: stop shooting
                         tower.target = null
+                    }*/
+                    //TODO: fix range check
+                    if(tower.target == null || tower.target!!.isDead) {//select new target if tower has none
+                        tower.target = enemy
+                        tower.hasTarget = true
+                    } else {//tower already has a target: shoot
+                        addProjectile(Projectile(tower, tower.target!!))
                     }
+
                 }
             }
         }
 
         projectileList.forEach { projectile ->
-            val creep = projectile.creep
+            val enemy = projectile.enemy
             //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
-            if(creep.findDistance(projectile.positionX(), projectile.positionY(), creep.positionX(), creep.positionY()) <= 15){
-                creep.takeDamage(projectile.baseDamage)
+            if(enemy.findDistance(projectile.positionX(), projectile.positionY(), enemy.positionX(), enemy.positionY()) <= 15){
+                enemy.takeDamage(projectile.baseDamage)
                 projectileList.remove(projectile)
             }
             projectile.update()
         }
-        //TODO(): different spawn rates for different creepTypes
-        //add enemies to the spawn
-        if (Creep.canSpawn()) { //wait for update timer
-            val creep = Creep(CreepTypes.LEAFBUG)
-            addCreep(creep) //add creeps to concurrentHashMap
+        //TODO(): different spawn rates for different enemyTypes
+        if(canSpawn() && waveActive){
+            //add enemies to the spawn
+            addEnemy(Enemy(EnemyType.LEAFBUG))
+            addEnemy(Enemy(EnemyType.MAGMACRAB))
+            if(gameLevel > 1) {
+                addEnemy(Enemy(EnemyType.SKELETONKING))
             }
+        }
+
         /**
          * update movement, update target or remove enemy
          */
-        creepList.forEach { creep ->
-            if(creep.positionY() >= playGround.squareArray[0][squaresY - 1].coordY){
-                decreaseLives(creep.baseDamage)
-                creepList.remove(creep)
-            }else if(creep.healthPoints <= 0){
+        enemyList.forEach { enemy ->
+            if(enemy.positionY() >= playGround.squareArray[0][squaresY - 1].coordY){
+                decreaseLives(enemy.baseDamage)
+                enemy.isDead = true
+                enemyList.remove(enemy)
+            }else if(enemy.healthPoints <= 0){
                 increaseCoins(10)
-                creepList.remove(creep)
-                creep.isDead = true
+                enemyList.remove(enemy)
+                enemy.isDead = true
                 increaseKills(1) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
-                creep.update()
+                enemy.update()
             }
         }
     }
@@ -176,13 +184,13 @@ class GameManager(private val callBack: GameActivity) {
         var killCounter: Int = 0
         var gameLevel = 0
         var towerList = CopyOnWriteArrayList<Tower>()
-        var creepList = CopyOnWriteArrayList<Creep>()
+        var enemyList = CopyOnWriteArrayList<Enemy>()
         var projectileList = CopyOnWriteArrayList<Projectile>()
-
+        var waveActive = true //TODO(): set to toggle enemy waves
         fun reset() {
             playGround = PlayGround(GameView.gameWidth)
             towerList = CopyOnWriteArrayList<Tower>()
-            creepList = CopyOnWriteArrayList()
+            enemyList = CopyOnWriteArrayList()
             projectileList = CopyOnWriteArrayList()
             gameLevel = 0
             coinAmnt = 0
@@ -198,11 +206,34 @@ class GameManager(private val callBack: GameActivity) {
             }
         }
         // TODO: create one map out of all things to draw and sort it to get a good drawing order?
-        private fun addCreep(creep: Creep) {
-            creepList += creep
+        private fun addEnemy(enemy: Enemy) {
+            enemyList += enemy
         }
         private fun addProjectile(projectile: Projectile) {
             projectileList += projectile
+        }
+
+
+        private var updateCycle: Float = 0f
+        private var waitUpdates: Float = 0f
+        //set spawn rate
+        var actionsPerMinute: Float = 0f
+            set(value){
+                field = value
+                val actionsPerSecond: Float = field / 60
+                //link with target updates per second to convert to updates per spawn
+                updateCycle = GameLoop.targetUPS / actionsPerSecond
+
+            }
+        fun canSpawn(): Boolean{
+            actionsPerMinute = 10f
+            return if(waitUpdates <= 0f) {
+                waitUpdates += updateCycle
+                true
+            }else{
+                waitUpdates--
+                false
+            }
         }
     }
 }
