@@ -4,6 +4,8 @@ import android.util.Log
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.GameView
+import de.mow2.towerdefense.controller.SoundManager
+import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.ConcurrentHashMap
@@ -153,11 +155,13 @@ class GameManager(private val callBack: GameActivity) {
         creepList.forEach { creep ->
             if(creep.positionY() >= playGround.squareArray[0][squaresY - 1].coordY){
                 decreaseLives(creep.baseDamage)
+                SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
                 creepList.remove(creep)
             }else if(creep.healthPoints <= 0){
                 increaseCoins(10)
                 creepList.remove(creep)
                 creep.isDead = true
+                SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 1F, 1F, 1, 0, 1F)
                 increaseKills(1) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
                 creep.update()

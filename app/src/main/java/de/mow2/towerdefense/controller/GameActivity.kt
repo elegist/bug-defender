@@ -90,10 +90,10 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     /**
      * Button-triggered reset (return to main menu)
      */
-    /*fun leaveGame(view: View) {
+    fun leaveGame(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
         GameManager.reset()
-    }*/
+    }
 
     /**
      * Load all saved user preferences
@@ -170,7 +170,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                 buildMenu.upgradeTower(selectedField)
             } else {
                 buildMenu.buildTower(selectedField, type)
-                soundPool.play(Sounds.PUNCHSOUND.id, 1F, 1F, 1, 0, 1F)
+                soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
             }
         } else {
             // Alternative zu FancyToast
@@ -206,6 +206,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
                     buildMenu.destroyTower(tower)
                     gameManager.increaseCoins(buildMenu.getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
                     toggleBuildMenu(selectedField)
+                    soundPool.play(Sounds.EXPLOSION.id, 1F, 1F, 1, 0, 1F)
                 }
                 tower.level + 1
             } else {
