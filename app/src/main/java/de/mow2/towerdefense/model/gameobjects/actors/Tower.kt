@@ -10,6 +10,7 @@ import de.mow2.towerdefense.model.gameobjects.GameObject
  */
 class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(), java.io.Serializable {
     override val speed: Float = 0f
+
     //position
     var x: Float = squareField.coordX
     var y: Float
@@ -19,15 +20,18 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     //game variables
     var level: Int = 0
     var hasTarget = false
-    var target: Creep? = null
+    var target: Enemy? = null
     //queue sorting
     override fun compareTo(other: Tower): Int = this.y.compareTo(other.y)
 
     val baseRange = 500
+    override fun update() {
+        //TODO("Not yet implemented")
+    }
 
     init {
         squareField.hasTower = this
         y = squareField.coordY - w
-        actionsPerMinute = 60f
+        actionsPerMinute = 120f
     }
 }
