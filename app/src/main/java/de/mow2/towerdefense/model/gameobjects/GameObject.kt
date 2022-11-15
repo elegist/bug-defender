@@ -1,35 +1,29 @@
 package de.mow2.towerdefense.model.gameobjects
 
-
-
-import android.util.Log
-import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
-import kotlin.math.pow
-import kotlin.math.sqrt
+import de.mow2.towerdefense.model.helper.Vector2D
+import kotlin.math.abs
 
 /**
  * GameObject is the foundation of any moving or static actor in the game
  */
 abstract class GameObject() {
     abstract val speed: Float
-
-    //device coordinates for drawing and moving
-    // TODO(): replace with vector2D utils
-    protected var coordX: Float = 0f
-    protected var coordY: Float = 0f
-    private var velocityX: Float = 0f
-    private var velocityY: Float = 0f
+    //size
+    abstract var width: Int
+    abstract var height: Int
+    //position
+    abstract var position: Vector2D
+    val positionCenter: Vector2D
+        get() {
+            return Vector2D(position.x + width / 2, position.y + height / 2)
+    }
 
     //variables for movement calculation
-    //vector to a target
-    protected var distanceToTargetX = 0f
-    protected var distanceToTargetY = 0f
-    //absolute distance to a target
+    protected lateinit var distance: Vector2D
     protected var distanceToTargetAbs: Float = 0f
-    //vector direction
-    private var directionX: Float = distanceToTargetX/distanceToTargetAbs
-    private var directionY: Float = distanceToTargetY/distanceToTargetAbs
+    private lateinit var direction: Vector2D
+    private lateinit var velocity: Vector2D
 
     private var updateCycle: Float = 0f
     //set spawn rate
@@ -53,36 +47,22 @@ abstract class GameObject() {
      * @see speedPixelsPerSecond
      * @see speed
      */
-    fun moveTo(targetX: Float, targetY: Float){
+    fun moveTo(target: Vector2D){
         //vector to the target
-        distanceToTargetX = targetX - coordX
-        distanceToTargetY = targetY - coordY
+        distance = target - position
         //absolute distance
-        distanceToTargetAbs = findDistance(coordX, coordY, targetX, targetY)
+        distanceToTargetAbs = findDistance(position, target)
         //direction
-        directionX= distanceToTargetX/distanceToTargetAbs
-        directionY= distanceToTargetY/distanceToTargetAbs
+        direction = distance / distanceToTargetAbs
         //check if target has been reached
-        if(distanceToTargetAbs > 0f){
-            velocityX = directionX*speed
-            velocityY = directionY*speed
+        velocity = if(distanceToTargetAbs > 0f){
+            direction * speed
         }else{
-            velocityX = 0f
-            velocityY = 0f
+            Vector2D(0, 0)
         }
         //update coordinates
-        coordX += velocityX
-        coordY += velocityY
+        position += velocity
     }
-    /**
-     * @return current x-coordinates of a GameObject
-     */
-    fun positionX(): Float{ return coordX }
-    /**
-     * current Y-coordinates of a GameObject
-     * @return
-     */
-    fun positionY(): Float{ return coordY }
 
     /**
      * gets the absolute distance between two objects
@@ -91,25 +71,11 @@ abstract class GameObject() {
      * @return Float
      */
     open fun findDistance (obj1: GameObject, obj2: GameObject): Float {
-        return sqrt(
-            (obj2.coordX - obj1.coordX).pow(2) + (obj2.coordY - obj1.coordY).pow(2)
-        )
+        return abs(obj2.position.x - obj1.position.x) + abs(obj2.position.y - obj1.position.y)
     }
-
-    /**
-     * gets the absolute distance between two points
-     * @param fromX x-coordinate of the starting point
-     * @param fromY y-coordinate of the starting point
-     * @param toX x-coordinate of the destination
-     * @param toY y-coordinate of the destination
-     * @return Float
-     */
-    fun findDistance (fromX: Float, fromY: Float,  toX: Float, toY: Float): Float {
-        return sqrt(
-            (toX - fromX).pow(2) + (toY - fromY).pow(2)
-        )
+    open fun findDistance (from: Vector2D, to: Vector2D): Float {
+        return abs(to.x - from.x) + abs(to.y - from.y)
     }
-
     /**
      * Cycles between true and false.
      * Enables GameObjects to have a set amount of actions per minute.

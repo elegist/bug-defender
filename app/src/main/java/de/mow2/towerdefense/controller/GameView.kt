@@ -14,6 +14,7 @@ import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.helper.Vector2D
 
 @SuppressLint("ViewConstructor")
 class GameView(context: Context, private val callBack: GUICallBack, val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
@@ -83,28 +84,28 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
     private fun drawObjects(canvas: Canvas) {
         //towers
         GameManager.towerList.forEach { tower ->
-            draw(canvas, BitmapPreloader.towerImages[tower.type], tower.x, tower.y)
+            draw(canvas, BitmapPreloader.towerImages[tower.type], tower.position)
             if(tower.target != null) {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.x, tower.y)
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.position)
             } else {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.x, tower.y)
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.position)
             }
         }
         //enemies
         GameManager.enemyList.forEach { enemy ->
-            draw(canvas, BitmapPreloader.enemyAnims[enemy.type]!!.nextFrame(enemy.orientation), enemy.positionX(), enemy.positionY())
+            draw(canvas, BitmapPreloader.enemyAnims[enemy.type]!!.nextFrame(enemy.orientation), enemy.position)
         }
         //projectiles
         GameManager.projectileList.forEach { projectile ->
-            draw(canvas, BitmapPreloader.projectileAnims[projectile.tower.type]!!.nextFrame(0), projectile.positionX(), projectile.positionY())
+            draw(canvas, BitmapPreloader.projectileAnims[projectile.tower.type]!!.nextFrame(0), projectile.position)
         }
     }
     /**
      * draws a bitmap onto canvas
      */
-    private fun draw(canvas: Canvas, bitmap: Bitmap?, posX: Float, posY: Float) {
+    private fun draw(canvas: Canvas, bitmap: Bitmap?, position: Vector2D) {
         if (bitmap != null) {
-            canvas.drawBitmap(bitmap, posX, posY, null)
+            canvas.drawBitmap(bitmap, position.x, position.y, null)
         }
     }
 
@@ -160,8 +161,8 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
         var yPos = 0
         GameManager.playGround.squareArray.forEachIndexed { i, it ->
             it.forEachIndexed {j, element ->
-                val coordRangeX = element.coordX..(element.coordX+element.width)
-                val coordRangeY = element.coordY..(element.coordY+element.height)
+                val coordRangeX = element.position.x..(element.position.x+element.width)
+                val coordRangeY = element.position.y..(element.position.y+element.height)
                 if(x in coordRangeX && y in coordRangeY) {
                     xPos = i
                     yPos = j

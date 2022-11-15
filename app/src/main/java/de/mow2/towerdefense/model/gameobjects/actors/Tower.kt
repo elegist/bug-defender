@@ -2,8 +2,7 @@ package de.mow2.towerdefense.model.gameobjects.actors
 
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
-import kotlin.math.pow
-import kotlin.math.sqrt
+import de.mow2.towerdefense.model.helper.Vector2D
 
 /**
  * A specific tower
@@ -12,44 +11,41 @@ import kotlin.math.sqrt
  */
 class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(), java.io.Serializable {
     override val speed: Float = 0f
-
-    //position
-    var x: Float = squareField.coordX
-    var y: Float
     //scale
-    var w: Int = squareField.width
-    var h: Int = (2*w)
+    override var width = squareField.width
+    override var height = 2 * width
+    //position
+    override var position = Vector2D(squareField.position.x, squareField.position.y - width)
     //game variables
     var level: Int = 0
     var hasTarget = false
     var target: Enemy? = null
     //queue sorting
-    override fun compareTo(other: Tower): Int = this.y.compareTo(other.y)
+    override fun compareTo(other: Tower): Int = this.position.y.compareTo(other.position.y)
 
-    var baseRange = 0
+    private var baseRange = 2 * width + width / 2
+    var range = 0
     var baseDamage = 0
 
     override fun update() {
     }
 
     init {
-        squareField.hasTower = this
-        y = squareField.coordY - w
+        squareField.tower = this
         actionsPerMinute = 120f
-        coordX = x
-        coordY = y
 
+        //define range and damage scaling for each type of tower
         when(type) {
             TowerTypes.BLOCK -> {
-                baseRange = 2 * w + level * 100
+                range = baseRange + level * width
                 baseDamage = 1 + level
             }
             TowerTypes.SLOW -> {
-                baseRange = (2.5 * w + level * 100).toInt()
+                range = baseRange / 2 + level * width / 2
                 baseDamage = 0
             }
             TowerTypes.AOE -> {
-                baseRange = w + level * 50
+                range = baseRange + level * width / 2
                 baseDamage = 2 + level * 2
             }
         }

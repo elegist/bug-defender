@@ -194,8 +194,8 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //create build menu or make it disappear
         if(!buildMenuExists) {
             //if field already contains tower, display delete tower button
-            val level = if(selectedField.hasTower != null) {
-                val tower = selectedField.hasTower!! //reference tower
+            val level = if(selectedField.tower != null) {
+                val tower = selectedField.tower!! //reference tower
                 //add delete tower button
                 val deleteBtn = ImageButton(this, null, R.style.MenuButton_Button)
                 deleteBtn.setImageResource(R.drawable.tower_destroy)

@@ -53,7 +53,7 @@ class BuildUpgradeMenu {
      * Upgrades a tower
      */
     fun upgradeTower(selectedField: SquareField) {
-        val tower = selectedField.hasTower
+        val tower = selectedField.tower
         if(tower != null) {
             tower.level++
         }

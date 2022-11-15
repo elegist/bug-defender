@@ -114,15 +114,15 @@ class GameManager(private val callBack: GameActivity) {
         towerList.forEach towerIteration@{ tower ->
             if(tower.cooldown()) {
                 if(tower.target != null) {//tower already has a target
-                    val distance = tower.findDistance(tower, tower.target!!)
-                    if(!tower.target!!.isDead && distance < tower.baseRange) {
+                    val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
+                    if(!tower.target!!.isDead && distance < tower.range) {
                         addProjectile(Projectile(tower, tower.target!!))
                     } else {
                         tower.target = null
                     }
                 } else {//look for new target
                     enemyList.forEach{ enemy ->
-                        if(tower.findDistance(tower, enemy) < tower.baseRange) {
+                        if(tower.findDistance(tower, enemy) < tower.range) {
                             tower.target = enemy
                             return@towerIteration
                         }
@@ -134,7 +134,7 @@ class GameManager(private val callBack: GameActivity) {
         projectileList.forEach { projectile ->
             val enemy = projectile.enemy
             //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
-            if(enemy.findDistance(projectile.positionX(), projectile.positionY(), enemy.positionX(), enemy.positionY()) <= 15){
+            if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
                 enemy.takeDamage(projectile.baseDamage)
                 projectileList.remove(projectile)
             }
@@ -155,12 +155,12 @@ class GameManager(private val callBack: GameActivity) {
          */
         
         enemyList.forEach { enemy ->
-            if(enemy.positionY() >= playGround.squareArray[0][squaresY - 1].coordY){
+            if(enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y){ //enemy reached finish line
                 decreaseLives(enemy.baseDamage)
                 enemy.isDead = true
                 SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
                 enemyList.remove(enemy)
-            }else if(enemy.healthPoints <= 0){
+            }else if(enemy.healthPoints <= 0){ //enemy dies
                 increaseCoins(enemy.coinValue)
                 enemyList.remove(enemy)
                 enemy.isDead = true
@@ -199,10 +199,6 @@ class GameManager(private val callBack: GameActivity) {
         fun addTower(tower: Tower) {
             towerList += tower
             towerList.sort()
-            Log.i("TowerSet: ", "----")
-            towerList.forEachIndexed { i, tower ->
-                Log.i("TowerSet: ", "$i -> ${tower.y}")
-            }
         }
         // TODO: create one map out of all things to draw and sort it to get a good drawing order?
         private fun addEnemy(enemy: Enemy) {

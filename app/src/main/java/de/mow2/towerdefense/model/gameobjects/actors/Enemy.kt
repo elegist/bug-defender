@@ -11,14 +11,10 @@ import kotlin.random.nextInt
 /**
  * An instance of this class represents one specific enemy.
  * @param type One value of CreepTypes (e.g. leafbug, firebug...)
- * @param squareField The squareField on which this creep will spawn
+ * @param spawnPoint A-star node at which the enemy will spawn
  */
-//TODO: ist squareField als parameter wirklich sinnvoll? vielleicht eher node verwenden
 class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
 ): GameObject(), Comparable<Enemy>, java.io.Serializable {
-    // set width and height of the bitmap
-    var w: Int = GameManager.playGround.squareSize
-    var h: Int = w
     /**
      * Pixels per update for movement.
      * Will be multiplied with direction to get a velocity.
@@ -29,6 +25,11 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
             val rawPixels = (GameView.gameWidth + GameView.gameHeight) * value
             field = rawPixels / GameLoop.targetUPS
         }
+    //position
+    override var position = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
+    //size
+    override var height = GameManager.playGround.squareSize
+    override var width = height
     //walking direction
     var orientation: Int = 0 //TODO: Change value based on walking direction! (0 = down, 1 = up, 2 = left/right) maybe develop a better solution??
     //path finding
@@ -38,10 +39,11 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
     private var path = alg.findPath(spawnPoint, targetNode, GameManager.squaresX, GameManager.squaresY)
     private var sortedPath= path?.reversed()
     private var currentPath = sortedPath
-    private var target = currentPath!!.first()
+    private var currentTargetNode = currentPath!!.first()
+    private var currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
 
     //queue sorting
-    override fun compareTo(other: Enemy): Int = this.coordY.compareTo(other.coordY)
+    override fun compareTo(other: Enemy): Int = this.position.y.compareTo(other.position.y)
 
     //game variables
     var healthPoints = 0
@@ -50,14 +52,7 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
     var killValue = 0
     var coinValue = 0
 
-    //coordinates of first target
-    private var targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
-    private var targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
-
     init{
-        //spawn point
-        coordX = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordX
-        coordY = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].coordY
         //spawn frequency
         actionsPerMinute = 120f
 
@@ -111,12 +106,12 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
          * math for the movement calculation:
          * https://www.codeproject.com/articles/990452/interception-of-two-moving-objects-in-d-space
          */
-        moveTo(targetX, targetY)
-        orientation = if(distanceToTargetX < -5) {
+        moveTo(currentTargetPosition)
+        orientation = if(distance.x < -5) {
             3 //left
-        } else if(distanceToTargetX > 5) {
+        } else if(distance.x > 5) {
             2 //right
-        } else if(distanceToTargetY < 0) {
+        } else if(distance.y < 0) {
             1 //up
         } else {
             0 //down (default)
@@ -125,8 +120,8 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
         //TODO: distance check might break on different screen sizes
         //check if creep distance is close enough to the target so it can create a new path
         if(distanceToTargetAbs <= GameManager.playGround.squareSize*0.10){
-            targetNode = Astar.Node(target.x, GameManager.squaresY-1)
-            path = Astar().findPath(target, targetNode, GameManager.squaresX, GameManager.squaresY)
+            targetNode = Astar.Node(currentTargetNode.x, GameManager.squaresY-1)
+            path = Astar().findPath(currentTargetNode, targetNode, GameManager.squaresX, GameManager.squaresY)
             sortedPath = path?.reversed()
 
             if(currentPath != sortedPath){
@@ -139,20 +134,14 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
 
     /**
      * Finds the device coordinates of the next node inside currentPath List of this creep and
-     * updates targetX and targetY.
-     * @see targetX
-     * @see targetY
+     * updates target position
      */
     private fun findNextTarget() {
-        target = currentPath!![targetIndex]
-        if (target != currentPath!!.last()) {
-            targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
-            targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
+        currentTargetNode = currentPath!![targetIndex]
+        if (currentTargetNode != currentPath!!.last()) {
             targetIndex++
-        } else {
-            targetX = GameManager.playGround.squareArray[target.x][target.y].coordX
-            targetY = GameManager.playGround.squareArray[target.x][target.y].coordY
         }
+        currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
     }
 
     //TODO: Damagetype (slow, poison, burn) as parameter?
