@@ -43,8 +43,6 @@ abstract class GameObject() {
             }
         }
     var waitUpdates: Float = 0f
-    fun positionX(): Float{ return coordX }
-    fun positionY(): Float{ return coordY }
 
     abstract fun update()
 
