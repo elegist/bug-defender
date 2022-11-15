@@ -1,6 +1,8 @@
 package de.mow2.towerdefense.model.pathfinding
 
 import de.mow2.towerdefense.model.core.GameManager
+import android.util.Log
+import de.mow2.towerdefense.model.util.Vector2D
 import kotlin.math.*
 
 /**
