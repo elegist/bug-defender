@@ -1,9 +1,11 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import android.util.Log
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
+import de.mow2.towerdefense.model.helper.Vector2D
 import de.mow2.towerdefense.model.pathfinding.Astar
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -13,7 +15,7 @@ import kotlin.random.nextInt
  * @param type One value of CreepTypes (e.g. leafbug, firebug...)
  * @param spawnPoint A-star node at which the enemy will spawn
  */
-class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
+class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
 ): GameObject(), Comparable<Enemy>, java.io.Serializable {
     /**
      * Pixels per update for movement.
@@ -31,16 +33,14 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
     override var height = GameManager.playGround.squareSize
     override var width = height
     //walking direction
-    var orientation: Int = 0 //TODO: Change value based on walking direction! (0 = down, 1 = up, 2 = left/right) maybe develop a better solution??
+    var orientation: Int = 0
     //path finding
     private val alg = Astar()
     private var targetIndex: Int = 0
-    private var targetNode = Astar.Node(spawnPoint.x, GameManager.squaresY-1)
-    private var path = alg.findPath(spawnPoint, targetNode, GameManager.squaresX, GameManager.squaresY)
-    private var sortedPath= path?.reversed()
-    private var currentPath = sortedPath
-    private var currentTargetNode = currentPath!!.first()
-    private var currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
+    private var finalTarget = Astar.Node(spawnPoint.x, GameManager.squaresY-1) //initial destination
+    private lateinit var sortedPath: List<Astar.Node>
+    private lateinit var currentTargetNode: Astar.Node
+    private lateinit var currentTargetPosition: Vector2D
 
     //queue sorting
     override fun compareTo(other: Enemy): Int = this.position.y.compareTo(other.position.y)
@@ -53,6 +53,11 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
     var coinValue = 0
 
     init{
+        if(isValidPath(spawnPoint, finalTarget)) {
+            Log.i("Path: ", "Creature has found path!")
+        } else {
+            Log.i("Path: ", "Creature has found no path!")
+        }
         //spawn frequency
         actionsPerMinute = 120f
 
@@ -118,27 +123,51 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
         }
 
         //TODO: distance check might break on different screen sizes
-        //check if creep distance is close enough to the target so it can create a new path
+        //if creep has reached its current target, search for a new path and set a new target
         if(distanceToTargetAbs <= GameManager.playGround.squareSize*0.10){
-            targetNode = Astar.Node(currentTargetNode.x, GameManager.squaresY-1)
-            path = Astar().findPath(currentTargetNode, targetNode, GameManager.squaresX, GameManager.squaresY)
-            sortedPath = path?.reversed()
-
-            if(currentPath != sortedPath){
-                currentPath = sortedPath
+            finalTarget = Astar.Node(currentTargetNode.x, GameManager.squaresY-1)
+            if(isValidPath(currentTargetNode, finalTarget)) {
+                Log.i("Path: ", "Creature has found path!")
+            } else {
+                Log.i("Path: ", "Creature did not find path!")
             }
-
             findNextTarget()
         }
     }
 
     /**
+     * Looks for a path from given starting point (creeps current position or spawn point) to finish line
+     * @param from Astar.Node which is the starting point
+     * @param to Astar.Node which is the target
+     * @return only true if a path has been found
+     */
+    private fun isValidPath(from: Astar.Node, to: Astar.Node): Boolean {
+        val path = alg.findPath(from, to, GameManager.squaresX, GameManager.squaresY) //find path from spawn to targetNode
+        return if(path != null) {//path is available
+            sortedPath =
+                if(!this::sortedPath.isInitialized) { //first call must initialize sortedPath!
+                    path.reversed()
+                } else {
+                    if(sortedPath != path.reversed()) { //check if new path is different
+                        path.reversed()
+                    } else {
+                        sortedPath
+                    }
+                }
+            currentTargetNode = sortedPath.first()
+            currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
+          true
+        } else {
+            false
+        }
+    }
+    /**
      * Finds the device coordinates of the next node inside currentPath List of this creep and
      * updates target position
      */
     private fun findNextTarget() {
-        currentTargetNode = currentPath!![targetIndex]
-        if (currentTargetNode != currentPath!!.last()) {
+        currentTargetNode = sortedPath[targetIndex]
+        if (currentTargetNode != sortedPath.last()) {
             targetIndex++
         }
         currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
@@ -155,6 +184,5 @@ class Enemy(val type: EnemyType, spawnPoint: Astar.Node = Astar.Node(Random.next
     enum class EnemyType {
         LEAFBUG, FIREBUG, MAGMACRAB, SKELETONKNIGHT, SKELETONKING
     }
-
 }
 

@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-import android.util.Log
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.GameView
@@ -115,14 +114,14 @@ class GameManager(private val callBack: GameActivity) {
             if(tower.cooldown()) {
                 if(tower.target != null) {//tower already has a target
                     val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
-                    if(!tower.target!!.isDead && distance < tower.range) {
+                    if(!tower.target!!.isDead && distance < tower.finalRange) {
                         addProjectile(Projectile(tower, tower.target!!))
                     } else {
                         tower.target = null
                     }
                 } else {//look for new target
                     enemyList.forEach{ enemy ->
-                        if(tower.findDistance(tower, enemy) < tower.range) {
+                        if(tower.findDistance(tower, enemy) < tower.finalRange) {
                             tower.target = enemy
                             return@towerIteration
                         }

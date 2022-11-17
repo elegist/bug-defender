@@ -8,6 +8,7 @@ import de.mow2.towerdefense.controller.*
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.SoundManager.soundSetting
+import de.mow2.towerdefense.controller.helper.BitmapPreloader
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityMainBinding
 import de.mow2.towerdefense.model.core.GameManager
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //preload all images
+        BitmapPreloader(resources).preloadImages()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
@@ -67,6 +70,13 @@ class MainActivity : AppCompatActivity() {
         GameManager.reset()
         startActivity(Intent(this, GameActivity::class.java))
     }
+    /**
+     * Load saved game
+     */
+    fun resumeGame(view: View) {
+        gameState.readGameState(this)
+        startActivity(Intent(this, GameActivity::class.java))
+    }
 
     /**
      * Loads Dialog Fragment popUpWindow on button Click based on button id
@@ -83,13 +93,5 @@ class MainActivity : AppCompatActivity() {
                 dialogPopup.show(fm, "settingsDialog")
             }
         }
-    }
-
-    /**
-     * resumes game with on click
-     */
-    fun resumeGame(view: View) {
-        gameState.readGameState(this)
-        startActivity(Intent(this, GameActivity::class.java))
     }
 }

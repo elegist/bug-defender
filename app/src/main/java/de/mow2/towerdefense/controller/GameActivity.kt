@@ -52,8 +52,6 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
-        //preload all images
-        BitmapPreloader(resources).preloadImages()
         //create new game view
         gameLayout = binding.gameViewContainer
         gameView = GameView(this,this, gameManager)

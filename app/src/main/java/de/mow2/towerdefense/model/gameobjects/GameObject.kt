@@ -16,6 +16,7 @@ abstract class GameObject() {
     abstract var position: Vector2D
     val positionCenter: Vector2D
         get() {
+            //return the center point of specific game object
             return Vector2D(position.x + width / 2, position.y + height / 2)
     }
 
@@ -26,7 +27,7 @@ abstract class GameObject() {
     private lateinit var velocity: Vector2D
 
     private var updateCycle: Float = 0f
-    //set spawn rate
+    //spawn rate
     var actionsPerMinute: Float = 0f
         set(value){
             field = value
