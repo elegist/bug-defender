@@ -79,7 +79,7 @@ class GameState{
             val lives = input.readObject() as Int
             val coins = input.readObject() as Int
             val kills = input.readObject() as Int
-            val towerList = input.readUnshared() as CopyOnWriteArrayList<Tower>
+            val towerList = input.readObject() as CopyOnWriteArrayList<Tower>
             val playGround = input.readObject() as PlayGround
             //reset tower objects
             towerList.forEach {

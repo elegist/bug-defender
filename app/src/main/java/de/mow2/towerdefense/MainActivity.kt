@@ -17,7 +17,6 @@ import de.mow2.towerdefense.model.core.GameManager
  * This class is the main entry point
  */
 class MainActivity : AppCompatActivity() {
-    private val TAG: String = javaClass.name
     private val gameState = GameState()
     private val fm = supportFragmentManager
     private var dialogPopup = PopupFragment()
