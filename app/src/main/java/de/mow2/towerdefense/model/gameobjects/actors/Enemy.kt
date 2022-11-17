@@ -54,9 +54,9 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
 
     init{
         if(isValidPath(spawnPoint, finalTarget)) {
-            Log.i("Path: ", "Creature has found path!")
+            // TODO: exception handling
         } else {
-            Log.i("Path: ", "Creature has found no path!")
+            // TODO: exception handling
         }
         //spawn frequency
         actionsPerMinute = 120f
@@ -127,9 +127,9 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
         if(distanceToTargetAbs <= GameManager.playGround.squareSize*0.10){
             finalTarget = Astar.Node(currentTargetNode.x, GameManager.squaresY-1)
             if(isValidPath(currentTargetNode, finalTarget)) {
-                Log.i("Path: ", "Creature has found path!")
+                // TODO: exception handling
             } else {
-                Log.i("Path: ", "Creature did not find path!")
+                // TODO: exception handling
             }
             findNextTarget()
         }

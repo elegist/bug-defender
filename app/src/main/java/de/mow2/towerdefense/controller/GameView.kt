@@ -5,23 +5,22 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
-import de.mow2.towerdefense.model.core.GUICallBack
-import de.mow2.towerdefense.model.core.GameLoop
-import de.mow2.towerdefense.model.core.GameManager
-import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.helper.Vector2D
 
 @SuppressLint("ViewConstructor")
-class GameView(context: Context, private val callBack: GUICallBack, val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, private val callBack: GameActivity ,val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     //background tiles
     private var bgPaint: Paint
     private var bgBitmap: Bitmap
+    private val buildMenu = BuildUpgradeMenu(gameManager, callBack)
 
     init {
         holder.addCallback(this)
@@ -121,32 +120,37 @@ class GameView(context: Context, private val callBack: GUICallBack, val gameMana
      * handling user inputs
      */
 
-
-    private var lastX = 0f
-    private var lastY = 0f
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val x: Float; val y: Float
 
         when (ev?.action) {
             MotionEvent.ACTION_DOWN -> {
-                lastX = ev.x
-                lastY = ev.y
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> {}
-
-            MotionEvent.ACTION_UP -> {
                 x = ev.x
                 y = ev.y
                 val selectedField = getTouchedSquare(x, y)
-                invalidate()
-                if(x == lastX && y == lastY) {
-                    if(selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                        //open up build and upgrade menu for selected square
-                        callBack.toggleBuildMenu(selectedField)
+                if(selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                    Log.i("Tool", "${GameManager.selectedTool}")
+
+                    when (GameManager.selectedTool) {
+                        R.id.deleteButton -> {
+                            if (selectedField.tower != null){
+                                buildMenu.destroyTower(selectedField.tower!!)
+                            }
+                        }
+
+                        R.id.buildButton -> {
+                            buildMenu.buildTower(selectedField, GameManager.selectedTower)
+                        }
+
+                        R.id.upgradeButton -> {}
                     }
                 }
+                invalidate()
             }
+
+            MotionEvent.ACTION_MOVE -> {}
+
+            MotionEvent.ACTION_UP -> {}
         }
         return true
     }

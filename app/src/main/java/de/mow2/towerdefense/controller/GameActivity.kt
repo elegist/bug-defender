@@ -5,20 +5,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.*
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
-import de.mow2.towerdefense.controller.helper.BitmapPreloader
 import de.mow2.towerdefense.controller.helper.BuildButton
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
-import de.mow2.towerdefense.model.core.GUICallBack
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
@@ -27,8 +23,9 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 /**
  * This Activity starts the game
  */
-class GameActivity : AppCompatActivity(), GUICallBack {
+class GameActivity : AppCompatActivity() {
     private val gameState = GameState()
+
      //game content and gui
     private val gameManager = GameManager(this)
     private lateinit var gameLayout: LinearLayout
@@ -41,11 +38,13 @@ class GameActivity : AppCompatActivity(), GUICallBack {
     lateinit var waveText: TextView
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
+
     //buildmenu
     private lateinit var buildMenuScrollView: HorizontalScrollView
     private lateinit var buildMenuLayout: LinearLayout
-    private val buildMenu = BuildUpgradeMenu()
-    var buildMenuExists = false
+    private lateinit var buildButton: ImageButton
+    private var buildMenuExists = false
+
     // View Binding
     private lateinit var binding: ActivityGameBinding
 
@@ -54,7 +53,7 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         binding = ActivityGameBinding.inflate(layoutInflater)
         //create new game view
         gameLayout = binding.gameViewContainer
-        gameView = GameView(this,this, gameManager)
+        gameView = GameView(this, this, gameManager)
         gameLayout.addView(gameView)
         setContentView(binding.root)
         //load settings and GUI
@@ -122,6 +121,45 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         //reference build menu container
         buildMenuScrollView = binding.buildMenuWrapper
         buildMenuLayout = binding.buildMenuContainer
+
+        // detect which button is currently selected
+        buildButton = binding.buildButton
+
+        binding.bottomGUI.children.forEach { view ->
+            view.setOnClickListener {
+                if(GameManager.selectedTool != null){
+                    if (GameManager.selectedTool == it.id){
+                        GameManager.selectedTool = null
+                    } else {
+                        GameManager.selectedTool = it.id
+                    }
+                } else {
+                    GameManager.selectedTool = it.id
+                }
+
+                //set onclick for the build menu
+//                if (it == binding.buildButton) {
+//                    toggleBuildMenu(it)
+//                }
+            }
+            if(view == buildButton) {
+                view.setOnLongClickListener {
+                    toggleBuildMenu(it)
+                    return@setOnLongClickListener true
+                }
+            }
+        }
+
+        TowerTypes.values().forEachIndexed { i, type ->
+            val towerBtn = BuildButton(this, null, R.style.MenuButton_Button, type)
+            towerBtn.id = i
+            towerBtn.setOnClickListener {
+                GameManager.selectedTool = buildButton.id
+                GameManager.selectedTower = type
+                toggleBuildMenu(it)
+            }
+            buildMenuLayout.addView(towerBtn)
+        }
     }
 
     override fun onResume(){
@@ -155,78 +193,13 @@ class GameActivity : AppCompatActivity(), GUICallBack {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    /**
-     * BuildMenu buttons trigger this function to build a tower
-     * @param type type of the tower
-     * @param level the towers level (base = 0, upgraded = 1-2)
-     */
-    override fun buildTower(type: TowerTypes, level: Int) {
-        val cost = buildMenu.getTowerCost(type, level)
-        if(gameManager.decreaseCoins(cost)) {
-            //build tower
-            if(level != 0) {
-                buildMenu.upgradeTower(selectedField)
-            } else {
-                buildMenu.buildTower(selectedField, type)
-                soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
-            }
-        } else {
-            // Alternative zu FancyToast
-            /*val snackbar = Snackbar
-                .make(gameView, R.string.moneyWarning, Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(getColor(R.color.dark_brown))
-                .show()*/
-            FancyToast.makeText(this, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
-        }
-    }
-
-    private lateinit var selectedField: SquareField
-    /**
-     * Generates an individual build tower menu depending on the touched SquareField
-     * If a tower has already been built, it displays a delete tower / upgrade menu
-     * @param squareField chosen field on the playground (by touch event)
-     */
-    override fun toggleBuildMenu(squareField: SquareField) {
-        buildMenuLayout.removeAllViews()
-        selectedField = squareField
-        //create build menu or make it disappear
-        if(!buildMenuExists) {
-            //if field already contains tower, display delete tower button
-            val level = if(selectedField.tower != null) {
-                val tower = selectedField.tower!! //reference tower
-                //add delete tower button
-                val deleteBtn = ImageButton(this, null, R.style.MenuButton_Button)
-                deleteBtn.setImageResource(R.drawable.tower_destroy)
-                deleteBtn.setBackgroundColor(getColor(R.color.green_overlay))
-                deleteBtn.setPadding(0,0, 0, 30)
-                buildMenuLayout.addView(deleteBtn)
-                deleteBtn.setOnClickListener {
-                    buildMenu.destroyTower(tower)
-                    gameManager.increaseCoins(buildMenu.getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
-                    toggleBuildMenu(selectedField)
-                    soundPool.play(Sounds.EXPLOSION.id, 1F, 1F, 1, 0, 1F)
-                }
-                tower.level + 1
-            } else {
-                0
-            }
-            TowerTypes.values().forEachIndexed { i, type ->
-                val towerBtn = BuildButton(this, null, R.style.MenuButton_Button, type, level)
-                towerBtn.id = i
-                towerBtn.setOnClickListener {
-                    buildTower(type, level)
-                    toggleBuildMenu(selectedField)
-                }
-                buildMenuLayout.addView(towerBtn)
-            }
-
+    private fun toggleBuildMenu(view: View) {
+        if (!buildMenuExists){
             buildMenuScrollView.visibility = View.VISIBLE
         } else {
             buildMenuScrollView.visibility = View.GONE
         }
-        //swap boolean flag
         buildMenuExists = !buildMenuExists
     }
-
 }
 

@@ -11,8 +11,8 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  * Custom ImageButton - This button is part of the in-game build menu
  */
 class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : AppCompatImageButton(context, attributeSet, defStyleAttr) {
-    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int, type: TowerTypes, level: Int) : this(context, attributeSet, defStyleAttr) {
-        initMenu(type, level)
+    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int, type: TowerTypes) : this(context, attributeSet, defStyleAttr) {
+        initMenu(type)
     }
 
     init {
@@ -20,28 +20,16 @@ class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: I
         this.setPadding(0, 0, 0, 30)
     }
 
-    private fun initMenu(type: TowerTypes, level: Int) {
+    private fun initMenu(type: TowerTypes) {
         when(type) {
             TowerTypes.BLOCK -> {
-                when(level) {
-                    0 -> {this.setImageResource(R.drawable.tower_block)}
-                    1 -> {this.setImageResource(R.drawable.tower_block1)}
-                    else -> {}
-                }
+                this.setImageResource(R.drawable.tower_block)
             }
             TowerTypes.SLOW -> {
-                when(level) {
-                    0 -> {this.setImageResource(R.drawable.tower_slow)}
-                    1 -> {this.setImageResource(R.drawable.tower_slow1)}
-                    else -> {}
-                }
+                this.setImageResource(R.drawable.tower_slow)
             }
             TowerTypes.AOE -> {
-                when(level) {
-                    0 -> {this.setImageResource(R.drawable.tower_aoe)}
-                    1 -> {this.setImageResource(R.drawable.tower_aoe1)}
-                    else -> {}
-                }
+                this.setImageResource(R.drawable.tower_aoe)
             }
         }
     }

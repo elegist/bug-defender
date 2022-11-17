@@ -79,9 +79,9 @@ class GameManager(private val callBack: GameActivity) {
         when(level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 10
+                livesAmnt = 10000
                 if(coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 400
+                    coinAmnt = 40000
                 }
                 killsToProgress = 10
                 callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
@@ -185,6 +185,11 @@ class GameManager(private val callBack: GameActivity) {
         var enemyList = CopyOnWriteArrayList<Enemy>()
         var projectileList = CopyOnWriteArrayList<Projectile>()
         var waveActive = true //TODO(): set to toggle enemy waves
+
+        // build menu variables
+        var selectedTool: Int? = null
+        var selectedTower = TowerTypes.BLOCK // default tower
+
         fun reset() {
             playGround = PlayGround(GameView.gameWidth)
             towerList = CopyOnWriteArrayList<Tower>()
