@@ -123,34 +123,29 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val x: Float; val y: Float
 
-        when (ev?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                x = ev.x
-                y = ev.y
-                val selectedField = getTouchedSquare(x, y)
-                if(selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                    Log.i("Tool", "${GameManager.selectedTool}")
 
-                    when (GameManager.selectedTool) {
-                        R.id.deleteButton -> {
-                            if (selectedField.tower != null){
-                                buildMenu.destroyTower(selectedField.tower!!)
-                            }
+        if (ev?.action == MotionEvent.ACTION_UP){
+            x = ev.x
+            y = ev.y
+            val selectedField = getTouchedSquare(x, y)
+            if(selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                Log.i("Tool", "${GameManager.selectedTool}")
+
+                when (GameManager.selectedTool) {
+                    R.id.deleteButton -> {
+                        if (selectedField.tower != null){
+                            buildMenu.destroyTower(selectedField.tower!!)
                         }
-
-                        R.id.buildButton -> {
-                            buildMenu.buildTower(selectedField, GameManager.selectedTower)
-                        }
-
-                        R.id.upgradeButton -> {}
                     }
+
+                    R.id.buildButton -> {
+                        buildMenu.buildTower(selectedField, GameManager.selectedTower)
+                    }
+
+                    R.id.upgradeButton -> {}
                 }
-                invalidate()
             }
-
-            MotionEvent.ACTION_MOVE -> {}
-
-            MotionEvent.ACTION_UP -> {}
+            invalidate()
         }
         return true
     }
