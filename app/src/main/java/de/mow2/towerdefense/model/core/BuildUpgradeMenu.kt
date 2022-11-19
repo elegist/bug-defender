@@ -2,7 +2,6 @@ package de.mow2.towerdefense.model.core
 
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
-import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
@@ -16,7 +15,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
      * @param type value of TowerTypes
      * @param level this towers level
      */
-    fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
+    private fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
         val cost = when(type) {
             TowerTypes.BLOCK -> 100
             TowerTypes.SLOW -> 200

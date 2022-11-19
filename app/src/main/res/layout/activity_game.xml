@@ -19,20 +19,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/timer_image"
+            app:srcCompat="@drawable/time" />
+
         <Chronometer
             android:id="@+id/timeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textAlignment="center" />
+            android:layout_weight="2"
+            android:textAlignment="textStart"
+            android:textColor="#BCAAA4" />
 
         <Button
             android:id="@+id/menuBtn"
+            style="@style/InGameButton.Main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/button_border"
+            android:background="@drawable/defaultbtn_states"
             android:onClick="popUpMenu"
             android:text="@string/menuBtn" />
 
@@ -45,12 +55,12 @@
 
         <ImageView
             android:id="@+id/coinImg"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_weight="1"
             android:contentDescription="@string/coins"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/coin_01" />
+            app:srcCompat="@drawable/coins" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,6 +74,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topGUI">
+
+        <ImageView
+            android:id="@+id/healthBallImg"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/health_ball_image"
+            android:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/healthball" />
 
         <TextView
             android:id="@+id/healthText"
@@ -81,13 +102,14 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginBottom="2dp"
+            android:elevation="2dp"
             android:progressDrawable="@drawable/healthbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/waveProgressBar"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/waveProgressBar"
@@ -95,7 +117,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="16dp"
             android:progressDrawable="@drawable/wavebar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/healthProgressBar"
@@ -110,15 +132,27 @@
             app:layout_constraintEnd_toEndOf="@+id/waveProgressBar"
             app:layout_constraintStart_toStartOf="@+id/waveProgressBar"
             app:layout_constraintTop_toTopOf="@+id/waveProgressBar" />
+
+        <ImageView
+            android:id="@+id/progressBallImg"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/progress_ball_image"
+            android:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/progressball" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:id="@+id/gameContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="64dp"
         android:contentDescription="@string/app_name"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@+id/bottomGUI"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topGUI">
@@ -152,46 +186,72 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomGUI"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
+        android:layout_marginBottom="4dp"
+        android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
             android:id="@+id/deleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/defaultbtn_states"
+            android:contentDescription="@string/delete_tower_button"
+            android:elevation="5dp"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/buildButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_clear_black_24dp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:layout_constraintTop_toTopOf="@+id/space"
+            app:srcCompat="@drawable/destroy_tower_btn"
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
         <ImageButton
             android:id="@+id/buildButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/defaultbtn_states"
+            android:contentDescription="@string/build_tower_button"
+            android:elevation="5dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/upgradeButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/deleteButton"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_check_black_24dp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:srcCompat="@drawable/tower_block_imagebtn"
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
+            tools:srcCompat="@drawable/tower_block_imagebtn" />
 
         <ImageButton
             android:id="@+id/upgradeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/defaultbtn_states"
+            android:contentDescription="@string/upgrade_tower_button"
+            android:elevation="5dp"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/buildButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_pan_tool_black_24dp"
+            app:layout_constraintTop_toTopOf="@+id/space"
+            app:srcCompat="@drawable/upgrade"
             tools:ignore="SpeakableTextPresentCheck" />
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

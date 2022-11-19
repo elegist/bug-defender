@@ -48,6 +48,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
     //game variables
     var healthPoints = 0
     var baseDamage = 0
+    var baseSpeed = 0f
     var isDead = false
     var killValue = 0
     var coinValue = 0
@@ -66,7 +67,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
          */
         when(type){
             EnemyType.LEAFBUG -> {
-                speed = 0.03f
+                baseSpeed = 0.03f
                 healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
                 baseDamage = 1
                 killValue = 1
@@ -74,14 +75,14 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.FIREBUG -> {
                 //TODO()
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
                 killValue = 1
                 coinValue = 10
             }
             EnemyType.MAGMACRAB -> {
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
                 killValue = 2
@@ -89,20 +90,22 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.SKELETONKNIGHT -> {
                 //TODO()
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
                 killValue = 3
                 coinValue = 30
             }
             EnemyType.SKELETONKING -> {
-                speed = 0.005f
+                baseSpeed = 0.005f
                 healthPoints = if(GameManager.gameLevel != 0) 20 * GameManager.gameLevel else 20
                 baseDamage = 10
                 killValue = 5
                 coinValue = 50
             }
         }
+        //set initial speed (needed to change value later on)
+        speed = baseSpeed
 
     }
 
@@ -173,8 +176,13 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
         currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
     }
 
-    //TODO: Damagetype (slow, poison, burn) as parameter?
-    fun takeDamage(damageAmount: Int){
+    fun takeDamage(damageAmount: Int, towerType: TowerTypes){
+        //use when for special effects like slow, burn etc.
+        when(towerType) {
+            TowerTypes.BLOCK -> {}
+            TowerTypes.SLOW -> {speed = baseSpeed / 2}
+            TowerTypes.AOE -> {}
+        }
         healthPoints -= damageAmount
     }
 

@@ -13,6 +13,7 @@
     <color name="dark_green">#31421f</color>
     <color name="light_green">#6c8255</color>
     <color name="middle_green">#678547</color>
+    <color name="active_green">#4D8511</color>
 
     <color name="colorAccent">#31421f</color>
 </resources>

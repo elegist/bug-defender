@@ -80,14 +80,15 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
      *
      * ! Use iterators for lists, or use ConcurrentHashMaps to avoid ConcurrentModificationException !
      */
+    private val weaponsOffset = Vector2D(0, GameManager.playGround.squareSize / 4)
     private fun drawObjects(canvas: Canvas) {
         //towers
         GameManager.towerList.forEach { tower ->
             draw(canvas, BitmapPreloader.towerImages[tower.type], tower.position)
             if(tower.target != null) {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.position)
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.position + weaponsOffset)
             } else {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.position)
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.position + weaponsOffset)
             }
         }
         //enemies

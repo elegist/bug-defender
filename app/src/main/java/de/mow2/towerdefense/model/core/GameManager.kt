@@ -79,9 +79,9 @@ class GameManager(private val callBack: GameActivity) {
         when(level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 10000
+                livesAmnt = 100
                 if(coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 40000
+                    coinAmnt = 5000
                 }
                 killsToProgress = 10
                 callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
@@ -134,7 +134,7 @@ class GameManager(private val callBack: GameActivity) {
             val enemy = projectile.enemy
             //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
             if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
-                enemy.takeDamage(projectile.baseDamage)
+                enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
                 projectileList.remove(projectile)
             }
             projectile.update()
@@ -190,6 +190,9 @@ class GameManager(private val callBack: GameActivity) {
         var selectedTool: Int? = null
         var selectedTower = TowerTypes.BLOCK // default tower
 
+        /**
+         * Reset all game variables
+         */
         fun reset() {
             playGround = PlayGround(GameView.gameWidth)
             towerList = CopyOnWriteArrayList<Tower>()
@@ -199,6 +202,8 @@ class GameManager(private val callBack: GameActivity) {
             coinAmnt = 0
             livesAmnt = 0
             killCounter = 0
+            selectedTool = null
+            selectedTower = TowerTypes.BLOCK
         }
         fun addTower(tower: Tower) {
             towerList += tower

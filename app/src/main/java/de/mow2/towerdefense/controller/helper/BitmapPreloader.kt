@@ -37,31 +37,40 @@ class BitmapPreloader(val resources: Resources) {
             //build images and animation maps
             when(key) {
                 TowerTypes.BLOCK -> {
-                    towerR = R.drawable.tower_block
+                    //tower
+                    towerR = R.drawable.tower_block_1
+                    //weapon
                     weaponAnimR = R.drawable.tower_block_weapon_anim_1
                     frameCountWeapon = 6
+                    //projectile
                     projectileAnimR = R.drawable.tower_block_projectile_1
                     frameCountProjectile = 3
                     widthProjectile = 20
                     heightProjectile = 80
                 }
                 TowerTypes.SLOW -> {
-                    towerR = R.drawable.tower_slow
+                    //tower
+                    towerR = R.drawable.tower_slow_1
+                    //weapon
                     weaponAnimR = R.drawable.tower_slow_weapon_anim_1
                     frameCountWeapon = 16
+                    //projectile
                     projectileAnimR = R.drawable.tower_slow_projectile_1
                     frameCountProjectile = 5
                     widthProjectile = 64
                     heightProjectile = 64
                 }
                 TowerTypes.AOE -> {
-                    towerR = R.drawable.tower_aoe
-                    weaponAnimR = R.drawable.tower_block_weapon_anim_1
-                    frameCountWeapon = 6
-                    projectileAnimR = R.drawable.tower_block_projectile_1 //TODO: replace with correct values for specific projectile
-                    frameCountProjectile = 3 //TODO: replace with correct values for specific projectile
-                    widthProjectile = 20 //TODO: replace with correct values for specific projectile
-                    heightProjectile = 80 //TODO: replace with correct values for specific projectile
+                    //tower
+                    towerR = R.drawable.tower_aoe_1
+                    //weapon
+                    weaponAnimR = R.drawable.tower_aoe_weapon_anim_1
+                    frameCountWeapon = 8
+                    //projectile
+                    projectileAnimR = R.drawable.tower_aoe_projectile_1
+                    frameCountProjectile = 6
+                    widthProjectile = 20
+                    heightProjectile = 20
                 }
             }
             towerImages[key] = ScaledImage(resources, width, height * 2, towerR).scaledImage

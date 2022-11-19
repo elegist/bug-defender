@@ -126,25 +126,19 @@ class GameActivity : AppCompatActivity() {
         buildButton = binding.buildButton
 
         binding.bottomGUI.children.forEach { view ->
-            view.setOnClickListener {
-                if(GameManager.selectedTool != null){
-                    if (GameManager.selectedTool == it.id){
-                        GameManager.selectedTool = null
-                    } else {
-                        GameManager.selectedTool = it.id
-                    }
+            view.setOnClickListener { button ->
+                if (GameManager.selectedTool == button.id){
+                    GameManager.selectedTool = null
+                    binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 } else {
-                    GameManager.selectedTool = it.id
+                    GameManager.selectedTool = button.id
+                    binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
+                    button.setBackgroundResource(R.drawable.button_border_active)
                 }
-
-                //set onclick for the build menu
-//                if (it == binding.buildButton) {
-//                    toggleBuildMenu(it)
-//                }
             }
             if(view == buildButton) {
                 view.setOnLongClickListener {
-                    toggleBuildMenu(it)
+                    toggleBuildMenu(view)
                     return@setOnLongClickListener true
                 }
             }
@@ -153,13 +147,21 @@ class GameActivity : AppCompatActivity() {
         TowerTypes.values().forEachIndexed { i, type ->
             val towerBtn = BuildButton(this, null, R.style.MenuButton_Button, type)
             towerBtn.id = i
-            towerBtn.setOnClickListener {
+            towerBtn.setOnClickListener { button ->
                 GameManager.selectedTool = buildButton.id
                 GameManager.selectedTower = type
-                toggleBuildMenu(it)
+                binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
+                binding.buildButton.setBackgroundResource(R.drawable.button_border_active)
+                toggleBuildMenu(button)
+                when(type) {
+                    TowerTypes.BLOCK -> buildButton.setImageResource(R.drawable.tower_block_imagebtn)
+                    TowerTypes.SLOW -> buildButton.setImageResource(R.drawable.tower_slow_imagebtn)
+                    TowerTypes.AOE -> buildButton.setImageResource(R.drawable.tower_aoe_imagebtn)
+                }
             }
             buildMenuLayout.addView(towerBtn)
         }
+        GameManager.selectedTool = null //deselect any tool at beginning
     }
 
     override fun onResume(){
@@ -178,7 +180,6 @@ class GameActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
         // stops MediaPlayer while not being in activity
         SoundManager.mediaPlayer.release()
     }

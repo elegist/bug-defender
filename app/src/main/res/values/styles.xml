@@ -26,6 +26,13 @@
         <item name="android:layout_height">58dp</item>
         <item name="android:layout_marginBottom">35dp</item>
     </style>
+    <style name="InGameButton.Main" parent="Widget.AppCompat.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:fontFamily">@font/medievalsharpbold</item>
+        <item name="android:background">@drawable/defaultbtn_states</item>
+        <item name="android:layout_width">58dp</item>
+        <item name="android:layout_height">58dp</item>
+    </style>
     <style name="MenuButton.Button" parent="Widget.AppCompat.ImageButton">
         <item name="android:contentDescription">@string/menuBtn</item>
     </style>
