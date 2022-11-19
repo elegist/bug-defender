@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.core
 
+import android.view.Gravity
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.GameView
@@ -36,8 +37,9 @@ class GameManager(private val callBack: GameActivity) {
         updateGUI()
     }
     /**
-     * Method to call when decreasing coins (e.g. Building or upgrading a tower)
+     * Decrease players available coins by given value
      * @param decreaseValue the value to subtract from the total amount
+     * @return true if succeeds, returns false if player has not enough coins
      */
     fun decreaseCoins(decreaseValue: Int) : Boolean {
         return if(coinAmnt >= (0 + decreaseValue)) {
@@ -73,15 +75,15 @@ class GameManager(private val callBack: GameActivity) {
         updateGUI()
     }
 
-    //TODO: GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
+    //TODO: (load game) GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
     private var killsToProgress = 0
     fun initLevel(level: Int) {
         when(level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 100
+                livesAmnt = 10
                 if(coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 5000
+                    coinAmnt = 5500
                 }
                 killsToProgress = 10
                 callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
@@ -97,7 +99,9 @@ class GameManager(private val callBack: GameActivity) {
         }
         callBack.runOnUiThread {
             callBack.waveBar.max = killsToProgress
-            FancyToast.makeText(callBack, "Welle: $gameLevel", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false ).show()
+            val toast = FancyToast.makeText(callBack, "Welle: $gameLevel", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false )
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
         }
         killCounter = 0
         updateGUI()
@@ -181,6 +185,8 @@ class GameManager(private val callBack: GameActivity) {
         var livesAmnt: Int = 0
         var killCounter: Int = 0
         var gameLevel = 0
+        //game objects
+        const val maxTowerLevel = 2
         var towerList = CopyOnWriteArrayList<Tower>()
         var enemyList = CopyOnWriteArrayList<Enemy>()
         var projectileList = CopyOnWriteArrayList<Projectile>()

@@ -2,11 +2,11 @@ package de.mow2.towerdefense.controller
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.*
-import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
@@ -16,7 +16,6 @@ import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GameManager
-import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 
@@ -138,7 +137,7 @@ class GameActivity : AppCompatActivity() {
             }
             if(view == buildButton) {
                 view.setOnLongClickListener {
-                    toggleBuildMenu(view)
+                    toggleBuildMenu()
                     return@setOnLongClickListener true
                 }
             }
@@ -152,7 +151,7 @@ class GameActivity : AppCompatActivity() {
                 GameManager.selectedTower = type
                 binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 binding.buildButton.setBackgroundResource(R.drawable.button_border_active)
-                toggleBuildMenu(button)
+                toggleBuildMenu()
                 when(type) {
                     TowerTypes.BLOCK -> buildButton.setImageResource(R.drawable.tower_block_imagebtn)
                     TowerTypes.SLOW -> buildButton.setImageResource(R.drawable.tower_slow_imagebtn)
@@ -194,7 +193,7 @@ class GameActivity : AppCompatActivity() {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    private fun toggleBuildMenu(view: View) {
+    private fun toggleBuildMenu() {
         if (!buildMenuExists){
             buildMenuScrollView.visibility = View.VISIBLE
         } else {

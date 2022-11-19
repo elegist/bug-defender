@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.core
 
+import android.view.Gravity
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager.soundPool
@@ -15,7 +16,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
      * @param type value of TowerTypes
      * @param level this towers level
      */
-    private fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
+    fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
         val cost = when(type) {
             TowerTypes.BLOCK -> 100
             TowerTypes.SLOW -> 200
@@ -48,7 +49,9 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
                 GameManager.addTower(tower)
                 soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
             } else {
-                FancyToast.makeText(callBack, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
+                val toast = FancyToast.makeText(callBack, "Not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false )
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
             }
         }
     }
@@ -66,10 +69,10 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
     /**
      * Upgrades a tower
      */
-    fun upgradeTower(selectedField: SquareField) {
-        val tower = selectedField.tower
-        if(tower != null) {
-            tower.level++
+    fun upgradeTower(selectedTower: Tower?) {
+        if(selectedTower != null && selectedTower.level < GameManager.maxTowerLevel && gameManager.decreaseCoins(getTowerCost(selectedTower.type, selectedTower.level + 1))) {
+            selectedTower.level++
+            selectedTower.scaleTowerValues()
         }
     }
 }

@@ -11,6 +11,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
+import de.mow2.towerdefense.controller.helper.ScaledImage
 import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.helper.Vector2D
 
@@ -84,11 +85,14 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
     private fun drawObjects(canvas: Canvas) {
         //towers
         GameManager.towerList.forEach { tower ->
-            draw(canvas, BitmapPreloader.towerImages[tower.type], tower.position)
+            draw(canvas, BitmapPreloader.towerImagesArray[tower.level][tower.type], tower.position)
+            if(GameManager.selectedTool == R.id.upgradeButton && tower.level < GameManager.maxTowerLevel && buildMenu.getTowerCost(tower.type, tower.level + 1) <= GameManager.coinAmnt) {
+                draw(canvas, ScaledImage(resources, tower.width, tower.height, R.drawable.upgrade_tower_overlay).scaledImage, tower.position)
+            }
             if(tower.target != null) {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.position + weaponsOffset)
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.position)
             } else {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.position + weaponsOffset)
+                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.position)
             }
         }
         //enemies
@@ -138,12 +142,12 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
                             buildMenu.destroyTower(selectedField.tower!!)
                         }
                     }
-
                     R.id.buildButton -> {
                         buildMenu.buildTower(selectedField, GameManager.selectedTower)
                     }
-
-                    R.id.upgradeButton -> {}
+                    R.id.upgradeButton -> {
+                        buildMenu.upgradeTower(selectedField.tower)
+                    }
                 }
             }
             invalidate()

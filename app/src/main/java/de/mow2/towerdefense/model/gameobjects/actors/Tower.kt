@@ -33,8 +33,14 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
 
     init {
         squareField.tower = this
+        scaleTowerValues()
+    }
 
-        //define range, damage and speed scaling for each type of tower
+    /**
+     * Method to call after tower has been built or upgraded
+     * calculates speed, damage and range for this towers level
+     */
+    fun scaleTowerValues() {
         when(type) {
             TowerTypes.BLOCK -> {
                 finalRange = baseRange + level * width
