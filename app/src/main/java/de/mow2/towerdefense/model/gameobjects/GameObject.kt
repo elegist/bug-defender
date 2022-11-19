@@ -2,7 +2,8 @@ package de.mow2.towerdefense.model.gameobjects
 
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.helper.Vector2D
-import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * GameObject is the foundation of any moving or static actor in the game
@@ -33,7 +34,7 @@ abstract class GameObject() {
             field = value
             if(field != 0f){
                 val actionsPerSecond: Float = field / 60
-                //link with target updates per second to convert to updates per spawn
+                //link with target updates per second to convert to updates per action
                 updateCycle = GameLoop.targetUPS / actionsPerSecond
             }
         }
@@ -45,18 +46,18 @@ abstract class GameObject() {
      * Moves a GameObject to another. Has to be called from a subclass of GameObject.
      * Subclasses have to init movement speed.
      * Default movement speed is 0.
-     * @see speedPixelsPerSecond
      * @see speed
      */
     fun moveTo(target: Vector2D){
-        //vector to the target
+        //vector between this and the target
         distance = target - position
-        //absolute distance
+        //magnitude (length) of the vector
         distanceToTargetAbs = findDistance(position, target)
-        //direction
+        //unit vector / normalized vector (distance traveled in one unit of time (with direction))
         direction = distance / distanceToTargetAbs
-        //check if target has been reached
+        //check if target has been reached and set velocity if it hasn't
         velocity = if(distanceToTargetAbs > 0f){
+            //multiply normalized vector with speed
             direction * speed
         }else{
             Vector2D(0, 0)
@@ -65,18 +66,32 @@ abstract class GameObject() {
         position += velocity
     }
 
+    private var xDiff: Float = 0f
+    private var yDiff: Float = 0f
     /**
-     * gets the absolute distance between two objects
+     * gets the euclidean distance between two GameObjects
      * @param obj1 GameObject that will provide x- and y-coordinates as a starting point
      * @param obj2 GameObject that will provide x- and y-coordinates as a destination
      * @return Float
      */
-    open fun findDistance (obj1: GameObject, obj2: GameObject): Float {
-        return abs(obj2.position.x - obj1.position.x) + abs(obj2.position.y - obj1.position.y)
+    fun findDistance (obj1: GameObject, obj2: GameObject): Float {
+        xDiff = (obj2.position.x - obj1.position.x).pow(2)
+        yDiff = (obj2.position.y - obj1.position.y).pow(2)
+        return sqrt(xDiff + yDiff)
     }
-    open fun findDistance (from: Vector2D, to: Vector2D): Float {
-        return abs(to.x - from.x) + abs(to.y - from.y)
+
+    /**
+     * gets the euclidean distance between two Vector2D objects
+     * @param from Vector2D that will provide x- and y-coordinates as a starting point
+     * @param to Vector2D that will provide x- and y-coordinates as a destination
+     * @return Float
+     */
+    fun findDistance (from: Vector2D, to: Vector2D): Float {
+        xDiff = (to.x - from.x).pow(2)
+        yDiff = (to.y - from.y).pow(2)
+        return sqrt(xDiff + yDiff)
     }
+
     /**
      * Cycles between true and false.
      * Enables GameObjects to have a set amount of actions per minute.
