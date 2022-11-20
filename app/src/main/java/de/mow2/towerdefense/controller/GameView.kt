@@ -81,6 +81,10 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
      * ! Use iterators for lists, or use ConcurrentHashMaps to avoid ConcurrentModificationException !
      */
     private fun drawObjects(canvas: Canvas) {
+        //enemies
+        GameManager.enemyList.forEach { enemy ->
+            draw(canvas, BitmapPreloader.enemyAnims[enemy.type]!!.nextFrame(enemy.orientation), enemy.position)
+        }
         //towers
         GameManager.towerList.forEach { tower ->
             draw(canvas, BitmapPreloader.towerImages[tower.type], tower.position)
@@ -90,10 +94,7 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
                 draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.position)
             }
         }
-        //enemies
-        GameManager.enemyList.forEach { enemy ->
-            draw(canvas, BitmapPreloader.enemyAnims[enemy.type]!!.nextFrame(enemy.orientation), enemy.position)
-        }
+
         //projectiles
         GameManager.projectileList.forEach { projectile ->
             draw(canvas, BitmapPreloader.projectileAnims[projectile.tower.type]!!.nextFrame(0), projectile.position)
@@ -119,10 +120,8 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
     /**
      * handling user inputs
      */
-
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val x: Float; val y: Float
-
 
         if (ev?.action == MotionEvent.ACTION_UP){
             x = ev.x

@@ -21,6 +21,8 @@ abstract class GameObject() {
             return Vector2D(position.x + width / 2, position.y + height / 2)
     }
 
+    //sprite direction
+    var orientation: Int = 0
     //variables for movement calculation
     protected lateinit var distance: Vector2D
     protected var distanceToTargetAbs: Float = 0f
@@ -28,7 +30,10 @@ abstract class GameObject() {
     private lateinit var velocity: Vector2D
 
     private var updateCycle: Float = 0f
-    //spawn rate
+
+    /**
+     * defines the frequency
+     */
     var actionsPerMinute: Float = 0f
         set(value){
             field = value
@@ -64,6 +69,17 @@ abstract class GameObject() {
         }
         //update coordinates
         position += velocity
+
+        orientation = if(distance.x < -5) {
+            3 //left
+        } else if(distance.x > 5) {
+            2 //right
+        } else if(distance.y < 0) {
+            1 //up
+        } else {
+            0 //down (default)
+        }
+
     }
 
     private var xDiff: Float = 0f
@@ -95,7 +111,7 @@ abstract class GameObject() {
     /**
      * Cycles between true and false.
      * Enables GameObjects to have a set amount of actions per minute.
-     * @see spawnsPerMinute
+     * @see actionsPerMinute
      * @return true || false
      */
     open fun cooldown() :Boolean{

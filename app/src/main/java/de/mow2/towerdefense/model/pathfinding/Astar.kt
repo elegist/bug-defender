@@ -6,7 +6,8 @@ import kotlin.math.*
 /**
  * A-star search algorithm, used by enemies to find the fastest way across the map
  */
-class Astar : java.io.Serializable {
+class Astar() : java.io.Serializable {
+
     fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {
         val openSet = mutableSetOf<Node>()
         val closedSet = mutableSetOf<Node>()
@@ -85,15 +86,37 @@ class Astar : java.io.Serializable {
         fun getNeighbors(maxRows: Int, maxCols: Int): MutableSet<Node> {
             val neighbors = mutableSetOf<Node>()
 
+            /**
+             * straight
+             */
             //left
-            if (x - 1 >= 0) neighbors.add(Node(x - 1, y))
+            if (x - 1 >= 0) {
+                if(!GameManager.playGround.squareArray[x - 1][y].isBlocked) {
+                    neighbors.add(Node(x - 1, y))
+                }
+            }
             //top
-            if (y + 1 < maxCols) neighbors.add(Node(x, y + 1))
+            if (y + 1 < maxCols) {
+                if(!GameManager.playGround.squareArray[x ][y + 1].isBlocked) {
+                    neighbors.add(Node(x, y + 1))
+                }
+            }
             //right
-            if (x + 1 < maxRows) neighbors.add(Node(x + 1, y))
+            if (x + 1 < maxRows) {
+                if(!GameManager.playGround.squareArray[x + 1][y].isBlocked) {
+                    neighbors.add(Node(x + 1, y))
+                }
+            }
             //bottom
-            if (y - 1 >= 0) neighbors.add(Node(x, y - 1))
+            if (y - 1 >= 0) {
+                if(!GameManager.playGround.squareArray[x][y - 1].isBlocked) {
+                    neighbors.add(Node(x, y - 1))
+                }
+            }
 
+            /**
+             * diagonal
+             */
             //diagonal bottom left
             if (x - 1 > 0 && y - 1 > 0){
                 if(!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked){
@@ -127,12 +150,9 @@ class Astar : java.io.Serializable {
 
     /**
      * Calculates the correct values to decide which way should be preferred (straight or diagonal).
-     * 8 directions, diagonal cost and straight cost are the same.
+     * 8 directions, diagonal cost and straight cost are the same. (chebyshev-distance)
      */
     private fun calculateHeuristics(from: Node, to: Node): Int {
-        //10, 14 is faster than 1, sqrt(2) but can provoke weird behavior
-        val weightS = 1
-        val weightD = 1//sqrt(2.0)
         val xDist = abs(from.x - to.x)
         val yDist = abs(from.y - to.y)
 
