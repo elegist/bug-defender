@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameoverView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_brown">
@@ -10,7 +11,7 @@
         android:id="@+id/gameOverIV"
         android:layout_width="111dp"
         android:layout_height="220dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="84dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,26 +22,107 @@
         style="@style/Heading.TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="48dp"
         android:text="@string/lostText"
         android:textAlignment="center"
-        android:textSize="34sp"
+        android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gameOverIV" />
+
+    <TextView
+        android:id="@+id/timeText"
+        style="@style/Text.TextView"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/timeMade"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/enemyText"
+        app:layout_constraintEnd_toStartOf="@id/timeValue"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/timeValue"
+        style="@style/Text.TextView"
+        android:layout_width="181dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/enemyValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/timeText" />
+
+    <TextView
+        android:id="@+id/enemyText"
+        style="@style/Text.TextView"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/enemyMade"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/levelText"
+        app:layout_constraintEnd_toStartOf="@id/enemyValue"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/enemyValue"
+        style="@style/Text.TextView"
+        android:layout_width="181dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/levelValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/enemyText" />
+
+    <TextView
+        android:id="@+id/levelText"
+        style="@style/Text.TextView"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/levelMade"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/marginSpacer"
+        app:layout_constraintEnd_toStartOf="@+id/levelValue"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/levelValue"
+        style="@style/Text.TextView"
+        android:layout_width="181dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/marginSpacer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/levelText" />
+
+    <Space
+        android:id="@+id/marginSpacer"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@id/backToMainBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/backToMainBtn"
         style="@style/Button.Main"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="108dp"
-        android:background="@drawable/button_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="312dp"
+        android:background="@drawable/defaultbtn_states"
         android:onClick="leaveGame"
         android:text="@string/back"
-        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameOverTV" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

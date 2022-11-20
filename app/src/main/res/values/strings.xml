@@ -21,11 +21,14 @@
     <string name="coins">coins</string>
     <string name="back">back to main menu</string>
     <string name="restart">restart game</string>
-    <string name="lostText">You lost, that was probably one too many, too bad. Try again!</string>
+    <string name="lostText">Game Over!</string>
     <string name="timer_image">Timer</string>
     <string name="delete_tower_button">Delete tower</string>
     <string name="build_tower_button">Build a tower</string>
     <string name="upgrade_tower_button">Upgrade tower</string>
     <string name="progress_ball_image">Progress bar decor image</string>
     <string name="health_ball_image">Health bar decor image</string>
+    <string name="timeMade">Time spend: </string>
+    <string name="enemyMade">Enemies killed: </string>
+    <string name="levelMade">Level made: </string>
 </resources>

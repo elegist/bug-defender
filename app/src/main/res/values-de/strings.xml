@@ -21,5 +21,14 @@
     <string name="coins">Münzen</string>
     <string name="back">zurück zu Hauptmenü</string>
     <string name="restart">restart game</string>
-    <string name="lostText">Du hast verloren, das war wohl einer zu viel, schade. Versuch\'s doch nochmal!</string>
+    <string name="lostText">Du hast verloren!</string>
+    <string name="timer_image">Timer</string>
+    <string name="delete_tower_button">Lösche Turm</string>
+    <string name="build_tower_button">Baue Turm</string>
+    <string name="upgrade_tower_button">Upgrade Turm</string>
+    <string name="progress_ball_image">Progress bar decor image</string>
+    <string name="health_ball_image">Health bar decor image</string>
+    <string name="timeMade">Zeit geschafft: </string>
+    <string name="enemyMade">Gegener getötet: </string>
+    <string name="levelMade">Level geschafft: </string>
 </resources>
