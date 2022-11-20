@@ -67,7 +67,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 coinValue = 10
             }
             EnemyType.FIREBUG -> {
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 7 * GameManager.gameLevel else 8
                 baseDamage = 2
                 killValue = 1
@@ -82,7 +82,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.SCORPION ->{
                 //TODO: balancing
-                speed = 0.015f
+                baseSpeed = 0.015f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 4
                 killValue = 5
@@ -90,7 +90,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.CLAMPBEETLE ->{
                 //TODO: balancing
-                speed = 0.07f
+                baseSpeed = 0.07f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
@@ -98,7 +98,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.FIREWASP ->{
                 //TODO: balancing
-                speed = 0.10f
+                baseSpeed = 0.10f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
@@ -106,7 +106,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.LOCUST -> {
                 //TODO: balancing
-                speed = 0.08f
+                baseSpeed = 0.08f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
@@ -114,7 +114,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.VOIDBUTTERFLY -> {
                 //TODO: balancing
-                speed = 0.08f
+                baseSpeed = 0.08f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
@@ -122,7 +122,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.SKELETONGRUNT -> {
                 //TODO: balancing
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
@@ -130,7 +130,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.NECROMANCER -> {
                 //TODO: balancing
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
@@ -138,7 +138,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.SKELETONWARRIOR -> {
                 //TODO: balancing
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
@@ -146,7 +146,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
             EnemyType.SKELETONKNIGHT -> {
                 //TODO: balancing
-                speed = 0.02f
+                baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
                 killValue = 5
