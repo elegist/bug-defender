@@ -15,7 +15,7 @@
         android:id="@+id/gameName_text"
         android:layout_width="424dp"
         android:layout_height="218dp"
-        android:layout_marginTop="192dp"
+        android:layout_marginTop="320dp"
         android:fontFamily="@font/medievalsharpbold"
         android:gravity="center"
         android:text="@string/game_name"
@@ -24,7 +24,6 @@
         android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
