@@ -16,7 +16,7 @@ import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.helper.Vector2D
 
 @SuppressLint("ViewConstructor")
-class GameView(context: Context, private val callBack: GameActivity ,val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, callBack: GameActivity ,val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     //background tiles
     private var bgPaint: Paint
@@ -81,7 +81,6 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
      *
      * ! Use iterators for lists, or use ConcurrentHashMaps to avoid ConcurrentModificationException !
      */
-    private val weaponsOffset = Vector2D(0, GameManager.playGround.squareSize / 4)
     private fun drawObjects(canvas: Canvas) {
         //enemies
         GameManager.enemyList.forEach { enemy ->
