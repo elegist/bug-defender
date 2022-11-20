@@ -17,7 +17,7 @@ class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: I
 
     init {
         this.setBackgroundColor(getColor(context, R.color.green_overlay))
-        this.setPadding(0, 0, 0, 30)
+        this.setPadding(30, 0, 30, 30)
     }
 
     private fun initMenu(type: TowerTypes) {
