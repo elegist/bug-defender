@@ -101,8 +101,8 @@ abstract class GameObject() {
      * @return Float
      */
     fun findDistance (obj1: GameObject, obj2: GameObject): Float {
-        xDiff = (obj2.position.x - obj1.position.x).pow(2)
-        yDiff = (obj2.position.y - obj1.position.y).pow(2)
+        xDiff = (obj2.positionCenter.x - obj1.positionCenter.x).pow(2)
+        yDiff = (obj2.positionCenter.y - obj1.positionCenter.y).pow(2)
         return sqrt(xDiff + yDiff)
     }
 

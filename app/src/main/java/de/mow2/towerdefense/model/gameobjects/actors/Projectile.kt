@@ -6,7 +6,7 @@ import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.helper.Vector2D
 
 class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
-    override var position = tower.position
+    override var position = tower.positionCenter
     override var width: Int = 0
     override var height: Int = 0
     val baseDamage = tower.baseDamage

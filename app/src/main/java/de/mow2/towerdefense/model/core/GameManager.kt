@@ -246,7 +246,7 @@ class GameManager(private val callBack: GameActivity) {
 
             }
         fun canSpawn(): Boolean{
-            spawnsPerMinute = 120f
+            spawnsPerMinute = 30f
             return if(waitUpdates <= 0f) {
                 waitUpdates += updateCycle
                 true
