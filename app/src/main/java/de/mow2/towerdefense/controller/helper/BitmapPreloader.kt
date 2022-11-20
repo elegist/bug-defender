@@ -117,21 +117,59 @@ class BitmapPreloader(val resources: Resources) {
                     frameDuration = 45
                 }
                 EnemyType.FIREBUG -> {
-                    //TODO: replace with actual fire bug values
-                    enemyR = R.drawable.leafbug_anim
-                    frameCount = 7
-                    frameDuration = 30
-                }
-                EnemyType.MAGMACRAB -> {
-                    enemyR = R.drawable.magacrab_anim
+                    enemyR = R.drawable.firebug_anim
                     frameCount = 8
                     frameDuration = 60
                 }
-                EnemyType.SKELETONKNIGHT -> {
-                    //TODO: replace with skeletonknight_anim
-                    enemyR = R.drawable.magacrab_anim
+                EnemyType.MAGMACRAB -> {
+                    enemyR = R.drawable.magmacrab_anim
                     frameCount = 8
-                    frameDuration = 30
+                    frameDuration = 60
+                }
+                EnemyType.SCORPION -> {
+                    enemyR = R.drawable.scorpion_anim
+                    frameCount = 8
+                    frameDuration = 120
+                }
+                EnemyType.CLAMPBEETLE -> {
+                    enemyR = R.drawable.clampbeetle_anim
+                    frameCount = 8
+                    frameDuration = 60
+                }
+                EnemyType.FIREWASP -> {
+                    enemyR = R.drawable.firewasp_anim
+                    frameCount = 8
+                    frameDuration = 60
+                }
+                EnemyType.LOCUST -> {
+                    enemyR = R.drawable.locust_anim
+                    frameCount = 8
+                    frameDuration = 60
+                }
+                EnemyType.VOIDBUTTERFLY -> {
+                    enemyR = R.drawable.voidbutterfly_anim
+                    frameCount = 4
+                    frameDuration = 60
+                }
+                EnemyType.SKELETONGRUNT -> {
+                    enemyR = R.drawable.skeletongrunt_anim
+                    frameCount = 6
+                    frameDuration = 60
+                }
+                EnemyType.NECROMANCER -> {
+                    enemyR = R.drawable.necromancer_anim
+                    frameCount = 6
+                    frameDuration = 105
+                }
+                EnemyType.SKELETONWARRIOR -> {
+                    enemyR = R.drawable.skeletonwarrior_anim
+                    frameCount = 8
+                    frameDuration = 90
+                }
+                EnemyType.SKELETONKNIGHT -> {
+                    enemyR = R.drawable.skeletonknight_anim
+                    frameCount = 8
+                    frameDuration = 60
                 }
                 EnemyType.SKELETONKING -> {
                     enemyR = R.drawable.skeletonking_anim
