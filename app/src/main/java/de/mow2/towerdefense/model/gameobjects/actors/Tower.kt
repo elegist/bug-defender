@@ -1,5 +1,7 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import de.mow2.towerdefense.controller.GameView
+import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.helper.Vector2D
@@ -10,7 +12,6 @@ import de.mow2.towerdefense.model.helper.Vector2D
  * @param type the towers type
  */
 class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(), java.io.Serializable {
-    override val speed: Float = 0f
     //visual scaling
     override var width = squareField.width
     override var height = 2 * width
@@ -18,6 +19,10 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     override var position = Vector2D(squareField.position.x, squareField.position.y - width)
     //tower-specific game variables
     var level: Int = 0
+    set(value) {
+        scaleTowerValues()
+        field = value
+    }
     var hasTarget = false
     var target: Enemy? = null
     //queue sorting

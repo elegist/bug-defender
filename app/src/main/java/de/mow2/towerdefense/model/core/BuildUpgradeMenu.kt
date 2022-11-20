@@ -70,9 +70,9 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
      * Upgrades a tower
      */
     fun upgradeTower(selectedTower: Tower?) {
+        //only upgrade if there is a tower which is below max level and if player can afford the upgrade
         if(selectedTower != null && selectedTower.level < GameManager.maxTowerLevel && gameManager.decreaseCoins(getTowerCost(selectedTower.type, selectedTower.level + 1))) {
             selectedTower.level++
-            selectedTower.scaleTowerValues()
         }
     }
 }

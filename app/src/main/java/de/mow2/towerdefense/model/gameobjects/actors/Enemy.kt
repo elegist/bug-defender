@@ -17,16 +17,6 @@ import kotlin.random.nextInt
  */
 class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
 ): GameObject(), Comparable<Enemy>, java.io.Serializable {
-    /**
-     * Pixels per update for movement.
-     * Will be multiplied with direction to get a velocity.
-     * @see moveTo()
-     */
-    override var speed: Float = 0f
-        set(value) {
-            val rawPixels = (GameView.gameWidth + GameView.gameHeight) * value
-            field = rawPixels / GameLoop.targetUPS
-        }
     //position
     override var position = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
     //size
@@ -104,9 +94,8 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 coinValue = 50
             }
         }
-        //set initial speed (needed to change value later on)
+        //set initial speed (needed to change its value later on)
         speed = baseSpeed
-
     }
 
     override fun update(){

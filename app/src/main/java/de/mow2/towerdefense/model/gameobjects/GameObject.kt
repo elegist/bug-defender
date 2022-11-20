@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.gameobjects
 
+import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.helper.Vector2D
 import kotlin.math.pow
@@ -9,7 +10,6 @@ import kotlin.math.sqrt
  * GameObject is the foundation of any moving or static actor in the game
  */
 abstract class GameObject() {
-    abstract val speed: Float
     //size
     abstract var width: Int
     abstract var height: Int
@@ -26,6 +26,16 @@ abstract class GameObject() {
     protected var distanceToTargetAbs: Float = 0f
     private lateinit var direction: Vector2D
     private lateinit var velocity: Vector2D
+    /**
+     * Pixels per update for movement.
+     * Will be multiplied with direction to get a velocity.
+     * @see moveTo()
+     */
+    var speed: Float = 0f
+        set(value) {
+            val rawPixels = (GameView.gameWidth + GameView.gameHeight) * value
+            field = rawPixels / GameLoop.targetUPS
+        }
 
     private var updateCycle: Float = 0f
     //spawn rate
