@@ -47,7 +47,9 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
                 }
                 selectedField.isBlocked = true //important!! block field for path finding
                 GameManager.addTower(tower)
+                GameManager.lastTower = tower
                 soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
+                gameManager.validatePlayGround()
             } else {
                 FancyToast.makeText(callBack, "not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false ).show()
             }
@@ -62,6 +64,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
         GameManager.towerList.remove(tower) //remove tower from drawing list
         gameManager.increaseCoins(getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
         soundPool.play(Sounds.EXPLOSION.id, 1F, 1F, 1, 0, 1F)
+        gameManager.validatePlayGround()
     }
 
     /**

@@ -108,7 +108,7 @@ class GameManager(private val callBack: GameActivity) {
     }
     val algs = Astar()
     //check if target can be reached from spawn
-    private fun validatePlayGround(){
+    fun validatePlayGround(){
         waveActive = algs.findPath(Astar.Node(0,0), Astar.Node(squaresX-1, squaresY-1), squaresX, squaresY) != null
     }
 
@@ -116,7 +116,6 @@ class GameManager(private val callBack: GameActivity) {
      * updates to game logic related values
      */
     fun updateLogic() {
-        validatePlayGround()
         //TODO: apply different damage types and effects
         towerList.forEach towerIteration@{ tower ->
             if(tower.cooldown()) {
@@ -192,6 +191,7 @@ class GameManager(private val callBack: GameActivity) {
         var enemyList = CopyOnWriteArrayList<Enemy>()
         var projectileList = CopyOnWriteArrayList<Projectile>()
         var waveActive = true //TODO(): set to toggle enemy waves
+        var lastTower: Tower? = null
 
         // build menu variables
         var selectedTool: Int? = null
@@ -208,6 +208,7 @@ class GameManager(private val callBack: GameActivity) {
             coinAmnt = 0
             livesAmnt = 0
             killCounter = 0
+            lastTower = null
         }
         fun addTower(tower: Tower) {
             towerList += tower

@@ -188,7 +188,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             }
         }
 
-
         //search new path on each Node
         if(distanceToTargetAbs <= nextDistance){
             if(pathToEnd(currentTargetNode)) {
@@ -199,9 +198,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 currentState = ActorState.IDLE
             }
         }
-
-
-
     }
 
     /**
