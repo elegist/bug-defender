@@ -43,8 +43,8 @@ class PopupFragment: DialogFragment() {
                 binding.popupFragmentContainer.visibility = View.GONE
                 binding.pauseGameBtn.visibility = View.GONE
                 binding.menuDivider.visibility = View.GONE
-                binding.popupText.setText(R.string.info_text)
-                binding.popupTitleText.setText(R.string.info_button)
+                binding.popupText.setText(R.string.glossary_text)
+                binding.popupTitleText.setText(R.string.glossary_button)
             }
             "settingsDialog" -> {
                 binding.popupTitleText.setText(R.string.preference_button)

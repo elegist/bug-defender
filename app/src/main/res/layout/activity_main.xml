@@ -65,7 +65,7 @@
         android:onClick="popUpButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_manage" />
+        app:srcCompat="@drawable/settings" />
 
     <ImageButton
         android:id="@+id/about_button"
@@ -76,17 +76,17 @@
         android:onClick="popUpButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@drawable/about" />
 
     <ImageButton
-        android:id="@+id/info_button"
+        android:id="@+id/glossary_button"
         style="@style/ImageButton.Main"
         android:background="@drawable/defaultbtn_states"
-        android:contentDescription="@string/info_button"
+        android:contentDescription="@string/glossary_button"
         android:onClick="popUpButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/preference_button"
         app:layout_constraintStart_toEndOf="@+id/about_button"
-        app:srcCompat="@drawable/ic_info_outline_black_24dp" />
+        app:srcCompat="@drawable/glossary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
