@@ -141,6 +141,7 @@ class GameManager(private val callBack: GameActivity) {
                 enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
                 projectileList.remove(projectile)
             }
+            if(enemy.isDead) projectileList.remove(projectile)
             projectile.update()
         }
         //TODO(): different spawn rates for different enemyTypes
