@@ -7,7 +7,9 @@ import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
+import de.mow2.towerdefense.model.pathfinding.Astar
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.random.Random
 
 /**
  * GameManager handles the game logic, updates game objects and calls updates on UI Thread
@@ -104,11 +106,17 @@ class GameManager(private val callBack: GameActivity) {
         //TODO:
         // make enemies stronger, could be a multiplier or defined values for each wave
     }
+    val algs = Astar()
+    //check if target can be reached from spawn
+    private fun validatePlayGround(){
+        waveActive = algs.findPath(Astar.Node(0,0), Astar.Node(squaresX-1, squaresY-1), squaresX, squaresY) != null
+    }
 
     /**
      * updates to game logic related values
      */
     fun updateLogic() {
+        validatePlayGround()
         //TODO: apply different damage types and effects
         towerList.forEach towerIteration@{ tower ->
             if(tower.cooldown()) {
@@ -134,6 +142,7 @@ class GameManager(private val callBack: GameActivity) {
             val enemy = projectile.enemy
             //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
             if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
+
                 enemy.takeDamage(projectile.baseDamage)
                 projectileList.remove(projectile)
             }
@@ -142,17 +151,14 @@ class GameManager(private val callBack: GameActivity) {
         //TODO(): different spawn rates for different enemyTypes
         if(canSpawn() && waveActive){
             //add enemies to the spawn
-            addEnemy(Enemy(EnemyType.LEAFBUG))
-            addEnemy(Enemy(EnemyType.MAGMACRAB))
-            if(gameLevel > 1) {
-                addEnemy(Enemy(EnemyType.SKELETONKING))
+           EnemyType.values().random().also{ type ->
+                addEnemy(Enemy(type))
             }
         }
 
         /**
          * update movement, update target or remove enemy
          */
-        
         enemyList.forEach { enemy ->
             if(enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y){ //enemy reached finish line
                 decreaseLives(enemy.baseDamage)
@@ -170,6 +176,7 @@ class GameManager(private val callBack: GameActivity) {
             }
         }
     }
+
 
     companion object {
         //playground variables
@@ -189,6 +196,8 @@ class GameManager(private val callBack: GameActivity) {
         // build menu variables
         var selectedTool: Int? = null
         var selectedTower = TowerTypes.BLOCK // default tower
+
+
 
         fun reset() {
             playGround = PlayGround(GameView.gameWidth)
@@ -218,7 +227,7 @@ class GameManager(private val callBack: GameActivity) {
         private var updateCycle: Float = 0f
         private var waitUpdates: Float = 0f
         //set spawn rate
-        var actionsPerMinute: Float = 0f
+        private var spawnsPerMinute: Float = 0f
             set(value){
                 field = value
                 val actionsPerSecond: Float = field / 60
@@ -227,7 +236,7 @@ class GameManager(private val callBack: GameActivity) {
 
             }
         fun canSpawn(): Boolean{
-            actionsPerMinute = 10f
+            spawnsPerMinute = 120f
             return if(waitUpdates <= 0f) {
                 waitUpdates += updateCycle
                 true
