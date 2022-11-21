@@ -5,12 +5,14 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable.Orientation
 import android.icu.lang.UCharacter.VerticalOrientation
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import com.google.android.material.snackbar.Snackbar
+import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
@@ -19,6 +21,7 @@ import de.mow2.towerdefense.controller.helper.BuildButton
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
+import de.mow2.towerdefense.model.core.GameController
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
@@ -26,7 +29,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 /**
  * This Activity starts the game
  */
-class GameActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity(), GameController {
     private val gameState = GameState()
 
      //game content and gui
@@ -34,11 +37,11 @@ class GameActivity : AppCompatActivity() {
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
     private lateinit var chrono: Chronometer
-    lateinit var coinsTxt: TextView
-    lateinit var healthBar: ProgressBar
-    lateinit var healthText: TextView
-    lateinit var waveBar: ProgressBar
-    lateinit var waveText: TextView
+    private lateinit var coinsTxt: TextView
+    private lateinit var healthBar: ProgressBar
+    private lateinit var healthText: TextView
+    private lateinit var waveBar: ProgressBar
+    private lateinit var waveDisplay: TextView
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
 
@@ -97,7 +100,7 @@ class GameActivity : AppCompatActivity() {
     /**
      * Triggered if liveAmt = 0, sets game over screen
      */
-    fun onGameOver() {
+    override fun onGameOver() {
         setContentView(R.layout.gameover_view)
         SoundManager.mediaPlayer.release()
         soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
@@ -143,7 +146,7 @@ class GameActivity : AppCompatActivity() {
         healthBar = binding.healthProgressBar
         healthText = binding.healthText
         waveBar = binding.waveProgressBar
-        waveText = binding.waveText
+        waveDisplay = binding.waveText
         //reference build menu container
         buildMenuScrollView = binding.buildMenuWrapper
         buildMenuLayout = binding.buildMenuContainer
@@ -200,6 +203,38 @@ class GameActivity : AppCompatActivity() {
             buildMenuLayout.addView(buttonContainer)
         }
         GameManager.selectedTool = null //deselect any tool at beginning
+    }
+
+    /**
+     * Method to write all GUI-related data into their respective layout element
+     */
+    override fun updateGUI() {
+        runOnUiThread {
+            coinsTxt.text = GameManager.coinAmnt.toString()
+            healthBar.progress = GameManager.livesAmnt
+            waveBar.progress = GameManager.killCounter
+            val livesText = "${GameManager.livesAmnt} / ${healthBar.max}"
+            healthText.text = livesText
+            val waveText = "${GameManager.killCounter} / ${waveBar.max}"
+            waveDisplay.text = waveText
+        }
+    }
+
+    override fun updateHealthBarMax(newMax: Int) {
+        healthBar.max = newMax
+    }
+
+    override fun updateProgressBarMax(newMax: Int) {
+        waveBar.max = newMax
+        waveBar.progress = 0
+    }
+
+    override fun showToastMessage(message: String, type: Int) {
+        runOnUiThread {
+            val toast = FancyToast.makeText(this, message, FancyToast.LENGTH_SHORT, type, false )
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
     }
 
     override fun onResume(){

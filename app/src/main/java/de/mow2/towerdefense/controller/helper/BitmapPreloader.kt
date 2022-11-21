@@ -170,8 +170,8 @@ class BitmapPreloader(val resources: Resources) {
                             else -> R.drawable.tower_magic_projectile_1
                         }
                         frameCountProjectile = 12
-                        widthProjectile = 64
-                        heightProjectile = 64
+                        widthProjectile = 128
+                        heightProjectile = 128
                     }
                 }
                 projectileAnims[type] = SpriteAnimation(BitmapFactory.decodeResource(resources, projectileAnimR), widthProjectile, heightProjectile, 1, frameCountProjectile, 100)
