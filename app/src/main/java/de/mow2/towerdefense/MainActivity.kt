@@ -38,9 +38,9 @@ class MainActivity : AppCompatActivity() {
         }
         // loads music and sounds and sets them based on saved preferences
         SoundManager.loadPreferences(this)
-        SoundManager.initMediaPlayer(this, R.raw.eight_bit_adventure_loop)
         SoundManager.playSounds()
         SoundManager.loadSounds(this)
+        SoundManager.initMediaPlayer(this, R.raw.eight_bit_adventure_loop)
         if(!soundSetting){
             soundPool.release()
         }

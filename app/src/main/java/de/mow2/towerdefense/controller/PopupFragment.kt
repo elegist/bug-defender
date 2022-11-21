@@ -1,10 +1,15 @@
 package de.mow2.towerdefense.controller
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.databinding.PopupViewBinding
 
@@ -17,6 +22,7 @@ import de.mow2.towerdefense.databinding.PopupViewBinding
 class PopupFragment: DialogFragment() {
     private var _binding: PopupViewBinding? = null
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +42,7 @@ class PopupFragment: DialogFragment() {
                 binding.popupFragmentContainer.visibility = View.GONE
                 binding.pauseGameBtn.visibility = View.GONE
                 binding.menuDivider.visibility = View.GONE
+                binding.tutorialBtn.visibility = View.GONE
                 binding.popupText.setText(R.string.about_text)
                 binding.popupTitleText.setText(R.string.about_button)
             }
@@ -43,6 +50,7 @@ class PopupFragment: DialogFragment() {
                 binding.popupFragmentContainer.visibility = View.GONE
                 binding.pauseGameBtn.visibility = View.GONE
                 binding.menuDivider.visibility = View.GONE
+                binding.tutorialBtn.visibility = View.GONE
                 binding.popupText.setText(R.string.glossary_text)
                 binding.popupTitleText.setText(R.string.glossary_button)
             }
@@ -51,6 +59,7 @@ class PopupFragment: DialogFragment() {
                 binding.pauseGameBtn.visibility = View.GONE
                 binding.popupText.visibility = View.GONE
                 binding.menuDivider.visibility = View.GONE
+                binding.tutorialBtn.visibility = View.GONE
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
@@ -59,10 +68,20 @@ class PopupFragment: DialogFragment() {
             "menuDialog" -> {
                 binding.popupTitleText.setText(R.string.preference_button)
                 binding.popupText.visibility = View.GONE
+                binding.tutorialBtn.visibility = View.GONE
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
                     .commit()
+            }
+            "tutorialDialog" -> {
+                binding.popupFragmentContainer.visibility = View.GONE
+                binding.pauseGameBtn.visibility = View.GONE
+                context?.let { ContextCompat.getColor(it, R.color.middle_brown) }
+                    ?.let { binding.menuDivider.setBackgroundColor(it) }
+                binding.popupTitleText.setText(R.string.tutorialTitel)
+
+                val tutorialArray = resources.getStringArray(R.array.arrayTutorial)
             }
         }
 

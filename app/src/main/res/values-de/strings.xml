@@ -31,4 +31,20 @@
     <string name="timeMade">Zeit geschafft: </string>
     <string name="enemyMade">Gegener getötet: </string>
     <string name="levelMade">Level geschafft: </string>
+    <string name="showTutorial">Zeig mir das Tutorial</string>
+    <string name="goOnTutorial">Weiter</string>
+    <string name="tutorialTitel">Tutorial</string>
+    <string name="tutorialWelcome">Willkommen zum Tutorial von Bug Defense</string>
+    <string name="tutorialMenu">Unten findest du das Baumenü, dort kannst du ein Tool anwählen.</string>
+    <string name="tutorialMenuLeft">Mit dem linken Tool kannst du gebaute Türme zerstören.</string>
+    <string name="tutorialMenuRight">Mit dem rechten Tool kannst du gebaute Türme upgraden.</string>
+    <string name="tutorialMenuMiddle">Mit dem mittleren Tool kannst du Türme bauen.</string>
+    <string name="tutorialMenuHold">Wenn du den mittleren Button gedrückt hälst, gelangst du zur Turmauswahl.</string>
+    <string name="tutorialGUI">Oben findest du die Spielanzeigen.</string>
+    <string name="tutorialGUILeft">Links oben siehst du die Zeit, die du schon gespielt hast.</string>
+    <string name="tutorialGUIRight">Rechts oben siehst du die Münzen, die dir zur Verfügung stehen.</string>
+    <string name="tutorialGUILeftBar">Die linke Leiste zeigt dir deine Lebensleiste.</string>
+    <string name="tutorialGUIRightBar">Die rechte Leiste zeigt dir, wie viele Gegner du zum nächsten Level benötigst.</string>
+    <string name="tutorialMenuButton">Der Button in der Mitte öffnet ein Menü.</string>
+    <string name="tutorialMenuButtonInner">Dort kannst du deine Einstellungen ändern und deinen Spielstand speichern.</string>
 </resources>

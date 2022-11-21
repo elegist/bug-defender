@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.*
+import com.google.android.material.snackbar.Snackbar
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
@@ -16,6 +18,7 @@ import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.helper.BuildButton
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityGameBinding
+import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
@@ -64,7 +67,24 @@ class GameActivity : AppCompatActivity() {
         gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
         //start level timer
         chrono.start()
+        // tutorial
+        showTutorial()
     }
+
+    /**
+    * opens tutorial
+    */
+    private fun showTutorial() {
+        val tutorial = Snackbar.make(this, binding.topGUI, "", Snackbar.LENGTH_INDEFINITE)
+        tutorial.setAction(R.string.showTutorial, View.OnClickListener {
+            menuPopup.show(fm, "tutorialDialog")
+        })
+        tutorial.setActionTextColor(ContextCompat.getColor(this, R.color.white))
+        tutorial.setBackgroundTint(ContextCompat.getColor(this, R.color.dark_brown))
+        tutorial.setAnchorView(R.id.bottomGUI)
+        tutorial.show()
+    }
+
     /**
      * pauses Game and goes back to main menu
      */

@@ -28,7 +28,38 @@
     <string name="upgrade_tower_button">Upgrade tower</string>
     <string name="progress_ball_image">Progress bar decor image</string>
     <string name="health_ball_image">Health bar decor image</string>
-    <string name="timeMade">Time spend: </string>
+    <string name="timeMade">Time spent: </string>
     <string name="enemyMade">Enemies killed: </string>
-    <string name="levelMade">Level made: </string>
+    <string name="levelMade">Level reached: </string>
+    <string name="goOnTutorial">Go On</string>
+    <string name="showTutorial">show me the tutorial</string>
+    <string name="tutorialTitel">Tutorial</string>
+    <string name="tutorialWelcome">Welcome to the tutorial of Bug Defense</string>
+    <string name="tutorialMenu">At the bottom you will find the build menu, there you can select a tool.</string>
+    <string name="tutorialMenuLeft">With the left tool you can destroy built towers.</string>
+    <string name="tutorialMenuRight">With the right tool you can upgrade built towers.</string>
+    <string name="tutorialMenuMiddle">With the middle tool you can build towers.</string>
+    <string name="tutorialMenuHold">If you keep the middle button pressed, you will get to the tower selection.</string>
+    <string name="tutorialGUI">At the top you will find the game indicators.</string>
+    <string name="tutorialGUILeft">In the upper left corner you can see the time you have already played.</string>
+    <string name="tutorialGUIRight">In the upper right corner you can see the coins that are at your disposal.</string>
+    <string name="tutorialGUILeftBar">The left bar shows you your life bar.</string>
+    <string name="tutorialGUIRightBar">The right bar shows you how many opponents you need to get to the next level.</string>
+    <string name="tutorialMenuButton">The button in the center opens a menu.</string>
+    <string name="tutorialMenuButtonInner">There you can change your settings and save your score.</string>
+    <string-array name="arrayTutorial">
+        <item>@string/tutorialWelcome</item>
+        <item>@string/tutorialMenu</item>
+        <item>@string/tutorialMenuLeft</item>
+        <item>@string/tutorialMenuRight</item>
+        <item>@string/tutorialMenuMiddle</item>
+        <item>@string/tutorialMenuHold</item>
+        <item>@string/tutorialGUI</item>
+        <item>@string/tutorialGUILeft</item>
+        <item>@string/tutorialGUIRight</item>
+        <item>@string/tutorialGUILeftBar</item>
+        <item>@string/tutorialGUIRightBar</item>
+        <item>@string/tutorialMenuButton</item>
+        <item>@string/tutorialMenuButtonInner</item>
+    </string-array>
 </resources>
