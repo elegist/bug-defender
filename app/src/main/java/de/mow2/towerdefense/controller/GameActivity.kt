@@ -1,6 +1,9 @@
 package de.mow2.towerdefense.controller
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable.Orientation
+import android.icu.lang.UCharacter.VerticalOrientation
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -111,7 +114,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     /**
-     * Initialize all game GUI references (findViewById)
+     * Initialize all game GUI references and contents
      */
     private fun initGUI() {
         //reference game gui
@@ -128,6 +131,7 @@ class GameActivity : AppCompatActivity() {
         // detect which button is currently selected
         buildButton = binding.buildButton
 
+        //create bottom gui contents
         binding.bottomGUI.children.forEach { view ->
             view.setOnClickListener { button ->
                 if (GameManager.selectedTool == button.id){
@@ -147,10 +151,16 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
+        //"choose a tower" menu displayed on long click
+        val buildMenu = BuildUpgradeMenu(gameManager, this)
         TowerTypes.values().forEachIndexed { i, type ->
             val towerBtn = BuildButton(this, null, R.style.MenuButton_Button, type)
+            val towerBtnText = TextView(this)
+            towerBtnText.text = "${buildMenu.getTowerCost(type)}"
+            towerBtnText.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+            towerBtnText.setTextColor(Color.YELLOW)
             towerBtn.id = i
-            towerBtn.setOnClickListener { button ->
+            towerBtn.setOnClickListener {
                 GameManager.selectedTool = buildButton.id
                 GameManager.selectedTower = type
                 binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
@@ -160,9 +170,14 @@ class GameActivity : AppCompatActivity() {
                     TowerTypes.BLOCK -> buildButton.setImageResource(R.drawable.tower_block_imagebtn)
                     TowerTypes.SLOW -> buildButton.setImageResource(R.drawable.tower_slow_imagebtn)
                     TowerTypes.AOE -> buildButton.setImageResource(R.drawable.tower_aoe_imagebtn)
+                    TowerTypes.MAGIC -> buildButton.setImageResource(R.drawable.tower_magic_imagebtn)
                 }
             }
-            buildMenuLayout.addView(towerBtn)
+            val buttonContainer = LinearLayout(this)
+            buttonContainer.orientation = LinearLayout.VERTICAL
+            buttonContainer.addView(towerBtnText)
+            buttonContainer.addView(towerBtn)
+            buildMenuLayout.addView(buttonContainer)
         }
         GameManager.selectedTool = null //deselect any tool at beginning
     }
@@ -170,7 +185,7 @@ class GameActivity : AppCompatActivity() {
     override fun onResume(){
         super.onResume()
         // (re-)initialize MediaPlayer with correct settings
-        SoundManager.initMediaPlayer(this, R.raw.song3)
+        SoundManager.initMediaPlayer(this, R.raw.exploration)
         SoundManager.playSounds()
         SoundManager.loadSounds(this)
         if(!musicSetting) {

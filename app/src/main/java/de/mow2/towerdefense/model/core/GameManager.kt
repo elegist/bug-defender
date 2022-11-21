@@ -83,7 +83,7 @@ class GameManager(private val callBack: GameActivity) {
         when(level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 10
+                livesAmnt = 100
                 if(coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 5500
                 }

@@ -23,13 +23,16 @@ class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: I
     private fun initMenu(type: TowerTypes) {
         when(type) {
             TowerTypes.BLOCK -> {
-                this.setImageResource(R.drawable.tower_block_1)
+                this.setImageResource(R.drawable.tower_block_imagebtn)
             }
             TowerTypes.SLOW -> {
-                this.setImageResource(R.drawable.tower_slow_1)
+                this.setImageResource(R.drawable.tower_slow_imagebtn)
             }
             TowerTypes.AOE -> {
-                this.setImageResource(R.drawable.tower_aoe_1)
+                this.setImageResource(R.drawable.tower_aoe_imagebtn)
+            }
+            TowerTypes.MAGIC -> {
+                this.setImageResource(R.drawable.tower_magic_imagebtn)
             }
         }
     }

@@ -2,7 +2,7 @@
     <string name="app_name">Bug Defender</string>
     <string name="title_activity_main">Bug Defender</string>
     <string name="startGame_button">Starte Spiel</string>
-    <string name="info_button">Spielanleitung</string>
+    <string name="glossary_button">Glossar</string>
     <string name="preference_button">Präferenzen</string>
     <string name="about_button">Über das Spiel</string>
     <string name="game_icon">Spiel Icon</string>
@@ -10,7 +10,7 @@
     <string name="game_name">Bug Defender</string>
     <string name="about_text">Dieses Spiel ist ein Projekt im Rahmen des Bachelorstudiengangs Medieninformatik im 5. Semester. Die Mitwirkenden sind Julius Wissemann, Armin Prinz, Robin Patzak und Sophia Meyer.</string>
     <string name="preferences_text">Leg deine Präferenzen fest:</string>
-    <string name="info_text">Dies ist ein Tower Defense Game, in dem du Türme aufstellen musst, um deine Basis zu verteidigen.</string>
+    <string name="glossary_text">TODO: Glossar</string>
     <string name="preference_music">Musik</string>
     <string name="menuBtn">Menü</string>
     <string name="sound">Sounds</string>

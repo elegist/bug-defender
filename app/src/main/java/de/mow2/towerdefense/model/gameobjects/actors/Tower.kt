@@ -45,7 +45,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
      * Method to call after tower has been built or upgraded
      * calculates speed, damage and range for this towers level
      */
-    fun scaleTowerValues() {
+    private fun scaleTowerValues() {
         when(type) {
             TowerTypes.BLOCK -> {
                 finalRange = baseRange + level * width
@@ -61,6 +61,11 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
                 finalRange = baseRange + level * width / 2
                 baseDamage = 2 + level * 2
                 actionsPerMinute = baseSpeed / 2 + level * 20
+            }
+            TowerTypes.MAGIC -> {
+                finalRange = baseRange + level * width
+                baseDamage = 5 + level * 5
+                actionsPerMinute = baseSpeed / 4 + level * 10
             }
         }
     }

@@ -21,6 +21,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
             TowerTypes.BLOCK -> 100
             TowerTypes.SLOW -> 200
             TowerTypes.AOE -> 300
+            TowerTypes.MAGIC -> 1000
         }
         return cost * (level + 1)
     }
@@ -43,6 +44,9 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
                     }
                     TowerTypes.AOE -> {
                         Tower(selectedField, TowerTypes.AOE)
+                    }
+                    TowerTypes.MAGIC -> {
+                        Tower(selectedField, TowerTypes.MAGIC)
                     }
                 }
                 selectedField.isBlocked = true //important!! block field for path finding

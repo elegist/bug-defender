@@ -16,7 +16,7 @@ import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.helper.Vector2D
 
 @SuppressLint("ViewConstructor")
-class GameView(context: Context, private val callBack: GameActivity ,val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, callBack: GameActivity ,val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     //background tiles
     private var bgPaint: Paint
@@ -81,7 +81,6 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
      *
      * ! Use iterators for lists, or use ConcurrentHashMaps to avoid ConcurrentModificationException !
      */
-    private val weaponsOffset = Vector2D(0, GameManager.playGround.squareSize / 4)
     private fun drawObjects(canvas: Canvas) {
         //enemies
         GameManager.enemyList.forEach { enemy ->
@@ -94,15 +93,15 @@ class GameView(context: Context, private val callBack: GameActivity ,val gameMan
                 draw(canvas, ScaledImage(resources, tower.width, tower.height, R.drawable.upgrade_tower_overlay).scaledImage, tower.position)
             }
             if(tower.target != null) {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.nextFrame(0), tower.position)
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(0), tower.position)
             } else {
-                draw(canvas, BitmapPreloader.weaponAnims[tower.type]!!.idleImage, tower.position)
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, tower.position)
             }
         }
 
         //projectiles
         GameManager.projectileList.forEach { projectile ->
-            draw(canvas, BitmapPreloader.projectileAnims[projectile.tower.type]!!.nextFrame(0), projectile.position)
+            draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.level][projectile.tower.type]!!.nextFrame(0), projectile.position)
         }
     }
     /**

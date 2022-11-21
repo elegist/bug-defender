@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //preload all images
-        BitmapPreloader(resources).preloadImages()
+        BitmapPreloader(resources).preloadGraphics()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
         // loads music and sounds and sets them based on saved preferences
         SoundManager.loadPreferences(this)
-        SoundManager.initMediaPlayer(this, R.raw.sound1)
+        SoundManager.initMediaPlayer(this, R.raw.eight_bit_adventure_loop)
         SoundManager.playSounds()
         SoundManager.loadSounds(this)
         if(!soundSetting){
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
      */
     fun popUpButton(view: View) {
         when (view.id) {
-            R.id.info_button -> {
+            R.id.glossary_button -> {
                 dialogPopup.show(fm, "infoDialog")
             }
             R.id.about_button -> {

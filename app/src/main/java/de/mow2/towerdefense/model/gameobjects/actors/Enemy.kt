@@ -236,6 +236,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             TowerTypes.BLOCK -> {}
             TowerTypes.SLOW -> {speed = baseSpeed / 2}
             TowerTypes.AOE -> {}
+            TowerTypes.MAGIC -> {}
         }
         healthPoints -= damageAmount
     }
