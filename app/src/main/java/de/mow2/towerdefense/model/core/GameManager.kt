@@ -1,8 +1,6 @@
 package de.mow2.towerdefense.model.core
 
-import android.view.Gravity
 import com.shashank.sony.fancytoastlib.FancyToast
-import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
@@ -10,33 +8,26 @@ import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
 import de.mow2.towerdefense.model.pathfinding.Astar
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.random.Random
 
+interface GameController {
+    fun updateGUI()
+    fun updateHealthBarMax(newMax: Int)
+    fun updateProgressBarMax(newMax: Int)
+    fun onGameOver()
+    fun showToastMessage(message: String, type: Int)
+}
 /**
  * GameManager handles the game logic, updates game objects and calls updates on UI Thread
+ * @param controller Class which handles UI related work and implements GameController interface
  */
-class GameManager(private val callBack: GameActivity) {
-    /**
-     * Method to write all GUI-related data into their respective layout element
-     */
-    private fun updateGUI() {
-        callBack.runOnUiThread {
-            callBack.coinsTxt.text = coinAmnt.toString()
-            callBack.healthBar.progress = livesAmnt
-            callBack.waveBar.progress = killCounter
-            val livesText = "$livesAmnt / ${callBack.healthBar.max}"
-            callBack.healthText.text = livesText
-            val waveText = "$killCounter / ${callBack.waveBar.max}"
-            callBack.waveText.text = waveText
-        }
-    }
+class GameManager(private val controller: GameController) {
     /**
      * Method to call when increasing coins (e.g. defeating an enemy creature or destroying a tower)
      * @param increaseValue the value to be added to the total coin amount
      */
     fun increaseCoins(increaseValue: Int){
         coinAmnt += increaseValue
-        updateGUI()
+        controller.updateGUI()
     }
     /**
      * Decrease players available coins by given value
@@ -46,7 +37,7 @@ class GameManager(private val callBack: GameActivity) {
     fun decreaseCoins(decreaseValue: Int) : Boolean {
         return if(coinAmnt >= (0 + decreaseValue)) {
             coinAmnt -= decreaseValue
-            updateGUI()
+            controller.updateGUI()
             true
         } else {
             false
@@ -54,15 +45,15 @@ class GameManager(private val callBack: GameActivity) {
     }
     private fun increaseLives(newValue: Int){
         livesAmnt += newValue
-        updateGUI()
+        controller.updateGUI()
     }
     private fun decreaseLives(newValue: Int) : Boolean {
         return if(livesAmnt > (0 + newValue)) {
             livesAmnt -= newValue
-            updateGUI()
+            controller.updateGUI()
             true
         } else {
-            callBack.runOnUiThread { callBack.onGameOver() }
+            controller.onGameOver()
             false
         }
     }
@@ -71,14 +62,13 @@ class GameManager(private val callBack: GameActivity) {
      */
     private fun increaseKills(newValue: Int){
         killCounter += newValue
-        if(killCounter >= callBack.waveBar.max) {
+        if(killCounter >= killsToProgress) {
             initLevel(++gameLevel)
         }
-        updateGUI()
+        controller.updateGUI()
     }
 
     //TODO: (load game) GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
-    private var killsToProgress = 0
     fun initLevel(level: Int) {
         when(level) {
             0 -> {
@@ -88,7 +78,7 @@ class GameManager(private val callBack: GameActivity) {
                     coinAmnt = 5500
                 }
                 killsToProgress = 10
-                callBack.runOnUiThread { callBack.healthBar.max = livesAmnt }
+                controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
                 if(level % 10 == 0) {
@@ -99,14 +89,11 @@ class GameManager(private val callBack: GameActivity) {
                 killsToProgress = killCounter * level
             }
         }
-        callBack.runOnUiThread {
-            callBack.waveBar.max = killsToProgress
-            val toast = FancyToast.makeText(callBack, "Welle: $gameLevel", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false )
-            toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.show()
-        }
+        controller.updateProgressBarMax(killsToProgress)
+        controller.showToastMessage("Welle: $gameLevel", FancyToast.SUCCESS)
+
         killCounter = 0
-        updateGUI()
+        controller.updateGUI()
         //TODO:
         // make enemies stronger, could be a multiplier or defined values for each wave
     }
@@ -190,6 +177,7 @@ class GameManager(private val callBack: GameActivity) {
         var coinAmnt: Int = 0
         var livesAmnt: Int = 0
         var killCounter: Int = 0
+        var killsToProgress: Int = 0
         var gameLevel = 0
         //game objects
         const val maxTowerLevel = 2
