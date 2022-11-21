@@ -18,6 +18,7 @@
     <string name="resumeGame">Spiel fortsetzen</string>
     <string name="moneyWarning">nicht genug Geld</string>
     <string name="toastAction">nicht mehr anzeigen</string>
+    <string name="wave">Welle</string>
     <string name="coins">Münzen</string>
     <string name="back">zurück zu Hauptmenü</string>
     <string name="restart">restart game</string>
@@ -34,7 +35,7 @@
     <string name="showTutorial">Zeig mir das Tutorial</string>
     <string name="goOnTutorial">Weiter</string>
     <string name="tutorialTitel">Tutorial</string>
-    <string name="tutorialWelcome">Willkommen zum Tutorial von Bug Defense</string>
+    <string name="tutorialWelcome">Willkommen zum Tutorial von Bug Defense! Wenn das Tutorial überspringen möchtest, schließe dieses Fenster</string>
     <string name="tutorialMenu">Unten findest du das Baumenü, dort kannst du ein Tool anwählen.</string>
     <string name="tutorialMenuLeft">Mit dem linken Tool kannst du gebaute Türme zerstören.</string>
     <string name="tutorialMenuRight">Mit dem rechten Tool kannst du gebaute Türme upgraden.</string>
