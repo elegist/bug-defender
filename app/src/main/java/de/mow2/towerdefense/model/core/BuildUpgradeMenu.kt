@@ -1,15 +1,13 @@
 package de.mow2.towerdefense.model.core
 
-import android.view.Gravity
 import com.shashank.sony.fancytoastlib.FancyToast
-import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 
-class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameActivity) {
+class BuildUpgradeMenu(val gameManager: GameManager, private val controller: GameController) {
 
     /**
      * Calculates tower value based on its type and level
@@ -55,9 +53,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
                 soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
                 gameManager.validatePlayGround()
             } else {
-                val toast = FancyToast.makeText(callBack, "Not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false )
-                toast.setGravity(Gravity.CENTER, 0, 0)
-                toast.show()
+                controller.showToastMessage("Not enough money", FancyToast.ERROR)
             }
         }
     }
