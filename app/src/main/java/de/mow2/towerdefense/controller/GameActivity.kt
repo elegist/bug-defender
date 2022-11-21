@@ -35,11 +35,11 @@ class GameActivity : AppCompatActivity(), GameController {
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
     private lateinit var chrono: Chronometer
-    lateinit var coinsTxt: TextView
-    lateinit var healthBar: ProgressBar
-    lateinit var healthText: TextView
-    lateinit var waveBar: ProgressBar
-    lateinit var waveDisplay: TextView
+    private lateinit var coinsTxt: TextView
+    private lateinit var healthBar: ProgressBar
+    private lateinit var healthText: TextView
+    private lateinit var waveBar: ProgressBar
+    private lateinit var waveDisplay: TextView
     private var menuPopup = PopupFragment()
     private val fm = supportFragmentManager
 
