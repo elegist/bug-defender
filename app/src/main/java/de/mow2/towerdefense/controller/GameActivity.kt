@@ -2,7 +2,6 @@ package de.mow2.towerdefense.controller
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.helper.BuildButton
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityGameBinding
-import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
@@ -80,6 +78,12 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.gameover_view)
         SoundManager.mediaPlayer.release()
         soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
+        val timeValue = findViewById<TextView>(R.id.timeValue)
+        val levelValue = findViewById<TextView>(R.id.levelValue)
+        val enemyValue = findViewById<TextView>(R.id.enemyValue)
+        timeValue.text = "${chrono.text}"
+        levelValue.text = "${GameManager.gameLevel}"
+        enemyValue.text = "${GameManager.killCounter}"
         GameManager.reset()
     }
 
