@@ -43,48 +43,47 @@ class PopupFragment: DialogFragment() {
         //decide which fragment will be inflated
         when(tag.toString()) {
             "aboutDialog" -> {
-                binding.popupFragmentContainer.visibility = View.GONE
-                binding.pauseGameBtn.visibility = View.GONE
-                binding.menuDivider.visibility = View.GONE
-                binding.tutorialBtn.visibility = View.GONE
+                binding.popupText.visibility = View.VISIBLE
                 binding.popupText.setText(R.string.about_text)
                 binding.popupTitleText.setText(R.string.about_button)
+                binding.closeBtn.setOnClickListener{ dismiss() }
             }
             "infoDialog" -> {
-                binding.popupFragmentContainer.visibility = View.GONE
-                binding.pauseGameBtn.visibility = View.GONE
-                binding.menuDivider.visibility = View.GONE
-                binding.tutorialBtn.visibility = View.GONE
+                binding.popupText.visibility = View.VISIBLE
                 binding.popupText.setText(R.string.glossary_text)
                 binding.popupTitleText.setText(R.string.glossary_button)
+                binding.closeBtn.setOnClickListener{ dismiss() }
             }
             "settingsDialog" -> {
                 binding.popupTitleText.setText(R.string.preference_button)
-                binding.pauseGameBtn.visibility = View.GONE
-                binding.popupText.visibility = View.GONE
-                binding.menuDivider.visibility = View.GONE
-                binding.tutorialBtn.visibility = View.GONE
+                binding.popupFragmentContainer.visibility = View.VISIBLE
+                binding.closeBtn.setOnClickListener{ dismiss() }
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
                     .commit()
             }
             "menuDialog" -> {
+                binding.tutorialBtn.visibility = View.VISIBLE
+                binding.popupFragmentContainer.visibility = View.VISIBLE
+                binding.pauseGameBtn.visibility = View.VISIBLE
+                binding.menuDivider.visibility = View.VISIBLE
                 binding.popupTitleText.setText(R.string.preference_button)
-                binding.popupText.visibility = View.GONE
                 binding.tutorialBtn.setText(R.string.tutorialTitel)
                 binding.tutorialBtn.setOnClickListener{
                     dismiss()
                     (activity as GameActivity).showTutorial()
                 }
+                binding.closeBtn.setOnClickListener{ dismiss() }
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
                     .commit()
             }
             "tutorialDialog" -> {
-                binding.popupFragmentContainer.visibility = View.GONE
-                binding.pauseGameBtn.visibility = View.GONE
+                binding.popupText.visibility = View.VISIBLE
+                binding.tutorialBtn.visibility = View.VISIBLE
+                binding.menuDivider.visibility = View.VISIBLE
                 dialog?.window?.also {window ->
                     window.attributes?.also {attributes->
                         attributes.dimAmount = 0f
@@ -95,6 +94,11 @@ class PopupFragment: DialogFragment() {
                 binding.popupText.setText(R.string.tutorialWelcome)
                 context?.let { ContextCompat.getColor(it, R.color.middle_brown) }
                     ?.let { binding.menuDivider.setBackgroundColor(it) }
+
+                binding.closeBtn.setOnClickListener{
+                    (activity as GameActivity).highlight("endTutorial")
+                    dismiss()
+                }
 
                 binding.tutorialBtn.setOnClickListener {
                     when (binding.popupText.text) {
@@ -146,11 +150,6 @@ class PopupFragment: DialogFragment() {
                     }
                 }
             }
-        }
-
-        binding.closeBtn.setOnClickListener{
-            (activity as GameActivity).highlight("endTutorial")
-            dismiss()
         }
     }
 
