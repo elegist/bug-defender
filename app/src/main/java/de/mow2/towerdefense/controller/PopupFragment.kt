@@ -1,11 +1,15 @@
 package de.mow2.towerdefense.controller
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
@@ -34,7 +38,7 @@ class PopupFragment: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val tutorialArray = resources.getStringArray(R.array.arrayTutorial)
+        //val tutorialArray = resources.getStringArray(R.array.arrayTutorial)
 
         //decide which fragment will be inflated
         when(tag.toString()) {
@@ -77,6 +81,12 @@ class PopupFragment: DialogFragment() {
             "tutorialDialog" -> {
                 binding.popupFragmentContainer.visibility = View.GONE
                 binding.pauseGameBtn.visibility = View.GONE
+                dialog?.window?.also {window ->
+                    window.attributes?.also {attributes->
+                        attributes.dimAmount = 0f
+                        window.attributes = attributes
+                    }
+                }
                 binding.popupTitleText.setText(R.string.tutorialTitel)
                 binding.popupText.setText(R.string.tutorialWelcome)
                 context?.let { ContextCompat.getColor(it, R.color.middle_brown) }
@@ -86,41 +96,46 @@ class PopupFragment: DialogFragment() {
                     when (binding.popupText.text) {
                         getString(R.string.tutorialWelcome) -> {
                             binding.popupText.setText(R.string.tutorialMenu)
+                            (activity as GameActivity).highlight("bottomGui")
                         }
                         getString(R.string.tutorialMenu) -> {
                             binding.popupText.setText(R.string.tutorialMenuLeft)
+                            (activity as GameActivity).highlight("bottomLeft")
                         }
                         getString(R.string.tutorialMenuLeft) -> {
                             binding.popupText.setText(R.string.tutorialMenuRight)
+                            (activity as GameActivity).highlight("bottomRight")
                         }
                         getString(R.string.tutorialMenuRight) -> {
                             binding.popupText.setText(R.string.tutorialMenuMiddle)
+                            (activity as GameActivity).highlight("bottomMiddle")
                         }
                         getString(R.string.tutorialMenuMiddle) -> {
-                            binding.popupText.setText(R.string.tutorialMenuHold)
-                        }
-                        getString(R.string.tutorialMenuHold) -> {
                             binding.popupText.setText(R.string.tutorialGUI)
+                            (activity as GameActivity).highlight("topGui")
                         }
                         getString(R.string.tutorialGUI) -> {
                             binding.popupText.setText(R.string.tutorialGUILeft)
+                            (activity as GameActivity).highlight("topGuiLeft")
                         }
                         getString(R.string.tutorialGUILeft) -> {
                             binding.popupText.setText(R.string.tutorialGUIRight)
+                            (activity as GameActivity).highlight("topGuiRight")
                         }
                         getString(R.string.tutorialGUIRight) -> {
                             binding.popupText.setText(R.string.tutorialGUILeftBar)
+                            (activity as GameActivity).highlight("topGuiLeftBar")
                         }
                         getString(R.string.tutorialGUILeftBar) -> {
                             binding.popupText.setText(R.string.tutorialGUIRightBar)
+                            (activity as GameActivity).highlight("topGuiRightBar")
                         }
                         getString(R.string.tutorialGUIRightBar) -> {
                             binding.popupText.setText(R.string.tutorialMenuButton)
-                        }
-                        getString(R.string.tutorialMenuButton) -> {
-                            binding.popupText.setText(R.string.tutorialMenuButtonInner)
+                            (activity as GameActivity).highlight("topGuiMenu")
                             binding.tutorialBtn.setText(R.string.close_button)
                             binding.tutorialBtn.setOnClickListener {
+                                (activity as GameActivity).highlight("endTutorial")
                                 dismiss()
                             }
                         }

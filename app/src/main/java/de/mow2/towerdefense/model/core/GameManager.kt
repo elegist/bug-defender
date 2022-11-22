@@ -1,12 +1,14 @@
 package de.mow2.towerdefense.model.core
 
 import com.shashank.sony.fancytoastlib.FancyToast
+import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
 import de.mow2.towerdefense.model.pathfinding.Astar
+import kotlinx.coroutines.flow.callbackFlow
 import java.util.concurrent.CopyOnWriteArrayList
 
 interface GameController {
@@ -90,7 +92,7 @@ class GameManager(private val controller: GameController) {
             }
         }
         controller.updateProgressBarMax(killsToProgress)
-        controller.showToastMessage("Welle: $gameLevel", FancyToast.SUCCESS)
+        controller.showToastMessage("Level:  $gameLevel", FancyToast.SUCCESS)
 
         killCounter = 0
         controller.updateGUI()

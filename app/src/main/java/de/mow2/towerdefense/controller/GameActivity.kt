@@ -1,13 +1,10 @@
 package de.mow2.towerdefense.controller
 
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
-import android.view.Window
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -80,22 +77,64 @@ class GameActivity : AppCompatActivity(), GameController {
     */
     private fun showTutorial() {
         val tutorial = Snackbar.make(this, binding.topGUI, "", Snackbar.LENGTH_INDEFINITE)
-        tutorial.setAction(R.string.showTutorial, View.OnClickListener {
+        tutorial.setAction(R.string.showTutorial) {
             menuPopup.show(fm, "tutorialDialog")
-        })
+        }
         tutorial.setActionTextColor(ContextCompat.getColor(this, R.color.white))
         tutorial.setBackgroundTint(ContextCompat.getColor(this, R.color.dark_brown))
         tutorial.setAnchorView(R.id.bottomGUI)
         tutorial.show()
     }
 
-    fun changeText() {
-        val tutorialArray = resources.getStringArray(R.array.arrayTutorial)
-        val text = findViewById<TextView>(R.id.popupText)
-        tutorialArray.forEach { item ->
-            text.text = item
+    fun highlight(string: String) {
+        binding.bottomGUI.children.forEach { it.alpha = 0.2F }
+        binding.topGUI.children.forEach { it.alpha = 0.2F }
+        binding.progressBarContainer.children.forEach {it.alpha = 0.2F}
+        when(string) {
+            "bottomGui" -> {
+                binding.bottomGUI.children.forEach { it.alpha = 1F }
+            }
+            "bottomLeft" -> {
+                binding.deleteButton.alpha = 1F
+            }
+            "bottomRight" -> {
+                binding.upgradeButton.alpha = 1F
+            }
+            "bottomMiddle" -> {
+                binding.buildButton.alpha = 1F
+            }
+            "topGui" -> {
+                binding.topGUI.children.forEach { it.alpha = 1F }
+            }
+            "topGuiLeft" -> {
+                binding.timeView.alpha = 1F
+                binding.clockImage.alpha = 1F
+            }
+            "topGuiRight" -> {
+                binding.coinsText.alpha = 1F
+                binding.coinImg.alpha = 1F
+            }
+            "topGuiLeftBar" -> {
+                binding.healthProgressBar.alpha = 1F
+                binding.healthText.alpha = 1F
+                binding.healthBallImg.alpha = 1F
+            }
+            "topGuiRightBar" -> {
+                binding.waveProgressBar.alpha = 1F
+                binding.waveText.alpha = 1F
+                //binding.progressBallImg = 1F
+            }
+            "topGuiMenu" -> {
+                binding.menuBtn.alpha = 1F
+            }
+            "endTutorial" -> {
+                binding.bottomGUI.children.forEach { it.alpha = 1F }
+                binding.topGUI.children.forEach { it.alpha = 1F }
+                binding.progressBarContainer.children.forEach {it.alpha = 1F}
+            }
         }
     }
+
 
     /**
      * pauses Game and goes back to main menu
@@ -116,6 +155,7 @@ class GameActivity : AppCompatActivity(), GameController {
         val timeValue = findViewById<TextView>(R.id.timeValue)
         val levelValue = findViewById<TextView>(R.id.levelValue)
         val enemyValue = findViewById<TextView>(R.id.enemyValue)
+        //"${this.resources.getString(R.string.timeMade)} ${chrono.text}".also { timeValue.text = it }
         timeValue.text = "${chrono.text}"
         levelValue.text = "${GameManager.gameLevel}"
         enemyValue.text = "${GameManager.killCounter}"

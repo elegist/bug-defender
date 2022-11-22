@@ -8,7 +8,7 @@
     <string name="game_icon">Spiel Icon</string>
     <string name="close_button">Schließen</string>
     <string name="game_name">Bug Defender</string>
-    <string name="about_text">Dieses Spiel ist ein Projekt im Rahmen des Bachelorstudiengangs Medieninformatik im 5. Semester. Die Mitwirkenden sind Julius Wissemann, Armin Prinz, Robin Patzak und Sophia Meyer.</string>
+    <string name="about_text">Bug Defender ist ein Tower Defense Spiel, das im Rahmen eines Studienprojekts entstanden ist. Die Mitwirkenden sind Julius Wissemann, Armin Prinz, Robin Patzak und Sophia Meyer.</string>
     <string name="preferences_text">Leg deine Präferenzen fest:</string>
     <string name="glossary_text">TODO: Glossar</string>
     <string name="preference_music">Musik</string>
@@ -40,12 +40,10 @@
     <string name="tutorialMenuLeft">Mit dem linken Tool kannst du gebaute Türme zerstören.</string>
     <string name="tutorialMenuRight">Mit dem rechten Tool kannst du gebaute Türme upgraden.</string>
     <string name="tutorialMenuMiddle">Mit dem mittleren Tool kannst du Türme bauen.</string>
-    <string name="tutorialMenuHold">Wenn du den mittleren Button gedrückt hälst, gelangst du zur Turmauswahl.</string>
     <string name="tutorialGUI">Oben findest du die Spielanzeigen.</string>
     <string name="tutorialGUILeft">Links oben siehst du die Zeit, die du schon gespielt hast.</string>
     <string name="tutorialGUIRight">Rechts oben siehst du die Münzen, die dir zur Verfügung stehen.</string>
     <string name="tutorialGUILeftBar">Die linke Leiste zeigt dir deine Lebensleiste.</string>
     <string name="tutorialGUIRightBar">Die rechte Leiste zeigt dir, wie viele Gegner du zum nächsten Level benötigst.</string>
     <string name="tutorialMenuButton">Der Button in der Mitte öffnet ein Menü.</string>
-    <string name="tutorialMenuButtonInner">Dort kannst du deine Einstellungen ändern und deinen Spielstand speichern.</string>
 </resources>

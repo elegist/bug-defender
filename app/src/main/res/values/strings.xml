@@ -8,7 +8,7 @@
     <string name="game_icon">game icon</string>
     <string name="close_button">Close</string>
     <string name="game_name">Bug Defender</string>
-    <string name="about_text">This Game is a project within the bachelor degree in media informatics in the 5th semester. The contributors are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.</string>
+    <string name="about_text">Bug Defender is a tower defense game created as part of a study project. The contributors are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.</string>
     <string name="preferences_text">set your preferences:</string>
     <string name="glossary_text">TODO: Glossary</string>
     <string name="preference_music">music</string>
@@ -39,28 +39,11 @@
     <string name="tutorialMenu">At the bottom you will find the build menu, there you can select a tool.</string>
     <string name="tutorialMenuLeft">With the left tool you can destroy built towers.</string>
     <string name="tutorialMenuRight">With the right tool you can upgrade built towers.</string>
-    <string name="tutorialMenuMiddle">With the middle tool you can build towers.</string>
-    <string name="tutorialMenuHold">If you keep the middle button pressed, you will get to the tower selection.</string>
+    <string name="tutorialMenuMiddle">With the middle tool you can build towers. If you keep the middle button pressed, you will get to the tower selection.</string>
     <string name="tutorialGUI">At the top you will find the game indicators.</string>
     <string name="tutorialGUILeft">In the upper left corner you can see the time you have already played.</string>
     <string name="tutorialGUIRight">In the upper right corner you can see the coins that are at your disposal.</string>
     <string name="tutorialGUILeftBar">The left bar shows you your life bar.</string>
     <string name="tutorialGUIRightBar">The right bar shows you how many opponents you need to get to the next level.</string>
-    <string name="tutorialMenuButton">The button in the center opens a menu.</string>
-    <string name="tutorialMenuButtonInner">There you can change your settings and save your score.</string>
-    <string-array name="arrayTutorial">
-        <item>@string/tutorialWelcome</item>
-        <item>@string/tutorialMenu</item>
-        <item>@string/tutorialMenuLeft</item>
-        <item>@string/tutorialMenuRight</item>
-        <item>@string/tutorialMenuMiddle</item>
-        <item>@string/tutorialMenuHold</item>
-        <item>@string/tutorialGUI</item>
-        <item>@string/tutorialGUILeft</item>
-        <item>@string/tutorialGUIRight</item>
-        <item>@string/tutorialGUILeftBar</item>
-        <item>@string/tutorialGUIRightBar</item>
-        <item>@string/tutorialMenuButton</item>
-        <item>@string/tutorialMenuButtonInner</item>
-    </string-array>
+    <string name="tutorialMenuButton">The button in the center opens a menu. There you can change your settings and save your score.</string>
 </resources>

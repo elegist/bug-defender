@@ -1,7 +1,9 @@
 package de.mow2.towerdefense.model.core
 
 import android.view.Gravity
+import android.widget.Toast
 import com.shashank.sony.fancytoastlib.FancyToast
+import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.Sounds
@@ -55,8 +57,8 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val callBack: GameA
                 soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
                 gameManager.validatePlayGround()
             } else {
-                val toast = FancyToast.makeText(callBack, "Not enough money", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false )
-                toast.setGravity(Gravity.CENTER, 0, 0)
+                val toast = FancyToast.makeText(callBack, callBack.resources.getString(R.string.moneyWarning), FancyToast.LENGTH_SHORT, FancyToast.ERROR, false )
+                //toast.setGravity(Gravity.CENTER, 0, 0)
                 toast.show()
             }
         }
