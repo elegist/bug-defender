@@ -72,7 +72,11 @@ class PopupFragment: DialogFragment() {
             "menuDialog" -> {
                 binding.popupTitleText.setText(R.string.preference_button)
                 binding.popupText.visibility = View.GONE
-                binding.tutorialBtn.visibility = View.GONE
+                binding.tutorialBtn.setText(R.string.tutorialTitel)
+                binding.tutorialBtn.setOnClickListener{
+                    dismiss()
+                    (activity as GameActivity).showTutorial()
+                }
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
@@ -145,6 +149,7 @@ class PopupFragment: DialogFragment() {
         }
 
         binding.closeBtn.setOnClickListener{
+            (activity as GameActivity).highlight("endTutorial")
             dismiss()
         }
     }

@@ -68,14 +68,14 @@ class GameActivity : AppCompatActivity(), GameController {
         gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
         //start level timer
         chrono.start()
-        // tutorial
+        // show tutorial
         showTutorial()
     }
 
     /**
     * opens tutorial
     */
-    private fun showTutorial() {
+    fun showTutorial() {
         val tutorial = Snackbar.make(this, binding.topGUI, "", Snackbar.LENGTH_INDEFINITE)
         tutorial.setAction(R.string.showTutorial) {
             menuPopup.show(fm, "tutorialDialog")
