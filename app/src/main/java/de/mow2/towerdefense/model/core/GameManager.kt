@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.core
 
+import android.util.Log
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager

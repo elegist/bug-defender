@@ -213,7 +213,7 @@
             app:layout_constraintEnd_toStartOf="@+id/buildButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/space"
+            app:layout_constraintTop_toTopOf="@+id/bottomGuiSpacer"
             app:srcCompat="@drawable/destroy_tower_btn"
             tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
@@ -250,12 +250,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/buildButton"
-            app:layout_constraintTop_toTopOf="@+id/space"
+            app:layout_constraintTop_toTopOf="@+id/bottomGuiSpacer"
             app:srcCompat="@drawable/upgrade"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Space
-            android:id="@+id/space"
+            android:id="@+id/bottomGuiSpacer"
             android:layout_width="0dp"
             android:layout_height="120dp"
             app:layout_constraintBottom_toBottomOf="parent"

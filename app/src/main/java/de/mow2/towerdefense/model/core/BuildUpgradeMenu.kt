@@ -6,9 +6,10 @@ import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
-
+/**
+ * Defines logic behind build and upgrade functions
+ */
 class BuildUpgradeMenu(val gameManager: GameManager, private val controller: GameController) {
-
     /**
      * Calculates tower value based on its type and level
      * @param type value of TowerTypes

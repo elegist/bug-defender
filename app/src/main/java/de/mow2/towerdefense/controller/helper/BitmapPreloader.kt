@@ -3,6 +3,9 @@ package de.mow2.towerdefense.controller.helper
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Shader
+import android.graphics.drawable.BitmapDrawable
+import android.view.Gravity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
@@ -17,10 +20,21 @@ class BitmapPreloader(val resources: Resources) {
      * Should improve performance compared to decoding bitmaps while drawing
      */
     fun preloadGraphics() {
+        preloadGui()
         preloadTowers()
         preloadWeapons()
         preloadProjectiles()
         preloadEnemies()
+    }
+
+    private fun preloadGui() {
+        //bottom gui
+        bottomDrawable = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.bottomgui_bg))
+        bottomDrawable.tileModeX = Shader.TileMode.REPEAT
+        //top gui
+        topDrawable = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.topgui_bg))
+        topDrawable.tileModeX = Shader.TileMode.REPEAT
+        topDrawable.gravity = Gravity.BOTTOM
     }
 
     private fun preloadTowers() {
@@ -262,5 +276,7 @@ class BitmapPreloader(val resources: Resources) {
         var weaponAnimsArray = emptyArray<ConcurrentHashMap<TowerTypes, SpriteAnimation>>()
         var projectileAnimsArray = emptyArray<ConcurrentHashMap<TowerTypes, SpriteAnimation>>()
         var enemyAnims = ConcurrentHashMap<EnemyType, SpriteAnimation>()
+        lateinit var bottomDrawable: BitmapDrawable
+        lateinit var topDrawable: BitmapDrawable
     }
 }
