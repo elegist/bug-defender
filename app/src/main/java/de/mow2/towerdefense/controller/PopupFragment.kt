@@ -38,7 +38,10 @@ class PopupFragment: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //val tutorialArray = resources.getStringArray(R.array.arrayTutorial)
+
+        binding.closeBtn.setOnClickListener{
+            dismiss()
+        }
 
         //decide which fragment will be inflated
         when(tag.toString()) {
@@ -46,18 +49,15 @@ class PopupFragment: DialogFragment() {
                 binding.popupText.visibility = View.VISIBLE
                 binding.popupText.setText(R.string.about_text)
                 binding.popupTitleText.setText(R.string.about_button)
-                binding.closeBtn.setOnClickListener{ dismiss() }
             }
             "infoDialog" -> {
                 binding.popupText.visibility = View.VISIBLE
                 binding.popupText.setText(R.string.glossary_text)
                 binding.popupTitleText.setText(R.string.glossary_button)
-                binding.closeBtn.setOnClickListener{ dismiss() }
             }
             "settingsDialog" -> {
                 binding.popupTitleText.setText(R.string.preference_button)
                 binding.popupFragmentContainer.visibility = View.VISIBLE
-                binding.closeBtn.setOnClickListener{ dismiss() }
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
@@ -72,83 +72,12 @@ class PopupFragment: DialogFragment() {
                 binding.tutorialBtn.setText(R.string.tutorialTitel)
                 binding.tutorialBtn.setOnClickListener{
                     dismiss()
-                    (activity as GameActivity).showTutorial()
+                    (activity as GameActivity).displayTutorial()
                 }
-                binding.closeBtn.setOnClickListener{ dismiss() }
                 childFragmentManager
                     .beginTransaction()
                     .replace(R.id.popupFragmentContainer, SettingsFragment())
                     .commit()
-            }
-            "tutorialDialog" -> {
-                binding.popupText.visibility = View.VISIBLE
-                binding.tutorialBtn.visibility = View.VISIBLE
-                binding.menuDivider.visibility = View.VISIBLE
-                dialog?.window?.also {window ->
-                    window.attributes?.also {attributes->
-                        attributes.dimAmount = 0f
-                        window.attributes = attributes
-                    }
-                }
-                binding.popupTitleText.setText(R.string.tutorialTitel)
-                binding.popupText.setText(R.string.tutorialWelcome)
-                context?.let { ContextCompat.getColor(it, R.color.middle_brown) }
-                    ?.let { binding.menuDivider.setBackgroundColor(it) }
-
-                binding.closeBtn.setOnClickListener{
-                    (activity as GameActivity).highlight("endTutorial")
-                    dismiss()
-                }
-
-                binding.tutorialBtn.setOnClickListener {
-                    when (binding.popupText.text) {
-                        getString(R.string.tutorialWelcome) -> {
-                            binding.popupText.setText(R.string.tutorialMenu)
-                            (activity as GameActivity).highlight("bottomGui")
-                        }
-                        getString(R.string.tutorialMenu) -> {
-                            binding.popupText.setText(R.string.tutorialMenuLeft)
-                            (activity as GameActivity).highlight("bottomLeft")
-                        }
-                        getString(R.string.tutorialMenuLeft) -> {
-                            binding.popupText.setText(R.string.tutorialMenuRight)
-                            (activity as GameActivity).highlight("bottomRight")
-                        }
-                        getString(R.string.tutorialMenuRight) -> {
-                            binding.popupText.setText(R.string.tutorialMenuMiddle)
-                            (activity as GameActivity).highlight("bottomMiddle")
-                        }
-                        getString(R.string.tutorialMenuMiddle) -> {
-                            binding.popupText.setText(R.string.tutorialGUI)
-                            (activity as GameActivity).highlight("topGui")
-                        }
-                        getString(R.string.tutorialGUI) -> {
-                            binding.popupText.setText(R.string.tutorialGUILeft)
-                            (activity as GameActivity).highlight("topGuiLeft")
-                        }
-                        getString(R.string.tutorialGUILeft) -> {
-                            binding.popupText.setText(R.string.tutorialGUIRight)
-                            (activity as GameActivity).highlight("topGuiRight")
-                        }
-                        getString(R.string.tutorialGUIRight) -> {
-                            binding.popupText.setText(R.string.tutorialGUILeftBar)
-                            (activity as GameActivity).highlight("topGuiLeftBar")
-                        }
-                        getString(R.string.tutorialGUILeftBar) -> {
-                            binding.popupText.setText(R.string.tutorialGUIRightBar)
-                            (activity as GameActivity).highlight("topGuiRightBar")
-                        }
-                        getString(R.string.tutorialGUIRightBar) -> {
-                            binding.popupText.setText(R.string.tutorialMenuButton)
-                            (activity as GameActivity).highlight("topGuiMenu")
-                            binding.tutorialBtn.setText(R.string.close_button)
-                            binding.tutorialBtn.setOnClickListener {
-                                (activity as GameActivity).highlight("endTutorial")
-                                dismiss()
-                            }
-                        }
-                    }
-                }
             }
         }
     }

@@ -7,9 +7,8 @@ import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.*
-import com.google.android.material.snackbar.Snackbar
+import androidx.preference.PreferenceManager
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
@@ -41,7 +40,13 @@ class GameActivity : AppCompatActivity(), GameController {
     private lateinit var waveBar: ProgressBar
     private lateinit var waveDisplay: TextView
     private var menuPopup = PopupFragment()
+    private var tutPopup = TutorialFragment()
     private val fm = supportFragmentManager
+    var showTutorial: Boolean = true
+        set(value) {
+            field = value
+            gameView.toggleGameLoop()
+        }
 
     //buildmenu
     private lateinit var buildMenuScrollView: HorizontalScrollView
@@ -68,29 +73,26 @@ class GameActivity : AppCompatActivity(), GameController {
         gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
         //start level timer
         chrono.start()
-        // show tutorial
-        showTutorial()
+        // shows tutorial
+        if(showTutorial) {
+           displayTutorial()
+        }
+    }
+
+    fun displayTutorial() {
+        tutPopup.show(fm, "tutorialDialog")
+        tutPopup.saveTutPref(true)
     }
 
     /**
-    * opens tutorial
+    * sets a highlight for the in the tutorial mentioned element
+     * @param item the element which should be highlighted
     */
-    fun showTutorial() {
-        val tutorial = Snackbar.make(this, binding.topGUI, "", Snackbar.LENGTH_INDEFINITE)
-        tutorial.setAction(R.string.showTutorial) {
-            menuPopup.show(fm, "tutorialDialog")
-        }
-        tutorial.setActionTextColor(ContextCompat.getColor(this, R.color.white))
-        tutorial.setBackgroundTint(ContextCompat.getColor(this, R.color.dark_brown))
-        tutorial.setAnchorView(R.id.bottomGUI)
-        tutorial.show()
-    }
-
-    fun highlight(string: String) {
+    fun highlight(item: String) {
         binding.bottomGUI.children.forEach { it.alpha = 0.2F }
         binding.topGUI.children.forEach { it.alpha = 0.2F }
         binding.progressBarContainer.children.forEach {it.alpha = 0.2F}
-        when(string) {
+        when(item) {
             "bottomGui" -> {
                 binding.bottomGUI.children.forEach { it.alpha = 1F }
             }
@@ -122,7 +124,7 @@ class GameActivity : AppCompatActivity(), GameController {
             "topGuiRightBar" -> {
                 binding.waveProgressBar.alpha = 1F
                 binding.waveText.alpha = 1F
-                //binding.progressBallImg = 1F
+                binding.progressBallImg.alpha = 1F
             }
             "topGuiMenu" -> {
                 binding.menuBtn.alpha = 1F
@@ -175,6 +177,8 @@ class GameActivity : AppCompatActivity(), GameController {
      */
     private fun loadPrefs() {
         //load preferences
+        val tutorialPref = PreferenceManager.getDefaultSharedPreferences(this)
+        showTutorial = tutorialPref.getBoolean("tutorial_pref", true)
         SoundManager.loadPreferences(this)
     }
 

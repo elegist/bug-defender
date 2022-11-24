@@ -16,7 +16,7 @@ import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.helper.Vector2D
 
 @SuppressLint("ViewConstructor")
-class GameView(context: Context, callBack: GameActivity ,val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, private val callBack: GameActivity, val gameManager: GameManager) : SurfaceView(context), SurfaceHolder.Callback {
     private var gameLoop: GameLoop
     //background tiles
     private var bgPaint: Paint
@@ -36,17 +36,16 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        setWillNotDraw(false)
-
-        //start game loop
-        gameLoop.setRunning(true)
-        gameLoop.start()
+    fun toggleGameLoop() {
+        if(callBack.showTutorial) {
+            stopGameLoop()
+        } else {
+            gameLoop.setRunning(true)
+            gameLoop.start()
+        }
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
-
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
+    fun stopGameLoop() {
         var retry = true
         while (retry) {
             try {
@@ -57,6 +56,19 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
             }
             retry = false
         }
+    }
+
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        setWillNotDraw(false)
+
+        //start game loop
+        toggleGameLoop()
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        stopGameLoop()
     }
 
     override fun onDraw(canvas: Canvas) {

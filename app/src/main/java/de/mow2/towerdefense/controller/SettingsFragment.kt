@@ -3,6 +3,7 @@ package de.mow2.towerdefense.controller
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import de.mow2.towerdefense.R
 
 /**
@@ -33,6 +34,12 @@ class SettingsFragment: PreferenceFragmentCompat() {
                 SoundManager.playSounds()
                 context?.let { SoundManager.loadSounds(it) }
             }
+            true
+        }
+
+        val tutorialCheck = findPreference<CheckBoxPreference>("tutorial_pref")!!
+        tutorialCheck.setOnPreferenceChangeListener{ _ , newValue ->
+            (activity as GameActivity).showTutorial = newValue as Boolean
             true
         }
     }

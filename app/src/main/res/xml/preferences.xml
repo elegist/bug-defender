@@ -12,4 +12,9 @@
         android:key="sound_pref"
         android:title="@string/sound"
         app:iconSpaceReserved="false" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="tutorial_pref"
+        android:title="@string/tutorialTitel"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

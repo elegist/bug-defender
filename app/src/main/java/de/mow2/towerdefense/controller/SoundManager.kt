@@ -72,9 +72,8 @@ object SoundManager {
     // preference function for checkbox functionality
     fun loadPreferences(context: Context) {
         val musicPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val soundPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         musicSetting = musicPreferences.getBoolean("music_pref", true)
-        soundSetting = soundPreferences.getBoolean("sound_pref", true)
+        soundSetting = musicPreferences.getBoolean("sound_pref", true)
     }
 
 }
