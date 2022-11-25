@@ -88,11 +88,13 @@ class BitmapPreloader(val resources: Resources) {
             TowerTypes.values().forEach { type ->
                 val weaponAnimR: Int
                 val frameCountWeapon: Int
+                val rowCountWeapon = 4
                 //build images and animation maps
                 when(type) {
                     TowerTypes.BLOCK -> {
                         weaponAnimR = when(level) {
-                            0 -> R.drawable.tower_block_weapon_anim_1
+                            //TODO: einigen, wie man das mit dem sprite und dem offset löst
+                            0 -> R.drawable.tower_block_weapon_anim_1_alternative
                             1 -> R.drawable.tower_block_weapon_anim_2
                             2 -> R.drawable.tower_block_weapon_anim_3
                             else -> R.drawable.tower_block_weapon_anim_1
@@ -127,7 +129,7 @@ class BitmapPreloader(val resources: Resources) {
                         frameCountWeapon = 29
                     }
                 }
-                weaponAnims[type] = SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, 1, frameCountWeapon, 100)
+                weaponAnims[type] = SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, rowCountWeapon, frameCountWeapon, 100, true)
             }
             weaponAnimsArray = weaponAnimsArray.plus(weaponAnims)
         }
@@ -139,6 +141,7 @@ class BitmapPreloader(val resources: Resources) {
             TowerTypes.values().forEach { type ->
                 val projectileAnimR: Int
                 val frameCountProjectile: Int
+                val rowCountProjectile = 4
                 val widthProjectile: Int
                 val heightProjectile: Int
                 when(type) {
@@ -188,7 +191,7 @@ class BitmapPreloader(val resources: Resources) {
                         heightProjectile = 128
                     }
                 }
-                projectileAnims[type] = SpriteAnimation(BitmapFactory.decodeResource(resources, projectileAnimR), widthProjectile, heightProjectile, 1, frameCountProjectile, 100)
+                projectileAnims[type] = SpriteAnimation(BitmapFactory.decodeResource(resources, projectileAnimR), widthProjectile, heightProjectile, rowCountProjectile, frameCountProjectile, 100, true)
             }
             projectileAnimsArray = projectileAnimsArray.plus(projectileAnims)
         }

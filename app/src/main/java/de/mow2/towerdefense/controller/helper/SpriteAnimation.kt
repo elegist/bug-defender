@@ -1,6 +1,8 @@
 package de.mow2.towerdefense.controller.helper
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import androidx.core.graphics.createBitmap
 
 /**
  * Takes a Bitmap containing all frames of an animation.
@@ -12,7 +14,7 @@ import android.graphics.Bitmap
  * @param frameCount Number of Frames contained in given bitmap
  * @param frameDuration Time duration of one frame in milliseconds
  */
-class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val height: Int, private val rowCount: Int = 4, private val frameCount: Int = 7, private val frameDuration: Int = 30) {
+class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val height: Int, private val rowCount: Int = 4, private val frameCount: Int = 7, private val frameDuration: Int = 30, private val rotate: Boolean = false) {
     private var animationMap = HashMap<Int, Array<Bitmap>>() //holds all different animations for this type
     private lateinit var animation: Array<Bitmap>
     private var startFrameTime = System.currentTimeMillis()
@@ -22,7 +24,11 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
     var frameCounter = 0
 
     init {
-        cutSpriteSheet()
+        if (rotate) {
+            cutSpriteSheetRotation()
+        } else {
+            cutSpriteSheet()
+        }
     }
 
     /**
@@ -54,6 +60,30 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
             animationMap[i] = addAnimation
         }
         idleImage = animationMap[0]!![0]
+    }
+
+    private fun cutSpriteSheetRotation() {
+        var degrees = 0f
+        val cutW = bitmap.width / frameCount
+        val cutH = bitmap.height
+        for(i in 0 until rowCount) {
+            var addAnimation = arrayOf<Bitmap>()
+            for(j in 0 until frameCount) {
+                val cutImg = Bitmap.createBitmap(bitmap, cutW * j, 0, cutW, cutH)
+                val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
+                val rotated = rotateImage(scaled, degrees)
+                addAnimation = addAnimation.plus(rotated)
+            }
+            degrees += 90f
+            animationMap[i] = addAnimation
+        }
+        idleImage = animationMap[0]!![0]
+    }
+
+    private fun rotateImage(bitmap: Bitmap, degrees: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degrees)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
     fun finished(): Boolean {

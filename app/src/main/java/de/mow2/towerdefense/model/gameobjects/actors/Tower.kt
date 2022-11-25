@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import android.util.Log
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.SquareField
@@ -37,6 +38,21 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     var isShooting = false
 
     override fun update() {
+        if (target != null){
+            distance = target!!.position - position
+
+            orientation = if(distance.x < -5) {
+                3 //left
+            } else if(distance.x > 5) {
+                1 //right
+            } else if(distance.y < 0) {
+                0 //up
+            } else {
+                2 //down (default)
+            }
+        }
+
+        Log.i("orientation", "$orientation")
     }
 
     init {

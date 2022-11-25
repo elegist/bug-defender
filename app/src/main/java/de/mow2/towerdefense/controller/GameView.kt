@@ -93,7 +93,7 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
                 draw(canvas, ScaledImage(resources, tower.width, tower.height, R.drawable.upgrade_tower_overlay).scaledImage, tower.position)
             }
             if(tower.isShooting) {
-                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(0), tower.position)
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(tower.orientation), tower.position)
             } else {
                 draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, tower.position)
             }
@@ -101,7 +101,7 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
 
         //projectiles
         GameManager.projectileList.forEach { projectile ->
-            draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.level][projectile.tower.type]!!.nextFrame(0), projectile.position)
+            draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.level][projectile.tower.type]!!.nextFrame(projectile.orientation), projectile.position)
         }
     }
     /**
