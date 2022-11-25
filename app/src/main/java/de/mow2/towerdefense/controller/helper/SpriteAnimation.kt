@@ -56,6 +56,10 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
         idleImage = animationMap[0]!![0]
     }
 
+    fun finished(): Boolean {
+        return frameCounter == animation.size - 1
+    }
+
     private fun update() {
         if(frameCounter < animation.size - 1) {
             frameCounter++

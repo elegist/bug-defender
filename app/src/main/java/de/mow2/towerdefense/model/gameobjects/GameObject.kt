@@ -89,7 +89,6 @@ abstract class GameObject() {
         } else {
             0 //down (default)
         }
-
     }
 
     private var xDiff: Float = 0f

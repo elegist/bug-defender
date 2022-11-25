@@ -33,6 +33,9 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     var baseDamage = 0
     private var baseSpeed = 120f
 
+    //detects if the tower should be shooting right now. received from gamemanager
+    var isShooting = false
+
     override fun update() {
     }
 

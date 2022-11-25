@@ -74,7 +74,7 @@ class GameManager(private val controller: GameController) {
         when(level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 100
+                livesAmnt = 1
                 if(coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 5500
                 }
@@ -115,8 +115,10 @@ class GameManager(private val controller: GameController) {
                     val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
                     if(!tower.target!!.isDead && distance < tower.finalRange) {
                         addProjectile(Projectile(tower, tower.target!!))
+                        tower.isShooting = true
                     } else {
                         tower.target = null
+                        tower.isShooting = false
                     }
                 } else {//look for new target
                     enemyList.forEach{ enemy ->
