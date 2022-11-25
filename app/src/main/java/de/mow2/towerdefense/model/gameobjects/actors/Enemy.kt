@@ -16,8 +16,10 @@ import kotlin.random.nextInt
  */
 class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
 ): GameObject(), Comparable<Enemy>, java.io.Serializable {
+
     //position
     override var position = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
+
     //size
     override var height = GameManager.playGround.squareSize
     override var width = height
@@ -44,6 +46,8 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
     var coinValue = 0
 
     init{
+        GameManager.enemiesAlive++ // each enemy spawned adds one enemy alive die() will decrement by one
+
        if(pathToEnd(spawnPoint)){
             currentTargetNode = sortedPath.first()
             currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
@@ -51,9 +55,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             currentTargetNode = spawnPoint
             currentTargetPosition = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
         }
-
-        //spawn frequency
-        actionsPerMinute = 120f
 
         /**
          * set speed, health and baseDamage depending on the type of the creep instance
@@ -239,6 +240,15 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
             TowerTypes.MAGIC -> {}
         }
         healthPoints -= damageAmount
+    }
+
+    /**
+     * removes the enemy from the game and tells the spawner that their is one less enemy alive
+     */
+    fun die(){
+        isDead = true
+        GameManager.enemyList.remove(this)
+        GameManager.enemiesAlive--
     }
 
     /**

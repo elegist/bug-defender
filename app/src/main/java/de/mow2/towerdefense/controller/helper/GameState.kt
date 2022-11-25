@@ -53,6 +53,7 @@ class GameState{
             val objectOut = ObjectOutputStream(output)
             //save all needed data
             objectOut.writeObject(GameManager.gameLevel)
+            objectOut.writeObject(GameManager.enemyCounter)
             objectOut.writeObject(GameManager.livesAmnt)
             objectOut.writeObject(GameManager.coinAmnt)
             objectOut.writeObject(GameManager.killCounter)
@@ -76,6 +77,7 @@ class GameState{
             val input = ObjectInputStream(FileInputStream(file))
             //read all saved variables and objects
             val level = input.readObject() as Int
+            val enemyCounter = input.readObject() as Int
             val lives = input.readObject() as Int
             val coins = input.readObject() as Int
             val kills = input.readObject() as Int
@@ -89,6 +91,7 @@ class GameState{
             }
             //replace GameManager variables with saved ones
             GameManager.gameLevel = level
+            GameManager.enemyCounter = enemyCounter
             GameManager.livesAmnt = lives
             GameManager.coinAmnt = coins
             GameManager.killCounter = kills
