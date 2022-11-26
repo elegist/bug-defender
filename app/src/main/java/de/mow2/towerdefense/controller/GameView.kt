@@ -11,7 +11,6 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
-import de.mow2.towerdefense.controller.helper.ScaledImage
 import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.helper.Vector2D
 
@@ -20,7 +19,6 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
     private var gameLoop: GameLoop
     //background tiles
     private var bgPaint: Paint
-    private var bgBitmap: Bitmap
     private val buildMenu = BuildUpgradeMenu(gameManager, callBack)
 
     init {
@@ -31,9 +29,7 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
         //initializing background tiles
         bgPaint = Paint()
         bgPaint.style = Paint.Style.FILL
-        val bgTileDimension = GameManager.playGround.squareSize * 2
-        bgBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), bgTileDimension, bgTileDimension, false)
-        bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+        bgPaint.shader = BitmapShader(BitmapPreloader.playgroundBG, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -90,7 +86,7 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
         GameManager.towerList.forEach { tower ->
             draw(canvas, BitmapPreloader.towerImagesArray[tower.level][tower.type], tower.position)
             if(GameManager.selectedTool == R.id.upgradeButton && tower.level < GameManager.maxTowerLevel && buildMenu.getTowerCost(tower.type, tower.level + 1) <= GameManager.coinAmnt) {
-                draw(canvas, ScaledImage(resources, tower.width, tower.height, R.drawable.upgrade_tower_overlay).scaledImage, tower.position)
+                draw(canvas, BitmapPreloader.upgradeOverlay, tower.position)
             }
             if(tower.target != null) {
                 draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(0), tower.position)
