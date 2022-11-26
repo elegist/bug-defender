@@ -204,67 +204,67 @@ class BitmapPreloader(val resources: Resources) {
             val frameDuration: Int
             when(key) {
                 EnemyType.LEAFBUG -> {
-                    enemyR = R.drawable.leafbug_anim
+                    enemyR = R.drawable.enemy_leafbug_anim
                     frameCount = 7
                     frameDuration = 45
                 }
                 EnemyType.FIREBUG -> {
-                    enemyR = R.drawable.firebug_anim
+                    enemyR = R.drawable.enemy_firebug_anim
                     frameCount = 8
                     frameDuration = 60
                 }
                 EnemyType.MAGMACRAB -> {
-                    enemyR = R.drawable.magmacrab_anim
+                    enemyR = R.drawable.enemy_magmacrab_anim
                     frameCount = 8
                     frameDuration = 60
                 }
                 EnemyType.SCORPION -> {
-                    enemyR = R.drawable.scorpion_anim
+                    enemyR = R.drawable.enemy_scorpion_anim
                     frameCount = 8
                     frameDuration = 120
                 }
                 EnemyType.CLAMPBEETLE -> {
-                    enemyR = R.drawable.clampbeetle_anim
+                    enemyR = R.drawable.enemy_clampbeetle_anim
                     frameCount = 8
                     frameDuration = 60
                 }
                 EnemyType.FIREWASP -> {
-                    enemyR = R.drawable.firewasp_anim
+                    enemyR = R.drawable.enemy_firewasp_anim
                     frameCount = 8
                     frameDuration = 60
                 }
                 EnemyType.LOCUST -> {
-                    enemyR = R.drawable.locust_anim
+                    enemyR = R.drawable.enemy_locust_anim
                     frameCount = 8
                     frameDuration = 60
                 }
                 EnemyType.VOIDBUTTERFLY -> {
-                    enemyR = R.drawable.voidbutterfly_anim
+                    enemyR = R.drawable.enemy_voidbutterfly_anim
                     frameCount = 4
                     frameDuration = 60
                 }
                 EnemyType.SKELETONGRUNT -> {
-                    enemyR = R.drawable.skeletongrunt_anim
+                    enemyR = R.drawable.enemy_skeletongrunt_anim
                     frameCount = 6
                     frameDuration = 60
                 }
                 EnemyType.NECROMANCER -> {
-                    enemyR = R.drawable.necromancer_anim
+                    enemyR = R.drawable.enemy_necromancer_anim
                     frameCount = 6
                     frameDuration = 105
                 }
                 EnemyType.SKELETONWARRIOR -> {
-                    enemyR = R.drawable.skeletonwarrior_anim
+                    enemyR = R.drawable.enemy_skeletonwarrior_anim
                     frameCount = 8
                     frameDuration = 90
                 }
                 EnemyType.SKELETONKNIGHT -> {
-                    enemyR = R.drawable.skeletonknight_anim
+                    enemyR = R.drawable.enemy_skeletonknight_anim
                     frameCount = 8
                     frameDuration = 60
                 }
                 EnemyType.SKELETONKING -> {
-                    enemyR = R.drawable.skeletonking_anim
+                    enemyR = R.drawable.enemy_skeletonking_anim
                     frameCount = 10
                     frameDuration = 120
                 }
