@@ -12,7 +12,6 @@ import androidx.core.content.edit
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
-import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
@@ -237,11 +236,18 @@ class GameActivity : AppCompatActivity(), GameController {
     /**
      * show custom toast message in the middle of the screen
      */
-    override fun showToastMessage(message: String, type: Int) {
+    override fun showToastMessage(type: String) {
         runOnUiThread {
-            val toast = FancyToast.makeText(this, message, FancyToast.LENGTH_SHORT, type, false )
-            toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.show()
+            when(type){
+                "wave" -> {
+                    val waveToast = NiceToast.makeText(this, resources.getString(R.string.moneyWarning), NiceToast.LENGTH_SHORT, NiceToast.MONEY)
+                    waveToast.show()
+                }
+                "money" -> {
+                    val moneyToast = NiceToast.makeText(this, resources.getString(R.string.wave), NiceToast.LENGTH_SHORT, NiceToast.WAVE)
+                    moneyToast.show()
+                }
+            }
         }
     }
 

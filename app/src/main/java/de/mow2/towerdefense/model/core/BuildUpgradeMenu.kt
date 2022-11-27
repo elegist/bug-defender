@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
@@ -54,7 +53,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
                 soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
                 gameManager.validatePlayGround()
             } else {
-                controller.showToastMessage("Not enough money", FancyToast.ERROR)
+                controller.showToastMessage("money")
             }
         }
     }
@@ -66,7 +65,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
         tower.squareField.removeTower() //free square
         GameManager.towerList.remove(tower) //remove tower from drawing list
         gameManager.increaseCoins(getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
-        soundPool.play(Sounds.EXPLOSION.id, 1F, 1F, 1, 0, 1F)
+        soundPool.play(Sounds.TOWERDESTROY.id, 1F, 1F, 1, 0, 1F)
         gameManager.validatePlayGround()
     }
 

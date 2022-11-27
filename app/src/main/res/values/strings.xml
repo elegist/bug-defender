@@ -33,9 +33,8 @@
     <string name="enemyMade">Enemies killed: </string>
     <string name="levelMade">Level reached: </string>
     <string name="goOnTutorial">Go On</string>
-    <string name="showTutorial">show me the tutorial</string>
     <string name="tutorialTitel">Tutorial</string>
-    <string name="tutorialWelcome">Welcome to the tutorial of Bug Defense! If u want to skip the tutorial just leave this Window.</string>
+    <string name="tutorialWelcome">Welcome to the tutorial of Bug Defense! If You want to skip the tutorial just leave this Window.</string>
     <string name="tutorialMenu">At the bottom you will find the build menu, there you can select a tool.</string>
     <string name="tutorialMenuLeft">With the left tool you can destroy built towers.</string>
     <string name="tutorialMenuRight">With the right tool you can upgrade built towers.</string>

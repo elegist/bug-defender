@@ -32,7 +32,6 @@
     <string name="timeMade">Zeit geschafft: </string>
     <string name="enemyMade">Gegener getötet: </string>
     <string name="levelMade">Level geschafft: </string>
-    <string name="showTutorial">Zeig mir das Tutorial</string>
     <string name="goOnTutorial">Weiter</string>
     <string name="tutorialTitel">Tutorial</string>
     <string name="tutorialWelcome">Willkommen zum Tutorial von Bug Defense! Wenn das Tutorial überspringen möchtest, schließe dieses Fenster</string>
