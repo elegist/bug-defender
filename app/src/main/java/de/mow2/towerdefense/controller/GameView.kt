@@ -93,9 +93,9 @@ class GameView(context: Context, callBack: GameActivity ,val gameManager: GameMa
                 draw(canvas, ScaledImage(resources, tower.width, tower.height, R.drawable.upgrade_tower_overlay).scaledImage, tower.position)
             }
             if(tower.isShooting) {
-                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(tower.orientation), tower.position)
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(tower.orientation), Vector2D(tower.position.x, tower.position.y + tower.weaponOffset))
             } else {
-                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, tower.position)
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, Vector2D(tower.position.x, tower.position.y + tower.weaponOffset))
             }
         }
 

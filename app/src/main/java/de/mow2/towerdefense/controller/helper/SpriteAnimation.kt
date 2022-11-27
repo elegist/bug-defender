@@ -2,7 +2,6 @@ package de.mow2.towerdefense.controller.helper
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import androidx.core.graphics.createBitmap
 
 /**
  * Takes a Bitmap containing all frames of an animation.
@@ -63,7 +62,7 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
     }
 
     private fun cutSpriteSheetRotation() {
-        var degrees = 0f
+        var rotationDegrees = 0f
         val cutW = bitmap.width / frameCount
         val cutH = bitmap.height
         for(i in 0 until rowCount) {
@@ -71,18 +70,18 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
             for(j in 0 until frameCount) {
                 val cutImg = Bitmap.createBitmap(bitmap, cutW * j, 0, cutW, cutH)
                 val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
-                val rotated = rotateImage(scaled, degrees)
+                val rotated = processBitmap(scaled, rotationDegrees)
                 addAnimation = addAnimation.plus(rotated)
             }
-            degrees += 90f
+            rotationDegrees += 90f
             animationMap[i] = addAnimation
         }
         idleImage = animationMap[0]!![0]
     }
 
-    private fun rotateImage(bitmap: Bitmap, degrees: Float): Bitmap {
+    private fun processBitmap(bitmap: Bitmap, rotationDegrees: Float): Bitmap {
         val matrix = Matrix()
-        matrix.postRotate(degrees)
+        matrix.postRotate(rotationDegrees)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
