@@ -35,6 +35,12 @@ class BitmapPreloader(val resources: Resources) {
         topDrawable = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.topgui_bg))
         topDrawable.tileModeX = Shader.TileMode.REPEAT
         topDrawable.gravity = Gravity.BOTTOM
+        //background in game
+        val tileWidth = GameManager.playGround.squareSize
+        val tileHeight = GameManager.playGround.squareSize * 2
+        playgroundBG = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), tileHeight, tileHeight, false)
+        //tower overlay for upgrade menu
+        upgradeOverlay = ScaledImage(resources, tileWidth, tileHeight, R.drawable.upgrade_tower_overlay).scaledImage
     }
 
     private fun preloadTowers() {
@@ -201,6 +207,7 @@ class BitmapPreloader(val resources: Resources) {
             projectileAnimsArray = projectileAnimsArray.plus(projectileAnims)
         }
     }
+
     private fun preloadEnemies() {
         EnemyType.values().forEach { key ->
             val enemyR: Int
@@ -286,5 +293,7 @@ class BitmapPreloader(val resources: Resources) {
         var enemyAnims = ConcurrentHashMap<EnemyType, SpriteAnimation>()
         lateinit var bottomDrawable: BitmapDrawable
         lateinit var topDrawable: BitmapDrawable
+        lateinit var playgroundBG: Bitmap
+        lateinit var upgradeOverlay: Bitmap
     }
 }
