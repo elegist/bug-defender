@@ -104,7 +104,7 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
             if(GameManager.selectedTool == R.id.upgradeButton && tower.level < GameManager.maxTowerLevel && buildMenu.getTowerCost(tower.type, tower.level + 1) <= GameManager.coinAmnt) {
                 draw(canvas, ScaledImage(resources, tower.width, tower.height, R.drawable.upgrade_tower_overlay).scaledImage, tower.position)
             }
-            if(tower.target != null) {
+            if(tower.target != null && GameManager.waveActive) {
                 draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(0), tower.position)
             } else {
                 draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, tower.position)
