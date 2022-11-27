@@ -119,60 +119,59 @@ class GameManager(private val controller: GameController) {
      * updates to game logic related values
      */
     fun updateLogic() {
-        if (waveActive) {
+        if(waveActive){
             //TODO: apply different damage types and effects
             towerList.forEach towerIteration@{ tower ->
-                if (tower.cooldown()) {
-                    if (tower.target != null) {//tower already has a target
+                if(tower.cooldown()) {
+                    if(tower.target != null) {//tower already has a target
                         val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
-                        if (!tower.target!!.isDead && distance < tower.finalRange) {
+                        if(!tower.target!!.isDead && distance < tower.finalRange) {
                             addProjectile(Projectile(tower, tower.target!!))
                             tower.isShooting = true
                         } else {
                             tower.target = null
                             tower.isShooting = false
                         }
-                        tower.update()
                     } else {//look for new target
-                        enemyList.forEach { enemy ->
-                            if (tower.findDistance(tower, enemy) < tower.finalRange) {
+                        enemyList.forEach{ enemy ->
+                            if(tower.findDistance(tower, enemy) < tower.finalRange) {
                                 tower.target = enemy
                                 return@towerIteration
                             }
                         }
                     }
                 }
-                projectileList.forEach { projectile ->
-                    val enemy = projectile.enemy
-                    //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
-                    if (enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15) {
-                        enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
-                        projectileList.remove(projectile)
-                    }
-                    if (enemy.isDead) projectileList.remove(projectile)
-                    projectile.update()
-                }
-
-                /**
-                 * spawning enemies depending on the current gameLevel
-                 */
-                spawnWave()
             }
+            projectileList.forEach { projectile ->
+                val enemy = projectile.enemy
+                //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
+                if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
+                    enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
+                    projectileList.remove(projectile)
+                }
+                if(enemy.isDead) projectileList.remove(projectile)
+                projectile.update()
+            }
+
+            /**
+             * spawning enemies depending on the current gameLevel
+             */
+            spawnWave()
         }
         /**
          * update movement, update target or remove enemy
          */
         enemyList.forEach { enemy ->
-            if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
+            if(enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y){ //enemy reached finish line
                 decreaseLives(enemy.baseDamage)
                 enemy.die()
                 SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
-            } else if (enemy.healthPoints <= 0) { //enemy dies
+            }else if(enemy.healthPoints <= 0){ //enemy dies
                 increaseCoins(enemy.coinValue)
                 enemy.die()
                 SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 1F, 1F, 1, 0, 1F)
                 increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
-            } else {
+            }else{
                 enemy.update()
             }
         }
