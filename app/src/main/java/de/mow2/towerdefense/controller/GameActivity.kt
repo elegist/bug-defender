@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -73,7 +74,7 @@ class GameActivity : AppCompatActivity(), GameController {
         chrono.start()
         // shows tutorial
         if(GameManager.tutorialsActive) {
-           displayTutorial(false)
+           displayTutorial(true)
         }
     }
 

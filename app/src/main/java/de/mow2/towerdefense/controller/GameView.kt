@@ -47,23 +47,10 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         }
     }
 
-    private fun stopGameLoop() {
-        var retry = true
-        while (retry) {
-            try {
-                gameLoop.setRunning(true)
-                gameLoop.join()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            retry = false
-        }
-    }
-
     override fun surfaceCreated(holder: SurfaceHolder) {
         setWillNotDraw(false)
-
         //start game loop
+        Log.i("TutActive:", "${GameManager.tutorialsActive}")
         if(!GameManager.tutorialsActive) {
             toggleGameLoop(true)
         }
@@ -72,7 +59,16 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        stopGameLoop()
+        var retry = true
+        while (retry) {
+            try {
+                gameLoop.setRunning(false)
+                gameLoop.join()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            retry = false
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
