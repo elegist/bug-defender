@@ -17,6 +17,7 @@ interface GameController {
     fun onGameOver()
     fun showToastMessage(message: String, type: Int)
 }
+
 /**
  * GameManager handles the game logic, updates game objects and calls updates on UI Thread
  * @param controller Class which handles UI related work and implements GameController interface
@@ -26,17 +27,18 @@ class GameManager(private val controller: GameController) {
      * Method to call when increasing coins (e.g. defeating an enemy creature or destroying a tower)
      * @param increaseValue the value to be added to the total coin amount
      */
-    fun increaseCoins(increaseValue: Int){
+    fun increaseCoins(increaseValue: Int) {
         coinAmnt += increaseValue
         controller.updateGUI()
     }
+
     /**
      * Decrease players available coins by given value
      * @param decreaseValue the value to subtract from the total amount
      * @return true if succeeds, returns false if player has not enough coins
      */
-    fun decreaseCoins(decreaseValue: Int) : Boolean {
-        return if(coinAmnt >= (0 + decreaseValue)) {
+    fun decreaseCoins(decreaseValue: Int): Boolean {
+        return if (coinAmnt >= (0 + decreaseValue)) {
             coinAmnt -= decreaseValue
             controller.updateGUI()
             true
@@ -44,12 +46,14 @@ class GameManager(private val controller: GameController) {
             false
         }
     }
-    private fun increaseLives(newValue: Int){
+
+    private fun increaseLives(newValue: Int) {
         livesAmnt += newValue
         controller.updateGUI()
     }
-    private fun decreaseLives(newValue: Int) : Boolean {
-        return if(livesAmnt > (0 + newValue)) {
+
+    private fun decreaseLives(newValue: Int): Boolean {
+        return if (livesAmnt > (0 + newValue)) {
             livesAmnt -= newValue
             controller.updateGUI()
             true
@@ -62,9 +66,9 @@ class GameManager(private val controller: GameController) {
     /**
      * Increases the value of killCounter. This serves as an indicator for when to start a new / stronger wave of enemies
      */
-    private fun increaseKills(newValue: Int){
+    private fun increaseKills(newValue: Int) {
         killCounter += newValue
-        if(killCounter >= killsToProgress) {
+        if (killCounter >= killsToProgress) {
             initLevel(++gameLevel)
         }
         controller.updateGUI()
@@ -74,18 +78,18 @@ class GameManager(private val controller: GameController) {
     fun initLevel(level: Int) {
         //set the current wave
         wave = Wave(gameLevel)
-        when(level) {
+        when (level) {
             0 -> {
                 /* Start game */
                 livesAmnt = 100
-                if(coinAmnt == 0) { //prevents save game cheating
+                if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 5500
                 }
                 killsToProgress = 10
                 controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
-                if(level % 10 == 0) {
+                if (level % 10 == 0) {
                     //TODO: spawn boss wave
                     increaseLives(5)
                 }
@@ -102,21 +106,27 @@ class GameManager(private val controller: GameController) {
 
     //check if target can be reached from spawn
     private val algs = Astar() //TODO: move into companion object?
-    fun validatePlayGround(){
-        waveActive = algs.findPath(Astar.Node(0,0), Astar.Node(squaresX-1, squaresY-1), squaresX, squaresY) != null
+    fun validatePlayGround() {
+        waveActive = algs.findPath(
+            Astar.Node(0, 0),
+            Astar.Node(squaresX - 1, squaresY - 1),
+            squaresX,
+            squaresY
+        ) != null
     }
 
     /**
      * updates to game logic related values
      */
     fun updateLogic() {
-    if(waveActive){        
-    //TODO: apply different damage types and effects
+        if (waveActive) {
+            //TODO: apply different damage types and effects
             towerList.forEach towerIteration@{ tower ->
-                if(tower.cooldown()) {
-                    if(tower.target != null) {//tower already has a target
-                        val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
-                        if(!tower.target!!.isDead && distance < tower.finalRange) {
+                if (tower.cooldown()) {
+                    if (tower.target != null) {//tower already has a target
+                        val distance =
+                            tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
+                        if (!tower.target!!.isDead && distance < tower.finalRange) {
                             addProjectile(Projectile(tower, tower.target!!))
                             tower.isShooting = true
                         } else {
@@ -125,8 +135,8 @@ class GameManager(private val controller: GameController) {
                         }
                         tower.update()
                     } else {//look for new target
-                        enemyList.forEach{ enemy ->
-                            if(tower.findDistance(tower, enemy) < tower.finalRange) {
+                        enemyList.forEach { enemy ->
+                            if (tower.findDistance(tower, enemy) < tower.finalRange) {
                                 tower.target = enemy
                                 return@towerIteration
                             }
@@ -136,11 +146,11 @@ class GameManager(private val controller: GameController) {
                 projectileList.forEach { projectile ->
                     val enemy = projectile.enemy
                     //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
-                    if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
+                    if (enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15) {
                         enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
                         projectileList.remove(projectile)
                     }
-                    if(enemy.isDead) projectileList.remove(projectile)
+                    if (enemy.isDead) projectileList.remove(projectile)
                     projectile.update()
                 }
 
@@ -150,37 +160,40 @@ class GameManager(private val controller: GameController) {
                 spawnWave()
             }
         }
-            /**
-             * update movement, update target or remove enemy
-             */
-            enemyList.forEach { enemy ->
-                if(enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y){ //enemy reached finish line
-                    decreaseLives(enemy.baseDamage)
-                    enemy.die()
-                    SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
-                }else if(enemy.healthPoints <= 0){ //enemy dies
-                    increaseCoins(enemy.coinValue)
-                    enemy.die()
-                    SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 1F, 1F, 1, 0, 1F)
-                    increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
-                }else{
-                    enemy.update()
-                }
+        /**
+         * update movement, update target or remove enemy
+         */
+        enemyList.forEach { enemy ->
+            if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
+                decreaseLives(enemy.baseDamage)
+                enemy.die()
+                SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
+            } else if (enemy.healthPoints <= 0) { //enemy dies
+                increaseCoins(enemy.coinValue)
+                enemy.die()
+                SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 1F, 1F, 1, 0, 1F)
+                increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+            } else {
+                enemy.update()
             }
+        }
     }
 
     companion object {
         //tutorials
         var tutorialsActive = true
+
         //playground variables
         const val squaresX = 9
         const val squaresY = 18
         var playGround = PlayGround(GameView.gameWidth)
+
         //static game variables
         var coinAmnt: Int = 0
         var livesAmnt: Int = 0
         var killCounter: Int = 0
         var killsToProgress: Int = 0
+
         //game objects
         const val maxTowerLevel = 2
         var towerList = CopyOnWriteArrayList<Tower>()
@@ -217,10 +230,12 @@ class GameManager(private val controller: GameController) {
             enemyCounter = 0
             enemiesAlive = 0
         }
+
         fun addTower(tower: Tower) {
             towerList += tower
             towerList.sort()
         }
+
         // TODO: create one map out of all things to draw and sort it to get a good drawing order?
         fun addEnemy(enemy: Enemy) {
             enemyList += enemy
@@ -228,6 +243,7 @@ class GameManager(private val controller: GameController) {
             enemyList.reverse()
             enemyCounter++ //TODO: maybe use enemyList.size instead?
         }
+
         private fun addProjectile(projectile: Projectile) {
             projectileList += projectile
         }
@@ -235,8 +251,8 @@ class GameManager(private val controller: GameController) {
         /**
          * will
          */
-        fun spawnWave(){
-            if(Wave.canSpawn()){
+        fun spawnWave() {
+            if (Wave.canSpawn()) {
                 addEnemy(Enemy(wave.enemyType))
             }
         }

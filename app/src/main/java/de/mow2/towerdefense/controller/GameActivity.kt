@@ -3,11 +3,7 @@ package de.mow2.towerdefense.controller
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.BitmapFactory
-import android.graphics.Shader
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -308,8 +304,9 @@ class GameActivity : AppCompatActivity(), GameController {
      * @param item the element which should be highlighted
      */
     fun highlight(item: String) {
+        val topGuiContainer = binding.topGuiContainer!!
         binding.bottomGUI.children.forEach { it.alpha = 0.2F }
-        binding.topGUI.children.forEach { it.alpha = 0.2F }
+        topGuiContainer.children.forEach { it.alpha = 0.2F }
         binding.progressBarContainer.children.forEach {it.alpha = 0.2F}
         when(item) {
             "bottomGui" -> {
@@ -325,11 +322,11 @@ class GameActivity : AppCompatActivity(), GameController {
                 binding.buildButton.alpha = 1F
             }
             "topGui" -> {
-                binding.topGUI.children.forEach { it.alpha = 1F }
+                topGuiContainer.children.forEach { it.alpha = 1F }
             }
             "topGuiLeft" -> {
                 binding.timeView.alpha = 1F
-                binding.clockImage.alpha = 1F
+                binding.clockImage?.alpha = 1F
             }
             "topGuiRight" -> {
                 binding.coinsText.alpha = 1F
@@ -350,7 +347,7 @@ class GameActivity : AppCompatActivity(), GameController {
             }
             "endTutorial" -> {
                 binding.bottomGUI.children.forEach { it.alpha = 1F }
-                binding.topGUI.children.forEach { it.alpha = 1F }
+                topGuiContainer.children.forEach { it.alpha = 1F }
                 binding.progressBarContainer.children.forEach {it.alpha = 1F}
             }
         }
