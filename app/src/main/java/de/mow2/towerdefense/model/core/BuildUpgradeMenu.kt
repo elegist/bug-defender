@@ -58,9 +58,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
                 soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
                 gameManager.validatePlayGround()
             } else {
-                val toast = FancyToast.makeText(callBack, callBack.resources.getString(R.string.moneyWarning), FancyToast.LENGTH_SHORT, FancyToast.ERROR, false )
-                //toast.setGravity(Gravity.CENTER, 0, 0)
-                toast.show()
+                controller.showToastMessage("Not enough money", FancyToast.ERROR)
             }
         }
     }
