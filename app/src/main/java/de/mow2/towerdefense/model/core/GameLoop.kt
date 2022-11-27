@@ -40,7 +40,6 @@ class GameLoop(val gameManager: GameManager) : Thread() {
                 avgUps = (updateCount) / (1E-3 * elapsedTime)
                 updateCount = 0
                 startTime = System.currentTimeMillis()
-                //Log.i("UpsMonitor", "UPS:${avgUps}")
             }
         }
     }

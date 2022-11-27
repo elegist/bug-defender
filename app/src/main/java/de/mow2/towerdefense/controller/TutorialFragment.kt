@@ -1,6 +1,7 @@
 package de.mow2.towerdefense.controller
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.databinding.TutorialPopupBinding
+import de.mow2.towerdefense.model.core.GameManager
 
 class TutorialFragment: DialogFragment() {
     private var _binding: TutorialPopupBinding? = null
@@ -87,7 +89,7 @@ class TutorialFragment: DialogFragment() {
                             tutBtn.setText(R.string.close_button)
                             tutBtn.setOnClickListener {
                                 (activity as GameActivity).highlight("endTutorial")
-                                saveTutPref(false)
+                                (activity as GameActivity).displayTutorial(false)
                                 dismiss()
                             }
                         }
@@ -98,14 +100,9 @@ class TutorialFragment: DialogFragment() {
 
         tutClose.setOnClickListener {
             (activity as GameActivity).highlight("endTutorial")
-            saveTutPref(false)
+            (activity as GameActivity).displayTutorial(false)
             dismiss()
         }
-    }
-
-    fun saveTutPref(value: Boolean) {
-        val setting = SettingsFragment().findPreference<CheckBoxPreference>("tutorial_pref")!!
-        setting.isChecked = value
     }
 
     override fun onDestroyView() {

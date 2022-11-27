@@ -171,6 +171,8 @@ class GameManager(private val controller: GameController) {
 
 
     companion object {
+        //tutorials
+        var tutorialsActive = true
         //playground variables
         const val squaresX = 9
         const val squaresY = 18

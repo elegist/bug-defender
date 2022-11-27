@@ -3,8 +3,8 @@ package de.mow2.towerdefense.controller
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.model.core.GameManager
 
 /**
  * class SettingsFragment sets layout.xml for preferences
@@ -15,9 +15,8 @@ class SettingsFragment: PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
         // background music // MediaPlayer
-        val musicCheck = findPreference<CheckBoxPreference>("music_pref")!!
-        musicCheck.setOnPreferenceChangeListener{ _, newValue ->
-            if(newValue as Boolean){
+        findPreference<CheckBoxPreference>("music_pref")?.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue as Boolean) {
                 SoundManager.resumeMusic()
             } else {
                 SoundManager.pauseMusic()
@@ -26,20 +25,13 @@ class SettingsFragment: PreferenceFragmentCompat() {
         }
 
         // sound sprites / SoundPool
-        val soundCheck = findPreference<CheckBoxPreference>("sound_pref")!!
-        soundCheck.setOnPreferenceChangeListener { _, newValue ->
-            if(!(newValue as Boolean)){
+        findPreference<CheckBoxPreference>("sound_pref")?.setOnPreferenceChangeListener { _, newValue ->
+            if (!(newValue as Boolean)) {
                 SoundManager.soundPool.release()
             } else {
                 SoundManager.playSounds()
                 context?.let { SoundManager.loadSounds(it) }
             }
-            true
-        }
-
-        val tutorialCheck = findPreference<CheckBoxPreference>("tutorial_pref")!!
-        tutorialCheck.setOnPreferenceChangeListener{ _ , newValue ->
-            (activity as GameActivity).showTutorial = newValue as Boolean
             true
         }
     }

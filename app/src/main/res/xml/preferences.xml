@@ -16,5 +16,6 @@
         android:defaultValue="true"
         android:key="tutorial_pref"
         android:title="@string/tutorialTitel"
-        app:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false" />
 </PreferenceScreen>

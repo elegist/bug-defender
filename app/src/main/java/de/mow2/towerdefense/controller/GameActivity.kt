@@ -1,12 +1,14 @@
 package de.mow2.towerdefense.controller
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
 import com.shashank.sony.fancytoastlib.FancyToast
@@ -39,14 +41,10 @@ class GameActivity : AppCompatActivity(), GameController {
     private lateinit var healthText: TextView
     private lateinit var waveBar: ProgressBar
     private lateinit var waveDisplay: TextView
-    private var menuPopup = PopupFragment()
-    private var tutPopup = TutorialFragment()
+    private val menuPopup = PopupFragment()
+    private val tutPopup = TutorialFragment()
     private val fm = supportFragmentManager
-    var showTutorial: Boolean = true
-        set(value) {
-            field = value
-            gameView.toggleGameLoop()
-        }
+    private lateinit var prefManager: SharedPreferences
 
     //buildmenu
     private lateinit var buildMenuScrollView: HorizontalScrollView
@@ -74,69 +72,10 @@ class GameActivity : AppCompatActivity(), GameController {
         //start level timer
         chrono.start()
         // shows tutorial
-        if(showTutorial) {
-           displayTutorial()
+        if(GameManager.tutorialsActive) {
+           displayTutorial(false)
         }
     }
-
-    fun displayTutorial() {
-        tutPopup.show(fm, "tutorialDialog")
-        tutPopup.saveTutPref(true)
-    }
-
-    /**
-    * sets a highlight for the in the tutorial mentioned element
-     * @param item the element which should be highlighted
-    */
-    fun highlight(item: String) {
-        binding.bottomGUI.children.forEach { it.alpha = 0.2F }
-        binding.topGUI.children.forEach { it.alpha = 0.2F }
-        binding.progressBarContainer.children.forEach {it.alpha = 0.2F}
-        when(item) {
-            "bottomGui" -> {
-                binding.bottomGUI.children.forEach { it.alpha = 1F }
-            }
-            "bottomLeft" -> {
-                binding.deleteButton.alpha = 1F
-            }
-            "bottomRight" -> {
-                binding.upgradeButton.alpha = 1F
-            }
-            "bottomMiddle" -> {
-                binding.buildButton.alpha = 1F
-            }
-            "topGui" -> {
-                binding.topGUI.children.forEach { it.alpha = 1F }
-            }
-            "topGuiLeft" -> {
-                binding.timeView.alpha = 1F
-                binding.clockImage.alpha = 1F
-            }
-            "topGuiRight" -> {
-                binding.coinsText.alpha = 1F
-                binding.coinImg.alpha = 1F
-            }
-            "topGuiLeftBar" -> {
-                binding.healthProgressBar.alpha = 1F
-                binding.healthText.alpha = 1F
-                binding.healthBallImg.alpha = 1F
-            }
-            "topGuiRightBar" -> {
-                binding.waveProgressBar.alpha = 1F
-                binding.waveText.alpha = 1F
-                binding.progressBallImg.alpha = 1F
-            }
-            "topGuiMenu" -> {
-                binding.menuBtn.alpha = 1F
-            }
-            "endTutorial" -> {
-                binding.bottomGUI.children.forEach { it.alpha = 1F }
-                binding.topGUI.children.forEach { it.alpha = 1F }
-                binding.progressBarContainer.children.forEach {it.alpha = 1F}
-            }
-        }
-    }
-
 
     /**
      * pauses Game and goes back to main menu
@@ -176,9 +115,8 @@ class GameActivity : AppCompatActivity(), GameController {
      * Load all saved user preferences
      */
     private fun loadPrefs() {
-        //load preferences
-        val tutorialPref = PreferenceManager.getDefaultSharedPreferences(this)
-        showTutorial = tutorialPref.getBoolean("tutorial_pref", true)
+        prefManager = PreferenceManager.getDefaultSharedPreferences(this)
+        GameManager.tutorialsActive = prefManager.getBoolean("tutorial_pref", true)
         SoundManager.loadPreferences(this)
     }
 
@@ -327,6 +265,71 @@ class GameActivity : AppCompatActivity(), GameController {
             buildMenuScrollView.visibility = View.GONE
         }
         buildMenuExists = !buildMenuExists
+    }
+
+    fun displayTutorial(active: Boolean) {
+        if(active) {
+            tutPopup.show(fm, "tutorialDialog")
+            gameView.toggleGameLoop(false)
+        } else {
+            prefManager.edit {
+                putBoolean("tutorial_pref", false)
+            }
+            gameView.toggleGameLoop(true)
+        }
+    }
+
+    /**
+     * sets a highlight for the in the tutorial mentioned element
+     * @param item the element which should be highlighted
+     */
+    fun highlight(item: String) {
+        binding.bottomGUI.children.forEach { it.alpha = 0.2F }
+        binding.topGUI.children.forEach { it.alpha = 0.2F }
+        binding.progressBarContainer.children.forEach {it.alpha = 0.2F}
+        when(item) {
+            "bottomGui" -> {
+                binding.bottomGUI.children.forEach { it.alpha = 1F }
+            }
+            "bottomLeft" -> {
+                binding.deleteButton.alpha = 1F
+            }
+            "bottomRight" -> {
+                binding.upgradeButton.alpha = 1F
+            }
+            "bottomMiddle" -> {
+                binding.buildButton.alpha = 1F
+            }
+            "topGui" -> {
+                binding.topGUI.children.forEach { it.alpha = 1F }
+            }
+            "topGuiLeft" -> {
+                binding.timeView.alpha = 1F
+                binding.clockImage.alpha = 1F
+            }
+            "topGuiRight" -> {
+                binding.coinsText.alpha = 1F
+                binding.coinImg.alpha = 1F
+            }
+            "topGuiLeftBar" -> {
+                binding.healthProgressBar.alpha = 1F
+                binding.healthText.alpha = 1F
+                binding.healthBallImg.alpha = 1F
+            }
+            "topGuiRightBar" -> {
+                binding.waveProgressBar.alpha = 1F
+                binding.waveText.alpha = 1F
+                binding.progressBallImg.alpha = 1F
+            }
+            "topGuiMenu" -> {
+                binding.menuBtn.alpha = 1F
+            }
+            "endTutorial" -> {
+                binding.bottomGUI.children.forEach { it.alpha = 1F }
+                binding.topGUI.children.forEach { it.alpha = 1F }
+                binding.progressBarContainer.children.forEach {it.alpha = 1F}
+            }
+        }
     }
 }
 

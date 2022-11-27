@@ -36,20 +36,22 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         bgPaint.shader = BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
-    fun toggleGameLoop() {
-        if(callBack.showTutorial) {
-            stopGameLoop()
+    fun toggleGameLoop(setRunning: Boolean) {
+        if(!setRunning) {
+            gameLoop.setRunning(false)
+            gameLoop.join()
         } else {
+            gameLoop = GameLoop(gameManager)
             gameLoop.setRunning(true)
             gameLoop.start()
         }
     }
 
-    fun stopGameLoop() {
+    private fun stopGameLoop() {
         var retry = true
         while (retry) {
             try {
-                gameLoop.setRunning(false)
+                gameLoop.setRunning(true)
                 gameLoop.join()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -62,7 +64,9 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         setWillNotDraw(false)
 
         //start game loop
-        toggleGameLoop()
+        if(!GameManager.tutorialsActive) {
+            toggleGameLoop(true)
+        }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}

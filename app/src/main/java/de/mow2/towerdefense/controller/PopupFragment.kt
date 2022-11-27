@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import de.mow2.towerdefense.R
@@ -71,8 +72,8 @@ class PopupFragment: DialogFragment() {
                 binding.popupTitleText.setText(R.string.preference_button)
                 binding.tutorialBtn.setText(R.string.tutorialTitel)
                 binding.tutorialBtn.setOnClickListener{
+                    (activity as GameActivity).displayTutorial(true)
                     dismiss()
-                    (activity as GameActivity).displayTutorial()
                 }
                 childFragmentManager
                     .beginTransaction()
