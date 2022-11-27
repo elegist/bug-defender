@@ -124,8 +124,7 @@ class GameManager(private val controller: GameController) {
             towerList.forEach towerIteration@{ tower ->
                 if (tower.cooldown()) {
                     if (tower.target != null) {//tower already has a target
-                        val distance =
-                            tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
+                        val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
                         if (!tower.target!!.isDead && distance < tower.finalRange) {
                             addProjectile(Projectile(tower, tower.target!!))
                             tower.isShooting = true
