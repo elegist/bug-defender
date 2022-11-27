@@ -104,16 +104,16 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
             if(GameManager.selectedTool == R.id.upgradeButton && tower.level < GameManager.maxTowerLevel && buildMenu.getTowerCost(tower.type, tower.level + 1) <= GameManager.coinAmnt) {
                 draw(canvas, ScaledImage(resources, tower.width, tower.height, R.drawable.upgrade_tower_overlay).scaledImage, tower.position)
             }
-            if(tower.target != null && GameManager.waveActive) {
-                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(0), tower.position)
+            if(tower.isShooting && GameManager.waveActive) {
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(tower.orientation), Vector2D(tower.position.x, tower.position.y + tower.weaponOffset))
             } else {
-                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, tower.position)
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, Vector2D(tower.position.x, tower.position.y + tower.weaponOffset))
             }
         }
 
         //projectiles
         GameManager.projectileList.forEach { projectile ->
-            draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.level][projectile.tower.type]!!.nextFrame(0), projectile.position)
+            draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.level][projectile.tower.type]!!.nextFrame(projectile.orientation), projectile.position)
         }
     }
     /**

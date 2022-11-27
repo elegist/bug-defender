@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.core
 
+import android.util.Log
 import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameView
@@ -110,17 +111,20 @@ class GameManager(private val controller: GameController) {
      * updates to game logic related values
      */
     fun updateLogic() {
-        if(waveActive){
-            //TODO: apply different damage types and effects
+    if(waveActive){        
+    //TODO: apply different damage types and effects
             towerList.forEach towerIteration@{ tower ->
                 if(tower.cooldown()) {
                     if(tower.target != null) {//tower already has a target
                         val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
                         if(!tower.target!!.isDead && distance < tower.finalRange) {
                             addProjectile(Projectile(tower, tower.target!!))
+                            tower.isShooting = true
                         } else {
                             tower.target = null
+                            tower.isShooting = false
                         }
+                        tower.update()
                     } else {//look for new target
                         enemyList.forEach{ enemy ->
                             if(tower.findDistance(tower, enemy) < tower.finalRange) {
@@ -130,22 +134,22 @@ class GameManager(private val controller: GameController) {
                         }
                     }
                 }
-            }
-            projectileList.forEach { projectile ->
-                val enemy = projectile.enemy
-                //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
-                if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
-                    enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
-                    projectileList.remove(projectile)
+                projectileList.forEach { projectile ->
+                    val enemy = projectile.enemy
+                    //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
+                    if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
+                        enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
+                        projectileList.remove(projectile)
+                    }
+                    if(enemy.isDead) projectileList.remove(projectile)
+                    projectile.update()
                 }
-                if(enemy.isDead) projectileList.remove(projectile)
-                projectile.update()
-            }
 
-            /**
-             * spawning enemies depending on the current gameLevel
-             */
-            spawnWave()
+                /**
+                 * spawning enemies depending on the current gameLevel
+                 */
+                spawnWave()
+            }
         }
             /**
              * update movement, update target or remove enemy

@@ -3,6 +3,9 @@ package de.mow2.towerdefense.controller
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.BitmapFactory
+import android.graphics.Shader
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -10,6 +13,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
 import com.shashank.sony.fancytoastlib.FancyToast
@@ -17,6 +21,7 @@ import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
+import de.mow2.towerdefense.controller.helper.BitmapPreloader
 import de.mow2.towerdefense.controller.helper.BuildButton
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityGameBinding
@@ -34,6 +39,9 @@ class GameActivity : AppCompatActivity(), GameController {
 
      //game content and gui
     private val gameManager = GameManager(this)
+    private lateinit var bottomGuiContainer: ConstraintLayout
+    private lateinit var topGuiBg: View
+    private lateinit var bottomGuiSpacer: View
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
     private lateinit var chrono: Chronometer
@@ -84,6 +92,7 @@ class GameActivity : AppCompatActivity(), GameController {
     fun pauseGame(view: View) {
         //TODO: save game state and return to main menu
         gameState.saveGameState(this)
+        SoundManager.mediaPlayer.release()
         startActivity(Intent(this, MainActivity::class.java))
     }
 
@@ -91,23 +100,25 @@ class GameActivity : AppCompatActivity(), GameController {
      * Triggered if liveAmt = 0, sets game over screen
      */
     override fun onGameOver() {
-        setContentView(R.layout.gameover_view)
-        SoundManager.mediaPlayer.release()
-        soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
-        val timeValue = findViewById<TextView>(R.id.timeValue)
-        val levelValue = findViewById<TextView>(R.id.levelValue)
-        val enemyValue = findViewById<TextView>(R.id.enemyValue)
-        //"${this.resources.getString(R.string.timeMade)} ${chrono.text}".also { timeValue.text = it }
-        timeValue.text = "${chrono.text}"
-        levelValue.text = "${GameManager.gameLevel}"
-        enemyValue.text = "${GameManager.killCounter}"
-        GameManager.reset()
+        runOnUiThread {
+            setContentView(R.layout.gameover_view)
+            SoundManager.mediaPlayer.release()
+            soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
+            val timeValue = findViewById<TextView>(R.id.timeValue)
+            val levelValue = findViewById<TextView>(R.id.levelValue)
+            val enemyValue = findViewById<TextView>(R.id.enemyValue)
+            timeValue.text = "${chrono.text}"
+            levelValue.text = "${GameManager.gameLevel}"
+            enemyValue.text = "${GameManager.killCounter}"
+            GameManager.reset()
+        }
     }
 
     /**
      * Button-triggered reset (return to main menu)
      */
     fun leaveGame(view: View) {
+        SoundManager.mediaPlayer.release()
         startActivity(Intent(this, MainActivity::class.java))
         GameManager.reset()
     }
@@ -132,7 +143,12 @@ class GameActivity : AppCompatActivity(), GameController {
      * Initialize all game GUI references and contents
      */
     private fun initGUI() {
-        //reference game gui
+        //reference game gui containers
+        bottomGuiContainer = binding.bottomGuiContainer!!
+        bottomGuiSpacer = binding.bottomGuiSpacer
+        topGuiBg = binding.topGuiBg!!
+        topGuiBg.background = BitmapPreloader.topDrawable
+        //reference game gui elements
         chrono = binding.timeView
         coinsTxt = binding.coinsText
         healthBar = binding.healthProgressBar
@@ -147,14 +163,15 @@ class GameActivity : AppCompatActivity(), GameController {
         buildButton = binding.buildButton
 
         //create bottom gui contents
-        binding.bottomGUI.children.forEach { view ->
+        bottomGuiSpacer.background = BitmapPreloader.bottomDrawable
+        bottomGuiContainer.children.forEach { view ->
             view.setOnClickListener { button ->
                 if (GameManager.selectedTool == button.id){
                     GameManager.selectedTool = null
-                    binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
+                    bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 } else {
                     GameManager.selectedTool = button.id
-                    binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
+                    bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                     button.setBackgroundResource(R.drawable.button_border_active)
                 }
             }
@@ -178,7 +195,7 @@ class GameActivity : AppCompatActivity(), GameController {
             towerBtn.setOnClickListener {
                 GameManager.selectedTool = buildButton.id
                 GameManager.selectedTower = type
-                binding.bottomGUI.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
+                bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 binding.buildButton.setBackgroundResource(R.drawable.button_border_active)
                 toggleBuildMenu()
                 when(type) {
@@ -221,6 +238,9 @@ class GameActivity : AppCompatActivity(), GameController {
         waveBar.progress = 0
     }
 
+    /**
+     * show custom toast message in the middle of the screen
+     */
     override fun showToastMessage(message: String, type: Int) {
         runOnUiThread {
             val toast = FancyToast.makeText(this, message, FancyToast.LENGTH_SHORT, type, false )
@@ -259,6 +279,9 @@ class GameActivity : AppCompatActivity(), GameController {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
+    /**
+     * hide or show build menu
+     */
     private fun toggleBuildMenu() {
         if (!buildMenuExists){
             buildMenuScrollView.visibility = View.VISIBLE

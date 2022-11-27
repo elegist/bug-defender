@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import android.util.Log
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.SquareField
@@ -20,8 +21,8 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     //tower-specific game variables
     var level: Int = 0
     set(value) {
-        scaleTowerValues()
         field = value
+        scaleTowerValues()
     }
     var hasTarget = false
     var target: Enemy? = null
@@ -32,8 +33,27 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     var finalRange = 0
     var baseDamage = 0
     private var baseSpeed = 120f
+    var weaponOffset = 0f
+
+    //detects if the tower should be shooting right now. received from gamemanager
+    var isShooting = false
 
     override fun update() {
+        if (type != TowerTypes.SLOW) {
+            if (target != null){
+                distance = target!!.position - position
+
+                orientation = if(distance.x < -5) {
+                    3 //left
+                } else if(distance.x > 5) {
+                    1 //right
+                } else if(distance.y < 0) {
+                    0 //up
+                } else {
+                    2 //down (default)
+                }
+            }
+        }
     }
 
     init {
@@ -46,6 +66,11 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
      * calculates speed, damage and range for this towers level
      */
     private fun scaleTowerValues() {
+        when (level) {
+            0 -> weaponOffset = height / 6f
+            1 -> weaponOffset = height / 9f
+            2 -> weaponOffset = 0f
+        }
         when(type) {
             TowerTypes.BLOCK -> {
                 finalRange = baseRange + level * width

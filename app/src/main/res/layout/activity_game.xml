@@ -7,62 +7,98 @@
     android:layout_height="match_parent"
     android:background="@color/dark_brown">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topGUI"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/top_menu_bg"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:layout_height="58dp"
+        android:background="@color/dark_brown"
+        app:layout_constraintBottom_toTopOf="@+id/gameContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:elevation="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/menuBtn"
+                style="@style/InGameButton.Main"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="@drawable/defaultbtn_states"
+                android:onClick="popUpMenu"
+                android:text="@string/menuBtn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/coinsText"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/timeView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/coinImg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/coins"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/coinsText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/coins" />
+
+            <Chronometer
+                android:id="@+id/timeView"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:textColor="#BCAAA4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/menuBtn"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/coinsText"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/coinImg"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/menuBtn"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/timer_image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/timeView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/time" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ImageView
-            android:id="@+id/clockImage"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/timer_image"
-            app:srcCompat="@drawable/time" />
-
-        <Chronometer
-            android:id="@+id/timeView"
-            android:layout_width="wrap_content"
+            android:id="@+id/topGuiBg"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="textStart"
-            android:textColor="#BCAAA4" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/menuBtn"
-            style="@style/InGameButton.Main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/defaultbtn_states"
-            android:onClick="popUpMenu"
-            android:text="@string/menuBtn" />
-
-        <TextView
-            android:id="@+id/coinsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="textEnd" />
-
-        <ImageView
-            android:id="@+id/coinImg"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/coins"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/coins" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progressBarContainer"
@@ -188,69 +224,79 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomGUI"
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="4dp"
+        android:layout_height="74dp"
         android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/deleteButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/defaultbtn_states"
-            android:contentDescription="@string/delete_tower_button"
-            android:elevation="5dp"
-            android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/buildButton"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/space"
-            app:srcCompat="@drawable/destroy_tower_btn"
-            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
-
-        <ImageButton
-            android:id="@+id/buildButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_margin="4dp"
-            android:background="@drawable/defaultbtn_states"
-            android:contentDescription="@string/build_tower_button"
-            android:elevation="5dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/upgradeButton"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/deleteButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/tower_block_imagebtn"
-            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
-            tools:srcCompat="@drawable/tower_block_imagebtn" />
-
-        <ImageButton
-            android:id="@+id/upgradeButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/defaultbtn_states"
-            android:contentDescription="@string/upgrade_tower_button"
-            android:elevation="5dp"
-            android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buildButton"
-            app:layout_constraintTop_toTopOf="@+id/space"
-            app:srcCompat="@drawable/upgrade"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-        <Space
-            android:id="@+id/space"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomGuiContainer"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="0dp"
+            android:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/bottomGuiSpacer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/defaultbtn_states"
+                android:contentDescription="@string/delete_tower_button"
+                android:elevation="5dp"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buildButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/destroy_tower_btn"
+                tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+            <ImageButton
+                android:id="@+id/buildButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/defaultbtn_states"
+                android:contentDescription="@string/build_tower_button"
+                android:elevation="5dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/upgradeButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/deleteButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/tower_block_imagebtn"
+                tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
+                tools:srcCompat="@drawable/tower_block_imagebtn" />
+
+            <ImageButton
+                android:id="@+id/upgradeButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/defaultbtn_states"
+                android:contentDescription="@string/upgrade_tower_button"
+                android:elevation="5dp"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/buildButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/upgrade"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/bottomGuiSpacer"
+            android:layout_width="0dp"
+            android:layout_height="66dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
