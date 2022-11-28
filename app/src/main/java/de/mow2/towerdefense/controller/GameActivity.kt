@@ -332,7 +332,7 @@ class GameActivity : AppCompatActivity(), GameController {
             }
             "topGuiLeft" -> {
                 binding.timeView.alpha = 1F
-                binding.clockImage?.alpha = 1F
+                //binding.clockImage.alpha = 1F
             }
             "topGuiRight" -> {
                 binding.coinsText.alpha = 1F
