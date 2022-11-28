@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -310,13 +311,21 @@ class GameActivity : AppCompatActivity(), GameController {
      * @param item the element which should be highlighted
      */
     fun highlight(item: String) {
-        val topGuiContainer = binding.topGuiContainer!!
-        binding.bottomGUI.children.forEach { it.alpha = 0.2F }
-        topGuiContainer.children.forEach { it.alpha = 0.2F }
-        binding.progressBarContainer.children.forEach {it.alpha = 0.2F}
+        val healthBar = binding.healthBarContainer
+        val progressBar = binding.progressBarContainer
+        val time = binding.leftElementsWrapper
+        val coins = binding.rightElementsWrapper
+        val topGuiContainer = binding.topGuiContainer
+        val bottomGuiContainer = binding.bottomGuiContainer
+        bottomGuiContainer.children.forEach { it.alpha = 0.2F }
+        time.children.forEach { it.alpha = 0.2F }
+        coins.children.forEach { it.alpha = 0.2F }
+        healthBar.children.forEach { it.alpha = 0.2F }
+        progressBar.children.forEach { it.alpha = 0.2F }
+        binding.menuBtn.alpha = 0.2F
         when(item) {
             "bottomGui" -> {
-                binding.bottomGUI.children.forEach { it.alpha = 1F }
+                bottomGuiContainer.children.forEach { it.alpha = 1F }
             }
             "bottomLeft" -> {
                 binding.deleteButton.alpha = 1F
@@ -328,33 +337,34 @@ class GameActivity : AppCompatActivity(), GameController {
                 binding.buildButton.alpha = 1F
             }
             "topGui" -> {
-                topGuiContainer.children.forEach { it.alpha = 1F }
+                time.children.forEach { it.alpha = 1F }
+                coins.children.forEach { it.alpha = 1F }
+                healthBar.children.forEach { it.alpha = 1F }
+                progressBar.children.forEach { it.alpha = 1F }
+                binding.menuBtn.alpha = 1F
             }
             "topGuiLeft" -> {
-                binding.timeView.alpha = 1F
-                //binding.clockImage.alpha = 1F
+                time.children.forEach { it.alpha = 1F }
             }
             "topGuiRight" -> {
-                binding.coinsText.alpha = 1F
-                binding.coinImg.alpha = 1F
+                coins.children.forEach { it.alpha = 1F }
             }
             "topGuiLeftBar" -> {
-                binding.healthProgressBar.alpha = 1F
-                binding.healthText.alpha = 1F
-                binding.healthBallImg.alpha = 1F
+                healthBar.children.forEach { it.alpha = 1F }
             }
             "topGuiRightBar" -> {
-                binding.waveProgressBar.alpha = 1F
-                binding.waveText.alpha = 1F
-                binding.progressBallImg.alpha = 1F
+                progressBar.children.forEach { it.alpha = 1F }
             }
             "topGuiMenu" -> {
                 binding.menuBtn.alpha = 1F
             }
             "endTutorial" -> {
-                binding.bottomGUI.children.forEach { it.alpha = 1F }
-                topGuiContainer.children.forEach { it.alpha = 1F }
-                binding.progressBarContainer.children.forEach {it.alpha = 1F}
+                bottomGuiContainer.children.forEach { it.alpha = 1F }
+                time.children.forEach { it.alpha = 1F }
+                coins.children.forEach { it.alpha = 1F }
+                healthBar.children.forEach { it.alpha = 1F }
+                progressBar.children.forEach { it.alpha = 1F }
+                binding.menuBtn.alpha = 1F
             }
         }
     }
