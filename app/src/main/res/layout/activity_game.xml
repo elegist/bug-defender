@@ -311,9 +311,9 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/deleteButton"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/tower_block_imagebtn"
+                app:srcCompat="@drawable/tower_single_imagebtn"
                 tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
-                tools:srcCompat="@drawable/tower_block_imagebtn" />
+                tools:srcCompat="@drawable/tower_single_imagebtn" />
 
             <ImageButton
                 android:id="@+id/upgradeButton"

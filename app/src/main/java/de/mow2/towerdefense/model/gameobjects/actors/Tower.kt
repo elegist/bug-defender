@@ -1,8 +1,5 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import android.util.Log
-import de.mow2.towerdefense.controller.GameView
-import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.helper.Vector2D
@@ -18,6 +15,8 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     override var height = 2 * width
     //position on screen
     override var position = Vector2D(squareField.position.x, squareField.position.y - width)
+    var weaponOffset = 0f
+    private var isRotatable = true
     //tower-specific game variables
     var level: Int = 0
     set(value) {
@@ -33,13 +32,12 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     var finalRange = 0
     var baseDamage = 0
     private var baseSpeed = 120f
-    var weaponOffset = 0f
 
     //detects if the tower should be shooting right now. received from gamemanager
     var isShooting = false
 
     override fun update() {
-        if (type != TowerTypes.SLOW) {
+        if (isRotatable) {
             if (target != null){
                 distance = target!!.position - position
 
@@ -72,22 +70,25 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
             2 -> weaponOffset = 0f
         }
         when(type) {
-            TowerTypes.BLOCK -> {
+            TowerTypes.SINGLE -> {
                 finalRange = baseRange + level * width
                 baseDamage = 1 + level
                 actionsPerMinute = baseSpeed + level * 10
             }
             TowerTypes.SLOW -> {
+                isRotatable = false
                 finalRange = baseRange + level * width / 2
                 baseDamage = 0
                 actionsPerMinute = baseSpeed / 2 + level * 10
             }
             TowerTypes.AOE -> {
+                isRotatable = false
                 finalRange = baseRange + level * width / 2
                 baseDamage = 2 + level * 2
                 actionsPerMinute = baseSpeed / 2 + level * 20
             }
             TowerTypes.MAGIC -> {
+                isRotatable = false
                 finalRange = baseRange + level * width
                 baseDamage = 5 + level * 5
                 actionsPerMinute = baseSpeed / 4 + level * 10

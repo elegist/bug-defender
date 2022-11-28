@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
@@ -208,7 +207,7 @@ class GameManager(private val controller: GameController) {
 
         // build menu variables
         var selectedTool: Int? = null
-        var selectedTower = TowerTypes.BLOCK // default tower
+        var selectedTower = TowerTypes.SINGLE // default tower
 
         /**
          * Reset all game variables
@@ -222,7 +221,7 @@ class GameManager(private val controller: GameController) {
             livesAmnt = 0
             killCounter = 0
             selectedTool = null
-            selectedTower = TowerTypes.BLOCK
+            selectedTower = TowerTypes.SINGLE
             lastTower = null
             gameLevel = 0
             enemyCounter = 0
