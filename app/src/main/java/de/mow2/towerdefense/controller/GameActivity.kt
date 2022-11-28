@@ -1,18 +1,19 @@
 package de.mow2.towerdefense.controller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.edit
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
+import com.google.android.material.snackbar.Snackbar.*
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
@@ -140,9 +141,9 @@ class GameActivity : AppCompatActivity(), GameController {
      */
     private fun initGUI() {
         //reference game gui containers
-        bottomGuiContainer = binding.bottomGuiContainer!!
+        bottomGuiContainer = binding.bottomGuiContainer
         bottomGuiSpacer = binding.bottomGuiSpacer
-        topGuiBg = binding.topGuiBg!!
+        topGuiBg = binding.topGuiBg
         topGuiBg.background = BitmapPreloader.topDrawable
         //reference game gui elements
         chrono = binding.timeView
@@ -236,17 +237,41 @@ class GameActivity : AppCompatActivity(), GameController {
 
     /**
      * show custom toast message in the middle of the screen
+     * @param type decides which snackbar should be shown
      */
+    @SuppressLint("InflateParams", "ResourceType", "PrivateResource")
     override fun showToastMessage(type: String) {
         runOnUiThread {
+            val parent = binding.wrapAll
+            val snackBar = make(parent, "", LENGTH_SHORT)
+            val snackBarLayout: View = layoutInflater.inflate(R.layout.toast, null)
+            val snackbarLayout = snackBar.view as SnackbarLayout
+            val text = snackBarLayout.findViewById<TextView>(R.id.toast_text)
+            val image = snackBarLayout.findViewById<ImageView>(R.id.toast_icon)
+            val layout = snackBarLayout.findViewById<LinearLayout>(R.id.toast_type)
+            val params = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
+            val display = binding.wrapAll.resources.displayMetrics
+            snackBar.view.setBackgroundResource(Color.TRANSPARENT)
+            //snackBar.anchorView = binding.wrapAll
+            snackBar.animationMode = ANIMATION_MODE_FADE
+            snackbarLayout.addView(snackBarLayout, 0)
+
             when(type){
                 "wave" -> {
-                    val waveToast = NiceToast.makeText(this, resources.getString(R.string.moneyWarning), NiceToast.LENGTH_SHORT, NiceToast.MONEY)
-                    waveToast.show()
+                    "${resources.getString(R.string.wave)} ${GameManager.gameLevel}".also { text.text = it }
+                    image.setImageResource(R.drawable.time)
+                    layout.setBackgroundResource(R.drawable.wave_toast_shape)
+                    params.setMargins(display.widthPixels/4, display.heightPixels/2, display.widthPixels/4, display.heightPixels/2)
+                    snackBar.view.layoutParams = params
+                    snackBar.show()
                 }
                 "money" -> {
-                    val moneyToast = NiceToast.makeText(this, resources.getString(R.string.wave), NiceToast.LENGTH_SHORT, NiceToast.WAVE)
-                    moneyToast.show()
+                    resources.getString(R.string.moneyWarning).also { text.text = it }
+                    image.setImageResource(R.drawable.coins)
+                    layout.setBackgroundResource(R.drawable.warning_toast_shape)
+                    params.setMargins(display.widthPixels/5, display.heightPixels/2, display.widthPixels/5, display.heightPixels/2)
+                    snackBar.view.layoutParams = params
+                    snackBar.show()
                 }
             }
         }
@@ -294,6 +319,10 @@ class GameActivity : AppCompatActivity(), GameController {
         buildMenuExists = !buildMenuExists
     }
 
+    /**
+     * hide or show Tutorial
+     * @param active Boolean Value shows if Tutorial should be shown or not
+     */
     fun displayTutorial(active: Boolean) {
         if(active) {
             tutPopup.show(fm, "tutorialDialog")
@@ -315,8 +344,7 @@ class GameActivity : AppCompatActivity(), GameController {
         val progressBar = binding.progressBarContainer
         val time = binding.leftElementsWrapper
         val coins = binding.rightElementsWrapper
-        val topGuiContainer = binding.topGuiContainer
-        val bottomGuiContainer = binding.bottomGuiContainer
+        bottomGuiContainer = binding.bottomGuiContainer
         bottomGuiContainer.children.forEach { it.alpha = 0.2F }
         time.children.forEach { it.alpha = 0.2F }
         coins.children.forEach { it.alpha = 0.2F }

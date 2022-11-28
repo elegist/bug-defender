@@ -18,7 +18,7 @@
     <string name="resumeGame">Spiel fortsetzen</string>
     <string name="moneyWarning">nicht genug Geld</string>
     <string name="toastAction">nicht mehr anzeigen</string>
-    <string name="wave">Welle</string>
+    <string name="wave">Welle: </string>
     <string name="coins">Münzen</string>
     <string name="back">zurück zu Hauptmenü</string>
     <string name="restart">restart game</string>

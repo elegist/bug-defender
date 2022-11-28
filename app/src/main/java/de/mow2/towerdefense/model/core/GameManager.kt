@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.core
 
+import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds

@@ -18,7 +18,7 @@
     <string name="resumeGame">resume game</string>
     <string name="moneyWarning">not enough money</string>
     <string name="toastAction">don\'t show again</string>
-    <string name="wave">Wave</string>
+    <string name="wave">Wave: </string>
     <string name="coins">coins</string>
     <string name="back">back to main menu</string>
     <string name="restart">restart game</string>
