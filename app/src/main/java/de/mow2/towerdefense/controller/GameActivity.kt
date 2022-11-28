@@ -195,7 +195,7 @@ class GameActivity : AppCompatActivity(), GameController {
                 binding.buildButton.setBackgroundResource(R.drawable.button_border_active)
                 toggleBuildMenu()
                 when(type) {
-                    TowerTypes.BLOCK -> buildButton.setImageResource(R.drawable.tower_block_imagebtn)
+                    TowerTypes.SINGLE -> buildButton.setImageResource(R.drawable.tower_single_imagebtn)
                     TowerTypes.SLOW -> buildButton.setImageResource(R.drawable.tower_slow_imagebtn)
                     TowerTypes.AOE -> buildButton.setImageResource(R.drawable.tower_aoe_imagebtn)
                     TowerTypes.MAGIC -> buildButton.setImageResource(R.drawable.tower_magic_imagebtn)

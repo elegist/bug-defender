@@ -1,13 +1,11 @@
 package de.mow2.towerdefense.model.core
 
 import com.shashank.sony.fancytoastlib.FancyToast
-import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
-import kotlinx.coroutines.flow.callbackFlow
 import java.util.concurrent.CopyOnWriteArrayList
 
 interface GameController {
@@ -209,7 +207,7 @@ class GameManager(private val controller: GameController) {
 
         // build menu variables
         var selectedTool: Int? = null
-        var selectedTower = TowerTypes.BLOCK // default tower
+        var selectedTower = TowerTypes.SINGLE // default tower
 
         /**
          * Reset all game variables
@@ -223,7 +221,7 @@ class GameManager(private val controller: GameController) {
             livesAmnt = 0
             killCounter = 0
             selectedTool = null
-            selectedTower = TowerTypes.BLOCK
+            selectedTower = TowerTypes.SINGLE
             lastTower = null
             gameLevel = 0
             enemyCounter = 0

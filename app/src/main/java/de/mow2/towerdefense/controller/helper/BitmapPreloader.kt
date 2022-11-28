@@ -49,12 +49,12 @@ class BitmapPreloader(val resources: Resources) {
             TowerTypes.values().forEach { type ->
                 val towerR: Int
                 when(type) {
-                    TowerTypes.BLOCK -> {
+                    TowerTypes.SINGLE -> {
                         towerR = when(level) {
-                            0 -> R.drawable.tower_block_1
-                            1 -> R.drawable.tower_block_2
-                            2 -> R.drawable.tower_block_3
-                            else -> R.drawable.tower_block_1
+                            0 -> R.drawable.tower_single_1
+                            1 -> R.drawable.tower_single_2
+                            2 -> R.drawable.tower_single_3
+                            else -> R.drawable.tower_single_1
                         }
                     }
                     TowerTypes.SLOW -> {
@@ -94,18 +94,18 @@ class BitmapPreloader(val resources: Resources) {
             TowerTypes.values().forEach { type ->
                 val weaponAnimR: Int
                 val frameCountWeapon: Int
-                var rowCountWeapon = 4
+                val rowCountWeapon = 4
+                var isRotatable = true //set to false in specific tower type to prevent generating rotatable sprite sheets
                 //build images and animation maps
                 when(type) {
-                    TowerTypes.BLOCK -> {
+                    TowerTypes.SINGLE -> {
                         weaponAnimR = when(level) {
-                            //TODO: einigen, wie man das mit dem sprite und dem offset löst
-                            0 -> R.drawable.tower_block_weapon_anim_1_alternative
-                            1 -> R.drawable.tower_block_weapon_anim_2
-                            2 -> R.drawable.tower_block_weapon_anim_3
-                            else -> R.drawable.tower_block_weapon_anim_1
+                            0 -> R.drawable.tower_single_weapon_anim_1
+                            1 -> R.drawable.tower_single_weapon_anim_2
+                            2 -> R.drawable.tower_single_weapon_anim_3
+                            else -> R.drawable.tower_single_weapon_anim_1
                         }
-                        frameCountWeapon = 6
+                        frameCountWeapon = 8
                     }
                     TowerTypes.SLOW -> {
                         weaponAnimR = when(level) {
@@ -115,7 +115,7 @@ class BitmapPreloader(val resources: Resources) {
                             else -> R.drawable.tower_slow_weapon_anim_1
                         }
                         frameCountWeapon = 16
-                        rowCountWeapon = 1
+                        isRotatable = false
                     }
                     TowerTypes.AOE -> {
                         weaponAnimR = when(level) {
@@ -124,7 +124,8 @@ class BitmapPreloader(val resources: Resources) {
                             2 -> R.drawable.tower_aoe_weapon_anim_1
                             else -> R.drawable.tower_aoe_weapon_anim_1
                         }
-                        frameCountWeapon = 8
+                        frameCountWeapon = 10
+                        isRotatable = false
                     }
                     TowerTypes.MAGIC -> {
                         weaponAnimR = when(level) {
@@ -134,12 +135,13 @@ class BitmapPreloader(val resources: Resources) {
                             else -> R.drawable.tower_magic_weapon_anim_1
                         }
                         frameCountWeapon = 29
+                        isRotatable = false
                     }
                 }
-                weaponAnims[type] = if (type == TowerTypes.SLOW) {
-                    SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, 1, frameCountWeapon, 100)
-                } else {
+                weaponAnims[type] = if (isRotatable) {
                     SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, rowCountWeapon, frameCountWeapon, 100, true)
+                } else {
+                    SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, 1, frameCountWeapon, 100)
                 }
             }
             weaponAnimsArray = weaponAnimsArray.plus(weaponAnims)
@@ -156,16 +158,16 @@ class BitmapPreloader(val resources: Resources) {
                 val widthProjectile: Int
                 val heightProjectile: Int
                 when(type) {
-                    TowerTypes.BLOCK -> {
+                    TowerTypes.SINGLE -> {
                         projectileAnimR = when(level) {
-                            0 -> R.drawable.tower_block_projectile_1
-                            1 -> R.drawable.tower_block_projectile_2
-                            2 -> R.drawable.tower_block_projectile_3
-                            else -> R.drawable.tower_block_projectile_1
+                            0 -> R.drawable.tower_single_projectile_1
+                            1 -> R.drawable.tower_single_projectile_2
+                            2 -> R.drawable.tower_single_projectile_3
+                            else -> R.drawable.tower_single_projectile_1
                         }
-                        frameCountProjectile = 3
+                        frameCountProjectile = 6
                         widthProjectile = 20
-                        heightProjectile = 80
+                        heightProjectile = 20
                     }
                     TowerTypes.SLOW -> {
                         projectileAnimR = when(level) {

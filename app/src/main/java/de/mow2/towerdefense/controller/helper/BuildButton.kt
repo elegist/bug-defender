@@ -22,8 +22,8 @@ class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: I
 
     private fun initMenu(type: TowerTypes) {
         when(type) {
-            TowerTypes.BLOCK -> {
-                this.setImageResource(R.drawable.tower_block_imagebtn)
+            TowerTypes.SINGLE -> {
+                this.setImageResource(R.drawable.tower_single_imagebtn)
             }
             TowerTypes.SLOW -> {
                 this.setImageResource(R.drawable.tower_slow_imagebtn)

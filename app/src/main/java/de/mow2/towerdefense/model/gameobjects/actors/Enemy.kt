@@ -1,7 +1,5 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import de.mow2.towerdefense.controller.GameView
-import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.helper.Vector2D
@@ -234,7 +232,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
     fun takeDamage(damageAmount: Int, towerType: TowerTypes){
         //use when for special effects like slow, burn etc.
         when(towerType) {
-            TowerTypes.BLOCK -> {}
+            TowerTypes.SINGLE -> {}
             TowerTypes.SLOW -> {speed = baseSpeed / 2}
             TowerTypes.AOE -> {}
             TowerTypes.MAGIC -> {}

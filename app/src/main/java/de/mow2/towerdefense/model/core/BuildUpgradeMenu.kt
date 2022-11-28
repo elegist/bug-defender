@@ -17,7 +17,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
      */
     fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
         val cost = when(type) {
-            TowerTypes.BLOCK -> 100
+            TowerTypes.SINGLE -> 100
             TowerTypes.SLOW -> 200
             TowerTypes.AOE -> 300
             TowerTypes.MAGIC -> 1000
@@ -35,8 +35,8 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
             val cost = getTowerCost(towerType)
             if (gameManager.decreaseCoins(cost)) {
                 val tower = when(towerType) {
-                    TowerTypes.BLOCK -> {
-                        Tower(selectedField, TowerTypes.BLOCK)
+                    TowerTypes.SINGLE -> {
+                        Tower(selectedField, TowerTypes.SINGLE)
                     }
                     TowerTypes.SLOW -> {
                         Tower(selectedField, TowerTypes.SLOW)
