@@ -41,14 +41,40 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
             if (target != null){
                 distance = target!!.position - position
 
-                orientation = if(distance.x < -5) {
-                    3 //left
-                } else if(distance.x > 5) {
-                    1 //right
-                } else if(distance.y < 0) {
-                    0 //up
-                } else {
-                    2 //down (default)
+//                orientation = if(distance.x < -5) {
+//                    3 //left
+//                } else if(distance.x > 5) {
+//                    1 //right
+//                } else if(distance.y < 0) {
+//                    0 //up
+//                } else {
+//                    2 //down (default)
+//                }
+
+                if (distance.x > -20 && distance.x < 20) { // up / down
+                    orientation = if (distance.y < 0) {
+                        0 // up
+                    } else {
+                        4 // down
+                    }
+                } else if (distance.y > -20 && distance.y < 20) { //left / right
+                    orientation = if (distance.x < 0) {
+                        6 // left
+                    } else {
+                        2 // right
+                    }
+                } else if (distance.x < -20) { // left-diagonals
+                    orientation = if (distance.y < 0) {
+                        7 // left-up
+                    }else {
+                        5 // left-down
+                    }
+                } else if (distance.x > 20) { //right-diagonals
+                    orientation = if (distance.y < 0) {
+                        1 // right-up
+                    } else {
+                        3 // right-down
+                    }
                 }
             }
         }

@@ -94,7 +94,7 @@ class BitmapPreloader(val resources: Resources) {
             TowerTypes.values().forEach { type ->
                 val weaponAnimR: Int
                 val frameCountWeapon: Int
-                val rowCountWeapon = 4
+                var rowCountWeapon = 8
                 var isRotatable = true //set to false in specific tower type to prevent generating rotatable sprite sheets
                 //build images and animation maps
                 when(type) {
@@ -116,6 +116,7 @@ class BitmapPreloader(val resources: Resources) {
                         }
                         frameCountWeapon = 16
                         isRotatable = false
+                        rowCountWeapon = 1
                     }
                     TowerTypes.AOE -> {
                         weaponAnimR = when(level) {
@@ -126,6 +127,7 @@ class BitmapPreloader(val resources: Resources) {
                         }
                         frameCountWeapon = 10
                         isRotatable = false
+                        rowCountWeapon = 1
                     }
                     TowerTypes.MAGIC -> {
                         weaponAnimR = when(level) {
@@ -136,12 +138,13 @@ class BitmapPreloader(val resources: Resources) {
                         }
                         frameCountWeapon = 29
                         isRotatable = false
+                        rowCountWeapon = 1
                     }
                 }
                 weaponAnims[type] = if (isRotatable) {
                     SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, rowCountWeapon, frameCountWeapon, 100, true)
                 } else {
-                    SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, 1, frameCountWeapon, 100)
+                    SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, rowCountWeapon, frameCountWeapon, 100)
                 }
             }
             weaponAnimsArray = weaponAnimsArray.plus(weaponAnims)
