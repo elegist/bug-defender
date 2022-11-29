@@ -38,8 +38,8 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
             "wave" -> {
                 text.text = buildString {
                     append(context.getString(R.string.wave))
-                    append("")
-                    append(GameManager.gameLevel)
+                    append(" ")
+                    append(GameManager.gameLevel+1)
                 }
                 image.setImageResource(R.drawable.time)
                 params.setMargins(width/4, height/2, width/4, height/2)
