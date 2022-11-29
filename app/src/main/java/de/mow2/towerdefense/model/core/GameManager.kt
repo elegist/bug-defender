@@ -74,7 +74,9 @@ class GameManager(private val controller: GameController) {
 
     //TODO: (load game) GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
     fun initLevel(level: Int) {
-        //set the current wave
+        //use to change starting game level
+        gameLevel = 0 //default = 0
+        //set the wave
         wave = Wave(gameLevel)
         when (level) {
             0 -> {
@@ -88,11 +90,10 @@ class GameManager(private val controller: GameController) {
             }
             else -> {
                 if (level % 10 == 0) {
-                    //TODO: spawn boss wave
                     increaseLives(5)
                 }
-                /* Define next wave */
-                killsToProgress = killCounter * level
+                // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
+                killsToProgress = wave.remaining
             }
         }
         controller.updateProgressBarMax(killsToProgress)
@@ -155,7 +156,7 @@ class GameManager(private val controller: GameController) {
             /**
              * spawning enemies depending on the current gameLevel
              */
-            spawnWave()
+            spawner.spawnWave(wave)
         }
         /**
          * update movement, update target or remove enemy
@@ -165,6 +166,7 @@ class GameManager(private val controller: GameController) {
                 decreaseLives(enemy.baseDamage)
                 enemy.die()
                 SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
+                increaseKills(enemy.killValue)
             }else if(enemy.healthPoints <= 0){ //enemy dies
                 increaseCoins(enemy.coinValue)
                 enemy.die()
@@ -199,9 +201,10 @@ class GameManager(private val controller: GameController) {
         var lastTower: Tower? = null
 
         //spawner variables
-        var wave: Wave = Wave(0)
+        val spawner = Spawner()
+        var wave = Wave(0) // default wave is 0 (gameLevel 0)
         var waveActive = true
-        var gameLevel = 0 // the level/wave TODO: refactor to currentWave?
+        var gameLevel = 0 // current level/wave
         var enemyCounter: Int = 0 //total enemies spawned
         var enemiesAlive: Int = 0 //enemies currently on the PlayGround
 
@@ -238,20 +241,12 @@ class GameManager(private val controller: GameController) {
             enemyList += enemy
             enemyList.sort()
             enemyList.reverse()
-            enemyCounter++ //TODO: maybe use enemyList.size instead?
+            enemyCounter++
         }
 
         private fun addProjectile(projectile: Projectile) {
             projectileList += projectile
         }
 
-        /**
-         * will
-         */
-        fun spawnWave() {
-            if (Wave.canSpawn()) {
-                addEnemy(Enemy(wave.enemyType))
-            }
-        }
     }
 }
