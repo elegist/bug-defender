@@ -19,20 +19,21 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
 
     @SuppressLint("InflateParams")
     private val snackBarLayout: View = inflater.inflate(R.layout.toast, null)
-    private val display: DisplayMetrics = parent.resources.displayMetrics
     private val snackBar = Snackbar.make(parent, "", Snackbar.LENGTH_SHORT)
     private val snackbarLayout = snackBar.view as Snackbar.SnackbarLayout
-    private val text: TextView = snackBarLayout.findViewById(R.id.toast_text)
-    private val image: ImageView = snackBarLayout.findViewById(R.id.toast_icon)
-    private val layout: LinearLayout = snackBarLayout.findViewById(R.id.toast_type)
+    private val text = snackBarLayout.findViewById<TextView>(R.id.toast_text)
+    private val image = snackBarLayout.findViewById<ImageView>(R.id.toast_icon)
+    private val layout = snackBarLayout.findViewById<LinearLayout>(R.id.toast_type)
     private val params = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
+    private val display = parent.resources.displayMetrics
+    private val height = display.heightPixels
+    private val width = display.widthPixels
 
     fun setUpSnackbar(type: String) {
         snackBar.view.setBackgroundResource(R.color.transparent)
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackbarLayout.addView(snackBarLayout, 0)
-        val height = display.heightPixels
-        val width = display.widthPixels
+
         when(type){
             "wave" -> {
                 text.text = buildString {
