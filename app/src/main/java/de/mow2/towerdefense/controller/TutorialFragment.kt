@@ -1,22 +1,26 @@
 package de.mow2.towerdefense.controller
 
+import android.nfc.Tag
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.edit
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
-import androidx.preference.CheckBoxPreference
-import androidx.preference.PreferenceManager
+import com.google.android.material.snackbar.Snackbar
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.controller.helper.TutorialHighlighter
+import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.databinding.TutorialPopupBinding
-import de.mow2.towerdefense.model.core.GameManager
+
 
 class TutorialFragment: DialogFragment() {
     private var _binding: TutorialPopupBinding? = null
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +37,7 @@ class TutorialFragment: DialogFragment() {
         val tutText = binding.tutText
         val tutBtn = binding.goOnBtn
         val tutClose = binding.closeTutBtn
+        val gameActivity = (activity as GameActivity)
 
         when (tag.toString()) {
             "tutorialDialog" -> {
@@ -42,54 +47,55 @@ class TutorialFragment: DialogFragment() {
                         window.attributes = attributes
                     }
                 }
-
                 tutText.setText(R.string.tutorialWelcome)
+                gameActivity.highlight("tutorial")
 
                 tutBtn.setOnClickListener {
                     when (tutText.text) {
                         getString(R.string.tutorialWelcome) -> {
                             tutText.setText(R.string.tutorialMenu)
-                            (activity as GameActivity).highlight("bottomGui")
+                            gameActivity.highlight("bottomGui")
+
                         }
                         getString(R.string.tutorialMenu) -> {
                             tutText.setText(R.string.tutorialMenuLeft)
-                            (activity as GameActivity).highlight("bottomLeft")
+                            gameActivity.highlight("deleteBtn")
                         }
                         getString(R.string.tutorialMenuLeft) -> {
                             tutText.setText(R.string.tutorialMenuRight)
-                            (activity as GameActivity).highlight("bottomRight")
+                            gameActivity.highlight("upgradeBtn")
                         }
                         getString(R.string.tutorialMenuRight) -> {
                             tutText.setText(R.string.tutorialMenuMiddle)
-                            (activity as GameActivity).highlight("bottomMiddle")
+                            gameActivity.highlight("buildBtn")
                         }
                         getString(R.string.tutorialMenuMiddle) -> {
                             tutText.setText(R.string.tutorialGUI)
-                            (activity as GameActivity).highlight("topGui")
+                            gameActivity.highlight("topGui")
                         }
                         getString(R.string.tutorialGUI) -> {
                             tutText.setText(R.string.tutorialGUILeft)
-                            (activity as GameActivity).highlight("topGuiLeft")
+                            gameActivity.highlight("time")
                         }
                         getString(R.string.tutorialGUILeft) -> {
                             tutText.setText(R.string.tutorialGUIRight)
-                            (activity as GameActivity).highlight("topGuiRight")
+                            gameActivity.highlight("coins")
                         }
                         getString(R.string.tutorialGUIRight) -> {
                             tutText.setText(R.string.tutorialGUILeftBar)
-                            (activity as GameActivity).highlight("topGuiLeftBar")
+                            gameActivity.highlight("healthBar")
                         }
                         getString(R.string.tutorialGUILeftBar) -> {
                             tutText.setText(R.string.tutorialGUIRightBar)
-                            (activity as GameActivity).highlight("topGuiRightBar")
+                            gameActivity.highlight("progressBar")
                         }
                         getString(R.string.tutorialGUIRightBar) -> {
                             tutText.setText(R.string.tutorialMenuButton)
-                            (activity as GameActivity).highlight("topGuiMenu")
+                            gameActivity.highlight("menuBtn")
                             tutBtn.setText(R.string.close_button)
                             tutBtn.setOnClickListener {
-                                (activity as GameActivity).highlight("endTutorial")
-                                (activity as GameActivity).displayTutorial(false)
+                                gameActivity.highlight("endTutorial")
+                                gameActivity.displayTutorial(false)
                                 dismiss()
                             }
                         }
@@ -99,8 +105,8 @@ class TutorialFragment: DialogFragment() {
         }
 
         tutClose.setOnClickListener {
-            (activity as GameActivity).highlight("endTutorial")
-            (activity as GameActivity).displayTutorial(false)
+            gameActivity.highlight("endTutorial")
+            gameActivity.displayTutorial(false)
             dismiss()
         }
     }

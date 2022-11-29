@@ -4,10 +4,10 @@
     <gradient android:startColor="@color/light_brown"
         android:endColor="@color/middle_brown"
         android:angle="270"/>
-    <corners android:radius="4dp"/>
+    <corners android:radius="3dp"/>
     <stroke
-        android:width="3dp"
+        android:width="5dp"
         android:color="@color/grey"
-        android:dashGap="5dp"
+        android:dashGap="2dp"
         android:dashWidth="20dp"/>
 </shape>
