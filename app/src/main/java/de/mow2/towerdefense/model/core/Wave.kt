@@ -1,113 +1,126 @@
 package de.mow2.towerdefense.model.core
 
 
+import android.content.ClipData.Item
+import android.util.Log
+import de.mow2.towerdefense.model.gameobjects.actors.Enemy
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
+import java.util.*
+import kotlin.collections.HashMap
+
 
 /**
  * Decides what enemy has to be spawned, how many enemies are in this instance of a wave
- * and at which rate a specific enemy type will spawn. Currently depends on GameManager.gameLevel to
- * work correctly. TODO: remove parameter and use gameLevel directly?
- * @see GameManager.gameLevel
+ * and at which rate a specific enemy type will spawn
+ * @see GameManager.gameLevel is used to create a wave object inside GameManager
+ * @see GameManager.initLevel updates the wave variable
  */
-class Wave(wave: Int): java.io.Serializable { // TODO: save current wave data in preferences?
-    // enemy for a wave
+class Wave(wave: Int){ // TODO: save current wave data in preferences?
+    //enemy types and count
+    var waveEnemyList = mutableListOf<EnemyType>()
+    var remaining: Int = 0  //the number of enemies for this wave
 
-    lateinit var enemyType: EnemyType
-    var remaining: Int = 0
+
+    // List mit enemies die einen Killcount haben
+    // nur der Boss soll den killcounter voranbringen
+
+
+    //spawn rate
+    private var updateCycle: Float = 0f
+    private var waitUpdates: Float = 0f
+    private var spawnsPerMinute: Float = 0f
+        set(value){
+            field = value
+            val spawnsPerSecond: Float = field / 60
+            //link with target updates per second to convert to updates per spawn
+            updateCycle = GameLoop.targetUPS / spawnsPerSecond
+        }
+
+    //spawn rate cycle
+    fun canSpawn(): Boolean{
+        return if(waitUpdates <= 0f) {
+            waitUpdates += updateCycle
+            true
+        }else{
+            waitUpdates--
+            false
+        }
+    }
 
     init{
         when{
             wave == 0 -> {
-                enemyType = EnemyType.LEAFBUG
+                waveEnemyList.add(EnemyType.LEAFBUG)
                 spawnsPerMinute = 30f
                 remaining = 10
             }
             wave == 1 -> {
-                enemyType = EnemyType.FIREBUG
-                spawnsPerMinute = 60f
-                remaining = 20
+                waveEnemyList.add(EnemyType.FIREBUG)
+                spawnsPerMinute = 30f
+                remaining = 10
             }
             wave == 2 -> {
-                enemyType = EnemyType.MAGMACRAB
+                waveEnemyList.add(EnemyType.MAGMACRAB)
                 spawnsPerMinute = 60f
                 remaining = 30
             }
             wave == 3 -> {
-                enemyType = EnemyType.SCORPION
+                waveEnemyList.add(EnemyType.SCORPION)
                 spawnsPerMinute = 60f
                 remaining = 10
             }
             wave == 4 -> {
-                enemyType = EnemyType.CLAMPBEETLE
+                waveEnemyList.add(EnemyType.CLAMPBEETLE)
                 spawnsPerMinute = 120f
                 remaining = 10
             }
             wave == 5 -> {
-                enemyType = EnemyType.FIREWASP
+                waveEnemyList.add(EnemyType.FIREWASP)
                 spawnsPerMinute = 120f
                 remaining = 10
             }
             wave == 6 -> {
-                enemyType = EnemyType.LOCUST
+                waveEnemyList.add(EnemyType.LOCUST)
                 spawnsPerMinute = 120f
                 remaining = 10
             }
             wave == 7 -> {
-                enemyType = EnemyType.SKELETONGRUNT
+                waveEnemyList.add(EnemyType.VOIDBUTTERFLY)
                 spawnsPerMinute = 240f
                 remaining = 10
             }
             wave == 8 -> {
-                enemyType = EnemyType.NECROMANCER
-                spawnsPerMinute = 90f
+                waveEnemyList.add(EnemyType.SKELETONGRUNT)
+                waveEnemyList.add(EnemyType.NECROMANCER)
+                spawnsPerMinute = 20f
                 remaining = 10
             }
             wave == 9 -> {
-                enemyType = EnemyType.SKELETONWARRIOR
-                spawnsPerMinute = 100f
-                remaining = 10
+                waveEnemyList.add(EnemyType.SKELETONWARRIOR)
+                waveEnemyList.add(EnemyType.SKELETONKNIGHT)
+                spawnsPerMinute = 60f
+                remaining = 20
             }
-            wave == 10 -> {
-                enemyType = EnemyType.SKELETONKNIGHT
-                spawnsPerMinute = 30f
-                remaining = 10
+            wave % 10 == 0 -> {
+                waveEnemyList.add(EnemyType.SKELETONGRUNT)
+                waveEnemyList.add(EnemyType.NECROMANCER)
+                waveEnemyList.add(EnemyType.SKELETONWARRIOR)
+                waveEnemyList.add(EnemyType.SKELETONKNIGHT)
+                waveEnemyList.add(EnemyType.SKELETONKING)
+                spawnsPerMinute = 1f
+                remaining = 1
             }
-            wave == 11 -> {
-                enemyType = EnemyType.SKELETONKING
-                spawnsPerMinute = 10f
-                remaining = 10
-            }
-            wave >= 12 -> {
-                EnemyType.values().random().also{ type ->
-                    enemyType = type
-                }
-                spawnsPerMinute = 120f
-                remaining = 10
+            wave >= 11 -> {
+                waveEnemyList.addAll(EnemyType.values())
+                spawnsPerMinute = 60f
+                remaining = 60
             }
         }
+
     }
     companion object{
-        //spawn rate variables
-        private var updateCycle: Float = 0f
-        private var waitUpdates: Float = 0f
-        private var spawnsPerMinute: Float = 0f
-            set(value){
-                field = value
-                val spawnsPerSecond: Float = field / 60
-                //link with target updates per second to convert to updates per spawn
-                updateCycle = GameLoop.targetUPS / spawnsPerSecond
-            }
-        //spawn rate per wave
-        fun canSpawn(): Boolean{
-            return if(waitUpdates <= 0f) {
-                waitUpdates += updateCycle
-                true
-            }else{
-                waitUpdates--
-                false
-            }
-        }
+       //TODO: static access to a variable (currentWaveEnemies???)
     }
-
-
 }
+
+

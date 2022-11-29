@@ -1,26 +1,26 @@
 
 package de.mow2.towerdefense.model.core
 
+import android.util.Log
+import de.mow2.towerdefense.model.gameobjects.actors.Enemy
+
 /**
- * Provides wave spawning related functions. TODO: maybe obsolete. Functionality moved to GameManager
+ * Provides wave spawning related functions. TODO: maybe obsolete. Functionality could be moved to GameManager
  */
-/*
 class Spawner() {
-    */
-/*private lateinit var wave: Wave*//*
 
-    private var wave = Wave(0)
-
-
-    fun spawnWave(currentWave: Int){
-       */
-/*if(!this::wave.isInitialized){
-            wave = Wave(GameManager.gameLevel)
-        }*//*
-
-        wave = Wave(currentWave)
-        if(Wave.canSpawn()){
-            GameManager.addEnemy(wave.enemy)
+    /**
+     * Takes a wave object as an parameter to determine how to spawn enemies.
+     * Enemy Type and spawn rate is provided by the wave object
+     * @see Wave
+     */
+    fun spawnWave(currentWave: Wave) {
+        if(currentWave.canSpawn() && currentWave.remaining != 0){
+            GameManager.addEnemy(Enemy(currentWave.waveEnemyList.random()))
+            currentWave.remaining--
         }
     }
-}*/
+
+}
+
+

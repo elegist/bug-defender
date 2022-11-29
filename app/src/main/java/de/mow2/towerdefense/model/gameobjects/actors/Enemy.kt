@@ -40,7 +40,7 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
     var baseDamage = 0
     var baseSpeed = 0f
     var isDead = false
-    var killValue = 0
+    var killValue = 1
     var coinValue = 0
 
     init{
@@ -62,21 +62,18 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.03f
                 healthPoints = if(GameManager.gameLevel != 0) 5 * GameManager.gameLevel else 5
                 baseDamage = 1
-                killValue = 1
                 coinValue = 10
             }
             EnemyType.FIREBUG -> {
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 7 * GameManager.gameLevel else 8
                 baseDamage = 2
-                killValue = 1
                 coinValue = 15
             }
             EnemyType.MAGMACRAB -> {
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
-                killValue = 2
                 coinValue = 20
             }
             EnemyType.SCORPION ->{
@@ -84,7 +81,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.015f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.CLAMPBEETLE ->{
@@ -92,7 +88,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.07f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.FIREWASP ->{
@@ -100,7 +95,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.10f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.LOCUST -> {
@@ -108,7 +102,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.08f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.VOIDBUTTERFLY -> {
@@ -116,7 +109,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.08f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.SKELETONGRUNT -> {
@@ -124,7 +116,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.NECROMANCER -> {
@@ -132,7 +123,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.SKELETONWARRIOR -> {
@@ -140,7 +130,6 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.SKELETONKNIGHT -> {
@@ -148,14 +137,12 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                killValue = 5
                 coinValue = 30
             }
             EnemyType.SKELETONKING -> {
                 baseSpeed = 0.005f
                 healthPoints = if(GameManager.gameLevel != 0) 20 * GameManager.gameLevel else 20
                 baseDamage = 10
-                killValue = 5
                 coinValue = 50
             }
         }
