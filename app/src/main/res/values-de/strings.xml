@@ -14,7 +14,7 @@
     <string name="preference_music">Musik</string>
     <string name="menuBtn">Menü</string>
     <string name="sound">Sounds</string>
-    <string name="pauseGame">Spiel speichern &amp; pausieren</string>
+    <string name="pauseGame">Hauptmenü</string>
     <string name="resumeGame">Spiel fortsetzen</string>
     <string name="moneyWarning">nicht genug Geld</string>
     <string name="toastAction">nicht mehr anzeigen</string>

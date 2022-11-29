@@ -17,7 +17,7 @@ import de.mow2.towerdefense.model.core.GameManager
  * This class is the main entry point
  */
 class MainActivity : AppCompatActivity() {
-    private val gameState = GameState()
+    private val gameState = GameState(this)
     private val fm = supportFragmentManager
     private var dialogPopup = PopupFragment()
     private lateinit var binding: ActivityMainBinding
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
      * Load saved game
      */
     fun resumeGame(view: View) {
-        gameState.readGameState(this)
+        gameState.readGameState()
         startActivity(Intent(this, GameActivity::class.java))
     }
 

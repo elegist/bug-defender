@@ -9,7 +9,7 @@ import java.io.*
 import java.util.concurrent.CopyOnWriteArrayList
 
 
-class GameState{
+class GameState (val context: Context){
 
     /**
      * Returns save game file
@@ -21,9 +21,8 @@ class GameState{
     }
     /**
      * Call this to save game data to local file
-     * @param context App context
      */
-    fun saveGameState(context: Context) {
+    fun saveGameState() {
         val file = defineFile(context)
         //detects if file exists, creates one if not and calls saveGame to store game variables and objects
         if(!file.exists()) {
@@ -68,9 +67,8 @@ class GameState{
 
     /**
      * Reads all saved game variables and objects from specified file
-     * @param context App context
      */
-    fun readGameState(context: Context) {
+    fun readGameState() {
         val file = defineFile(context)
         //load from file if it exists
         if(file.exists()) {
@@ -100,5 +98,14 @@ class GameState{
             //close input stream
             input.close()
         }
+    }
+
+    /**
+     * Deletes the save game file if exists
+     * @return Boolean - true if file is deleted, otherwise false
+     */
+    fun deleteSaveGame(): Boolean {
+        val file = defineFile(context)
+        return file.delete()
     }
 }
