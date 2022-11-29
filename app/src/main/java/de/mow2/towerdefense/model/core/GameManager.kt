@@ -93,10 +93,10 @@ class GameManager(private val controller: GameController) {
                 }
                 /* Define next wave */
                 killsToProgress = killCounter * level
+                controller.showToastMessage("wave")
             }
         }
         controller.updateProgressBarMax(killsToProgress)
-        controller.showToastMessage("wave")
 
         killCounter = 0
         controller.updateGUI()

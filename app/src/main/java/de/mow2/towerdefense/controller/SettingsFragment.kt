@@ -35,5 +35,15 @@ class SettingsFragment: PreferenceFragmentCompat() {
             }
             true
         }
+
+        // image quality
+        findPreference<CheckBoxPreference>("quality_pref")?.setOnPreferenceChangeListener{_, newValue ->
+            if(newValue as Boolean) {
+                // setzte Bildqualität hoch
+            } else {
+                // setze Bildqualität runter
+            }
+            false
+        }
     }
 }

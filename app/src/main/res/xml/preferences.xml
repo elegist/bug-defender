@@ -13,6 +13,11 @@
         android:title="@string/sound"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
+        android:defaultValue="@bool/qualityCheckbox"
+        android:key="quality_pref"
+        android:title="@string/quality"
+        app:iconSpaceReserved="false" />
+    <CheckBoxPreference
         android:defaultValue="true"
         android:key="tutorial_pref"
         android:title="@string/tutorialTitel"

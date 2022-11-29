@@ -45,4 +45,5 @@
     <string name="tutorialGUILeftBar">Die linke Leiste zeigt dir deine Lebensleiste.</string>
     <string name="tutorialGUIRightBar">Die rechte Leiste zeigt dir, wie viele Gegner du zum nächsten Level benötigst.</string>
     <string name="tutorialMenuButton">Der Button in der Mitte öffnet ein Menü.</string>
+    <string name="quality">Bildqualität</string>
 </resources>

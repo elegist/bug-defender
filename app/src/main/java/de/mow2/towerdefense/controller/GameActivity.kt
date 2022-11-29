@@ -106,7 +106,7 @@ class GameActivity : AppCompatActivity(), GameController {
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
             timeValue.text = "${chrono.text}"
             levelValue.text = "${GameManager.gameLevel}"
-            enemyValue.text = "${GameManager.killCounter}"
+            enemyValue.text = "${GameManager.enemyCounter}"
             GameManager.reset()
         }
     }
@@ -239,7 +239,9 @@ class GameActivity : AppCompatActivity(), GameController {
      * show custom toast message in the middle of the screen
      * @param type decides which snackbar should be shown
      */
-    @SuppressLint("InflateParams", "ResourceType", "PrivateResource")
+
+
+    @SuppressLint("InflateParams")
     override fun showToastMessage(type: String) {
         runOnUiThread {
             val parent = binding.wrapAll
@@ -251,7 +253,7 @@ class GameActivity : AppCompatActivity(), GameController {
             val layout = snackBarLayout.findViewById<LinearLayout>(R.id.toast_type)
             val params = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
             val display = binding.wrapAll.resources.displayMetrics
-            snackBar.view.setBackgroundResource(Color.TRANSPARENT)
+            snackBar.view.setBackgroundResource(R.color.transparent)
             //snackBar.anchorView = binding.wrapAll
             snackBar.animationMode = ANIMATION_MODE_FADE
             snackbarLayout.addView(snackBarLayout, 0)
