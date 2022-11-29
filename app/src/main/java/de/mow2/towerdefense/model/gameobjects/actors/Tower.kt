@@ -36,7 +36,8 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     var damage = 0
     //special stuff
     var slowAmount = 0
-    var dpsAmount = 0
+    var dotDamage = 0
+    var dotInterval: Long = 0
 
     override fun update() {
         if (isRotatable) {
@@ -93,7 +94,8 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
                 finalRange = baseRange + towerLevel * width
                 damage = 5 + towerLevel * 5
                 actionsPerMinute = baseSpeed / 4 + towerLevel * 10
-                dpsAmount = 1 + towerLevel
+                dotDamage = 1 + towerLevel
+                dotInterval = (1000 - towerLevel * 200).toLong() //milliseconds
             }
         }
     }
