@@ -1,26 +1,21 @@
 package de.mow2.towerdefense.controller
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
-import com.google.android.material.snackbar.Snackbar.*
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
-import de.mow2.towerdefense.controller.helper.BitmapPreloader
-import de.mow2.towerdefense.controller.helper.BuildButton
-import de.mow2.towerdefense.controller.helper.GameState
+import de.mow2.towerdefense.controller.helper.*
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GameController
@@ -240,39 +235,11 @@ class GameActivity : AppCompatActivity(), GameController {
      * @param type decides which snackbar should be shown
      */
 
-
-    @SuppressLint("InflateParams")
     override fun showToastMessage(type: String) {
         runOnUiThread {
             val parent = binding.wrapAll
-            val snackBar = make(parent, "", LENGTH_SHORT)
-            val snackBarLayout: View = layoutInflater.inflate(R.layout.toast, null)
-            val snackbarLayout = snackBar.view as SnackbarLayout
-            val text = snackBarLayout.findViewById<TextView>(R.id.toast_text)
-            val image = snackBarLayout.findViewById<ImageView>(R.id.toast_icon)
-            val layout = snackBarLayout.findViewById<LinearLayout>(R.id.toast_type)
-            val params = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
-            val display = binding.wrapAll.resources.displayMetrics
-            snackBar.view.setBackgroundResource(R.color.transparent)
-            //snackBar.anchorView = binding.wrapAll
-            snackBar.animationMode = ANIMATION_MODE_FADE
-            snackbarLayout.addView(snackBarLayout, 0)
-
-            when(type){
-                "wave" -> {
-                    "${resources.getString(R.string.wave)} ${GameManager.gameLevel}".also { text.text = it }
-                    image.setImageResource(R.drawable.time)
-                    params.setMargins(display.widthPixels/4, display.heightPixels/2, display.widthPixels/4, display.heightPixels/2)
-                }
-                "money" -> {
-                    resources.getString(R.string.moneyWarning).also { text.text = it }
-                    image.setImageResource(R.drawable.coins)
-                    params.setMargins(display.widthPixels/5, display.heightPixels/2, display.widthPixels/5, display.heightPixels/2)
-                }
-            }
-            layout.setBackgroundResource(R.drawable.wave_toast_shape)
-            snackBar.view.layoutParams = params
-            snackBar.show()
+            val toast = CustomToast(this, layoutInflater, parent)
+            toast.setUpSnackbar(type)
         }
     }
 
@@ -343,57 +310,13 @@ class GameActivity : AppCompatActivity(), GameController {
         val progressBar = binding.progressBarContainer
         val time = binding.leftElementsWrapper
         val coins = binding.rightElementsWrapper
-        bottomGuiContainer = binding.bottomGuiContainer
-        bottomGuiContainer.children.forEach { it.alpha = 0.2F }
-        time.children.forEach { it.alpha = 0.2F }
-        coins.children.forEach { it.alpha = 0.2F }
-        healthBar.children.forEach { it.alpha = 0.2F }
-        progressBar.children.forEach { it.alpha = 0.2F }
-        binding.menuBtn.alpha = 0.2F
-        when(item) {
-            "bottomGui" -> {
-                bottomGuiContainer.children.forEach { it.alpha = 1F }
-            }
-            "bottomLeft" -> {
-                binding.deleteButton.alpha = 1F
-            }
-            "bottomRight" -> {
-                binding.upgradeButton.alpha = 1F
-            }
-            "bottomMiddle" -> {
-                binding.buildButton.alpha = 1F
-            }
-            "topGui" -> {
-                time.children.forEach { it.alpha = 1F }
-                coins.children.forEach { it.alpha = 1F }
-                healthBar.children.forEach { it.alpha = 1F }
-                progressBar.children.forEach { it.alpha = 1F }
-                binding.menuBtn.alpha = 1F
-            }
-            "topGuiLeft" -> {
-                time.children.forEach { it.alpha = 1F }
-            }
-            "topGuiRight" -> {
-                coins.children.forEach { it.alpha = 1F }
-            }
-            "topGuiLeftBar" -> {
-                healthBar.children.forEach { it.alpha = 1F }
-            }
-            "topGuiRightBar" -> {
-                progressBar.children.forEach { it.alpha = 1F }
-            }
-            "topGuiMenu" -> {
-                binding.menuBtn.alpha = 1F
-            }
-            "endTutorial" -> {
-                bottomGuiContainer.children.forEach { it.alpha = 1F }
-                time.children.forEach { it.alpha = 1F }
-                coins.children.forEach { it.alpha = 1F }
-                healthBar.children.forEach { it.alpha = 1F }
-                progressBar.children.forEach { it.alpha = 1F }
-                binding.menuBtn.alpha = 1F
-            }
-        }
+        val menuBtn = binding.menuBtn
+        val deleteBtn = binding.deleteButton
+        val upgradeBtn = binding.upgradeButton
+        val buildBtn = binding.buildButton
+        val bottomGui = binding.bottomGuiContainer
+        val tutorial = TutorialHighlighter(healthBar, progressBar, time, coins, bottomGui, menuBtn, deleteBtn, upgradeBtn, buildBtn)
+        tutorial.highlightElement(item)
     }
 }
 
