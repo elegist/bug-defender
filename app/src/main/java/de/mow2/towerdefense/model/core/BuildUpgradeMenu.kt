@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
@@ -65,7 +64,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
     fun destroyTower(tower: Tower) {
         tower.squareField.removeTower() //free square
         GameManager.towerList.remove(tower) //remove tower from drawing list
-        gameManager.increaseCoins(getTowerCost(tower.type, tower.level) / 2) //get half of the tower value back
+        gameManager.increaseCoins(getTowerCost(tower.type, tower.towerLevel) / 2) //get half of the tower value back
         soundPool.play(Sounds.TOWERDESTROY.id, 1F, 1F, 1, 0, 1F)
         gameManager.validatePlayGround()
     }
@@ -75,8 +74,8 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
      */
     fun upgradeTower(selectedTower: Tower?) {
         //only upgrade if there is a tower which is below max level and if player can afford the upgrade
-        if(selectedTower != null && selectedTower.level < GameManager.maxTowerLevel && gameManager.decreaseCoins(getTowerCost(selectedTower.type, selectedTower.level + 1))) {
-            selectedTower.level++
+        if(selectedTower != null && selectedTower.towerLevel < GameManager.maxTowerLevel && gameManager.decreaseCoins(getTowerCost(selectedTower.type, selectedTower.towerLevel + 1))) {
+            selectedTower.towerLevel++
         }
     }
 }

@@ -68,13 +68,13 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 7 * GameManager.gameLevel else 8
                 baseDamage = 2
-                coinValue = 15
+                coinValue = 20
             }
             EnemyType.MAGMACRAB -> {
                 baseSpeed = 0.02f
                 healthPoints = if(GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
-                coinValue = 20
+                coinValue = 25
             }
             EnemyType.SCORPION ->{
                 //TODO: balancing
@@ -216,13 +216,12 @@ class Enemy(val type: EnemyType, private val spawnPoint: Astar.Node = Astar.Node
         currentTargetPosition = GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
     }
 
-    fun takeDamage(damageAmount: Int, towerType: TowerTypes){
+    fun takeDamage(damageAmount: Int, tower: Tower){
         //use when for special effects like slow, burn etc.
-        when(towerType) {
-            TowerTypes.SINGLE -> {}
-            TowerTypes.SLOW -> {speed = baseSpeed / 2}
-            TowerTypes.AOE -> {}
+        when(tower.type) {
+            TowerTypes.SLOW -> {speed = baseSpeed / tower.slowAmount}
             TowerTypes.MAGIC -> {}
+            else -> {}
         }
         healthPoints -= damageAmount
     }

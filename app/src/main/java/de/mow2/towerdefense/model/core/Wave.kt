@@ -61,7 +61,7 @@ class Wave(wave: Int){ // TODO: save current wave data in preferences?
             }
             wave == 2 -> {
                 waveEnemyList.add(EnemyType.MAGMACRAB)
-                spawnsPerMinute = 60f
+                spawnsPerMinute = 40f
                 remaining = 30
             }
             wave == 3 -> {

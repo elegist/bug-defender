@@ -264,7 +264,7 @@
         android:id="@+id/bottomGUI"
         android:layout_width="0dp"
         android:layout_height="74dp"
-        android:elevation="5dp"
+        android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -336,6 +336,7 @@
             android:id="@+id/bottomGuiSpacer"
             android:layout_width="0dp"
             android:layout_height="66dp"
+            android:elevation="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

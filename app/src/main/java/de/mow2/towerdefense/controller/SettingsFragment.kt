@@ -2,6 +2,7 @@ package de.mow2.towerdefense.controller
 
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import de.mow2.towerdefense.R
@@ -37,13 +38,13 @@ class SettingsFragment: PreferenceFragmentCompat() {
         }
 
         // image quality
-        findPreference<CheckBoxPreference>("quality_pref")?.setOnPreferenceChangeListener{_, newValue ->
-            if(newValue as Boolean) {
-                // setzte Bildqualität hoch
-            } else {
-                // setze Bildqualität runter
+        findPreference<ListPreference>("quality_pref")?.setOnPreferenceChangeListener{_, newValue ->
+            when(newValue) {
+                "Low" -> {} //low
+                "Avg" -> {} //avg
+                "High" -> {} //high
             }
-            false
+            true
         }
     }
 }

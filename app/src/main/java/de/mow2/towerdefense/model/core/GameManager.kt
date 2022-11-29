@@ -77,22 +77,22 @@ class GameManager(private val controller: GameController) {
     //TODO: (load game) GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
     fun initLevel(level: Int) {
         //use to change starting game level
-        gameLevel = 0 //default = 0
+        //gameLevel = 0 //default = 0
         //set the wave
         wave = Wave(gameLevel)
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 100
+                livesAmnt = 10
                 if (coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 5500
+                    coinAmnt = 500
                 }
                 killsToProgress = 10
                 controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
                 if (level % 10 == 0) {
-                    increaseLives(5)
+                    increaseLives(level)
                 }
                 /* Define next wave */
                 controller.gameState.saveGameState() //auto-save progress
@@ -150,7 +150,7 @@ class GameManager(private val controller: GameController) {
                 val enemy = projectile.enemy
                 //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
                 if(enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15){
-                    enemy.takeDamage(projectile.baseDamage, projectile.tower.type)
+                    enemy.takeDamage(projectile.baseDamage, projectile.tower)
                     projectileList.remove(projectile)
                 }
                 if(enemy.isDead) projectileList.remove(projectile)

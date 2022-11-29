@@ -5,8 +5,7 @@ import de.mow2.towerdefense.model.helper.Vector2D
 
 /**
  * Represents a single field on the playground
- * @param coordX the horizontal screen position in pixels
- * @param coordY the vertical screen position in pixels
+ * @param position a Vector2D which represents x and y coordinates on screen
  * @param width width of the field
  * @param height height of the field
  * @param mapPos a map representing x and y coordinates based on its position on screen / in 2D-array

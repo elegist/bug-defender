@@ -12,11 +12,12 @@
         android:key="sound_pref"
         android:title="@string/sound"
         app:iconSpaceReserved="false" />
-    <CheckBoxPreference
-        android:defaultValue="@bool/qualityCheckbox"
+    <ListPreference
+        android:defaultValue="@string/qualitySetting"
+        android:entries="@array/graphics_quality"
+        android:entryValues="@array/graphics_quality"
         android:key="quality_pref"
-        android:title="@string/quality"
-        app:iconSpaceReserved="false" />
+        app:title="@string/quality" />
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="tutorial_pref"

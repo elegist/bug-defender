@@ -15,11 +15,15 @@ import java.util.concurrent.ConcurrentHashMap
 class BitmapPreloader(val resources: Resources) {
     private val defaultWidth = GameManager.playGround.squareSize
     private val defaultHeight = defaultWidth
+    private var graphicsQuality = "Low"
     /**
      * Initialize all images and hold references for further use
      * Should improve performance compared to decoding bitmaps while drawing
      */
-    fun preloadGraphics() {
+    fun preloadGraphics(graphicsQuality: String? = "Low") {
+        if (graphicsQuality != null) {
+            this.graphicsQuality = graphicsQuality
+        }
         preloadGui()
         preloadTowers()
         preloadWeapons()
@@ -40,7 +44,7 @@ class BitmapPreloader(val resources: Resources) {
         val tileHeight = GameManager.playGround.squareSize * 2
         playgroundBG = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), tileHeight, tileHeight, false)
         //tower overlay for upgrade menu
-        upgradeOverlay = ScaledImage(resources, tileWidth, tileHeight, R.drawable.upgrade_tower_overlay).scaledImage
+        upgradeOverlay = ScaledImage(resources, tileWidth, tileHeight, R.drawable.upgrade_tower_overlay, graphicsQuality).scaledImage
     }
 
     private fun preloadTowers() {
@@ -82,7 +86,7 @@ class BitmapPreloader(val resources: Resources) {
                         }
                     }
                 }
-                towerImages[type] = ScaledImage(resources, defaultWidth, defaultHeight * 2, towerR).scaledImage
+                towerImages[type] = ScaledImage(resources, defaultWidth, defaultHeight * 2, towerR, graphicsQuality).scaledImage
             }
             towerImagesArray = towerImagesArray.plus(towerImages)
         }
@@ -120,8 +124,8 @@ class BitmapPreloader(val resources: Resources) {
                     TowerTypes.AOE -> {
                         weaponAnimR = when(level) {
                             0 -> R.drawable.tower_aoe_weapon_anim_1
-                            1 -> R.drawable.tower_aoe_weapon_anim_1
-                            2 -> R.drawable.tower_aoe_weapon_anim_1
+                            1 -> R.drawable.tower_aoe_weapon_anim_2
+                            2 -> R.drawable.tower_aoe_weapon_anim_3
                             else -> R.drawable.tower_aoe_weapon_anim_1
                         }
                         frameCountWeapon = 10
@@ -130,8 +134,8 @@ class BitmapPreloader(val resources: Resources) {
                     TowerTypes.MAGIC -> {
                         weaponAnimR = when(level) {
                             0 -> R.drawable.tower_magic_weapon_anim_1
-                            1 -> R.drawable.tower_magic_weapon_anim_1
-                            2 -> R.drawable.tower_magic_weapon_anim_1
+                            1 -> R.drawable.tower_magic_weapon_anim_2
+                            2 -> R.drawable.tower_magic_weapon_anim_3
                             else -> R.drawable.tower_magic_weapon_anim_1
                         }
                         frameCountWeapon = 29
