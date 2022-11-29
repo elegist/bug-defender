@@ -2,6 +2,7 @@ package de.mow2.towerdefense.controller.helper
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.util.Log
 
 /**
  * Takes a Bitmap containing all frames of an animation.
@@ -13,21 +14,17 @@ import android.graphics.Matrix
  * @param frameCount Number of Frames contained in given bitmap
  * @param frameDuration Time duration of one frame in milliseconds
  */
-class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val height: Int, private val rowCount: Int = 4, private val frameCount: Int = 7, private val frameDuration: Int = 30, private val rotate: Boolean = false) {
+class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val height: Int, private val rowCount: Int = 4, private val frameCount: Int = 7, private val frameDuration: Int = 30, rotate: Boolean = false) {
     private var animationMap = HashMap<Int, Array<Bitmap>>() //holds all different animations for this type
     private lateinit var animation: Array<Bitmap>
     private var startFrameTime = System.currentTimeMillis()
 
-    lateinit var idleImage: Bitmap
-
     var frameCounter = 0
 
+    lateinit var idleImage: Bitmap
+
     init {
-        if (rotate) {
-            cutSpriteSheetRotation()
-        } else {
-            cutSpriteSheet()
-        }
+        cutSpriteSheet(rotate)
     }
 
     /**
@@ -46,32 +43,29 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
     /**
      * Cuts Sprite sheet into single frames, based on parameter frameCount and rowCount
      */
-    private fun cutSpriteSheet() {
-        val cutW = bitmap.width / frameCount
-        val cutH = bitmap.height / rowCount
-        for(i in 0 until rowCount) {
-            var addAnimation = arrayOf<Bitmap>()
-            for(j in 0 until frameCount) {
-                val cutImg = Bitmap.createBitmap(bitmap, cutW * j, cutH * i, cutW, cutH)
-                val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
-                addAnimation = addAnimation.plus(scaled)
-            }
-            animationMap[i] = addAnimation
-        }
-        idleImage = animationMap[0]!![0]
-    }
-
-    private fun cutSpriteSheetRotation() {
+    private fun cutSpriteSheet(rotate: Boolean) {
         var rotationDegrees = 0f
         val cutW = bitmap.width / frameCount
-        val cutH = bitmap.height
+        val cutH = if(rotate) {
+            bitmap.height
+        } else {
+            bitmap.height / rowCount
+        }
+        var cutImg: Bitmap
+        var scaledImg: Bitmap
         for(i in 0 until rowCount) {
             var addAnimation = arrayOf<Bitmap>()
             for(j in 0 until frameCount) {
-                val cutImg = Bitmap.createBitmap(bitmap, cutW * j, 0, cutW, cutH)
-                val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
-                val rotated = processBitmap(scaled, rotationDegrees)
-                addAnimation = addAnimation.plus(rotated)
+                addAnimation = if(rotate) {
+                    cutImg = Bitmap.createBitmap(bitmap, cutW * j, 0, cutW, cutH)
+                    scaledImg = Bitmap.createScaledBitmap(cutImg, width, height, true)
+                    val rotated = processBitmap(scaledImg, rotationDegrees)
+                    addAnimation.plus(rotated)
+                } else {
+                    cutImg = Bitmap.createBitmap(bitmap, cutW * j, cutH * i, cutW, cutH)
+                    scaledImg = Bitmap.createScaledBitmap(cutImg, width, height, true)
+                    addAnimation.plus(scaledImg)
+                }
             }
             rotationDegrees += 90f
             animationMap[i] = addAnimation
@@ -83,10 +77,6 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
         val matrix = Matrix()
         matrix.postRotate(rotationDegrees)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-    }
-
-    fun finished(): Boolean {
-        return frameCounter == animation.size - 1
     }
 
     private fun update() {

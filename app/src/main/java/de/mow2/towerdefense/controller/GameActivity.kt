@@ -31,7 +31,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  * This Activity starts the game
  */
 class GameActivity : AppCompatActivity(), GameController {
-    private val gameState = GameState()
+    override var gameState = GameState(this)
 
      //game content and gui
     private val gameManager = GameManager(this)
@@ -87,7 +87,7 @@ class GameActivity : AppCompatActivity(), GameController {
      */
     fun pauseGame(view: View) {
         //TODO: save game state and return to main menu
-        gameState.saveGameState(this)
+        gameState.saveGameState()
         SoundManager.mediaPlayer.release()
         startActivity(Intent(this, MainActivity::class.java))
     }
@@ -107,6 +107,7 @@ class GameActivity : AppCompatActivity(), GameController {
             levelValue.text = "${GameManager.gameLevel}"
             enemyValue.text = "${GameManager.killCounter}"
             GameManager.reset()
+            gameState.deleteSaveGame()
         }
     }
 

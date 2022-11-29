@@ -4,11 +4,13 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
+import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
 import java.util.concurrent.CopyOnWriteArrayList
 
 interface GameController {
+    var gameState: GameState
     fun updateGUI()
     fun updateHealthBarMax(newMax: Int)
     fun updateProgressBarMax(newMax: Int)
@@ -93,6 +95,7 @@ class GameManager(private val controller: GameController) {
                 }
                 /* Define next wave */
                 killsToProgress = killCounter * level
+                controller.gameState.saveGameState() //auto-save progress
             }
         }
         controller.updateProgressBarMax(killsToProgress)
@@ -118,15 +121,14 @@ class GameManager(private val controller: GameController) {
      */
     fun updateLogic() {
         if(waveActive){
-            //TODO: apply different damage types and effects
             towerList.forEach towerIteration@{ tower ->
                 if(tower.cooldown()) {
                     if(tower.target != null) {//tower already has a target
                         val distance = tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
                         if(!tower.target!!.isDead && distance < tower.finalRange) {
                             tower.update()
-                            addProjectile(Projectile(tower, tower.target!!))
                             tower.isShooting = true
+                            addProjectile(Projectile(tower, tower.target!!))
                         } else {
                             tower.target = null
                             tower.isShooting = false
