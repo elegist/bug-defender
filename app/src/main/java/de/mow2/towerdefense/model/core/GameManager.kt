@@ -1,6 +1,6 @@
 package de.mow2.towerdefense.model.core
 
-import com.shashank.sony.fancytoastlib.FancyToast
+import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
@@ -15,7 +15,7 @@ interface GameController {
     fun updateHealthBarMax(newMax: Int)
     fun updateProgressBarMax(newMax: Int)
     fun onGameOver()
-    fun showToastMessage(message: String, type: Int)
+    fun showToastMessage(type: String)
 }
 
 /**
@@ -96,10 +96,10 @@ class GameManager(private val controller: GameController) {
                 /* Define next wave */
                 killsToProgress = killCounter * level
                 controller.gameState.saveGameState() //auto-save progress
+                controller.showToastMessage("wave")
             }
         }
         controller.updateProgressBarMax(killsToProgress)
-        controller.showToastMessage("Level:  $gameLevel", FancyToast.SUCCESS)
 
         killCounter = 0
         controller.updateGUI()
@@ -129,6 +129,7 @@ class GameManager(private val controller: GameController) {
                             tower.update()
                             tower.isShooting = true
                             addProjectile(Projectile(tower, tower.target!!))
+                            SoundManager.soundPool.play(Sounds.ARROWSHOT.id, 1F, 1F, 1, 0, 1F)
                         } else {
                             tower.target = null
                             tower.isShooting = false
@@ -170,7 +171,7 @@ class GameManager(private val controller: GameController) {
             }else if(enemy.healthPoints <= 0){ //enemy dies
                 increaseCoins(enemy.coinValue)
                 enemy.die()
-                SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 1F, 1F, 1, 0, 1F)
+                SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
                 increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
             }else{
                 enemy.update()
