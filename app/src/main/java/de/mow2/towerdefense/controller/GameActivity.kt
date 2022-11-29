@@ -260,20 +260,17 @@ class GameActivity : AppCompatActivity(), GameController {
                 "wave" -> {
                     "${resources.getString(R.string.wave)} ${GameManager.gameLevel}".also { text.text = it }
                     image.setImageResource(R.drawable.time)
-                    layout.setBackgroundResource(R.drawable.wave_toast_shape)
                     params.setMargins(display.widthPixels/4, display.heightPixels/2, display.widthPixels/4, display.heightPixels/2)
-                    snackBar.view.layoutParams = params
-                    snackBar.show()
                 }
                 "money" -> {
                     resources.getString(R.string.moneyWarning).also { text.text = it }
                     image.setImageResource(R.drawable.coins)
-                    layout.setBackgroundResource(R.drawable.warning_toast_shape)
                     params.setMargins(display.widthPixels/5, display.heightPixels/2, display.widthPixels/5, display.heightPixels/2)
-                    snackBar.view.layoutParams = params
-                    snackBar.show()
                 }
             }
+            layout.setBackgroundResource(R.drawable.wave_toast_shape)
+            snackBar.view.layoutParams = params
+            snackBar.show()
         }
     }
 
