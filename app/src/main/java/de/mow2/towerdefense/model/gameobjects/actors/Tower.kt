@@ -16,13 +16,14 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     //position on screen
     override var position = Vector2D(squareField.position.x, squareField.position.y - width)
     var weaponOffset = 0f
+    var rotationCorrection = 0f
     private var isRotatable = true
     //tower-specific game variables
     var level: Int = 0
-    set(value) {
-        field = value
-        scaleTowerValues()
-    }
+        set(value) {
+            field = value
+            scaleTowerValues()
+        }
     var hasTarget = false
     var target: Enemy? = null
     //queue sorting
@@ -51,28 +52,38 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
 //                    2 //down (default)
 //                }
 
-                if (distance.x > -20 && distance.x < 20) { // up / down
+                val directionTolerance = 80
+
+                if (distance.x > -directionTolerance && distance.x < directionTolerance) { // up / down
                     orientation = if (distance.y < 0) {
+                        rotationCorrection = 0f
                         0 // up
                     } else {
+                        rotationCorrection = 0f
                         4 // down
                     }
-                } else if (distance.y > -20 && distance.y < 20) { //left / right
+                } else if (distance.y > -directionTolerance && distance.y < directionTolerance) { //left / right
                     orientation = if (distance.x < 0) {
+                        rotationCorrection = 0f
                         6 // left
                     } else {
+                        rotationCorrection = 0f
                         2 // right
                     }
-                } else if (distance.x < -20) { // left-diagonals
+                } else if (distance.x < -directionTolerance) { // left-diagonals
                     orientation = if (distance.y < 0) {
+                        rotationCorrection = -squareField.width / 6f
                         7 // left-up
                     }else {
+                        rotationCorrection = -squareField.width / 6f
                         5 // left-down
                     }
-                } else if (distance.x > 20) { //right-diagonals
+                } else if (distance.x > directionTolerance) { //right-diagonals
                     orientation = if (distance.y < 0) {
+                        rotationCorrection = -squareField.width / 6f
                         1 // right-up
                     } else {
+                        rotationCorrection = -squareField.width / 6f
                         3 // right-down
                     }
                 }

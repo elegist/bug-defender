@@ -81,13 +81,8 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
 
     private fun processBitmap(bitmap: Bitmap, rotationDegrees: Float): Bitmap {
         val matrix = Matrix()
-        //matrix.postRotate(rotationDegrees)
-        matrix.postRotate(rotationDegrees, bitmap.width.toFloat() / 2, bitmap.height.toFloat() / 2)
+        matrix.setRotate(rotationDegrees, bitmap.width / 2f, bitmap.height / 2f)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-    }
-
-    fun finished(): Boolean {
-        return frameCounter == animation.size - 1
     }
 
     private fun update() {
