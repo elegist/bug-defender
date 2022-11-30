@@ -237,7 +237,6 @@ class GameActivity : AppCompatActivity(), GameController {
      * show custom toast message in the middle of the screen
      * @param type decides which snackbar should be shown
      */
-
     override fun showToastMessage(type: String) {
         runOnUiThread {
             val parent = binding.wrapAll

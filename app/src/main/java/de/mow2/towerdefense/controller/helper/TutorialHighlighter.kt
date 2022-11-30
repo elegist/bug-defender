@@ -11,6 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import de.mow2.towerdefense.R
 
+/**
+ * class to highlight elements in tutorial
+ */
 class TutorialHighlighter(
     private val healthBar: ConstraintLayout,
     private val progressBar: ConstraintLayout,
@@ -29,6 +32,7 @@ class TutorialHighlighter(
      * sets alpha for elements to show or hide them
      * @param element for view or view.children
      * @param show true = show, false = don't show
+     * @param hide true = hide, false = show
      */
     private fun highlight(element: View, show: Boolean) {
         if(show){

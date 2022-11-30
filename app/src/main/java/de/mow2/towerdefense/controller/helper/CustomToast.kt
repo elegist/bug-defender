@@ -16,6 +16,9 @@ import com.google.android.material.snackbar.Snackbar
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GameManager
 
+/**
+ * class to set up SnackBar for wave and money warning message
+ */
 class CustomToast(val context: Context, inflater: LayoutInflater, val parent: ConstraintLayout) {
 
     @SuppressLint("InflateParams")
@@ -30,8 +33,12 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
     private val height = display.heightPixels
     private val width = display.widthPixels
 
+    /**
+     * adds Snackbar, sets functionality and decides which snackbar should be shown
+     * @param string for setting right snackbar
+     */
     fun setUpSnackbar(type: String) {
-        //snackBar.view.setBackgroundResource(R.color.transparent)
+        snackBar.view.setBackgroundResource(R.color.transparent)
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackbarLayout.addView(snackBarLayout, 0)
         snackBarLayout.setOnClickListener{

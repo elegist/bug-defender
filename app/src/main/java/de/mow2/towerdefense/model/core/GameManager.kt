@@ -97,6 +97,7 @@ class GameManager(private val controller: GameController) {
                 killsToProgress = killCounter * level
                 controller.gameState.saveGameState() //auto-save progress
                 controller.showToastMessage("wave")
+                SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
             }
         }
         controller.updateProgressBarMax(killsToProgress)
@@ -129,7 +130,6 @@ class GameManager(private val controller: GameController) {
                             tower.update()
                             tower.isShooting = true
                             addProjectile(Projectile(tower, tower.target!!))
-                            SoundManager.soundPool.play(Sounds.ARROWSHOT.id, 1F, 1F, 1, 0, 1F)
                         } else {
                             tower.target = null
                             tower.isShooting = false
