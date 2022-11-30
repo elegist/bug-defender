@@ -33,7 +33,7 @@ class Enemy(
     private lateinit var sortedPath: List<Astar.Node>
     private var currentTargetNode: Astar.Node
     private var currentTargetPosition: Vector2D
-    private var nextDistance =
+    private var minDistance =
         GameManager.playGround.squareSize * 0.1f //min distance an enemy has to be from the currentTargetPosition to update it's path
     private var currentState: ActorState = ActorState.IDLE
 
@@ -174,7 +174,7 @@ class Enemy(
         }
 
         //search new path on each Node
-        if (distanceToTargetAbs <= nextDistance) {
+        if (distanceToTargetAbs <= minDistance) {
             if (pathToEnd(currentTargetNode)) {
                 currentState = ActorState.IS_MOVING
                 currentTargetNode = sortedPath.first()

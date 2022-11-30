@@ -36,12 +36,13 @@ class GameActivity : AppCompatActivity(), GameController {
     private lateinit var bottomGuiSpacer: View
     private lateinit var gameLayout: LinearLayout
     private lateinit var gameView: GameView
-    private lateinit var chrono: Chronometer
+    private lateinit var waveDisplay: TextView
+    private lateinit var waveDisplayText: String
     private lateinit var coinsTxt: TextView
     private lateinit var healthBar: ProgressBar
     private lateinit var healthText: TextView
     private lateinit var waveBar: ProgressBar
-    private lateinit var waveDisplay: TextView
+    private lateinit var wavePopupText: TextView
     private val menuPopup = PopupFragment()
     private val tutPopup = TutorialFragment()
     private val fm = supportFragmentManager
@@ -70,8 +71,9 @@ class GameActivity : AppCompatActivity(), GameController {
         hideSystemBars()
         //init game manager
         gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
-        //start level timer
-        chrono.start()
+        //initial wave display
+        waveDisplayText = "${GameManager.gameLevel + 1}"
+        waveDisplay.text = waveDisplayText
         // shows tutorial
         if(GameManager.tutorialsActive) {
            displayTutorial(true)
@@ -99,7 +101,7 @@ class GameActivity : AppCompatActivity(), GameController {
             val timeValue = findViewById<TextView>(R.id.timeValue)
             val levelValue = findViewById<TextView>(R.id.levelValue)
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
-            timeValue.text = "${chrono.text}"
+            timeValue.text = "${waveDisplay.text}"
             levelValue.text = "${GameManager.gameLevel}"
             enemyValue.text = "${GameManager.enemyCounter}"
             GameManager.reset()
@@ -142,12 +144,12 @@ class GameActivity : AppCompatActivity(), GameController {
         topGuiBg = binding.topGuiBg
         topGuiBg.background = BitmapPreloader.topDrawable
         //reference game gui elements
-        chrono = binding.timeView
+        waveDisplay = binding.timeView
         coinsTxt = binding.coinsText
         healthBar = binding.healthProgressBar
         healthText = binding.healthText
         waveBar = binding.waveProgressBar
-        waveDisplay = binding.waveText
+        wavePopupText = binding.waveText
         //reference build menu container
         buildMenuScrollView = binding.buildMenuWrapper
         buildMenuLayout = binding.buildMenuContainer
@@ -218,7 +220,9 @@ class GameActivity : AppCompatActivity(), GameController {
             val livesText = "${GameManager.livesAmnt} / ${healthBar.max}"
             healthText.text = livesText
             val waveText = "${GameManager.killCounter} / ${waveBar.max}"
-            waveDisplay.text = waveText
+            wavePopupText.text = waveText
+            waveDisplayText = "${GameManager.gameLevel + 1}"
+            waveDisplay.text = waveDisplayText
         }
     }
 

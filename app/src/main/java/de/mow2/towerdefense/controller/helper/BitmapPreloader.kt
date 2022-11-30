@@ -185,15 +185,33 @@ class BitmapPreloader(val resources: Resources) {
                         heightProjectile = 64
                     }
                     TowerTypes.AOE -> {
+                        val baseWidth = 2 * defaultWidth + defaultWidth / 2
                         projectileAnimR = when(level) {
-                            0 -> R.drawable.tower_aoe_projectile_1
-                            1 -> R.drawable.tower_aoe_projectile_2
-                            2 -> R.drawable.tower_aoe_projectile_3
-                            else -> R.drawable.tower_aoe_projectile_1
+                            0 -> {
+                                frameCountProjectile = 7
+                                widthProjectile = baseWidth * 2
+                                heightProjectile = widthProjectile
+                                R.drawable.tower_aoe_projectile_1
+                            }
+                            1 -> {
+                                frameCountProjectile = 12
+                                widthProjectile = (baseWidth + level * defaultWidth / 2) * 2
+                                heightProjectile = widthProjectile
+                                R.drawable.tower_aoe_projectile_2
+                            }
+                            2 -> {
+                                frameCountProjectile = 17
+                                widthProjectile = (baseWidth + level * defaultWidth / 2) * 2
+                                heightProjectile = widthProjectile
+                                R.drawable.tower_aoe_projectile_3
+                            }
+                            else -> {
+                                frameCountProjectile = 7
+                                widthProjectile = baseWidth
+                                heightProjectile = widthProjectile
+                                R.drawable.tower_aoe_projectile_1
+                            }
                         }
-                        frameCountProjectile = 6
-                        widthProjectile = 20
-                        heightProjectile = 20
                     }
                     TowerTypes.MAGIC -> {
                         //tower

@@ -27,6 +27,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     }
     var hasTarget = false
     var target: Enemy? = null
+    var targetArray = emptyArray<Enemy>() //for towers that shoot at more than one enemy
     var isShooting = false //flag to detect if tower is shooting. needed value for weapon animation
 
     //range,dmg,speed base settings
@@ -86,7 +87,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
                 slowAmount = 2 + towerLevel
             }
             TowerTypes.AOE -> {
-                finalRange = baseRange + towerLevel * width / 2
+                finalRange = baseRange + towerLevel * width / 2 //!IMPORTANT: changes made here must also be implemented in BitmapPreloader (bitmap should always be the same size as tower range!)
                 damage = 2 + towerLevel * 2
                 actionsPerMinute = baseSpeed / 2 + towerLevel * 20
             }
