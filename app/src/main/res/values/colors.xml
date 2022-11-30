@@ -4,12 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="black">#FF000000</color>
-    <color name="grey">#939393</color>
+    <color name="grey">#AEAEAE</color>
 
     <color name="dark_brown">#43240f</color>
     <color name="middle_brown">#6b472e</color>
     <color name="light_brown">#7d5336</color>
-    <color name="brown_overlay">#727D5336</color>
+    <color name="brown_overlay">#8B7D5336</color>
 
     <color name="green_overlay">#E62C3E1C</color>
     <color name="dark_green">#31421f</color>

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
@@ -30,9 +31,12 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
     private val width = display.widthPixels
 
     fun setUpSnackbar(type: String) {
-        snackBar.view.setBackgroundResource(R.color.transparent)
+        //snackBar.view.setBackgroundResource(R.color.transparent)
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackbarLayout.addView(snackBarLayout, 0)
+        snackBarLayout.setOnClickListener{
+            snackBar.dismiss()
+        }
 
         when(type){
             "wave" -> {
@@ -42,7 +46,7 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
                     append(GameManager.gameLevel+1)
                 }
                 image.setImageResource(R.drawable.time)
-                params.setMargins(width/4, height/2, width/4, height/2)
+                params.setMargins(width/5, height/2, width/5, height/2)
                 layout.setBackgroundResource(R.drawable.wave_toast_shape)
             }
             "money" -> {
