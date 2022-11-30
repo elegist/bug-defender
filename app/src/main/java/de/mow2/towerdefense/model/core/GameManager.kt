@@ -134,7 +134,7 @@ class GameManager(private val controller: GameController) {
                             tower.isShooting = true
                             when (tower.type) {
                                 TowerTypes.AOE -> {
-                                    addProjectile(Projectile(tower, tower.targetArray[0]))
+                                    addProjectile(Projectile(tower, tower.targetArray.last()))
                                     tower.targetArray.forEach { enemy ->
                                         enemy.takeDamage(tower.damage, tower)
                                     }
