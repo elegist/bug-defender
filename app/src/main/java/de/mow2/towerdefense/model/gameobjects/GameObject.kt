@@ -26,7 +26,7 @@ abstract class GameObject() {
     var orientation: Int = 0
 
     //variables for movement calculation
-    protected lateinit var distance: Vector2D
+    protected var distance = Vector2D(0, 0)
     protected var distanceToTargetAbs: Float = 0f
     private lateinit var direction: Vector2D
     private lateinit var velocity: Vector2D
@@ -93,15 +93,6 @@ abstract class GameObject() {
 //        } else {
 //            0 //down (default)
 //        }
-        orientation = if (distance.x < -5) {
-            3 //left
-        } else if (distance.x > 5) {
-            1 //right
-        } else if (distance.y < 0) {
-            0 //up
-        } else {
-            2 //down (default)
-        }
     }
 
 

@@ -162,36 +162,39 @@ class GameManager(private val controller: GameController) {
             }
 
             /**
+             * update movement, update target or remove enemy
+             */
+            enemyList.forEach { enemy ->
+                if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
+                    decreaseLives(enemy.baseDamage)
+                    enemy.die()
+                    SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
+                } else if (enemy.healthPoints <= 0) { //enemy dies
+                    increaseCoins(enemy.coinValue)
+                    enemy.die()
+                    SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
+                    increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+                } else {
+                    enemy.update()
+                }
+            }
+
+            /**
              * spawning enemies depending on the current gameLevel
              */
             spawnWave()
         } else {
-//            val towerDestroyer = TowerDestroyer(lastTower!!.squareField.mapPos["y"]!!)
-//            towerDestroyer.update()
-//            if (towerDestroyer.position.x == lastTower!!.squareField.mapPos["x"]!!) {
-//
-//            }
-            towerDestroyer.update()
-        }
-        /**
-         * update movement, update target or remove enemy
-         */
-        enemyList.forEach { enemy ->
-            if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
-                decreaseLives(enemy.baseDamage)
-                enemy.die()
-                SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
-            } else if (enemy.healthPoints <= 0) { //enemy dies
-                increaseCoins(enemy.coinValue)
-                enemy.die()
-                SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
-                increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+            if (towerDestroyer!!.isDone) {
+                validatePlayGround()
+                towerDestroyer = null
             } else {
-                enemy.update()
+                if (lastTower!!.positionCenter.x - 20 < towerDestroyer!!.positionCenter.x && towerDestroyer!!.positionCenter.x < lastTower!!.positionCenter.x + 20) {
+                    lastTower!!.squareField.isBlocked = false
+                    towerList.remove(lastTower!!)
+                }
+                towerDestroyer!!.update()
             }
         }
-
-        Log.i("wave", "$waveActive")
     }
 
     companion object {
@@ -214,7 +217,7 @@ class GameManager(private val controller: GameController) {
         var towerList = CopyOnWriteArrayList<Tower>()
         var enemyList = CopyOnWriteArrayList<Enemy>()
         var projectileList = CopyOnWriteArrayList<Projectile>()
-        lateinit var towerDestroyer: TowerDestroyer
+        var towerDestroyer: TowerDestroyer? = null
         var lastTower: Tower? = null
 
         //spawner variables
