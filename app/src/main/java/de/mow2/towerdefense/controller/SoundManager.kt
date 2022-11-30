@@ -20,7 +20,7 @@ import de.mow2.towerdefense.R
  * */
 
 enum class Sounds(var id: Int){
-    GAMEOVER(0), BUILD(0), BOSSDEATH(0), CREEPDEATH(0), EXPLOSION(0), LIVELOSS(0)
+    GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(0), ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0)
 }
 
 object SoundManager {
@@ -44,10 +44,13 @@ object SoundManager {
     fun loadSounds(context: Context) {
         Sounds.GAMEOVER.id = soundPool.load(context, R.raw.gameover, 1)
         Sounds.BUILD.id = soundPool.load(context, R.raw.building_sound, 1)
-        Sounds.BOSSDEATH.id = soundPool.load(context, R.raw.bug_death, 1)
-        Sounds.EXPLOSION.id = soundPool.load(context, R.raw.tower_explosion, 1)
+        Sounds.TOWERDESTROY.id = soundPool.load(context, R.raw.tower_explosion, 1)
         Sounds.LIVELOSS.id = soundPool.load(context, R.raw.lost_live, 1)
         Sounds.CREEPDEATH.id = soundPool.load(context, R.raw.creep_death, 1)
+        Sounds.MAGICSHOT.id = soundPool.load(context, R.raw.magic_shot, 1)
+        Sounds.SLOWSHOT.id = soundPool.load(context, R.raw.slow_shot, 1)
+        Sounds.ARROWSHOT.id = soundPool.load(context, R.raw.arrow_shot, 1)
+        Sounds.AOESHOT.id = soundPool.load(context, R.raw.aoe_shot, 1)
     }
 
     // MediaPlayer

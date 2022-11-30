@@ -4,22 +4,18 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.edit
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
-import com.shashank.sony.fancytoastlib.FancyToast
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
-import de.mow2.towerdefense.controller.helper.BitmapPreloader
-import de.mow2.towerdefense.controller.helper.BuildButton
-import de.mow2.towerdefense.controller.helper.GameState
+import de.mow2.towerdefense.controller.helper.*
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.BuildUpgradeMenu
 import de.mow2.towerdefense.model.core.GameController
@@ -31,7 +27,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  * This Activity starts the game
  */
 class GameActivity : AppCompatActivity(), GameController {
-    private val gameState = GameState()
+    override var gameState = GameState(this)
 
      //game content and gui
     private val gameManager = GameManager(this)
@@ -87,7 +83,7 @@ class GameActivity : AppCompatActivity(), GameController {
      */
     fun pauseGame(view: View) {
         //TODO: save game state and return to main menu
-        gameState.saveGameState(this)
+        gameState.saveGameState()
         SoundManager.mediaPlayer.release()
         startActivity(Intent(this, MainActivity::class.java))
     }
@@ -105,8 +101,9 @@ class GameActivity : AppCompatActivity(), GameController {
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
             timeValue.text = "${chrono.text}"
             levelValue.text = "${GameManager.gameLevel}"
-            enemyValue.text = "${GameManager.killCounter}"
+            enemyValue.text = "${GameManager.enemyCounter}"
             GameManager.reset()
+            gameState.deleteSaveGame()
         }
     }
 
@@ -140,9 +137,9 @@ class GameActivity : AppCompatActivity(), GameController {
      */
     private fun initGUI() {
         //reference game gui containers
-        bottomGuiContainer = binding.bottomGuiContainer!!
+        bottomGuiContainer = binding.bottomGuiContainer
         bottomGuiSpacer = binding.bottomGuiSpacer
-        topGuiBg = binding.topGuiBg!!
+        topGuiBg = binding.topGuiBg
         topGuiBg.background = BitmapPreloader.topDrawable
         //reference game gui elements
         chrono = binding.timeView
@@ -236,12 +233,14 @@ class GameActivity : AppCompatActivity(), GameController {
 
     /**
      * show custom toast message in the middle of the screen
+     * @param type decides which snackbar should be shown
      */
-    override fun showToastMessage(message: String, type: Int) {
+
+    override fun showToastMessage(type: String) {
         runOnUiThread {
-            val toast = FancyToast.makeText(this, message, FancyToast.LENGTH_SHORT, type, false )
-            toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.show()
+            val parent = binding.wrapAll
+            val toast = CustomToast(this, layoutInflater, parent)
+            toast.setUpSnackbar(type)
         }
     }
 
@@ -287,6 +286,10 @@ class GameActivity : AppCompatActivity(), GameController {
         buildMenuExists = !buildMenuExists
     }
 
+    /**
+     * hide or show Tutorial
+     * @param active Boolean Value shows if Tutorial should be shown or not
+     */
     fun displayTutorial(active: Boolean) {
         if(active) {
             tutPopup.show(fm, "tutorialDialog")
@@ -304,53 +307,17 @@ class GameActivity : AppCompatActivity(), GameController {
      * @param item the element which should be highlighted
      */
     fun highlight(item: String) {
-        val topGuiContainer = binding.topGuiContainer!!
-        binding.bottomGUI.children.forEach { it.alpha = 0.2F }
-        topGuiContainer.children.forEach { it.alpha = 0.2F }
-        binding.progressBarContainer.children.forEach {it.alpha = 0.2F}
-        when(item) {
-            "bottomGui" -> {
-                binding.bottomGUI.children.forEach { it.alpha = 1F }
-            }
-            "bottomLeft" -> {
-                binding.deleteButton.alpha = 1F
-            }
-            "bottomRight" -> {
-                binding.upgradeButton.alpha = 1F
-            }
-            "bottomMiddle" -> {
-                binding.buildButton.alpha = 1F
-            }
-            "topGui" -> {
-                topGuiContainer.children.forEach { it.alpha = 1F }
-            }
-            "topGuiLeft" -> {
-                binding.timeView.alpha = 1F
-                binding.clockImage?.alpha = 1F
-            }
-            "topGuiRight" -> {
-                binding.coinsText.alpha = 1F
-                binding.coinImg.alpha = 1F
-            }
-            "topGuiLeftBar" -> {
-                binding.healthProgressBar.alpha = 1F
-                binding.healthText.alpha = 1F
-                binding.healthBallImg.alpha = 1F
-            }
-            "topGuiRightBar" -> {
-                binding.waveProgressBar.alpha = 1F
-                binding.waveText.alpha = 1F
-                binding.progressBallImg.alpha = 1F
-            }
-            "topGuiMenu" -> {
-                binding.menuBtn.alpha = 1F
-            }
-            "endTutorial" -> {
-                binding.bottomGUI.children.forEach { it.alpha = 1F }
-                topGuiContainer.children.forEach { it.alpha = 1F }
-                binding.progressBarContainer.children.forEach {it.alpha = 1F}
-            }
-        }
+        val healthBar = binding.healthBarContainer
+        val progressBar = binding.progressBarContainer
+        val time = binding.leftElementsWrapper
+        val coins = binding.rightElementsWrapper
+        val menuBtn = binding.menuBtn
+        val deleteBtn = binding.deleteButton
+        val upgradeBtn = binding.upgradeButton
+        val buildBtn = binding.buildButton
+        val bottomGui = binding.bottomGuiContainer
+        val tutorial = TutorialHighlighter(healthBar, progressBar, time, coins, bottomGui, menuBtn, deleteBtn, upgradeBtn, buildBtn)
+        tutorial.highlightElement(item)
     }
 }
 

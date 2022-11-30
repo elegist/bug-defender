@@ -35,6 +35,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
 
     //detects if the tower should be shooting right now. received from gamemanager
     var isShooting = false
+    var animationFinished = true
 
     override fun update() {
         if (isRotatable) {

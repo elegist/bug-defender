@@ -106,7 +106,6 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
                 draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.idleImage, Vector2D(tower.position.x, tower.position.y + tower.weaponOffset))
             }
         }
-
         //projectiles
         GameManager.projectileList.forEach { projectile ->
             draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.level][projectile.tower.type]!!.nextFrame(projectile.orientation), projectile.position)

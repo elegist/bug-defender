@@ -14,11 +14,11 @@
     <string name="preference_music">Musik</string>
     <string name="menuBtn">Menü</string>
     <string name="sound">Sounds</string>
-    <string name="pauseGame">Spiel speichern &amp; pausieren</string>
+    <string name="pauseGame">Hauptmenü</string>
     <string name="resumeGame">Spiel fortsetzen</string>
     <string name="moneyWarning">nicht genug Geld</string>
     <string name="toastAction">nicht mehr anzeigen</string>
-    <string name="wave">Welle</string>
+    <string name="wave">Welle: </string>
     <string name="coins">Münzen</string>
     <string name="back">zurück zu Hauptmenü</string>
     <string name="restart">restart game</string>
@@ -32,7 +32,6 @@
     <string name="timeMade">Zeit geschafft: </string>
     <string name="enemyMade">Gegener getötet: </string>
     <string name="levelMade">Level geschafft: </string>
-    <string name="showTutorial">Zeig mir das Tutorial</string>
     <string name="goOnTutorial">Weiter</string>
     <string name="tutorialTitel">Tutorial</string>
     <string name="tutorialWelcome">Willkommen zum Tutorial von Bug Defense! Wenn das Tutorial überspringen möchtest, schließe dieses Fenster</string>
@@ -46,4 +45,5 @@
     <string name="tutorialGUILeftBar">Die linke Leiste zeigt dir deine Lebensleiste.</string>
     <string name="tutorialGUIRightBar">Die rechte Leiste zeigt dir, wie viele Gegner du zum nächsten Level benötigst.</string>
     <string name="tutorialMenuButton">Der Button in der Mitte öffnet ein Menü.</string>
+    <string name="quality">Bildqualität</string>
 </resources>
