@@ -41,17 +41,6 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
         if (isRotatable) {
             if (target != null){
                 distance = target!!.position - position
-
-//                orientation = if(distance.x < -5) {
-//                    3 //left
-//                } else if(distance.x > 5) {
-//                    1 //right
-//                } else if(distance.y < 0) {
-//                    0 //up
-//                } else {
-//                    2 //down (default)
-//                }
-
                 val directionTolerance = 80
 
                 if (distance.x > -directionTolerance && distance.x < directionTolerance) { // up / down
