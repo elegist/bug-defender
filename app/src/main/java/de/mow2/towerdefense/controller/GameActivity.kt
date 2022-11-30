@@ -49,7 +49,7 @@ class GameActivity : AppCompatActivity(), GameController {
     private val fm = supportFragmentManager
     private lateinit var prefManager: SharedPreferences
 
-    //buildmenu
+    //build menu
     private lateinit var buildMenuScrollView: HorizontalScrollView
     private lateinit var buildMenuLayout: LinearLayout
     private lateinit var buildButton: ImageButton
