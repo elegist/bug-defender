@@ -110,6 +110,10 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         GameManager.projectileList.forEach { projectile ->
             draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.level][projectile.tower.type]!!.nextFrame(projectile.orientation), projectile.position)
         }
+
+        if (!GameManager.waveActive) {
+            draw(canvas, BitmapPreloader.towerDestroyerAnims.nextFrame(0), GameManager.towerDestroyer.position)
+        }
     }
     /**
      * draws a bitmap onto canvas

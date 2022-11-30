@@ -19,10 +19,10 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     private var isRotatable = true
     //tower-specific game variables
     var level: Int = 0
-    set(value) {
-        field = value
-        scaleTowerValues()
-    }
+        set(value) {
+            field = value
+            scaleTowerValues()
+        }
     var hasTarget = false
     var target: Enemy? = null
     //queue sorting

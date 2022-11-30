@@ -25,6 +25,7 @@ class BitmapPreloader(val resources: Resources) {
         preloadWeapons()
         preloadProjectiles()
         preloadEnemies()
+        preloadTowerDestroyer()
     }
 
     private fun preloadGui() {
@@ -287,12 +288,21 @@ class BitmapPreloader(val resources: Resources) {
         }
     }
 
+    private fun preloadTowerDestroyer() {
+        val towerDestroyerR = R.drawable.enemy_cacodaemon_anim
+        val rowCount = 2
+        val frameCount = 6
+        val frameDuration = 100
+        towerDestroyerAnims = SpriteAnimation(BitmapFactory.decodeResource(resources, towerDestroyerR), defaultWidth, defaultHeight, rowCount, frameCount, frameDuration)
+    }
+
     companion object {
         //all various lists and maps for game objects and their respective bitmaps or animations
         var towerImagesArray = emptyArray<ConcurrentHashMap<TowerTypes, Bitmap>>()
         var weaponAnimsArray = emptyArray<ConcurrentHashMap<TowerTypes, SpriteAnimation>>()
         var projectileAnimsArray = emptyArray<ConcurrentHashMap<TowerTypes, SpriteAnimation>>()
         var enemyAnims = ConcurrentHashMap<EnemyType, SpriteAnimation>()
+        lateinit var towerDestroyerAnims: SpriteAnimation
         lateinit var bottomDrawable: BitmapDrawable
         lateinit var topDrawable: BitmapDrawable
         lateinit var playgroundBG: Bitmap

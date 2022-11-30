@@ -26,6 +26,6 @@ class SquareField(val position: Vector2D, val mapPos: Map<String, Int>, val widt
     }
 
     override fun toString(): String {
-        return "Ich bin ein Quadrat: x: ${position.x} y: ${position.y}"
+        return "x: ${mapPos["x"]} y: ${mapPos["y"]}"
     }
 }
