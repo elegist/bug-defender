@@ -8,6 +8,8 @@ import de.mow2.towerdefense.model.helper.Vector2D
  * A specific tower
  * @param squareField references the field on which the tower has been built
  * @param type the towers type
+ * @param weaponOffset when towers are leveled up, the weapons y position will be adjusted using this value
+ * @param rotationCorrection due to the rotation in SpriteAnimation, the 45f angles will be adjusted using this value
  */
 class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(), java.io.Serializable {
     //queue sorting
@@ -18,6 +20,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     override var position = Vector2D(squareField.position.x, squareField.position.y - width)
     //weapon positioning
     var weaponOffset = 0f
+    var rotationCorrection = 0f    
     private var isRotatable = false
     //tower-specific game variables
     var towerLevel: Int = 0
@@ -44,15 +47,40 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
         if (isRotatable) {
             if (target != null){
                 distance = target!!.position - position
+                val directionTolerance = 80
 
-                orientation = if(distance.x < -5) {
-                    3 //left
-                } else if(distance.x > 5) {
-                    1 //right
-                } else if(distance.y < 0) {
-                    0 //up
-                } else {
-                    2 //down (default)
+                if (distance.x > -directionTolerance && distance.x < directionTolerance) { // up / down
+                    orientation = if (distance.y < 0) {
+                        rotationCorrection = 0f
+                        0 // up
+                    } else {
+                        rotationCorrection = 0f
+                        4 // down
+                    }
+                } else if (distance.y > -directionTolerance && distance.y < directionTolerance) { //left / right
+                    orientation = if (distance.x < 0) {
+                        rotationCorrection = 0f
+                        6 // left
+                    } else {
+                        rotationCorrection = 0f
+                        2 // right
+                    }
+                } else if (distance.x < -directionTolerance) { // left-diagonals
+                    orientation = if (distance.y < 0) {
+                        rotationCorrection = -squareField.width / 6f
+                        7 // left-up
+                    }else {
+                        rotationCorrection = -squareField.width / 6f
+                        5 // left-down
+                    }
+                } else if (distance.x > directionTolerance) { //right-diagonals
+                    orientation = if (distance.y < 0) {
+                        rotationCorrection = -squareField.width / 6f
+                        1 // right-up
+                    } else {
+                        rotationCorrection = -squareField.width / 6f
+                        3 // right-down
+                    }
                 }
             }
         }

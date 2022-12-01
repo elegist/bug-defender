@@ -82,26 +82,6 @@ abstract class GameObject() {
         }
         //update coordinates
         position += velocity
-
-        //TODO: adjust the orientation on spritesheets or recode rotation in SpriteAnimation.kt
-//        orientation = if(distance.x < -5) {
-//            3 //left
-//        } else if(distance.x > 5) {
-//            2 //right
-//        } else if(distance.y < 0) {
-//            1 //up
-//        } else {
-//            0 //down (default)
-//        }
-        orientation = if (distance.x < -5) {
-            3 //left
-        } else if (distance.x > 5) {
-            1 //right
-        } else if (distance.y < 0) {
-            0 //up
-        } else {
-            2 //down (default)
-        }
     }
 
 

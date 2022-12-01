@@ -24,10 +24,19 @@ class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
     override fun update() {
         if(tower.type != TowerTypes.AOE) {
             moveTo(enemy.positionCenter)
+
+            orientation = if(distance.x < -5) {
+                3 //left
+            } else if(distance.x > 5) {
+                1 //right
+            } else if(distance.y < 0) {
+                0 //up
+            } else {
+                2 //down (default)
+            }
         } else {
             if(!tower.isShooting) {
                 GameManager.projectileList.remove(this)
             }
-        }
     }
 }

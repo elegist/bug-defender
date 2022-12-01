@@ -101,7 +101,7 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
                 draw(canvas, BitmapPreloader.upgradeOverlay, tower.position)
             }
             if(tower.isShooting && GameManager.waveActive) {
-                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.towerLevel][tower.type]!!.nextFrame(tower.orientation), Vector2D(tower.position.x, tower.position.y + tower.weaponOffset))
+                draw(canvas, BitmapPreloader.weaponAnimsArray[tower.level][tower.type]!!.nextFrame(tower.orientation), Vector2D(tower.position.x + tower.rotationCorrection, tower.position.y + tower.weaponOffset + tower.rotationCorrection))
             } else {
                 draw(canvas, BitmapPreloader.weaponAnimsArray[tower.towerLevel][tower.type]!!.idleImage, Vector2D(tower.position.x, tower.position.y + tower.weaponOffset))
             }
