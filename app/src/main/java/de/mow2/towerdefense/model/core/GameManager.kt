@@ -199,12 +199,14 @@ class GameManager(private val controller: GameController) {
                 if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
                     decreaseLives(enemy.baseDamage)
                     enemy.die()
+                    increaseKills(enemy.killValue)
                     SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
                 } else if (enemy.healthPoints <= 0) { //enemy dies
                     increaseCoins(enemy.coinValue)
                     enemy.die()
+                    increaseKills(enemy.killValue)
                     SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
-                    increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+                    enemiesKilled++
                 } else {
                     enemy.update()
                 }
@@ -319,7 +321,6 @@ class GameManager(private val controller: GameController) {
             enemyList += enemy
             enemyList.sort()
             enemyList.reverse()
-            enemiesKilled++
         }
 
         private fun addProjectile(projectile: Projectile) {
