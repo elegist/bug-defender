@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.core
 
-import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
@@ -76,18 +75,15 @@ class GameManager(private val controller: GameController) {
 
     //TODO: (load game) GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
     fun initLevel(level: Int) {
-        //use to change starting game level
-        gameLevel = 0 //default = 0
         //set the wave
-        wave = Wave(gameLevel)
+        waveSpawner = WaveSpawner(gameLevel)
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 100
+                livesAmnt = 999999
                 if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 5500
                 }
-                killsToProgress = 10
                 controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
@@ -95,11 +91,11 @@ class GameManager(private val controller: GameController) {
                     increaseLives(5)
                 }
                 // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
-                killsToProgress = wave.remaining
                 controller.gameState.saveGameState() //auto-save progress
                 controller.showToastMessage("wave")
             }
         }
+        killsToProgress = waveSpawner.enemyCount
         controller.updateProgressBarMax(killsToProgress)
 
         killCounter = 0
@@ -159,7 +155,8 @@ class GameManager(private val controller: GameController) {
             /**
              * spawning enemies depending on the current gameLevel
              */
-            spawner.spawnWave(wave)
+            waveSpawner.update()
+
         }
         /**
          * update movement, update target or remove enemy
@@ -175,6 +172,7 @@ class GameManager(private val controller: GameController) {
                 enemy.die()
                 SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
                 increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+                enemiesKilled++
             }else{
                 enemy.update()
             }
@@ -195,6 +193,11 @@ class GameManager(private val controller: GameController) {
         var livesAmnt: Int = 0
         var killCounter: Int = 0
         var killsToProgress: Int = 0
+        var waveActive = true
+        var waveSpawner = WaveSpawner(0)
+        var gameLevel = 0 // current level/wave
+        var enemiesKilled: Int = 0 //total enemies spawned
+        var enemiesAlive: Int = 0 //enemies currently on the PlayGround
 
         //game objects
         const val maxTowerLevel = 2
@@ -202,14 +205,6 @@ class GameManager(private val controller: GameController) {
         var enemyList = CopyOnWriteArrayList<Enemy>()
         var projectileList = CopyOnWriteArrayList<Projectile>()
         var lastTower: Tower? = null
-
-        //spawner variables
-        val spawner = Spawner()
-        var wave = Wave(0) // default wave is 0 (gameLevel 0)
-        var waveActive = true
-        var gameLevel = 0 // current level/wave
-        var enemyCounter: Int = 0 //total enemies spawned
-        var enemiesAlive: Int = 0 //enemies currently on the PlayGround
 
         // build menu variables
         var selectedTool: Int? = null
@@ -230,7 +225,7 @@ class GameManager(private val controller: GameController) {
             selectedTower = TowerTypes.SINGLE
             lastTower = null
             gameLevel = 0
-            enemyCounter = 0
+            enemiesKilled = 0
             enemiesAlive = 0
         }
 
@@ -244,7 +239,7 @@ class GameManager(private val controller: GameController) {
             enemyList += enemy
             enemyList.sort()
             enemyList.reverse()
-            enemyCounter++
+            enemiesKilled++
         }
 
         private fun addProjectile(projectile: Projectile) {
