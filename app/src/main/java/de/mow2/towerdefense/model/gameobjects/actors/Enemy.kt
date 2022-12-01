@@ -163,6 +163,15 @@ class Enemy(
 
             }
             ActorState.IS_MOVING -> {
+                orientation = if (distance.x < -5) {
+                    3 //left
+                } else if (distance.x > 5) {
+                    1 //right
+                } else if (distance.y < 0) {
+                    0 //up
+                } else {
+                    2 //down (default)
+                }
                 moveTo(currentTargetPosition)
 
                 orientation = if(distance.x < -5) {

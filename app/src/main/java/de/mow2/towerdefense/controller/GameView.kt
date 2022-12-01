@@ -110,6 +110,10 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         GameManager.projectileList.forEach { projectile ->
             draw(canvas, BitmapPreloader.projectileAnimsArray[projectile.tower.towerLevel][projectile.tower.type]!!.nextFrame(projectile.orientation), projectile.position)
         }
+
+        if (GameManager.towerDestroyer != null) {
+            draw(canvas, BitmapPreloader.towerDestroyerAnims.nextFrame(GameManager.towerDestroyer!!.orientation), GameManager.towerDestroyer!!.position)
+        }
     }
     /**
      * draws a bitmap onto canvas
@@ -135,27 +139,29 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         val x: Float; val y: Float
 
         if (ev?.action == MotionEvent.ACTION_UP){
-            x = ev.x
-            y = ev.y
-            val selectedField = getTouchedSquare(x, y)
-            if(selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                Log.i("Tool", "${GameManager.selectedTool}")
+            if (GameManager.waveActive){
+                x = ev.x
+                y = ev.y
+                val selectedField = getTouchedSquare(x, y)
+                if(selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
+                    Log.i("Tool", "${GameManager.selectedTool}")
 
-                when (GameManager.selectedTool) {
-                    R.id.deleteButton -> {
-                        if (selectedField.tower != null){
-                            buildMenu.destroyTower(selectedField.tower!!)
+                    when (GameManager.selectedTool) {
+                        R.id.deleteButton -> {
+                            if (selectedField.tower != null){
+                                buildMenu.destroyTower(selectedField.tower!!)
+                            }
+                        }
+                        R.id.buildButton -> {
+                            buildMenu.buildTower(selectedField, GameManager.selectedTower)
+                        }
+                        R.id.upgradeButton -> {
+                            buildMenu.upgradeTower(selectedField.tower)
                         }
                     }
-                    R.id.buildButton -> {
-                        buildMenu.buildTower(selectedField, GameManager.selectedTower)
-                    }
-                    R.id.upgradeButton -> {
-                        buildMenu.upgradeTower(selectedField.tower)
-                    }
                 }
+                invalidate()
             }
-            invalidate()
         }
         return true
     }

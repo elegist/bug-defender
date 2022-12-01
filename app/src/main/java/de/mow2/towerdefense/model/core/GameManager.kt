@@ -8,6 +8,8 @@ import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
+import java.util.Timer
+import java.util.TimerTask
 import java.util.concurrent.CopyOnWriteArrayList
 
 interface GameController {
@@ -24,6 +26,9 @@ interface GameController {
  * @param controller Class which handles UI related work and implements GameController interface
  */
 class GameManager(private val controller: GameController) {
+    private var towerDestroyerPatience = 3
+    private var towerDestroyerPatienceCooldown: Long = 1000 * 300 // 5 minutes
+
     /**
      * Method to call when increasing coins (e.g. defeating an enemy creature or destroying a tower)
      * @param increaseValue the value to be added to the total coin amount
@@ -112,12 +117,18 @@ class GameManager(private val controller: GameController) {
     //check if target can be reached from spawn
     private val algs = Astar() //TODO: move into companion object?
     fun validatePlayGround() {
-        waveActive = algs.findPath(
+        waveActive = if(algs.findPath(
             Astar.Node(0, 0),
             Astar.Node(squaresX - 1, squaresY - 1),
             squaresX,
             squaresY
-        ) != null
+        ) != null) {
+            true
+        } else {
+            towerDestroyer = TowerDestroyer(lastTower!!)
+            towerDestroyerPatience--
+            false
+        }
     }
 
     /**
@@ -184,27 +195,68 @@ class GameManager(private val controller: GameController) {
             }
 
             /**
+             * update movement, update target or remove enemy
+             */
+            enemyList.forEach { enemy ->
+                if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
+                    decreaseLives(enemy.baseDamage)
+                    enemy.die()
+                    SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
+                } else if (enemy.healthPoints <= 0) { //enemy dies
+                    increaseCoins(enemy.coinValue)
+                    enemy.die()
+                    SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
+                    increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+                } else {
+                    enemy.update()
+                }
+            }
+
+            /**
              * spawning enemies depending on the current gameLevel
              */
-            spawner.spawnWave(wave)
-        }
-        /**
-         * update movement, update target or remove enemy
-         */
-        enemyList.forEach { enemy ->
-            if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
-                decreaseLives(enemy.baseDamage)
-                enemy.die()
-                SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
-                increaseKills(enemy.killValue)
-            } else if (enemy.healthPoints <= 0) { //enemy dies
-                increaseCoins(enemy.coinValue)
-                enemy.die()
-                SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
-                increaseKills(enemy.killValue) //TODO: implement variable for worth of one kill (e.g. Bosses could count for more than 1 kill)
+            spawnWave()
+        } else {
+            /**
+             * if the wave cannot find a valid path, a towerdestroyer will spawn and destroy the last tower
+             * that was placed. If the player repeats this action a set amount of times it will destroy
+             * the complete row of the recent placed tower
+             * @see towerDestroyerPatience
+             */
+            if (towerDestroyer!!.isDone) {
+                validatePlayGround()
+                towerDestroyer = null
             } else {
-                enemy.update()
+                if (towerDestroyerPatience > 0) {
+                    if (lastTower!!.positionCenter.x - 20 < towerDestroyer!!.positionCenter.x && towerDestroyer!!.positionCenter.x < lastTower!!.positionCenter.x + 20) {
+                        lastTower!!.squareField.isBlocked = false
+                        towerList.remove(lastTower!!)
+                    }
+                } else {
+                    towerList.forEach { tower ->
+                        if (tower.squareField.mapPos["y"] == lastTower!!.squareField.mapPos["y"]) {
+                            if (tower.positionCenter.x -20 < towerDestroyer!!.positionCenter.x && towerDestroyer!!.positionCenter.x < tower.positionCenter.x + 20){
+                                tower.squareField.isBlocked = false
+                                towerList.remove(tower)
+                            }
+                        }
+                    }
+                }
+                towerDestroyer!!.update()
             }
+        }
+
+        /**
+         * if the towerdestroyer already has destroyed a tower, this timer will determine,
+         * when the patience value will be reset to its default value to give some leniency
+         * to the player
+         */
+        if (towerDestroyerPatience < 3) {
+            Timer().schedule(object : TimerTask(){
+                override fun run() {
+                    towerDestroyerPatience = 3
+                }
+            }, towerDestroyerPatienceCooldown)
         }
     }
 
@@ -228,6 +280,7 @@ class GameManager(private val controller: GameController) {
         var towerList = CopyOnWriteArrayList<Tower>()
         var enemyList = CopyOnWriteArrayList<Enemy>()
         var projectileList = CopyOnWriteArrayList<Projectile>()
+        var towerDestroyer: TowerDestroyer? = null
         var lastTower: Tower? = null
 
         //spawner variables
