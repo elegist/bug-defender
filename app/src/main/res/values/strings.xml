@@ -46,4 +46,5 @@
     <string name="tutorialGUIRightBar">The right bar shows you how many opponents you need to get to the next level.</string>
     <string name="tutorialMenuButton">The button in the center opens a menu. There you can change your settings and save your score.</string>
     <string name="quality">image quality</string>
+    <string name="waveDisplayText">Wave</string>
 </resources>

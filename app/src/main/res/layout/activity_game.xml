@@ -87,13 +87,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/healthBarContainer">
 
                 <TextView
-                    android:id="@+id/timeView"
+                    android:id="@+id/waveValue"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="#BCAAA4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/waveDisplayText"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/waveValue"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/timeIcon"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -104,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/timer_image"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/timeView"
+                    app:layout_constraintEnd_toStartOf="@+id/textView"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

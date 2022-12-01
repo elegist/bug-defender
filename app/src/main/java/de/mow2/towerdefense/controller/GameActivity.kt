@@ -144,7 +144,7 @@ class GameActivity : AppCompatActivity(), GameController {
         topGuiBg = binding.topGuiBg
         topGuiBg.background = BitmapPreloader.topDrawable
         //reference game gui elements
-        waveDisplay = binding.timeView
+        waveDisplay = binding.waveValue
         coinsTxt = binding.coinsText
         healthBar = binding.healthProgressBar
         healthText = binding.healthText
