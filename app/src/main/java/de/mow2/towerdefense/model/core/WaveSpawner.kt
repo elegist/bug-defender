@@ -74,8 +74,7 @@ class WaveSpawner() {
         }
         when {
             gameLevel == 0 -> {
-                //waveEnemyList.add(EnemyType.values().first())
-                GameManager.addEnemy(Enemy(EnemyType.values().first()))
+                waveEnemyList.add(EnemyType.values().first())
                 spawnsPerMinute = baseSpawnsPerMinute
                 enemyCount = 5
             }

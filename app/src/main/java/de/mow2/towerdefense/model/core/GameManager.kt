@@ -80,9 +80,9 @@ class GameManager(private val controller: GameController) {
         controller.updateGUI()
     }
 
-    val waveSpawner = WaveSpawner()
+    private val waveSpawner = WaveSpawner()
     fun initLevel(level: Int) {
-        gameLevel = 12
+        //gameLevel = 50
         //set the wave
         waveSpawner.initWave(gameLevel)
         when (level) {

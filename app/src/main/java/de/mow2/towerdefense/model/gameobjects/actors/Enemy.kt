@@ -49,6 +49,7 @@ class Enemy(
     var coinValue = 0
 
     init {
+        orientation = 2 //set default orientation to down
         GameManager.enemiesAlive++ // each enemy spawned adds one enemy alive die() will decrement by one
 
         if (pathToEnd(spawnPoint)) {
@@ -163,6 +164,7 @@ class Enemy(
 
             }
             ActorState.IS_MOVING -> {
+                moveTo(currentTargetPosition)
                 orientation = if (distance.x < -5) {
                     3 //left
                 } else if (distance.x > 5) {
@@ -172,17 +174,7 @@ class Enemy(
                 } else {
                     2 //down (default)
                 }
-                moveTo(currentTargetPosition)
 
-                orientation = if(distance.x < -5) {
-                    3 //left
-                } else if(distance.x > 5) {
-                    1 //right
-                } else if(distance.y < 0) {
-                    0 //up
-                } else {
-                    2 //down (default)
-                }
             }
             ActorState.ATTACKING -> {
                 //TODO()
