@@ -235,7 +235,7 @@ class GameActivity : AppCompatActivity(), GameController {
     override fun showToastMessage(type: String) {
         runOnUiThread {
             val parent = binding.wrapAll
-            val toast = CustomToast(this, layoutInflater, parent)
+            val toast = CustomToast(this, parent)
             toast.setUpSnackbar(type)
         }
     }
