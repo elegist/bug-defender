@@ -70,7 +70,7 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
             for(j in 0 until frameCount) {
                 val cutImg = Bitmap.createBitmap(bitmap, cutW * j, 0, cutW, cutH)
                 val scaled = Bitmap.createScaledBitmap(cutImg, width, height, true)
-                val rotated = processBitmap(scaled, rotationDegrees)
+                val rotated = rotateBitmap(scaled, rotationDegrees)
                 addAnimation = addAnimation.plus(rotated)
             }
             rotationDegrees += 45f
@@ -79,7 +79,10 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
         idleImage = animationMap[0]!![0]
     }
 
-    private fun processBitmap(bitmap: Bitmap, rotationDegrees: Float): Bitmap {
+    /**
+     * takes in a bitmap and rotates it with a matrix
+     */
+    private fun rotateBitmap(bitmap: Bitmap, rotationDegrees: Float): Bitmap {
         val matrix = Matrix()
         matrix.setRotate(rotationDegrees, bitmap.width / 2f, bitmap.height / 2f)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)

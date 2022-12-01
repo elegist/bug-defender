@@ -8,6 +8,8 @@ import de.mow2.towerdefense.model.helper.Vector2D
  * A specific tower
  * @param squareField references the field on which the tower has been built
  * @param type the towers type
+ * @param weaponOffset when towers are leveled up, the weapons y position will be adjusted using this value
+ * @param rotationCorrection due to the rotation in SpriteAnimation, the 45f angles will be adjusted using this value
  */
 class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(), java.io.Serializable {
     //visual scaling
