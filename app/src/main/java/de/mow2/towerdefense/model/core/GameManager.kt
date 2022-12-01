@@ -82,10 +82,8 @@ class GameManager(private val controller: GameController) {
 
     //TODO: (load game) GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
     fun initLevel(level: Int) {
-        //use to change starting game level
-        //gameLevel = 0 //default = 0
         //set the wave
-        wave = Wave(gameLevel)
+        waveSpawner = WaveSpawner(gameLevel)
         when (level) {
             0 -> {
                 /* Start game */
@@ -93,21 +91,19 @@ class GameManager(private val controller: GameController) {
                 if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 50000
                 }
-                killsToProgress = 10
                 controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
                 if (level % 10 == 0) {
                     increaseLives(level)
                 }
-                /* Define next wave */
+                SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
+                // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
                 controller.gameState.saveGameState() //auto-save progress
                 controller.showToastMessage("wave")
-                // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
-                killsToProgress = wave.remaining
-                SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
             }
         }
+        killsToProgress = waveSpawner.enemyCount
         controller.updateProgressBarMax(killsToProgress)
 
         killCounter = 0
@@ -216,7 +212,7 @@ class GameManager(private val controller: GameController) {
             /**
              * spawning enemies depending on the current gameLevel
              */
-            spawner.spawnWave(wave)
+            waveSpawner.update()
         } else {
             /**
              * if the wave cannot find a valid path, a towerdestroyer will spawn and destroy the last tower
@@ -244,7 +240,6 @@ class GameManager(private val controller: GameController) {
                     }
                 }
                 towerDestroyer!!.update()
-            }
         }
 
         /**
@@ -275,6 +270,11 @@ class GameManager(private val controller: GameController) {
         var livesAmnt: Int = 0
         var killCounter: Int = 0
         var killsToProgress: Int = 0
+        var waveActive = true
+        var waveSpawner = WaveSpawner(0)
+        var gameLevel = 0 // current level/wave
+        var enemiesKilled: Int = 0 //total enemies spawned
+        var enemiesAlive: Int = 0 //enemies currently on the PlayGround
 
         //game objects
         const val maxTowerLevel = 2
@@ -283,14 +283,6 @@ class GameManager(private val controller: GameController) {
         var projectileList = CopyOnWriteArrayList<Projectile>()
         var towerDestroyer: TowerDestroyer? = null
         var lastTower: Tower? = null
-
-        //spawner variables
-        val spawner = Spawner()
-        var wave = Wave(0) // default wave is 0 (gameLevel 0)
-        var waveActive = true
-        var gameLevel = 0 // current level/wave
-        var enemyCounter: Int = 0 //total enemies spawned
-        var enemiesAlive: Int = 0 //enemies currently on the PlayGround
 
         // build menu variables
         var selectedTool: Int? = null
@@ -311,7 +303,7 @@ class GameManager(private val controller: GameController) {
             selectedTower = TowerTypes.SINGLE
             lastTower = null
             gameLevel = 0
-            enemyCounter = 0
+            enemiesKilled = 0
             enemiesAlive = 0
         }
 
@@ -325,7 +317,7 @@ class GameManager(private val controller: GameController) {
             enemyList += enemy
             enemyList.sort()
             enemyList.reverse()
-            enemyCounter++
+            enemiesKilled++
         }
 
         private fun addProjectile(projectile: Projectile) {

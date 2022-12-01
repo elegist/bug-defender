@@ -105,7 +105,7 @@ class GameActivity : AppCompatActivity(), GameController {
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
             timeValue.text = "${waveDisplay.text}"
             levelValue.text = "${GameManager.gameLevel}"
-            enemyValue.text = "${GameManager.enemyCounter}"
+            enemyValue.text = "${GameManager.enemiesKilled}"
             GameManager.reset()
             gameState.deleteSaveGame()
         }
