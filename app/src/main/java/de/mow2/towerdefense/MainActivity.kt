@@ -2,7 +2,6 @@ package de.mow2.towerdefense
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //preload all images
         val graphics = PreferenceManager.getDefaultSharedPreferences(this).getString("quality_pref", "Low")
-        Log.i("Quality: ", "$graphics")
         BitmapPreloader(resources).preloadGraphics(graphics)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -86,9 +84,6 @@ class MainActivity : AppCompatActivity() {
      */
     fun popUpButton(view: View) {
         when (view.id) {
-            R.id.glossary_button -> {
-                dialogPopup.show(fm, "infoDialog")
-            }
             R.id.about_button -> {
                 dialogPopup.show(fm, "aboutDialog")
             }

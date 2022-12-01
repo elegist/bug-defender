@@ -281,7 +281,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomGUI"
         android:layout_width="0dp"
-        android:layout_height="74dp"
+        android:layout_height="78dp"
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -300,6 +300,7 @@
             android:id="@+id/bottomGuiContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
             android:elevation="6dp"
             app:layout_constraintBottom_toBottomOf="@+id/bottomGuiSpacer"
             app:layout_constraintEnd_toEndOf="parent"

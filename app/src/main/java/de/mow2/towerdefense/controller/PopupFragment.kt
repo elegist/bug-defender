@@ -51,11 +51,6 @@ class PopupFragment: DialogFragment() {
                 binding.popupText.setText(R.string.about_text)
                 binding.popupTitleText.setText(R.string.about_button)
             }
-            "infoDialog" -> {
-                binding.popupText.visibility = View.VISIBLE
-                binding.popupText.setText(R.string.glossary_text)
-                binding.popupTitleText.setText(R.string.glossary_button)
-            }
             "settingsDialog" -> {
                 binding.popupTitleText.setText(R.string.preference_button)
                 binding.popupFragmentContainer.visibility = View.VISIBLE

@@ -87,9 +87,9 @@ class GameManager(private val controller: GameController) {
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 1000
+                livesAmnt = 10
                 if (coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 50000
+                    coinAmnt = 500
                 }
                 controller.updateHealthBarMax(livesAmnt)
             }
@@ -113,12 +113,13 @@ class GameManager(private val controller: GameController) {
     //check if target can be reached from spawn
     private val algs = Astar() //TODO: move into companion object?
     fun validatePlayGround() {
-        waveActive = if(algs.findPath(
-            Astar.Node(0, 0),
-            Astar.Node(squaresX - 1, squaresY - 1),
-            squaresX,
-            squaresY
-        ) != null) {
+        waveActive = if (algs.findPath(
+                Astar.Node(0, 0),
+                Astar.Node(squaresX - 1, squaresY - 1),
+                squaresX,
+                squaresY
+            ) != null
+        ) {
             true
         } else {
             SoundManager.soundPool.play(Sounds.DESTROYER.id, 1f, 1f, 1, 0, 1f)
@@ -232,7 +233,7 @@ class GameManager(private val controller: GameController) {
                 } else {
                     towerList.forEach { tower ->
                         if (tower.squareField.mapPos["y"] == lastTower!!.squareField.mapPos["y"]) {
-                            if (tower.positionCenter.x -20 < towerDestroyer!!.positionCenter.x && towerDestroyer!!.positionCenter.x < tower.positionCenter.x + 20){
+                            if (tower.positionCenter.x - 20 < towerDestroyer!!.positionCenter.x && towerDestroyer!!.positionCenter.x < tower.positionCenter.x + 20) {
                                 tower.squareField.isBlocked = false
                                 towerList.remove(tower)
                             }
@@ -240,19 +241,20 @@ class GameManager(private val controller: GameController) {
                     }
                 }
                 towerDestroyer!!.update()
-        }
+            }
 
-        /**
-         * if the towerdestroyer already has destroyed a tower, this timer will determine,
-         * when the patience value will be reset to its default value to give some leniency
-         * to the player
-         */
-        if (towerDestroyerPatience < 3) {
-            Timer().schedule(object : TimerTask(){
-                override fun run() {
-                    towerDestroyerPatience = 3
-                }
-            }, towerDestroyerPatienceCooldown)
+            /**
+             * if the towerdestroyer already has destroyed a tower, this timer will determine,
+             * when the patience value will be reset to its default value to give some leniency
+             * to the player
+             */
+            if (towerDestroyerPatience < 3) {
+                Timer().schedule(object : TimerTask() {
+                    override fun run() {
+                        towerDestroyerPatience = 3
+                    }
+                }, towerDestroyerPatienceCooldown)
+            }
         }
     }
 

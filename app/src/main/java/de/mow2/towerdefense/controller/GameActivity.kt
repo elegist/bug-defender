@@ -89,7 +89,9 @@ class GameActivity : AppCompatActivity(), GameController {
         //TODO: save game state and return to main menu
         gameState.saveGameState()
         SoundManager.mediaPlayer.release()
-        startActivity(Intent(this, MainActivity::class.java))
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+        startActivity(intent)
     }
 
     /**
