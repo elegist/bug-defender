@@ -12,17 +12,16 @@ import kotlin.random.Random
  * TODO: infinite waves: increase chance of enemies that haven't been spawned in a set amount of waves to make it more engaging
  * TODO: alternate between hard and easy waves so it doesn't get dull //
  */
-class WaveSpawner(val gameLevel: Int) {
-
-    //number of enemies based on difficulty
-    private val baseSpawnCount = 10 //Random.nextInt(startingWeak, startingStrong) // TODO: to balance this, it should not apply to the first few rounds
+class WaveSpawner() {
 
     //enemy types and count for a specific wave
+    private val baseSpawnCount = 5
     private var waveEnemyList = arrayListOf<EnemyType>()
     var enemyCount: Int = 0  //the number of enemies for this wave.
-    var bossCounter: Int = 0
 
     //spawn rate values
+    private var baseSpawnsPerMinute = 10f
+    private var maxSpawnRPM = 130 //default = 120
     private var updateCycle: Float = 0f
     private var waitUpdates: Float = 0f
     private var spawnsPerMinute: Float = 0f
@@ -49,86 +48,84 @@ class WaveSpawner(val gameLevel: Int) {
         }
     }
 
-    private fun spawnWave(){
-        val enemy = Enemy(waveEnemyList.random())
-        if(enemyCount > 0){
-            GameManager.addEnemy(enemy)
-            enemyCount--
-        }
-        debugSpawnerValues()
-    }
-
-    fun update() {
-        if(canSpawn()){
-            spawnWave()
+    /**
+     *
+     */
+    fun spawnEnemy() {
+        if(canSpawn() && enemyCount != 0){
+            if(enemyCount > 0){
+                GameManager.addEnemy(Enemy(waveEnemyList.random()))
+                enemyCount--
+            }
         }
     }
 
-    init{
+    //enemy index for scaling purpose
+    var enemyIndexStart = 0
+    var enemyIndexEnd = 3
+    /**
+     *
+     */
+    fun initWave(gameLevel: Int){
+        for(i in 0..gameLevel){
+            if(baseSpawnsPerMinute <= maxSpawnRPM) {
+                baseSpawnsPerMinute*=1.2f //default = 1.2f; increase spawn rate by 20%
+            }
+        }
         when {
             gameLevel == 0 -> {
-                waveEnemyList.add(EnemyType.values()[gameLevel])
+                //waveEnemyList.add(EnemyType.values().first())
+                GameManager.addEnemy(Enemy(EnemyType.values().first()))
                 spawnsPerMinute = baseSpawnsPerMinute
-                enemyCount = baseSpawnCount
+                enemyCount = 5
             }
-            gameLevel in 1 until EnemyType.values().size-1 -> { //size-1 because SKELETONKING (BOSS) is on the last position
+            gameLevel in 1 until EnemyType.values().size-1 -> { //until + size-1 because SKELETONKING (BOSS) is on the last position
                 waveEnemyList.add(EnemyType.values()[gameLevel])
-                spawnsPerMinute = baseSpawnsPerMinute*gameLevel
                 enemyCount = baseSpawnCount*gameLevel
+                spawnsPerMinute = baseSpawnsPerMinute
             }
-            gameLevel % EnemyType.values().size-1 == 0 -> { //TODO: waveEnemyList is empty but should have all enemies from
+
+            gameLevel % (EnemyType.values().size-1) == 0 -> {
                 EnemyType.values().forEachIndexed{ i, type ->
-                    if(i in 8..12){
+                    if(i in enemyIndexStart..enemyIndexEnd){
                         waveEnemyList.add(type)
                     }
                 }
-                spawnsPerMinute = baseSpawnsPerMinute*gameLevel
+                GameManager.addEnemy(Enemy(EnemyType.SKELETONKING))
                 enemyCount = baseSpawnCount*gameLevel
+                spawnsPerMinute = baseSpawnsPerMinute
+                if(enemyIndexEnd < EnemyType.values().size-1){
+                    enemyIndexStart += 4
+                    enemyIndexEnd += 4
+                }else{
+                    enemyIndexStart = 0
+                    enemyIndexEnd = 3
+                }
+
             }
 
-            //------------------TODO: Wave after first Boss round unfinished-------------------------
-            gameLevel > EnemyType.values().size-1 -> { //TODO: Boss round unfinished
+            gameLevel > EnemyType.values().size-1 -> {
                 EnemyType.values().forEachIndexed{ i, type ->
-                    if(i in 8..12){
+                    if(i in enemyIndexStart..enemyIndexEnd){
                         waveEnemyList.add(type)
                     }
                 }
-                //now every 5 levels the minimum and maximum amount of enemies will increase by 10 TODO: if difficultyIncrease is only used here then just use gameLevel instead
-                if(difficultyIncrease % 5 == 0){
-                    startingWeak+=10
-                    startingStrong+=10
-                }
-                //spawnsPerMinute = //TODO: slower increase for spawnrate
-                enemyCount = baseSpawnCount + Random.nextInt(startingWeak+1, startingStrong+1)
-
-                //after the first boss wave, difficulty will increase
-                difficultyIncrease++
-                bossCounter++
+                enemyCount = baseSpawnCount*gameLevel
+                spawnsPerMinute = baseSpawnsPerMinute
             }
         }
-
     }
 
     private fun debugSpawnerValues(){
         Log.i("spacer", "----------")
-        Log.i("gameLevel", "$gameLevel")
+        Log.i("gameLevel", "${GameManager.gameLevel}")
         Log.i("spawnCount", "$enemyCount")
-        Log.i("startingWeak", "$startingWeak")
-        Log.i("startingStrong", "$startingStrong")
-        Log.i("difficultyIncrease", "$difficultyIncrease")
+        Log.i("startingStrong", "$maxSpawnRPM")
         Log.i("spawnsPerMinute", "$spawnsPerMinute")
         Log.i("waveEnemyList", "$waveEnemyList")
     }
 
-    companion object{
-        //spawn rate
-        private var baseSpawnsPerMinute = 10f
 
-        //spawn count ranges to be used after the first boss wave
-        private var startingWeak = 5 //default = 5
-        private var startingStrong = 15 //default = 5
-        private var difficultyIncrease = 0 // increase difficulty based on this value
-    }
 }
 
 

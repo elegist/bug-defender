@@ -80,10 +80,11 @@ class GameManager(private val controller: GameController) {
         controller.updateGUI()
     }
 
-    //TODO: (load game) GameState initialisiert nicht mit 0, daher stimmen Max health und max kills / wave nicht
+    val waveSpawner = WaveSpawner()
     fun initLevel(level: Int) {
+        gameLevel = 12
         //set the wave
-        waveSpawner = WaveSpawner(gameLevel)
+        waveSpawner.initWave(gameLevel)
         when (level) {
             0 -> {
                 /* Start game */
@@ -215,7 +216,7 @@ class GameManager(private val controller: GameController) {
             /**
              * spawning enemies depending on the current gameLevel
              */
-            waveSpawner.update()
+            waveSpawner.spawnEnemy()
         } else {
             /**
              * if the wave cannot find a valid path, a towerdestroyer will spawn and destroy the last tower
@@ -275,7 +276,6 @@ class GameManager(private val controller: GameController) {
         var killCounter: Int = 0
         var killsToProgress: Int = 0
         var waveActive = true
-        var waveSpawner = WaveSpawner(0)
         var gameLevel = 0 // current level/wave
         var enemiesKilled: Int = 0 //total enemies spawned
         var enemiesAlive: Int = 0 //enemies currently on the PlayGround
@@ -309,6 +309,7 @@ class GameManager(private val controller: GameController) {
             gameLevel = 0
             enemiesKilled = 0
             enemiesAlive = 0
+
         }
 
         fun addTower(tower: Tower) {
