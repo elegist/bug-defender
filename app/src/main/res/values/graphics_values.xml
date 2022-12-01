@@ -5,9 +5,4 @@
         <item>Avg</item>
         <item>High</item>
     </string-array>
-    <integer-array name="graphics_quality_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </integer-array>
 </resources>
