@@ -11,16 +11,10 @@ import de.mow2.towerdefense.R
  * class SoundManager
  * for playing background music and in-game Sound Sprites
  * contains MediaPlayer and SoundPool and initializes music & sound settings
- * SoundPool functions: playSounds -> initializes SoundPool with settings
- *                      loadSounds -> load audio streams from R
- *                      variables in enum class with integer for ID to make code readable
- * MediaPlayer functions: initMediaPlayer -> initializes MediaPlayer, starts it with setting for Loop
- *                      pauseMusic & resumeMusic enables to start and stop background music
- * function loadPreferences sets music and soundSettings as Preferences for checkbox
  * */
 
 enum class Sounds(var id: Int){
-    GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(0), ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0)
+    DESTROYER(0), WAVE(0), GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(0), ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0)
 }
 
 object SoundManager {
@@ -29,9 +23,14 @@ object SoundManager {
     var musicSetting: Boolean = true
     var soundSetting: Boolean = true
 
-    // SoundPool
+    /**
+     * SoundPool functions:
+     * playSounds -> initializes SoundPool with settings
+     * loadSounds -> load audio streams from R
+     * variables in enum class with integer for ID to make code readable
+     */
     fun playSounds() {
-        var audioattributes: AudioAttributes = AudioAttributes.Builder()
+        val audioattributes: AudioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_GAME)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
@@ -47,13 +46,19 @@ object SoundManager {
         Sounds.TOWERDESTROY.id = soundPool.load(context, R.raw.tower_explosion, 1)
         Sounds.LIVELOSS.id = soundPool.load(context, R.raw.lost_live, 1)
         Sounds.CREEPDEATH.id = soundPool.load(context, R.raw.creep_death, 1)
-        Sounds.MAGICSHOT.id = soundPool.load(context, R.raw.magic_shot, 1)
-        Sounds.SLOWSHOT.id = soundPool.load(context, R.raw.slow_shot, 1)
-        Sounds.ARROWSHOT.id = soundPool.load(context, R.raw.arrow_shot, 1)
-        Sounds.AOESHOT.id = soundPool.load(context, R.raw.aoe_shot, 1)
+        Sounds.MAGICSHOT.id = soundPool.load(context, R.raw.magic_shot, 2)
+        Sounds.SLOWSHOT.id = soundPool.load(context, R.raw.slow_shot, 2)
+        Sounds.ARROWSHOT.id = soundPool.load(context, R.raw.arrow_shot, 2)
+        Sounds.AOESHOT.id = soundPool.load(context, R.raw.aoe_shot, 2)
+        Sounds.WAVE.id = soundPool.load(context, R.raw.wave_success, 1)
+        Sounds.DESTROYER.id = soundPool.load(context, R.raw.destroyer_sound, 1)
     }
 
-    // MediaPlayer
+    /**
+     * MediaPlayer functions:
+     * initMediaPlayer -> initializes MediaPlayer, starts it with setting for Loop
+     * pauseMusic & resumeMusic enables to start and stop background music
+     */
     fun initMediaPlayer(context: Context, song: Int) {
         mediaPlayer = MediaPlayer.create(context, song)
         mediaPlayer.isLooping = true
@@ -72,7 +77,9 @@ object SoundManager {
         }
     }
 
-    // preference function for checkbox functionality
+    /**
+     * function loadPreferences sets music and soundSettings as Preferences for checkbox
+     */
     fun loadPreferences(context: Context) {
         val musicPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         musicSetting = musicPreferences.getBoolean("music_pref", true)

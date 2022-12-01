@@ -3,11 +3,13 @@ package de.mow2.towerdefense.controller
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.nfc.Tag
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
@@ -29,7 +31,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 class GameActivity : AppCompatActivity(), GameController {
     override var gameState = GameState(this)
 
-     //game content and gui
+    //game content and gui
     private val gameManager = GameManager(this)
     private lateinit var bottomGuiContainer: ConstraintLayout
     private lateinit var topGuiBg: View
@@ -48,7 +50,7 @@ class GameActivity : AppCompatActivity(), GameController {
     private val fm = supportFragmentManager
     private lateinit var prefManager: SharedPreferences
 
-    //buildmenu
+    //build menu
     private lateinit var buildMenuScrollView: HorizontalScrollView
     private lateinit var buildMenuLayout: LinearLayout
     private lateinit var buildButton: ImageButton
@@ -75,8 +77,8 @@ class GameActivity : AppCompatActivity(), GameController {
         waveDisplayText = "${GameManager.gameLevel + 1}"
         waveDisplay.text = waveDisplayText
         // shows tutorial
-        if(GameManager.tutorialsActive) {
-           displayTutorial(true)
+        if (GameManager.tutorialsActive) {
+            displayTutorial(true)
         }
     }
 
@@ -161,7 +163,7 @@ class GameActivity : AppCompatActivity(), GameController {
         bottomGuiSpacer.background = BitmapPreloader.bottomDrawable
         bottomGuiContainer.children.forEach { view ->
             view.setOnClickListener { button ->
-                if (GameManager.selectedTool == button.id){
+                if (GameManager.selectedTool == button.id) {
                     GameManager.selectedTool = null
                     bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 } else {
@@ -170,7 +172,7 @@ class GameActivity : AppCompatActivity(), GameController {
                     button.setBackgroundResource(R.drawable.button_border_active)
                 }
             }
-            if(view == buildButton) {
+            if (view == buildButton) {
                 view.setOnLongClickListener {
                     toggleBuildMenu()
                     return@setOnLongClickListener true
@@ -193,7 +195,7 @@ class GameActivity : AppCompatActivity(), GameController {
                 bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 binding.buildButton.setBackgroundResource(R.drawable.button_border_active)
                 toggleBuildMenu()
-                when(type) {
+                when (type) {
                     TowerTypes.SINGLE -> buildButton.setImageResource(R.drawable.tower_single_imagebtn)
                     TowerTypes.SLOW -> buildButton.setImageResource(R.drawable.tower_slow_imagebtn)
                     TowerTypes.AOE -> buildButton.setImageResource(R.drawable.tower_aoe_imagebtn)
@@ -239,7 +241,6 @@ class GameActivity : AppCompatActivity(), GameController {
      * show custom toast message in the middle of the screen
      * @param type decides which snackbar should be shown
      */
-
     override fun showToastMessage(type: String) {
         runOnUiThread {
             val parent = binding.wrapAll
@@ -248,16 +249,16 @@ class GameActivity : AppCompatActivity(), GameController {
         }
     }
 
-    override fun onResume(){
+    override fun onResume() {
         super.onResume()
         // (re-)initialize MediaPlayer with correct settings
         SoundManager.initMediaPlayer(this, R.raw.exploration)
         SoundManager.playSounds()
         SoundManager.loadSounds(this)
-        if(!musicSetting) {
+        if (!musicSetting) {
             SoundManager.pauseMusic()
         }
-        if(!SoundManager.soundSetting){
+        if (!SoundManager.soundSetting) {
             soundPool.release()
         }
     }
@@ -274,7 +275,8 @@ class GameActivity : AppCompatActivity(), GameController {
     private fun hideSystemBars() {
         // Hide both the status bar and the navigation bar
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
@@ -282,7 +284,7 @@ class GameActivity : AppCompatActivity(), GameController {
      * hide or show build menu
      */
     private fun toggleBuildMenu() {
-        if (!buildMenuExists){
+        if (!buildMenuExists) {
             buildMenuScrollView.visibility = View.VISIBLE
         } else {
             buildMenuScrollView.visibility = View.GONE
@@ -295,7 +297,7 @@ class GameActivity : AppCompatActivity(), GameController {
      * @param active Boolean Value shows if Tutorial should be shown or not
      */
     fun displayTutorial(active: Boolean) {
-        if(active) {
+        if (active) {
             tutPopup.show(fm, "tutorialDialog")
             gameView.toggleGameLoop(false)
         } else {
@@ -310,7 +312,7 @@ class GameActivity : AppCompatActivity(), GameController {
      * sets a highlight for the in the tutorial mentioned element
      * @param item the element which should be highlighted
      */
-    fun highlight(item: String) {
+    fun highlight(item: String){
         val healthBar = binding.healthBarContainer
         val progressBar = binding.progressBarContainer
         val time = binding.leftElementsWrapper
@@ -320,8 +322,9 @@ class GameActivity : AppCompatActivity(), GameController {
         val upgradeBtn = binding.upgradeButton
         val buildBtn = binding.buildButton
         val bottomGui = binding.bottomGuiContainer
-        val tutorial = TutorialHighlighter(healthBar, progressBar, time, coins, bottomGui, menuBtn, deleteBtn, upgradeBtn, buildBtn)
-        tutorial.highlightElement(item)
+        val topGui = binding.topGUI
+        val gameContainer = binding.gameContainer
+        val tutorial = TutorialHighlighter(healthBar, progressBar, time, coins, bottomGui, topGui, gameContainer, menuBtn, deleteBtn, upgradeBtn, buildBtn)
+        tutorial.showElements(item, this)
     }
 }
-

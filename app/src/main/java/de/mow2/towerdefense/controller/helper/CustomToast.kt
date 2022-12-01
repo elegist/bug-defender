@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
@@ -15,6 +16,9 @@ import com.google.android.material.snackbar.Snackbar
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GameManager
 
+/**
+ * class to set up SnackBar for wave and money warning message
+ */
 class CustomToast(val context: Context, inflater: LayoutInflater, val parent: ConstraintLayout) {
 
     @SuppressLint("InflateParams")
@@ -29,20 +33,27 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
     private val height = display.heightPixels
     private val width = display.widthPixels
 
+    /**
+     * adds Snackbar, sets functionality and decides which snackbar should be shown
+     * @param string for setting right snackbar
+     */
     fun setUpSnackbar(type: String) {
         snackBar.view.setBackgroundResource(R.color.transparent)
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackbarLayout.addView(snackBarLayout, 0)
+        snackBarLayout.setOnClickListener{
+            snackBar.dismiss()
+        }
 
         when(type){
             "wave" -> {
                 text.text = buildString {
                     append(context.getString(R.string.wave))
-                    append("")
-                    append(GameManager.gameLevel)
+                    append(" ")
+                    append(GameManager.gameLevel+1)
                 }
                 image.setImageResource(R.drawable.time)
-                params.setMargins(width/4, height/2, width/4, height/2)
+                params.setMargins(width/5, height/2, width/5, height/2)
                 layout.setBackgroundResource(R.drawable.wave_toast_shape)
             }
             "money" -> {

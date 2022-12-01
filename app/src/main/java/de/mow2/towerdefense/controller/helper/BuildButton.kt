@@ -3,7 +3,6 @@ package de.mow2.towerdefense.controller.helper
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.core.content.ContextCompat.getColor
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
@@ -16,7 +15,6 @@ class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: I
     }
 
     init {
-        this.setBackgroundColor(getColor(context, R.color.green_overlay))
         this.setPadding(30, 0, 30, 30)
     }
 

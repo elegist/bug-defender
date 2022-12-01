@@ -10,7 +10,7 @@ import de.mow2.towerdefense.model.core.GameManager
 
 /**
  * class SettingsFragment sets layout.xml for preferences
- * sets onPreferenceChangeListener for musicSettings and soundSettings for checkbox functionality
+ * sets onPreferenceChangeListener for musicSettings, soundSettings and image quality settings for checkbox functionality
  * */
 class SettingsFragment: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

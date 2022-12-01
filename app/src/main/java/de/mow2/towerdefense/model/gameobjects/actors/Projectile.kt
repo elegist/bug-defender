@@ -2,8 +2,10 @@ package de.mow2.towerdefense.model.gameobjects.actors
 
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
 import de.mow2.towerdefense.model.core.GameManager
+
+import de.mow2.towerdefense.controller.SoundManager
+import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.GameObject
-import de.mow2.towerdefense.model.helper.Vector2D
 
 class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
     override var position = tower.positionCenter
@@ -14,10 +16,22 @@ class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
     init{
         // TODO(): each tower could have different projectile speeds
         speed = 0.2f
-        if(tower.type == TowerTypes.AOE) {
-            width = BitmapPreloader.projectileAnimsArray[tower.towerLevel][tower.type]!!.width / 2
-            height = width
-            position = Vector2D(position.x - width, position.y - height)
+        when(tower.type){
+             TowerTypes.SINGLE -> {
+                 SoundManager.soundPool.play(Sounds.ARROWSHOT.id, 0.2F, 0.2F, 2, 0, 1F)
+            }
+            TowerTypes.SLOW -> {
+                SoundManager.soundPool.play(Sounds.SLOWSHOT.id, 0.2F, 0.2F, 2, 0, 1F)
+            }
+            TowerTypes.AOE -> {
+                SoundManager.soundPool.play(Sounds.AOESHOT.id, 0.2F, 0.2F, 2, 0, 1F)
+                width = BitmapPreloader.projectileAnimsArray[tower.towerLevel][tower.type]!!.width / 2
+                height = width
+                position = Vector2D(position.x - width, position.y - height)
+            }
+            TowerTypes.MAGIC -> {
+                SoundManager.soundPool.play(Sounds.MAGICSHOT.id, 0.2F, 0.2F, 2, 0, 1F)
+            }
         }
     }
 

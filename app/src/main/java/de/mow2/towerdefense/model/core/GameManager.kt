@@ -100,6 +100,7 @@ class GameManager(private val controller: GameController) {
                 controller.showToastMessage("wave")
                 // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
                 killsToProgress = wave.remaining
+                SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
             }
         }
         controller.updateProgressBarMax(killsToProgress)
