@@ -6,6 +6,7 @@ import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.model.gameobjects.GameObject
+import de.mow2.towerdefense.model.helper.Vector2D
 
 class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
     override var position = tower.positionCenter
@@ -52,5 +53,6 @@ class Projectile(val tower: Tower, val enemy: Enemy) : GameObject() {
             if(!tower.isShooting) {
                 GameManager.projectileList.remove(this)
             }
+        }
     }
 }

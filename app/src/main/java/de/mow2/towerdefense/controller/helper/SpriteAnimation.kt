@@ -59,7 +59,7 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
                 addAnimation = if(rotate) {
                     cutImg = Bitmap.createBitmap(bitmap, cutW * j, 0, cutW, cutH)
                     scaledImg = Bitmap.createScaledBitmap(cutImg, width, height, true)
-                    val rotated = processBitmap(scaledImg, rotationDegrees)
+                    val rotated = rotateBitmap(scaledImg, rotationDegrees)
                     addAnimation.plus(rotated)
                 } else {
                     cutImg = Bitmap.createBitmap(bitmap, cutW * j, cutH * i, cutW, cutH)
