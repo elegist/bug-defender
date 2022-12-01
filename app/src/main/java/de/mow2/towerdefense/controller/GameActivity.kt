@@ -3,13 +3,11 @@ package de.mow2.towerdefense.controller
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.nfc.Tag
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.*
 import androidx.preference.PreferenceManager
@@ -306,8 +304,8 @@ class GameActivity : AppCompatActivity(), GameController {
     fun highlight(item: String){
         val healthBar = binding.healthBarContainer
         val progressBar = binding.progressBarContainer
-        val time = binding.leftElementsWrapper
-        val coins = binding.rightElementsWrapper
+        val coins = binding.leftElementsWrapper
+        val wave = binding.rightElementsWrapper
         val menuBtn = binding.menuBtn
         val deleteBtn = binding.deleteButton
         val upgradeBtn = binding.upgradeButton
@@ -315,7 +313,7 @@ class GameActivity : AppCompatActivity(), GameController {
         val bottomGui = binding.bottomGuiContainer
         val topGui = binding.topGUI
         val gameContainer = binding.gameContainer
-        val tutorial = TutorialHighlighter(healthBar, progressBar, time, coins, bottomGui, topGui, gameContainer, menuBtn, deleteBtn, upgradeBtn, buildBtn)
+        val tutorial = TutorialHighlighter(healthBar, progressBar, wave, coins, bottomGui, topGui, gameContainer, menuBtn, deleteBtn, upgradeBtn, buildBtn)
         tutorial.showElements(item, this)
     }
 }

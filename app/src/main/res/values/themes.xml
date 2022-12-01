@@ -21,5 +21,6 @@
     <style name="Theme.AppCompat.NoActionBar.Main" parent="Theme.AppCompat.NoActionBar">
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlNormal">@color/white</item>
+        <item name="alertDialogTheme">@style/Preference.Dialog</item>
     </style>
 </resources>

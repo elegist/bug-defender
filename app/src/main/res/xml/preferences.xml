@@ -17,6 +17,8 @@
         android:entries="@array/graphics_quality"
         android:entryValues="@array/graphics_quality"
         android:key="quality_pref"
+        app:dialogTitle="@string/qualityTitle"
+        app:iconSpaceReserved="false"
         app:title="@string/quality" />
     <CheckBoxPreference
         android:defaultValue="true"
