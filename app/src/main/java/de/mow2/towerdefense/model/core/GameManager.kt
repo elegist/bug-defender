@@ -125,6 +125,7 @@ class GameManager(private val controller: GameController) {
         ) != null) {
             true
         } else {
+            SoundManager.soundPool.play(Sounds.DESTROYER.id, 1f, 1f, 1, 0, 1f)
             towerDestroyer = TowerDestroyer(lastTower!!)
             towerDestroyerPatience--
             false
@@ -215,7 +216,7 @@ class GameManager(private val controller: GameController) {
             /**
              * spawning enemies depending on the current gameLevel
              */
-            spawnWave()
+            spawner.spawnWave(wave)
         } else {
             /**
              * if the wave cannot find a valid path, a towerdestroyer will spawn and destroy the last tower
