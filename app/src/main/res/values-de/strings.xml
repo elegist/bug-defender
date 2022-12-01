@@ -30,7 +30,7 @@
     <string name="upgrade_tower_button">Upgrade Turm</string>
     <string name="progress_ball_image">Progress bar decor image</string>
     <string name="health_ball_image">Health bar decor image</string>
-    <string name="timeMade">Zeit geschafft: </string>
+    <string name="timeMade">Welle geschafft: </string>
     <string name="enemyMade">Gegner getötet: </string>
     <string name="levelMade">Level geschafft: </string>
     <string name="goOnTutorial">Weiter</string>

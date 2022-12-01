@@ -72,7 +72,7 @@ class GameActivity : AppCompatActivity(), GameController {
         //init game manager
         gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
         //initial wave display
-        waveDisplayText = "${GameManager.gameLevel + 1}"
+        waveDisplayText = "${this.getString(R.string.wave)} ${GameManager.gameLevel + 1}"
         waveDisplay.text = waveDisplayText
         // shows tutorial
         if (GameManager.tutorialsActive) {
@@ -90,6 +90,12 @@ class GameActivity : AppCompatActivity(), GameController {
         startActivity(intent)
     }
 
+    // sonst kommt man nicht auf resume game
+    fun pauseGame(view: View) {
+        leaveGame(view)
+        gameState.saveGameState()
+    }
+
     /**
      * Triggered if liveAmt = 0, sets game over screen
      */
@@ -101,9 +107,9 @@ class GameActivity : AppCompatActivity(), GameController {
             val timeValue = findViewById<TextView>(R.id.timeValue)
             val levelValue = findViewById<TextView>(R.id.levelValue)
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
-            timeValue.text = "${waveDisplay.text}"
-            levelValue.text = "${GameManager.gameLevel}"
-            enemyValue.text = "${GameManager.enemiesKilled}"
+            timeValue.text = "${this.getString(R.string.timeMade)} ${GameManager.gameLevel + 1}"
+            levelValue.text = "${this.getString(R.string.levelMade)} ${GameManager.gameLevel}"
+            enemyValue.text = "${this.getString(R.string.enemyMade)} ${GameManager.enemiesKilled}"
             GameManager.reset()
             gameState.deleteSaveGame()
         }
@@ -212,7 +218,7 @@ class GameActivity : AppCompatActivity(), GameController {
             healthText.text = livesText
             val waveText = "${GameManager.killCounter} / ${waveBar.max}"
             wavePopupText.text = waveText
-            waveDisplayText = "${GameManager.gameLevel + 1}"
+            waveDisplayText = "${this.getString(R.string.wave)} ${GameManager.gameLevel + 1}"
             waveDisplay.text = waveDisplayText
         }
     }
