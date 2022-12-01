@@ -67,9 +67,10 @@ class WaveSpawner() {
      *
      */
     fun initWave(gameLevel: Int){
+        waveEnemyList.clear()
         for(i in 0..gameLevel){
             if(baseSpawnsPerMinute <= maxSpawnRPM) {
-                baseSpawnsPerMinute*=1.2f //default = 1.2f; increase spawn rate by 20%
+                baseSpawnsPerMinute*=1.1f //default = 1.2f; increase spawn rate by 20%
             }
         }
         when {

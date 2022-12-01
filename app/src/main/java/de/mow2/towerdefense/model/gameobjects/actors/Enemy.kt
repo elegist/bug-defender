@@ -82,42 +82,42 @@ class Enemy(
                 baseSpeed = 0.02f
                 healthPoints = if (GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 3
-                coinValue = 25
+                coinValue = 20
             }
             EnemyType.SCORPION -> {
                 //TODO: balancing
                 baseSpeed = 0.015f
                 healthPoints = if (GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
                 baseDamage = 4
-                coinValue = 30
+                coinValue = 20
             }
             EnemyType.CLAMPBEETLE -> {
                 //TODO: balancing
                 baseSpeed = 0.07f
                 healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                coinValue = 30
+                coinValue = 25
             }
             EnemyType.FIREWASP -> {
                 //TODO: balancing
                 baseSpeed = 0.10f
                 healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                coinValue = 30
+                coinValue = 25
             }
             EnemyType.LOCUST -> {
                 //TODO: balancing
                 baseSpeed = 0.08f
                 healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                coinValue = 30
+                coinValue = 25
             }
             EnemyType.VOIDBUTTERFLY -> {
                 //TODO: balancing
                 baseSpeed = 0.08f
                 healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
                 baseDamage = 4
-                coinValue = 30
+                coinValue = 25
             }
             EnemyType.SKELETONGRUNT -> {
                 //TODO: balancing

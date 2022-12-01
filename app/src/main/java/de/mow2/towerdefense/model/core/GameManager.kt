@@ -90,13 +90,14 @@ class GameManager(private val controller: GameController) {
                 /* Start game */
                 livesAmnt = 10
                 if (coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 500
+                    coinAmnt = 250
                 }
                 controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
                 if (level % 10 == 0) {
                     increaseLives(level)
+                    controller.updateHealthBarMax(livesAmnt)
                 }
                 SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
                 // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
