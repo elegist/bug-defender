@@ -30,9 +30,10 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  */
 class GameActivity : AppCompatActivity(), GameController {
     override var gameState = GameState(this)
-
-    //game content and gui
     private val gameManager = GameManager(this)
+
+    //GUI
+    private lateinit var binding: ActivityGameBinding
     private lateinit var bottomGuiContainer: ConstraintLayout
     private lateinit var topGuiBg: View
     private lateinit var bottomGuiSpacer: View
@@ -56,9 +57,6 @@ class GameActivity : AppCompatActivity(), GameController {
     private lateinit var buildButton: ImageButton
     private var buildMenuExists = false
 
-    // View Binding
-    private lateinit var binding: ActivityGameBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
@@ -73,9 +71,6 @@ class GameActivity : AppCompatActivity(), GameController {
         hideSystemBars()
         //init game manager
         gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
-        //initial wave display
-        waveDisplayText = "${GameManager.gameLevel + 1}"
-        waveDisplay.text = waveDisplayText
         // shows tutorial
         if (GameManager.tutorialsActive) {
             displayTutorial(true)
@@ -104,7 +99,8 @@ class GameActivity : AppCompatActivity(), GameController {
             val levelValue = findViewById<TextView>(R.id.levelValue)
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
             timeValue.text = "${waveDisplay.text}"
-            levelValue.text = "${GameManager.gameLevel}"
+            val levelText = "${GameManager.gameLevel + 1}"
+            levelValue.text = levelText
             enemyValue.text = "${GameManager.enemiesKilled}"
             GameManager.reset()
             gameState.deleteSaveGame()

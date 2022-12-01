@@ -317,7 +317,6 @@ class GameManager(private val controller: GameController) {
             towerList.sort()
         }
 
-        // TODO: create one map out of all things to draw and sort it to get a good drawing order?
         fun addEnemy(enemy: Enemy) {
             enemyList += enemy
             enemyList.sort()
