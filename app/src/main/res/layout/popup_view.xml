@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/pauseGame"
-        android:onClick="pauseGame"
+        android:onClick="leaveGame"
         android:text="@string/pauseGame"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

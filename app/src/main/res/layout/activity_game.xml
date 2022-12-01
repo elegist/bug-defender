@@ -75,26 +75,24 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/leftElementsWrapper"
-                android:layout_width="0dp"
+                android:id="@+id/rightElementsWrapper"
+                android:layout_width="152dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:elevation="2dp"
                 android:padding="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/menuBtn"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/healthBarContainer">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/menuBtn"
+                app:layout_constraintTop_toBottomOf="@+id/progressBarContainer">
 
                 <TextView
                     android:id="@+id/waveValue"
-                    android:layout_width="0dp"
+                    android:layout_width="54dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="#BCAAA4"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/waveIcon"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textView"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -107,21 +105,21 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/waveValue"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/timeIcon"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/timeIcon"
+                    android:id="@+id/waveIcon"
                     android:layout_width="51dp"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/timer_image"
                     android:elevation="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/waveValue"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/time" />
+                    app:srcCompat="@drawable/wave_display_icon" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -188,17 +186,16 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rightElementsWrapper"
-                android:layout_width="0dp"
+                android:id="@+id/leftElementsWrapper"
+                android:layout_width="151dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="1dp"
                 android:elevation="2dp"
                 android:padding="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/menuBtn"
-                app:layout_constraintTop_toBottomOf="@+id/progressBarContainer">
+                app:layout_constraintEnd_toStartOf="@+id/menuBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/healthBarContainer">
 
                 <ImageView
                     android:id="@+id/coinImg"
@@ -208,21 +205,21 @@
                     android:elevation="6dp"
                     android:scaleType="centerInside"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/coinsText"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/coinsText"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/coins" />
 
                 <TextView
                     android:id="@+id/coinsText"
-                    android:layout_width="0dp"
+                    android:layout_width="88dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/coinImg"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/coinImg"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

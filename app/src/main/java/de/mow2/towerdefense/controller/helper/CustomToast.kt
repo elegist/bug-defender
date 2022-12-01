@@ -52,7 +52,7 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
                     append(" ")
                     append(GameManager.gameLevel+1)
                 }
-                image.setImageResource(R.drawable.time)
+                image.setImageResource(R.drawable.wave_up)
                 params.setMargins(width/5, height/2, width/5, height/2)
                 layout.setBackgroundResource(R.drawable.wave_toast_shape)
             }

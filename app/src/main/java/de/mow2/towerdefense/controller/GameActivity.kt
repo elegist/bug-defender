@@ -85,9 +85,7 @@ class GameActivity : AppCompatActivity(), GameController {
     /**
      * pauses Game and goes back to main menu
      */
-    fun pauseGame(view: View) {
-        //TODO: save game state and return to main menu
-        gameState.saveGameState()
+    fun leaveGame(view: View) {
         SoundManager.mediaPlayer.release()
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
@@ -111,15 +109,6 @@ class GameActivity : AppCompatActivity(), GameController {
             GameManager.reset()
             gameState.deleteSaveGame()
         }
-    }
-
-    /**
-     * Button-triggered reset (return to main menu)
-     */
-    fun leaveGame(view: View) {
-        SoundManager.mediaPlayer.release()
-        startActivity(Intent(this, MainActivity::class.java))
-        GameManager.reset()
     }
 
     /**
