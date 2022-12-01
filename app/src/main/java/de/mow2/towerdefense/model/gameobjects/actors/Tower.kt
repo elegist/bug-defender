@@ -116,7 +116,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
             }
             TowerTypes.AOE -> {
                 finalRange = baseRange + towerLevel * width / 2 //!IMPORTANT: changes made here must also be implemented in BitmapPreloader (bitmap should always be the same size as tower range!)
-                damage = 2 + towerLevel * 2
+                damage = 1 + towerLevel * 2
                 actionsPerMinute = baseSpeed / 2 + towerLevel * 20
             }
             TowerTypes.MAGIC -> {

@@ -74,82 +74,73 @@ class Enemy(
             }
             EnemyType.FIREBUG -> {
                 baseSpeed = 0.02f
-                healthPoints = if (GameManager.gameLevel != 0) 7 * GameManager.gameLevel else 8
+                healthPoints = 7 * GameManager.gameLevel
                 baseDamage = 2
-                coinValue = 20
+                coinValue = 15
             }
             EnemyType.MAGMACRAB -> {
                 baseSpeed = 0.02f
-                healthPoints = if (GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
+                healthPoints = 8 * GameManager.gameLevel
                 baseDamage = 3
                 coinValue = 20
             }
             EnemyType.SCORPION -> {
-                //TODO: balancing
                 baseSpeed = 0.015f
-                healthPoints = if (GameManager.gameLevel != 0) 8 * GameManager.gameLevel else 8
+                healthPoints = 8 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 20
             }
             EnemyType.CLAMPBEETLE -> {
-                //TODO: balancing
                 baseSpeed = 0.07f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                healthPoints = 1 * GameManager.gameLevel + 1
                 baseDamage = 4
                 coinValue = 25
             }
             EnemyType.FIREWASP -> {
-                //TODO: balancing
-                baseSpeed = 0.10f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                baseSpeed = 0.09f
+                healthPoints = 1 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 25
             }
             EnemyType.LOCUST -> {
-                //TODO: balancing
                 baseSpeed = 0.08f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                healthPoints = 1 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 25
             }
             EnemyType.VOIDBUTTERFLY -> {
-                //TODO: balancing
                 baseSpeed = 0.08f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                healthPoints = 1 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 25
             }
             EnemyType.SKELETONGRUNT -> {
-                //TODO: balancing
                 baseSpeed = 0.02f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                healthPoints = 1 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 30
             }
             EnemyType.NECROMANCER -> {
-                //TODO: balancing
                 baseSpeed = 0.02f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                healthPoints = 1 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 30
             }
             EnemyType.SKELETONWARRIOR -> {
-                //TODO: balancing
                 baseSpeed = 0.02f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                healthPoints = 1 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 30
             }
             EnemyType.SKELETONKNIGHT -> {
-                //TODO: balancing
                 baseSpeed = 0.02f
-                healthPoints = if (GameManager.gameLevel != 0) 1 * GameManager.gameLevel else 1
+                healthPoints = 1 * GameManager.gameLevel
                 baseDamage = 4
                 coinValue = 30
             }
             EnemyType.SKELETONKING -> {
                 baseSpeed = 0.005f
-                healthPoints = if (GameManager.gameLevel != 0) 20 * GameManager.gameLevel else 20
+                healthPoints = 20 * GameManager.gameLevel
                 baseDamage = 10
                 coinValue = 50
             }

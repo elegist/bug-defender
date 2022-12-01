@@ -58,6 +58,11 @@ class GameManager(private val controller: GameController) {
         controller.updateGUI()
     }
 
+    /**
+     * decreases players life amount
+     * @param newValue value to be subtracted
+     * @return boolean false if players life is 0
+     */
     private fun decreaseLives(newValue: Int): Boolean {
         return if (livesAmnt > (0 + newValue)) {
             livesAmnt -= newValue
@@ -74,7 +79,7 @@ class GameManager(private val controller: GameController) {
      */
     private fun increaseKills(newValue: Int) {
         killCounter += newValue
-        if (killCounter >= killsToProgress) {
+        if (killCounter >= killsToProgress && enemyList.isEmpty()) {
             initLevel(++gameLevel)
         }
         controller.updateGUI()
@@ -84,17 +89,18 @@ class GameManager(private val controller: GameController) {
     fun initLevel(level: Int) {
         //gameLevel = 50
         //set the wave
-        waveSpawner.initWave(gameLevel)
+        waveSpawner.initWave(level)
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 10
+                livesAmnt = 5
                 if (coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 250
+                    coinAmnt = 350
                 }
                 controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
+                coinAmnt += level * 10
                 if (level % 10 == 0) {
                     increaseLives(level)
                     controller.updateHealthBarMax(livesAmnt)
@@ -199,9 +205,10 @@ class GameManager(private val controller: GameController) {
              */
             enemyList.forEach { enemy ->
                 if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
-                    decreaseLives(enemy.baseDamage)
                     enemy.die()
-                    increaseKills(enemy.killValue)
+                    if(decreaseLives(enemy.baseDamage)) {
+                        increaseKills(enemy.killValue)
+                    }
                     SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
                 } else if (enemy.healthPoints <= 0) { //enemy dies
                     increaseCoins(enemy.coinValue)
