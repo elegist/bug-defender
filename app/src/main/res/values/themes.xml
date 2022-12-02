@@ -19,7 +19,9 @@
         <item name="fullscreenTextColor">@color/white</item>
     </style>
     <style name="Theme.AppCompat.NoActionBar.Main" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlNormal">@color/white</item>
+        <item name="alertDialogTheme">@style/Preference.Dialog</item>
+        <item name="checkboxStyle">@style/CheckBox.Button</item>
+        <item name="checkBoxPreferenceStyle">@style/CheckBox.Text</item>
+        <item name="dialogPreferenceStyle">@style/ListPref.Text</item>
     </style>
 </resources>

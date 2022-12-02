@@ -23,8 +23,8 @@
 
         <ImageView
             android:id="@+id/toast_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:contentDescription="@string/game_icon" />
 
@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

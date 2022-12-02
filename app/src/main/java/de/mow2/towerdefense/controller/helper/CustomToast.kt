@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import com.google.android.material.snackbar.Snackbar
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GameManager
@@ -38,7 +36,7 @@ class CustomToast(val context: Context, inflater: LayoutInflater, val parent: Co
      * @param string for setting right snackbar
      */
     fun setUpSnackbar(type: String) {
-        snackBar.view.setBackgroundResource(R.color.transparent)
+        //snackBar.view.setBackgroundResource(R.color.transparent)
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackbarLayout.addView(snackBarLayout, 0)
         snackBarLayout.setOnClickListener{

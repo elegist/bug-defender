@@ -86,7 +86,7 @@ class TutorialHighlighter(
                 highlight(progressBar.children, true)
                 highlight(menuBtn, true)
             }
-            "time" -> { highlight(time.children, true) }
+            "wave" -> { highlight(time.children, true) }
             "coins" -> { highlight(coins.children, true) }
             "healthBar" -> { highlight(healthBar.children, true) }
             "progressBar" -> { highlight(progressBar.children, true) }
