@@ -58,6 +58,11 @@ class GameManager(private val controller: GameController) {
         controller.updateGUI()
     }
 
+    /**
+     * decreases players life amount
+     * @param newValue value to be subtracted
+     * @return boolean false if players life is 0
+     */
     private fun decreaseLives(newValue: Int): Boolean {
         return if (livesAmnt > (0 + newValue)) {
             livesAmnt -= newValue
@@ -74,29 +79,31 @@ class GameManager(private val controller: GameController) {
      */
     private fun increaseKills(newValue: Int) {
         killCounter += newValue
-        if (killCounter >= killsToProgress) {
+        if (killCounter >= killsToProgress && enemyList.isEmpty()) {
             initLevel(++gameLevel)
         }
         controller.updateGUI()
     }
 
-    val waveSpawner = WaveSpawner()
+    private val waveSpawner = WaveSpawner()
     fun initLevel(level: Int) {
-        gameLevel = 12
+        //gameLevel = 50
         //set the wave
-        waveSpawner.initWave(gameLevel)
+        waveSpawner.initWave(level)
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 10
+                livesAmnt = 5
                 if (coinAmnt == 0) { //prevents save game cheating
-                    coinAmnt = 500
+                    coinAmnt = 350
                 }
                 controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
+                coinAmnt += level * 10
                 if (level % 10 == 0) {
                     increaseLives(level)
+                    controller.updateHealthBarMax(livesAmnt)
                 }
                 SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
                 // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
@@ -198,9 +205,10 @@ class GameManager(private val controller: GameController) {
              */
             enemyList.forEach { enemy ->
                 if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
-                    decreaseLives(enemy.baseDamage)
                     enemy.die()
-                    increaseKills(enemy.killValue)
+                    if(decreaseLives(enemy.baseDamage)) {
+                        increaseKills(enemy.killValue)
+                    }
                     SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
                 } else if (enemy.healthPoints <= 0) { //enemy dies
                     increaseCoins(enemy.coinValue)
@@ -317,7 +325,6 @@ class GameManager(private val controller: GameController) {
             towerList.sort()
         }
 
-        // TODO: create one map out of all things to draw and sort it to get a good drawing order?
         fun addEnemy(enemy: Enemy) {
             enemyList += enemy
             enemyList.sort()

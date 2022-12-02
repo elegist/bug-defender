@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -22,15 +23,15 @@ import de.mow2.towerdefense.model.core.GameController
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
-
 /**
  * This Activity starts the game
  */
 class GameActivity : AppCompatActivity(), GameController {
     override var gameState = GameState(this)
-
-    //game content and gui
     private val gameManager = GameManager(this)
+
+    //GUI
+    private lateinit var binding: ActivityGameBinding
     private lateinit var bottomGuiContainer: ConstraintLayout
     private lateinit var topGuiBg: View
     private lateinit var bottomGuiSpacer: View
@@ -54,12 +55,19 @@ class GameActivity : AppCompatActivity(), GameController {
     private lateinit var buildButton: ImageButton
     private var buildMenuExists = false
 
-    // View Binding
-    private lateinit var binding: ActivityGameBinding
+    /**
+     * Load all saved user preferences
+     */
+    private fun loadPrefs() {
+        prefManager = PreferenceManager.getDefaultSharedPreferences(this)
+        GameManager.tutorialsActive = prefManager.getBoolean("tutorial_pref", true)
+        SoundManager.loadPreferences(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
+        Log.i("Binding: ", "$binding.")
         //create new game view
         gameLayout = binding.gameViewContainer
         gameView = GameView(this, this, gameManager)
@@ -232,6 +240,14 @@ class GameActivity : AppCompatActivity(), GameController {
         waveBar.progress = 0
     }
 
+
+    /**
+     * opens menu as pop up window if menu button is clicked
+     */
+    fun popUpMenu(view: View) {
+        menuPopup.show(fm, "menuDialog")
+    }
+
     /**
      * show custom toast message in the middle of the screen
      * @param type decides which snackbar should be shown
@@ -239,8 +255,38 @@ class GameActivity : AppCompatActivity(), GameController {
     override fun showToastMessage(type: String) {
         runOnUiThread {
             val parent = binding.wrapAll
-            val toast = CustomToast(this, layoutInflater, parent)
+            val toast = CustomToast(this, parent)
             toast.setUpSnackbar(type)
+        }
+    }
+
+    /**
+     * pauses Game and goes back to main menu
+     */
+    fun leaveGame(view: View) {
+        SoundManager.mediaPlayer.release()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+        startActivity(intent)
+    }
+
+    /**
+     * Triggered if liveAmt = 0, sets game over screen
+     */
+    override fun onGameOver() {
+        runOnUiThread {
+            setContentView(R.layout.gameover_view)
+            SoundManager.mediaPlayer.release()
+            soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
+            val timeValue = findViewById<TextView>(R.id.timeValue)
+            val levelValue = findViewById<TextView>(R.id.levelValue)
+            val enemyValue = findViewById<TextView>(R.id.enemyValue)
+            timeValue.text = "${waveDisplay.text}"
+            val levelText = "${GameManager.gameLevel + 1}"
+            levelValue.text = levelText
+            enemyValue.text = "${GameManager.enemiesKilled}"
+            GameManager.reset()
+            gameState.deleteSaveGame()
         }
     }
 
@@ -307,7 +353,7 @@ class GameActivity : AppCompatActivity(), GameController {
      * sets a highlight for the in the tutorial mentioned element
      * @param item the element which should be highlighted
      */
-    fun highlight(item: String){
+    fun highlight(item: String) {
         val healthBar = binding.healthBarContainer
         val progressBar = binding.progressBarContainer
         val coins = binding.leftElementsWrapper

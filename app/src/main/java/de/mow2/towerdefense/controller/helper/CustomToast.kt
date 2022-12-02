@@ -1,9 +1,6 @@
 package de.mow2.towerdefense.controller.helper
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.DisplayMetrics
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -17,10 +14,9 @@ import de.mow2.towerdefense.model.core.GameManager
 /**
  * class to set up SnackBar for wave and money warning message
  */
-class CustomToast(val context: Context, inflater: LayoutInflater, val parent: ConstraintLayout) {
+class CustomToast(val context: Context, val parent: ConstraintLayout) {
 
-    @SuppressLint("InflateParams")
-    private val snackBarLayout: View = inflater.inflate(R.layout.toast, null)
+    private val snackBarLayout: View = View.inflate(context, R.layout.toast, null)
     private val snackBar = Snackbar.make(parent, "", Snackbar.LENGTH_SHORT)
     private val snackbarLayout = snackBar.view as Snackbar.SnackbarLayout
     private val text = snackBarLayout.findViewById<TextView>(R.id.toast_text)
