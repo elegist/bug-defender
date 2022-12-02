@@ -10,7 +10,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
-import androidx.core.view.*
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.children
 import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
@@ -222,9 +225,7 @@ class GameActivity : AppCompatActivity(), GameController {
      */
     fun leaveGame(view: View) {
         SoundManager.mediaPlayer.release()
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-        startActivity(intent)
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     /**
@@ -254,8 +255,8 @@ class GameActivity : AppCompatActivity(), GameController {
                 append(GameManager.enemiesKilled)
             }
             GameManager.reset()
-            gameState.deleteSaveGame()
         }
+        gameState.deleteSaveGame()
     }
     override fun onResume() {
         super.onResume()

@@ -35,7 +35,6 @@ class Enemy(
     private var currentTargetPosition: Vector2D
     private var minDistance =
         GameManager.playGround.squareSize * 0.1f //min distance an enemy has to be from the currentTargetPosition to update it's path
-    private var currentState: ActorState = ActorState.IDLE
 
     //queue sorting
     override fun compareTo(other: Enemy): Int = this.position.y.compareTo(other.position.y)
@@ -45,6 +44,7 @@ class Enemy(
     var baseDamage = 0
     var baseSpeed = 0f
     var isDead = false
+    var isSlowed = false
     var killValue = 1
     var coinValue = 0
 
@@ -150,39 +150,22 @@ class Enemy(
     }
 
     override fun update() {
-        when (currentState) {
-            ActorState.IDLE -> {
-
-            }
-            ActorState.IS_MOVING -> {
-                moveTo(currentTargetPosition)
-                orientation = if (distance.x < -5) {
-                    3 //left
-                } else if (distance.x > 5) {
-                    1 //right
-                } else if (distance.y < 0) {
-                    0 //up
-                } else {
-                    2 //down (default)
-                }
-
-            }
-            ActorState.ATTACKING -> {
-                //TODO()
-            }
-            ActorState.DEATH -> {
-                //TODO()
-            }
+        moveTo(currentTargetPosition)
+        orientation = if (distance.x < -5) {
+            3 //left
+        } else if (distance.x > 5) {
+            1 //right
+        } else if (distance.y < 0) {
+            0 //up
+        } else {
+            2 //down (default)
         }
 
         //search new path on each Node
         if (distanceToTargetAbs <= minDistance) {
             if (pathToEnd(currentTargetNode)) {
-                currentState = ActorState.IS_MOVING
                 currentTargetNode = sortedPath.first()
                 findNextTarget()
-            } else {
-                currentState = ActorState.IDLE
             }
         }
     }
@@ -212,8 +195,7 @@ class Enemy(
                     }
                 }
             true
-        } else {
-            //waveActive = false
+        } else {//path is blocked
             false
         }
     }
@@ -237,12 +219,19 @@ class Enemy(
         when (tower.type) {
             TowerTypes.SLOW -> {
                 speed = baseSpeed / tower.slowAmount
+                isSlowed = true
+                Timer().schedule(object : TimerTask() {
+                    override fun run() {
+                        isSlowed = false
+                        speed = baseSpeed
+                    }
+                }, tower.slowDuration)
             }
             TowerTypes.MAGIC -> {
                 //damage over time
                 Timer().scheduleAtFixedRate(object : TimerTask() {
                     override fun run() {
-                        if(!isDead) {
+                        if (!isDead) {
                             healthPoints -= tower.dotDamage
                         } else {
                             this.cancel()

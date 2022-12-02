@@ -9,7 +9,7 @@ import kotlin.math.sqrt
 /**
  * GameObject is the foundation of any moving or static actor in the game
  */
-abstract class GameObject() {
+abstract class GameObject {
     //size
     abstract var width: Int
     abstract var height: Int

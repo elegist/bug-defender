@@ -2,10 +2,12 @@ package de.mow2.towerdefense
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
-import de.mow2.towerdefense.controller.*
+import de.mow2.towerdefense.controller.GameActivity
+import de.mow2.towerdefense.controller.PopupFragment
+import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.SoundManager.soundSetting
@@ -26,16 +28,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //preload all images
-        val graphics = PreferenceManager.getDefaultSharedPreferences(this).getString("quality_pref", "Low")
-        BitmapPreloader(resources).preloadGraphics(graphics)
+        if (!BitmapPreloader.bitmapsLoaded) {
+            val graphics =
+                PreferenceManager.getDefaultSharedPreferences(this).getString("quality_pref", "Low")
+            BitmapPreloader(resources).preloadGraphics(graphics)
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
-
-    override fun onResume(){
+    override fun onResume() {
         super.onResume()
-        // decides if resume game button should be shown TODO: Resume Button will not disappear
+        // decides if resume game button should be shown
         if(gameState.defineFile(this).exists()){
             binding.resumeGameBtn.visibility = View.VISIBLE
         }
@@ -44,10 +48,10 @@ class MainActivity : AppCompatActivity() {
         SoundManager.playSounds()
         SoundManager.loadSounds(this)
         SoundManager.initMediaPlayer(this, R.raw.eight_bit_adventure_loop)
-        if(!soundSetting){
+        if (!soundSetting) {
             soundPool.release()
         }
-        if(!musicSetting) {
+        if (!musicSetting) {
             SoundManager.pauseMusic()
         }
     }
@@ -72,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         GameManager.reset()
         startActivity(Intent(this, GameActivity::class.java))
     }
+
     /**
      * Load saved game
      */

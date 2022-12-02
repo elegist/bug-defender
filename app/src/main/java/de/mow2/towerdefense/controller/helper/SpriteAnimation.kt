@@ -2,7 +2,6 @@ package de.mow2.towerdefense.controller.helper
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.util.Log
 
 /**
  * Takes a Bitmap containing all frames of an animation.
@@ -14,8 +13,17 @@ import android.util.Log
  * @param frameCount Number of Frames contained in given bitmap
  * @param frameDuration Time duration of one frame in milliseconds
  */
-class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val height: Int, private val rowCount: Int = 4, private val frameCount: Int = 7, private val frameDuration: Int = 30, rotate: Boolean = false) {
-    private var animationMap = HashMap<Int, Array<Bitmap>>() //holds all different animations for this type
+class SpriteAnimation(
+    private val bitmap: Bitmap,
+    val width: Int,
+    private val height: Int,
+    private val rowCount: Int = 4,
+    private val frameCount: Int = 7,
+    private val frameDuration: Int = 30,
+    rotate: Boolean = false
+) {
+    private var animationMap =
+        HashMap<Int, Array<Bitmap>>() //holds all different animations for this type
     private lateinit var animation: Array<Bitmap>
     private var startFrameTime = System.currentTimeMillis()
 
@@ -33,7 +41,7 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
     fun nextFrame(orientation: Int): Bitmap {
         animation = animationMap[orientation]!!
         //TODO: different orientations (e.g. walking direction of creep)
-        if(System.currentTimeMillis() - startFrameTime >= frameDuration) {
+        if (System.currentTimeMillis() - startFrameTime >= frameDuration) {
             update()
             startFrameTime = System.currentTimeMillis()
         }
@@ -46,17 +54,17 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
     private fun cutSpriteSheet(rotate: Boolean) {
         var rotationDegrees = 0f
         val cutW = bitmap.width / frameCount
-        val cutH = if(rotate) {
+        val cutH = if (rotate) {
             bitmap.height
         } else {
             bitmap.height / rowCount
         }
         var cutImg: Bitmap
         var scaledImg: Bitmap
-        for(i in 0 until rowCount) {
+        for (i in 0 until rowCount) {
             var addAnimation = arrayOf<Bitmap>()
-            for(j in 0 until frameCount) {
-                addAnimation = if(rotate) {
+            for (j in 0 until frameCount) {
+                addAnimation = if (rotate) {
                     cutImg = Bitmap.createBitmap(bitmap, cutW * j, 0, cutW, cutH)
                     scaledImg = Bitmap.createScaledBitmap(cutImg, width, height, true)
                     val rotated = rotateBitmap(scaledImg, rotationDegrees)
@@ -83,7 +91,7 @@ class SpriteAnimation(private val bitmap: Bitmap, val width: Int, private val he
     }
 
     private fun update() {
-        if(frameCounter < animation.size - 1) {
+        if (frameCounter < animation.size - 1) {
             frameCounter++
         } else {
             frameCounter = 0

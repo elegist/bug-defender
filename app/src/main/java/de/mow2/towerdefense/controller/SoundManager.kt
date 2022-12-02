@@ -13,8 +13,11 @@ import de.mow2.towerdefense.R
  * contains MediaPlayer and SoundPool and initializes music & sound settings
  * */
 
-enum class Sounds(var id: Int){
-    DESTROYER(0), WAVE(0), GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(0), ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0)
+enum class Sounds(var id: Int) {
+    DESTROYER(0), WAVE(0), GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(
+        0
+    ),
+    ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0)
 }
 
 object SoundManager {
@@ -66,13 +69,13 @@ object SoundManager {
     }
 
     fun pauseMusic() {
-        if(mediaPlayer.isPlaying) {
+        if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
         }
     }
 
     fun resumeMusic() {
-        if(!mediaPlayer.isPlaying) {
+        if (!mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
     }

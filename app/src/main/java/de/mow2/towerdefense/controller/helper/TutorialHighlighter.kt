@@ -26,7 +26,7 @@ class TutorialHighlighter(
     private val deleteBtn: ImageButton,
     private val upgradeBtn: ImageButton,
     private val buildBtn: ImageButton
-    ){
+) {
 
     /**
      * sets alpha for elements to show or hide them
@@ -35,7 +35,7 @@ class TutorialHighlighter(
      * @param hide true = hide, false = show
      */
     private fun highlight(element: View, show: Boolean) {
-        if(show){
+        if (show) {
             element.alpha = 1F
         } else {
             element.alpha = 0.1F
@@ -43,7 +43,7 @@ class TutorialHighlighter(
     }
 
     private fun highlight(element: Sequence<View>, show: Boolean) {
-        if (show){
+        if (show) {
             element.forEach { it.alpha = 1F }
         } else {
             element.forEach { it.alpha = 0.1F }
@@ -51,8 +51,9 @@ class TutorialHighlighter(
     }
 
     private fun dimElements(element: View, hide: Boolean, context: Context) {
-        if(hide){
-            element.foreground = ColorDrawable(ContextCompat.getColor(context, R.color.black_overlay))
+        if (hide) {
+            element.foreground =
+                ColorDrawable(ContextCompat.getColor(context, R.color.black_overlay))
         } else {
             element.foreground = ColorDrawable(ContextCompat.getColor(context, R.color.transparent))
         }
@@ -69,16 +70,22 @@ class TutorialHighlighter(
         highlight(healthBar.children, false)
         highlight(progressBar.children, false)
         highlight(menuBtn, false)
-        when(element){
+        when (element) {
             "tutorial" -> {
                 dimElements(gameContainer, true, context)
             }
             "bottomGui" -> {
                 highlight(bottomGui.children, true)
             }
-            "deleteBtn" -> { highlight(deleteBtn, true) }
-            "upgradeBtn" -> { highlight(upgradeBtn, true) }
-            "buildBtn" -> { highlight(buildBtn, true) }
+            "deleteBtn" -> {
+                highlight(deleteBtn, true)
+            }
+            "upgradeBtn" -> {
+                highlight(upgradeBtn, true)
+            }
+            "buildBtn" -> {
+                highlight(buildBtn, true)
+            }
             "topGui" -> {
                 highlight(time.children, true)
                 highlight(coins.children, true)

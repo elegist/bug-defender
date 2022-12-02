@@ -35,25 +35,25 @@ class CustomToast(val context: Context, val parent: ConstraintLayout) {
         snackBar.view.setBackgroundResource(R.color.transparent)
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackbarLayout.addView(snackBarLayout, 0)
-        snackBarLayout.setOnClickListener{
+        snackBarLayout.setOnClickListener {
             snackBar.dismiss()
         }
 
-        when(type){
+        when (type) {
             "wave" -> {
                 text.text = buildString {
                     append(context.getString(R.string.wave))
                     append(" ")
-                    append(GameManager.gameLevel+1)
+                    append(GameManager.gameLevel + 1)
                 }
                 image.setImageResource(R.drawable.wave_up)
-                params.setMargins(width/5, height/2, width/5, height/2)
+                params.setMargins(width / 5, height / 2, width / 5, height / 2)
                 layout.setBackgroundResource(R.drawable.wave_toast_shape)
             }
             "money" -> {
                 text.setText(R.string.moneyWarning)
                 image.setImageResource(R.drawable.coins)
-                params.setMargins(width/5, height/2, width/5, height/2)
+                params.setMargins(width / 5, height / 2, width / 5, height / 2)
                 layout.setBackgroundResource(R.drawable.warning_toast_shape)
             }
         }

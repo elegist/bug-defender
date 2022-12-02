@@ -12,7 +12,7 @@ import de.mow2.towerdefense.databinding.TutorialPopupBinding
  * Fragment for the tutorial
  * decides in when statement which text to show and which element should be highlighted an hidden
  */
-class TutorialFragment: DialogFragment() {
+class TutorialFragment : DialogFragment() {
     private var _binding: TutorialPopupBinding? = null
     private val binding get() = _binding!!
 
