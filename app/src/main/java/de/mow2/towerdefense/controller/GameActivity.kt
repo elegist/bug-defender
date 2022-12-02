@@ -64,6 +64,8 @@ class GameActivity : AppCompatActivity(), GameController {
         SoundManager.loadPreferences(this)
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
@@ -86,57 +88,6 @@ class GameActivity : AppCompatActivity(), GameController {
         if (GameManager.tutorialsActive) {
             displayTutorial(true)
         }
-    }
-
-    /**
-     * pauses Game and goes back to main menu
-     */
-    fun leaveGame(view: View) {
-        SoundManager.mediaPlayer.release()
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-        startActivity(intent)
-    }
-
-    // sonst kommt man nicht auf resume game
-    fun pauseGame(view: View) {
-        leaveGame(view)
-        gameState.saveGameState()
-    }
-
-    /**
-     * Triggered if liveAmt = 0, sets game over screen
-     */
-    override fun onGameOver() {
-        runOnUiThread {
-            setContentView(R.layout.gameover_view)
-            SoundManager.mediaPlayer.release()
-            soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
-            val timeValue = findViewById<TextView>(R.id.timeValue)
-            val levelValue = findViewById<TextView>(R.id.levelValue)
-            val enemyValue = findViewById<TextView>(R.id.enemyValue)
-            timeValue.text = "${this.getString(R.string.timeMade)} ${GameManager.gameLevel + 1}"
-            levelValue.text = "${this.getString(R.string.levelMade)} ${GameManager.gameLevel}"
-            enemyValue.text = "${this.getString(R.string.enemyMade)} ${GameManager.enemiesKilled}"
-            GameManager.reset()
-            gameState.deleteSaveGame()
-        }
-    }
-
-    /**
-     * Load all saved user preferences
-     */
-    private fun loadPrefs() {
-        prefManager = PreferenceManager.getDefaultSharedPreferences(this)
-        GameManager.tutorialsActive = prefManager.getBoolean("tutorial_pref", true)
-        SoundManager.loadPreferences(this)
-    }
-
-    /**
-     * opens menu as pop up window if menu button is clicked
-     */
-    fun popUpMenu(view: View) {
-        menuPopup.show(fm, "menuDialog")
     }
 
     /**
@@ -260,6 +211,12 @@ class GameActivity : AppCompatActivity(), GameController {
         }
     }
 
+    // sonst kommt man nicht auf resume game
+    fun pauseGame(view: View) {
+        leaveGame(view)
+        gameState.saveGameState()
+    }
+
     /**
      * pauses Game and goes back to main menu
      */
@@ -281,15 +238,25 @@ class GameActivity : AppCompatActivity(), GameController {
             val timeValue = findViewById<TextView>(R.id.timeValue)
             val levelValue = findViewById<TextView>(R.id.levelValue)
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
-            timeValue.text = "${waveDisplay.text}"
-            val levelText = "${GameManager.gameLevel + 1}"
-            levelValue.text = levelText
-            enemyValue.text = "${GameManager.enemiesKilled}"
+            timeValue.text = buildString {
+                append(this@GameActivity.getString(R.string.timeMade))
+                append(" ")
+                append(GameManager.gameLevel + 1)
+            }
+            levelValue.text = buildString {
+                append(this@GameActivity.getString(R.string.levelMade))
+                append(" ")
+                append(GameManager.gameLevel)
+            }
+            enemyValue.text = buildString {
+                append(this@GameActivity.getString(R.string.enemyMade))
+                append(" ")
+                append(GameManager.enemiesKilled)
+            }
             GameManager.reset()
             gameState.deleteSaveGame()
         }
     }
-
     override fun onResume() {
         super.onResume()
         // (re-)initialize MediaPlayer with correct settings

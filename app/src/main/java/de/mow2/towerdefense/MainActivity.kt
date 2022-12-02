@@ -32,9 +32,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+
     override fun onResume(){
         super.onResume()
-        // decides if resume game button should be shown
+        // decides if resume game button should be shown TODO: Resume Button will not disappear
         if(gameState.defineFile(this).exists()){
             binding.resumeGameBtn.visibility = View.VISIBLE
         }

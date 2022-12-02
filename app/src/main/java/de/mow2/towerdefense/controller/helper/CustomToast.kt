@@ -32,7 +32,7 @@ class CustomToast(val context: Context, val parent: ConstraintLayout) {
      * @param string for setting right snackbar
      */
     fun setUpSnackbar(type: String) {
-        //snackBar.view.setBackgroundResource(R.color.transparent)
+        snackBar.view.setBackgroundResource(R.color.transparent)
         snackBar.animationMode = Snackbar.ANIMATION_MODE_FADE
         snackbarLayout.addView(snackBarLayout, 0)
         snackBarLayout.setOnClickListener{
