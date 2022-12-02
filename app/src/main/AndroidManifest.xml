@@ -18,7 +18,7 @@
             android:exported="true"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar.Main">
+            android:theme="@style/Theme.TowerDefense.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

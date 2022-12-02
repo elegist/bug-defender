@@ -2,8 +2,10 @@ package de.mow2.towerdefense
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.controller.PopupFragment
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         //preload all images
         if (!BitmapPreloader.bitmapsLoaded) {
