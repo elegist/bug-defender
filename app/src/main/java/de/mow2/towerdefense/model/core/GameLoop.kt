@@ -43,6 +43,7 @@ class GameLoop(val gameManager: GameManager) : Thread() {
             }
         }
     }
+
     companion object {
         const val targetUPS = 30
         const val targetTime: Double = 1E+3 / targetUPS

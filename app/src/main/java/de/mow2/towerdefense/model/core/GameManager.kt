@@ -1,15 +1,15 @@
 package de.mow2.towerdefense.model.core
 
-import android.util.Log
-import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
-import java.util.Timer
-import java.util.TimerTask
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
 interface GameController {
@@ -93,7 +93,7 @@ class GameManager(private val controller: GameController) {
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 5
+                livesAmnt = 1
                 if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 350
                 }
@@ -142,92 +142,15 @@ class GameManager(private val controller: GameController) {
      */
     fun updateLogic() {
         if (waveActive) {
-            towerList.forEach towerIteration@{ tower ->
-                if (tower.cooldown()) {
-                    if (tower.target != null) {//tower already has a target
-                        val distance =
-                            tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
-                        if (!tower.target!!.isDead && distance < tower.finalRange) {
-                            tower.update()
-                            tower.isShooting = true
-                            when (tower.type) {
-                                TowerTypes.AOE -> {
-                                    addProjectile(Projectile(tower, tower.targetArray.last()))
-                                    tower.targetArray.forEach { enemy ->
-                                        enemy.takeDamage(tower.damage, tower)
-                                    }
-                                }
-                                else -> {
-                                    addProjectile(Projectile(tower, tower.target!!))
-                                }
-                            }
-                        } else {
-                            tower.target = null
-                            tower.targetArray = emptyArray()
-                            tower.isShooting = false
-                        }
-                    } else {//look for new target
-                        when (tower.type) {
-                            TowerTypes.AOE -> {
-                                enemyList.forEach { enemy ->
-                                    if (tower.findDistance(tower, enemy) < tower.finalRange) {
-                                        tower.targetArray = tower.targetArray.plus(enemy)
-                                        tower.target = enemy
-                                    }
-                                }
-                            }
-                            else -> {
-                                enemyList.forEach { enemy ->
-                                    if (tower.findDistance(tower, enemy) < tower.finalRange) {
-                                        tower.target = enemy
-                                        tower.targetArray = tower.targetArray.plus(enemy)
-                                        return@towerIteration
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            runBlocking {
+                launch { updateTowers() }
+                launch { updateProjectiles() }
+                launch { updateEnemies() }
+                launch { waveSpawner.spawnEnemy() }
             }
-            projectileList.forEach { projectile ->
-                val enemy = projectile.enemy
-                //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
-                if (enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15) {
-                    enemy.takeDamage(projectile.baseDamage, projectile.tower)
-                    projectileList.remove(projectile)
-                }
-                if (enemy.isDead) projectileList.remove(projectile)
-                projectile.update()
-            }
-
-            /**
-             * update movement, update target or remove enemy
-             */
-            enemyList.forEach { enemy ->
-                if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
-                    enemy.die()
-                    if(decreaseLives(enemy.baseDamage)) {
-                        increaseKills(enemy.killValue)
-                    }
-                    SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
-                } else if (enemy.healthPoints <= 0) { //enemy dies
-                    increaseCoins(enemy.coinValue)
-                    enemy.die()
-                    increaseKills(enemy.killValue)
-                    SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
-                    enemiesKilled++
-                } else {
-                    enemy.update()
-                }
-            }
-
-            /**
-             * spawning enemies depending on the current gameLevel
-             */
-            waveSpawner.spawnEnemy()
         } else {
             /**
-             * if the wave cannot find a valid path, a towerdestroyer will spawn and destroy the last tower
+             * if the wave cannot find a valid path, a tower-destroyer will spawn and destroy the last tower
              * that was placed. If the player repeats this action a set amount of times it will destroy
              * the complete row of the recent placed tower
              * @see towerDestroyerPatience
@@ -265,6 +188,112 @@ class GameManager(private val controller: GameController) {
                         towerDestroyerPatience = 3
                     }
                 }, towerDestroyerPatienceCooldown)
+            }
+        }
+    }
+
+    private suspend fun updateTowers() = coroutineScope {
+        towerList.forEach towerIteration@{ tower ->
+            if (tower.cooldown()) {
+                if (tower.target != null) {//tower already has a target
+                    val distance =
+                        tower.findDistance(tower.positionCenter, tower.target!!.positionCenter)
+                    if (!tower.target!!.isDead && distance < tower.finalRange) {
+                        tower.update()
+                        tower.isShooting = true
+                        when (tower.type) {
+                            TowerTypes.AOE -> {
+                                addProjectile(Projectile(tower, tower.targetArray.last()))
+                                tower.targetArray.forEach { enemy ->
+                                    enemy.takeDamage(tower.damage, tower)
+                                }
+                            }
+                            TowerTypes.SLOW -> {
+                                if (tower.target!!.isSlowed) {
+                                    tower.isShooting = false
+                                    tower.target = null
+                                } else {
+                                    addProjectile(Projectile(tower, tower.target!!))
+                                }
+                            }
+                            else -> {
+                                addProjectile(Projectile(tower, tower.target!!))
+                            }
+                        }
+                    } else {
+                        tower.target = null
+                        tower.targetArray = emptyArray()
+                        tower.isShooting = false
+                    }
+                } else {//look for new target
+                    when (tower.type) {
+                        TowerTypes.AOE -> {
+                            enemyList.forEach { enemy ->
+                                if (tower.findDistance(tower, enemy) < tower.finalRange) {
+                                    tower.targetArray = tower.targetArray.plus(enemy)
+                                    tower.target = enemy
+                                }
+                            }
+                        }
+                        TowerTypes.SLOW -> {
+                            enemyList.forEach { enemy ->
+                                if (tower.findDistance(
+                                        tower,
+                                        enemy
+                                    ) < tower.finalRange && !enemy.isSlowed
+                                ) {
+                                    tower.targetArray = tower.targetArray.plus(enemy)
+                                    tower.target = enemy
+                                }
+                            }
+                        }
+                        else -> {
+                            enemyList.forEach { enemy ->
+                                if (tower.findDistance(tower, enemy) < tower.finalRange) {
+                                    tower.target = enemy
+                                    tower.targetArray = tower.targetArray.plus(enemy)
+                                    return@towerIteration
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun updateProjectiles() = coroutineScope {
+        projectileList.forEach { projectile ->
+            val enemy = projectile.enemy
+            //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
+            if (enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15) {
+                enemy.takeDamage(projectile.baseDamage, projectile.tower)
+                projectileList.remove(projectile)
+            }
+            if (enemy.isDead) projectileList.remove(projectile)
+            projectile.update()
+        }
+    }
+
+    private suspend fun updateEnemies() = coroutineScope {
+        /**
+         * update movement, update target or remove enemy
+         */
+        enemyList.forEach { enemy ->
+            if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
+                enemy.die()
+                if (decreaseLives(enemy.baseDamage)) {
+                    increaseKills(enemy.killValue)
+                }
+                SoundManager.soundPool.play(Sounds.LIVELOSS.id, 1F, 1F, 1, 0, 1F)
+            } else if (enemy.healthPoints <= 0) { //enemy dies
+                increaseCoins(enemy.coinValue)
+                enemy.die()
+                increaseKills(enemy.killValue)
+                SoundManager.soundPool.play(Sounds.CREEPDEATH.id, 10F, 10F, 1, 0, 1F)
+                enemiesKilled++
+            } else {
+                enemy.update()
             }
         }
     }

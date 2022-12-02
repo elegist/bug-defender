@@ -1,27 +1,18 @@
 package de.mow2.towerdefense.controller
 
-import android.nfc.Tag
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageButton
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.snackbar.Snackbar
 import de.mow2.towerdefense.R
-import de.mow2.towerdefense.controller.helper.TutorialHighlighter
-import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.databinding.TutorialPopupBinding
 
 /**
  * Fragment for the tutorial
  * decides in when statement which text to show and which element should be highlighted an hidden
  */
-class TutorialFragment: DialogFragment() {
+class TutorialFragment : DialogFragment() {
     private var _binding: TutorialPopupBinding? = null
     private val binding get() = _binding!!
 

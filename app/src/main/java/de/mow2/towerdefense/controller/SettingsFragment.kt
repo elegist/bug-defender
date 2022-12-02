@@ -3,16 +3,14 @@ package de.mow2.towerdefense.controller
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import de.mow2.towerdefense.R
-import de.mow2.towerdefense.model.core.GameManager
 
 /**
  * class SettingsFragment sets layout.xml for preferences
  * sets onPreferenceChangeListener for musicSettings, soundSettings and image quality settings for checkbox functionality
  * */
-class SettingsFragment: PreferenceFragmentCompat() {
+class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
@@ -38,8 +36,8 @@ class SettingsFragment: PreferenceFragmentCompat() {
         }
 
         // image quality
-        findPreference<ListPreference>("quality_pref")?.setOnPreferenceChangeListener{_, newValue ->
-            when(newValue) {
+        findPreference<ListPreference>("quality_pref")?.setOnPreferenceChangeListener { _, newValue ->
+            when (newValue) {
                 "Low" -> {} //low
                 "Avg" -> {} //avg
                 "High" -> {} //high

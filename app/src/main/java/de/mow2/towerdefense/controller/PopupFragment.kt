@@ -1,18 +1,9 @@
 package de.mow2.towerdefense.controller
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.content.edit
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.databinding.PopupViewBinding
@@ -23,7 +14,7 @@ import de.mow2.towerdefense.databinding.PopupViewBinding
  * gets preferences through childFragment
  * functionality for close button in popup view
  **/
-class PopupFragment: DialogFragment() {
+class PopupFragment : DialogFragment() {
     private var _binding: PopupViewBinding? = null
     private val binding get() = _binding!!
 
@@ -40,12 +31,12 @@ class PopupFragment: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.closeBtn.setOnClickListener{
+        binding.closeBtn.setOnClickListener {
             dismiss()
         }
 
         //decide which fragment will be inflated
-        when(tag.toString()) {
+        when (tag.toString()) {
             "aboutDialog" -> {
                 binding.popupText.visibility = View.VISIBLE
                 binding.popupText.setText(R.string.about_text)
@@ -66,7 +57,7 @@ class PopupFragment: DialogFragment() {
                 binding.menuDivider.visibility = View.VISIBLE
                 binding.popupTitleText.setText(R.string.preference_button)
                 binding.tutorialBtn.setText(R.string.tutorialTitel)
-                binding.tutorialBtn.setOnClickListener{
+                binding.tutorialBtn.setOnClickListener {
                     (activity as GameActivity).displayTutorial(true)
                     dismiss()
                 }

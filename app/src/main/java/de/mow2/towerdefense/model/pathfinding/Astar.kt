@@ -1,14 +1,20 @@
 package de.mow2.towerdefense.model.pathfinding
 
 import de.mow2.towerdefense.model.core.GameManager
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.max
 
 /**
  * A-star search algorithm, used by enemies to find the fastest way across the map
  */
-class Astar() : java.io.Serializable {
+class Astar : java.io.Serializable {
 
-    fun findPath(startNode: Node, targetNode: Node, playGroundRows: Int, playGroundCols: Int): MutableSet<Node>? {
+    fun findPath(
+        startNode: Node,
+        targetNode: Node,
+        playGroundRows: Int,
+        playGroundCols: Int
+    ): MutableSet<Node>? {
         val openSet = mutableSetOf<Node>()
         val closedSet = mutableSetOf<Node>()
         openSet.add(startNode)
@@ -16,8 +22,8 @@ class Astar() : java.io.Serializable {
         while (openSet.any()) {
             var currentNode = openSet.first()
 
-            for(i in openSet) {
-                if(i.f < currentNode.f) {
+            for (i in openSet) {
+                if (i.f < currentNode.f) {
                     currentNode = i
                 }
             }
@@ -38,10 +44,12 @@ class Astar() : java.io.Serializable {
             val neighbors = currentNode.getNeighbors(playGroundRows, playGroundCols)
 
             neighbors.forEach neighbors@{ node ->
-                if (GameManager.playGround.squareArray[node.x][node.y].isBlocked) { return@neighbors }
+                if (GameManager.playGround.squareArray[node.x][node.y].isBlocked) {
+                    return@neighbors
+                }
 
-                for(closedNode in closedSet){
-                    if(closedNode.x == node.x && closedNode.y == node.y) {
+                for (closedNode in closedSet) {
+                    if (closedNode.x == node.x && closedNode.y == node.y) {
                         return@neighbors
                     }
                 }
@@ -52,7 +60,7 @@ class Astar() : java.io.Serializable {
                 node.f = node.g + node.h
 
                 openSet.forEach { openNode ->
-                    if(node == openNode && node.g > openNode.g) {
+                    if (node == openNode && node.g > openNode.g) {
                         return@neighbors
                     }
                 }
@@ -70,10 +78,13 @@ class Astar() : java.io.Serializable {
     data class Node(val x: Int, val y: Int) : Comparable<Node>, java.io.Serializable {
         // parent is the node that came previous to the current one
         var parent: Node? = null
+
         // g = distance from selected node to start node
         var g: Int = 0
+
         // h = distance from selected node to end node -> optimistic assignment: either equal or less than real distance
         var h: Int = 0
+
         // f = g + h -> the lower the value the more attractive it is as a path option
         var f: Int = g + h
 
@@ -91,25 +102,25 @@ class Astar() : java.io.Serializable {
              */
             //left
             if (x - 1 >= 0) {
-                if(!GameManager.playGround.squareArray[x - 1][y].isBlocked) {
+                if (!GameManager.playGround.squareArray[x - 1][y].isBlocked) {
                     neighbors.add(Node(x - 1, y))
                 }
             }
             //top
             if (y + 1 < maxCols) {
-                if(!GameManager.playGround.squareArray[x ][y + 1].isBlocked) {
+                if (!GameManager.playGround.squareArray[x][y + 1].isBlocked) {
                     neighbors.add(Node(x, y + 1))
                 }
             }
             //right
             if (x + 1 < maxRows) {
-                if(!GameManager.playGround.squareArray[x + 1][y].isBlocked) {
+                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked) {
                     neighbors.add(Node(x + 1, y))
                 }
             }
             //bottom
             if (y - 1 >= 0) {
-                if(!GameManager.playGround.squareArray[x][y - 1].isBlocked) {
+                if (!GameManager.playGround.squareArray[x][y - 1].isBlocked) {
                     neighbors.add(Node(x, y - 1))
                 }
             }
@@ -118,8 +129,8 @@ class Astar() : java.io.Serializable {
              * diagonal
              */
             //diagonal bottom left
-            if (x - 1 > 0 && y - 1 > 0){
-                if(!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked){
+            if (x - 1 > 0 && y - 1 > 0) {
+                if (!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked) {
                     neighbors.add(Node(x - 1, y - 1))
                 }
             }

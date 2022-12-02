@@ -15,7 +15,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
      * @param level this towers level
      */
     fun getTowerCost(type: TowerTypes, level: Int = 0): Int {
-        val cost = when(type) {
+        val cost = when (type) {
             TowerTypes.SINGLE -> 100
             TowerTypes.SLOW -> 200
             TowerTypes.AOE -> 300
@@ -33,7 +33,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
         if (!selectedField.isBlocked) {
             val cost = getTowerCost(towerType)
             if (gameManager.decreaseCoins(cost)) {
-                val tower = when(towerType) {
+                val tower = when (towerType) {
                     TowerTypes.SINGLE -> {
                         Tower(selectedField, TowerTypes.SINGLE)
                     }
@@ -64,7 +64,12 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
     fun destroyTower(tower: Tower) {
         tower.squareField.removeTower() //free square
         GameManager.towerList.remove(tower) //remove tower from drawing list
-        gameManager.increaseCoins(getTowerCost(tower.type, tower.towerLevel) / 2) //get half of the tower value back
+        gameManager.increaseCoins(
+            getTowerCost(
+                tower.type,
+                tower.towerLevel
+            ) / 2
+        ) //get half of the tower value back
         soundPool.play(Sounds.TOWERDESTROY.id, 1F, 1F, 1, 0, 1F)
         gameManager.validatePlayGround()
     }
@@ -74,7 +79,10 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
      */
     fun upgradeTower(selectedTower: Tower?) {
         //only upgrade if there is a tower which is below max level and if player can afford the upgrade
-        if(selectedTower != null && selectedTower.towerLevel < GameManager.maxTowerLevel && gameManager.decreaseCoins(getTowerCost(selectedTower.type, selectedTower.towerLevel + 1))) {
+        if (selectedTower != null && selectedTower.towerLevel < GameManager.maxTowerLevel && gameManager.decreaseCoins(
+                getTowerCost(selectedTower.type, selectedTower.towerLevel + 1)
+            )
+        ) {
             selectedTower.towerLevel++
         }
     }

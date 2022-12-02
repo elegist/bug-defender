@@ -8,26 +8,28 @@ import de.mow2.towerdefense.model.helper.Vector2D
  * A specific tower
  * @param squareField references the field on which the tower has been built
  * @param type the towers type
- * @param weaponOffset when towers are leveled up, the weapons y position will be adjusted using this value
- * @param rotationCorrection due to the rotation in SpriteAnimation, the 45f angles will be adjusted using this value
  */
-class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(), java.io.Serializable {
+class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tower>, GameObject(),
+    java.io.Serializable {
     //queue sorting
     override fun compareTo(other: Tower): Int = this.position.y.compareTo(other.position.y)
+
     //visual scaling and positioning
     override var width = squareField.width
     override var height = 2 * width
     override var position = Vector2D(squareField.position.x, squareField.position.y - width)
+
     //weapon positioning
     var weaponOffset = 0f
-    var rotationCorrection = 0f    
+    var rotationCorrection = 0f
     private var isRotatable = false
+
     //tower-specific game variables
     var towerLevel: Int = 0
-    set(value) {
-        field = value
-        scaleTowerValues()
-    }
+        set(value) {
+            field = value
+            scaleTowerValues()
+        }
     var hasTarget = false
     var target: Enemy? = null
     var targetArray = emptyArray<Enemy>() //for towers that shoot at more than one enemy
@@ -38,14 +40,16 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     private var baseRange = 2 * width + width / 2
     var finalRange = 0
     var damage = 0
+
     //special stuff
     var slowAmount = 0
+    var slowDuration: Long = 0
     var dotDamage = 0
     var dotInterval: Long = 0
 
     override fun update() {
         if (isRotatable) {
-            if (target != null){
+            if (target != null) {
                 distance = target!!.position - position
                 val directionTolerance = 80
 
@@ -69,7 +73,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
                     orientation = if (distance.y < 0) {
                         rotationCorrection = -squareField.width / 6f
                         7 // left-up
-                    }else {
+                    } else {
                         rotationCorrection = -squareField.width / 6f
                         5 // left-down
                     }
@@ -101,7 +105,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
             1 -> weaponOffset = height / 9f
             2 -> weaponOffset = 0f
         }
-        when(type) {
+        when (type) {
             TowerTypes.SINGLE -> {
                 isRotatable = true
                 finalRange = baseRange + towerLevel * width
@@ -113,9 +117,11 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
                 damage = 0
                 actionsPerMinute = baseSpeed / 2 + towerLevel * 10
                 slowAmount = 2 + towerLevel
+                slowDuration = 5000L + towerLevel * 2000L
             }
             TowerTypes.AOE -> {
-                finalRange = baseRange + towerLevel * width / 2 //!IMPORTANT: changes made here must also be implemented in BitmapPreloader (bitmap should always be the same size as tower range!)
+                finalRange =
+                    baseRange + towerLevel * width / 2 //!IMPORTANT: changes made here must also be implemented in BitmapPreloader (bitmap should always be the same size as tower range!)
                 damage = 1 + towerLevel * 2
                 actionsPerMinute = baseSpeed / 2 + towerLevel * 20
             }

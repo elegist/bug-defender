@@ -16,6 +16,7 @@ class BitmapPreloader(val resources: Resources) {
     private val defaultWidth = GameManager.playGround.squareSize
     private val defaultHeight = defaultWidth
     private var graphicsQuality = "Low"
+
     /**
      * Initialize all images and hold references for further use
      * Should improve performance compared to decoding bitmaps while drawing
@@ -30,32 +31,48 @@ class BitmapPreloader(val resources: Resources) {
         preloadProjectiles()
         preloadEnemies()
         preloadTowerDestroyer()
+        bitmapsLoaded = true
     }
 
     private fun preloadGui() {
         //bottom gui
-        bottomDrawable = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.bottomgui_bg))
+        bottomDrawable = BitmapDrawable(
+            resources,
+            BitmapFactory.decodeResource(resources, R.drawable.bottomgui_bg)
+        )
         bottomDrawable.tileModeX = Shader.TileMode.REPEAT
         //top gui
-        topDrawable = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.topgui_bg))
+        topDrawable =
+            BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.topgui_bg))
         topDrawable.tileModeX = Shader.TileMode.REPEAT
         topDrawable.gravity = Gravity.BOTTOM
         //background in game
         val tileWidth = GameManager.playGround.squareSize
         val tileHeight = GameManager.playGround.squareSize * 2
-        playgroundBG = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.green_chess_bg), tileHeight, tileHeight, false)
+        playgroundBG = Bitmap.createScaledBitmap(
+            BitmapFactory.decodeResource(
+                resources,
+                R.drawable.green_chess_bg
+            ), tileHeight, tileHeight, false
+        )
         //tower overlay for upgrade menu
-        upgradeOverlay = ScaledImage(resources, tileWidth, tileHeight, R.drawable.upgrade_tower_overlay, graphicsQuality).scaledImage
+        upgradeOverlay = ScaledImage(
+            resources,
+            tileWidth,
+            tileHeight,
+            R.drawable.upgrade_tower_overlay,
+            graphicsQuality
+        ).scaledImage
     }
 
     private fun preloadTowers() {
-        for(level in 0..GameManager.maxTowerLevel) { //for each tower level
+        for (level in 0..GameManager.maxTowerLevel) { //for each tower level
             val towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
             TowerTypes.values().forEach { type ->
                 val towerR: Int
-                when(type) {
+                when (type) {
                     TowerTypes.SINGLE -> {
-                        towerR = when(level) {
+                        towerR = when (level) {
                             0 -> R.drawable.tower_single_1
                             1 -> R.drawable.tower_single_2
                             2 -> R.drawable.tower_single_3
@@ -63,7 +80,7 @@ class BitmapPreloader(val resources: Resources) {
                         }
                     }
                     TowerTypes.SLOW -> {
-                        towerR = when(level) {
+                        towerR = when (level) {
                             0 -> R.drawable.tower_slow_1
                             1 -> R.drawable.tower_slow_2
                             2 -> R.drawable.tower_slow_3
@@ -71,7 +88,7 @@ class BitmapPreloader(val resources: Resources) {
                         }
                     }
                     TowerTypes.AOE -> {
-                        towerR = when(level) {
+                        towerR = when (level) {
                             0 -> R.drawable.tower_aoe_1
                             1 -> R.drawable.tower_aoe_2
                             2 -> R.drawable.tower_aoe_3
@@ -79,7 +96,7 @@ class BitmapPreloader(val resources: Resources) {
                         }
                     }
                     TowerTypes.MAGIC -> {
-                        towerR = when(level) {
+                        towerR = when (level) {
                             0 -> R.drawable.tower_magic_1
                             1 -> R.drawable.tower_magic_2
                             2 -> R.drawable.tower_magic_3
@@ -87,24 +104,31 @@ class BitmapPreloader(val resources: Resources) {
                         }
                     }
                 }
-                towerImages[type] = ScaledImage(resources, defaultWidth, defaultHeight * 2, towerR, graphicsQuality).scaledImage
+                towerImages[type] = ScaledImage(
+                    resources,
+                    defaultWidth,
+                    defaultHeight * 2,
+                    towerR,
+                    graphicsQuality
+                ).scaledImage
             }
             towerImagesArray = towerImagesArray.plus(towerImages)
         }
     }
 
     private fun preloadWeapons() {
-        for(level in 0..GameManager.maxTowerLevel) { //for each tower level
+        for (level in 0..GameManager.maxTowerLevel) { //for each tower level
             val weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation>()
             TowerTypes.values().forEach { type ->
                 val weaponAnimR: Int
                 val frameCountWeapon: Int
                 var rowCountWeapon = 8
-                var isRotatable = true //set to false in specific tower type to prevent generating rotatable sprite sheets
+                var isRotatable =
+                    true //set to false in specific tower type to prevent generating rotatable sprite sheets
                 //build images and animation maps
-                when(type) {
+                when (type) {
                     TowerTypes.SINGLE -> {
-                        weaponAnimR = when(level) {
+                        weaponAnimR = when (level) {
                             0 -> R.drawable.tower_single_weapon_anim_1
                             1 -> R.drawable.tower_single_weapon_anim_2
                             2 -> R.drawable.tower_single_weapon_anim_3
@@ -113,7 +137,7 @@ class BitmapPreloader(val resources: Resources) {
                         frameCountWeapon = 8
                     }
                     TowerTypes.SLOW -> {
-                        weaponAnimR = when(level) {
+                        weaponAnimR = when (level) {
                             0 -> R.drawable.tower_slow_weapon_anim_1
                             1 -> R.drawable.tower_slow_weapon_anim_2
                             2 -> R.drawable.tower_slow_weapon_anim_3
@@ -124,7 +148,7 @@ class BitmapPreloader(val resources: Resources) {
                         rowCountWeapon = 1
                     }
                     TowerTypes.AOE -> {
-                        weaponAnimR = when(level) {
+                        weaponAnimR = when (level) {
                             0 -> R.drawable.tower_aoe_weapon_anim_1
                             1 -> R.drawable.tower_aoe_weapon_anim_2
                             2 -> R.drawable.tower_aoe_weapon_anim_3
@@ -135,7 +159,7 @@ class BitmapPreloader(val resources: Resources) {
                         rowCountWeapon = 1
                     }
                     TowerTypes.MAGIC -> {
-                        weaponAnimR = when(level) {
+                        weaponAnimR = when (level) {
                             0 -> R.drawable.tower_magic_weapon_anim_1
                             1 -> R.drawable.tower_magic_weapon_anim_2
                             2 -> R.drawable.tower_magic_weapon_anim_3
@@ -147,9 +171,24 @@ class BitmapPreloader(val resources: Resources) {
                     }
                 }
                 weaponAnims[type] = if (isRotatable) {
-                    SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, rowCountWeapon, frameCountWeapon, 100, true)
+                    SpriteAnimation(
+                        BitmapFactory.decodeResource(resources, weaponAnimR),
+                        defaultWidth,
+                        defaultHeight,
+                        rowCountWeapon,
+                        frameCountWeapon,
+                        100,
+                        true
+                    )
                 } else {
-                    SpriteAnimation(BitmapFactory.decodeResource(resources, weaponAnimR), defaultWidth, defaultHeight, rowCountWeapon, frameCountWeapon, 100)
+                    SpriteAnimation(
+                        BitmapFactory.decodeResource(resources, weaponAnimR),
+                        defaultWidth,
+                        defaultHeight,
+                        rowCountWeapon,
+                        frameCountWeapon,
+                        100
+                    )
                 }
             }
             weaponAnimsArray = weaponAnimsArray.plus(weaponAnims)
@@ -157,7 +196,7 @@ class BitmapPreloader(val resources: Resources) {
     }
 
     private fun preloadProjectiles() {
-        for(level in 0..GameManager.maxTowerLevel) { //for each tower level
+        for (level in 0..GameManager.maxTowerLevel) { //for each tower level
             val projectileAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation>()
             TowerTypes.values().forEach { type ->
                 val projectileAnimR: Int
@@ -165,9 +204,9 @@ class BitmapPreloader(val resources: Resources) {
                 val rowCountProjectile = 4
                 val widthProjectile: Int
                 val heightProjectile: Int
-                when(type) {
+                when (type) {
                     TowerTypes.SINGLE -> {
-                        projectileAnimR = when(level) {
+                        projectileAnimR = when (level) {
                             0 -> R.drawable.tower_single_projectile_1
                             1 -> R.drawable.tower_single_projectile_2
                             2 -> R.drawable.tower_single_projectile_3
@@ -178,7 +217,7 @@ class BitmapPreloader(val resources: Resources) {
                         heightProjectile = 20
                     }
                     TowerTypes.SLOW -> {
-                        projectileAnimR = when(level) {
+                        projectileAnimR = when (level) {
                             0 -> R.drawable.tower_slow_projectile_1
                             1 -> R.drawable.tower_slow_projectile_2
                             2 -> R.drawable.tower_slow_projectile_3
@@ -190,7 +229,7 @@ class BitmapPreloader(val resources: Resources) {
                     }
                     TowerTypes.AOE -> {
                         val baseWidth = 2 * defaultWidth + defaultWidth / 2
-                        projectileAnimR = when(level) {
+                        projectileAnimR = when (level) {
                             0 -> {
                                 frameCountProjectile = 7
                                 widthProjectile = baseWidth * 2
@@ -219,7 +258,7 @@ class BitmapPreloader(val resources: Resources) {
                     }
                     TowerTypes.MAGIC -> {
                         //tower
-                        projectileAnimR = when(level) {
+                        projectileAnimR = when (level) {
                             0 -> R.drawable.tower_magic_projectile_1
                             1 -> R.drawable.tower_magic_projectile_2
                             2 -> R.drawable.tower_magic_projectile_3
@@ -230,7 +269,15 @@ class BitmapPreloader(val resources: Resources) {
                         heightProjectile = 128
                     }
                 }
-                projectileAnims[type] = SpriteAnimation(BitmapFactory.decodeResource(resources, projectileAnimR), widthProjectile, heightProjectile, rowCountProjectile, frameCountProjectile, 100, true)
+                projectileAnims[type] = SpriteAnimation(
+                    BitmapFactory.decodeResource(resources, projectileAnimR),
+                    widthProjectile,
+                    heightProjectile,
+                    rowCountProjectile,
+                    frameCountProjectile,
+                    100,
+                    true
+                )
             }
             projectileAnimsArray = projectileAnimsArray.plus(projectileAnims)
         }
@@ -240,9 +287,10 @@ class BitmapPreloader(val resources: Resources) {
         EnemyType.values().forEach { key ->
             val enemyR: Int
             val frameCount: Int
-            val rowCount = 4 // 4 rows = 4 animation types (0=down, 1=up, 2=right, 3= left), sprite sheet has to be in that order!
+            val rowCount =
+                4 // 4 rows = 4 animation types (0=down, 1=up, 2=right, 3= left), sprite sheet has to be in that order!
             val frameDuration: Int
-            when(key) {
+            when (key) {
                 EnemyType.LEAFBUG -> {
                     enemyR = R.drawable.enemy_leafbug_anim
                     frameCount = 7
@@ -309,7 +357,14 @@ class BitmapPreloader(val resources: Resources) {
                     frameDuration = 120
                 }
             }
-            enemyAnims[key] = SpriteAnimation(BitmapFactory.decodeResource(resources, enemyR), defaultWidth, defaultHeight, rowCount, frameCount, frameDuration)
+            enemyAnims[key] = SpriteAnimation(
+                BitmapFactory.decodeResource(resources, enemyR),
+                defaultWidth,
+                defaultHeight,
+                rowCount,
+                frameCount,
+                frameDuration
+            )
         }
     }
 
@@ -318,10 +373,19 @@ class BitmapPreloader(val resources: Resources) {
         val rowCount = 2
         val frameCount = 6
         val frameDuration = 100
-        towerDestroyerAnims = SpriteAnimation(BitmapFactory.decodeResource(resources, towerDestroyerR), defaultWidth, defaultHeight, rowCount, frameCount, frameDuration)
+        towerDestroyerAnims = SpriteAnimation(
+            BitmapFactory.decodeResource(resources, towerDestroyerR),
+            defaultWidth,
+            defaultHeight,
+            rowCount,
+            frameCount,
+            frameDuration
+        )
     }
 
     companion object {
+        var bitmapsLoaded = false
+
         //all various lists and maps for game objects and their respective bitmaps or animations
         var towerImagesArray = emptyArray<ConcurrentHashMap<TowerTypes, Bitmap>>()
         var weaponAnimsArray = emptyArray<ConcurrentHashMap<TowerTypes, SpriteAnimation>>()
