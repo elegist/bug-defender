@@ -6,7 +6,7 @@
     <string name="about_button">about the game</string>
     <string name="game_icon">game icon</string>
     <string name="close_button">Close</string>
-    <string name="game_name">Bug Defender</string>
+    <string name="game_name">"Bug\nDefender"</string>
     <string name="about_text">Bug Defender is a tower defense game created as part of a study project. The contributors are Julius Wissemann, Armin Prinz, Robin Patzak and Sophia Meyer.</string>
     <string name="preferences_text">set your preferences:</string>
     <string name="preference_music">music</string>
