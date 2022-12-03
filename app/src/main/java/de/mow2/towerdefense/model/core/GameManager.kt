@@ -76,7 +76,7 @@ class GameManager(private val controller: GameController) {
 
     private val waveSpawner = WaveSpawner(controller)
     fun initLevel(level: Int) {
-        //gameLevel = 50
+        gameLevel = 12
         //set the wave
         waveSpawner.initWave(level)
         when (level) {
@@ -90,14 +90,17 @@ class GameManager(private val controller: GameController) {
             }
             else -> {
                 coinAmnt += level * 10
-                if (level % 10 == 0) {
+                if (level % 12 == 0) {
                     increaseLives(level / 2)
                     controller.updateHealthBarMax(livesAmnt)
+                    controller.showToastMessage("bossWave")
+                    SoundManager.soundPool.play(Sounds.BOSSLEVEL.id, 1F, 1F, 1, 0, 1F)
+                } else {
+                    controller.showToastMessage("wave")
+                    SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
                 }
-                SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
                 // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
                 controller.gameState.saveGameState() //auto-save progress
-                controller.showToastMessage("wave")
             }
         }
         killsToProgress = waveSpawner.enemyCount
