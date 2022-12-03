@@ -92,7 +92,7 @@ class GameManager(private val controller: GameController) {
                 if (level % 12 == 0) {
                     increaseLives(level / 2)
                     controller.updateHealthBarMax(livesAmnt)
-                    controller.showToastMessage("bossWave")
+                    controller.showToastMessage("bossLevel")
                     SoundManager.soundPool.play(Sounds.BOSSLEVEL.id, 1F, 1F, 1, 0, 1F)
                 } else {
                     controller.showToastMessage("wave")
