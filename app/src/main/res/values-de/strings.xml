@@ -30,12 +30,12 @@
     <string name="upgrade_tower_button">Upgrade Turm</string>
     <string name="progress_ball_image">Progress bar decor image</string>
     <string name="health_ball_image">Health bar decor image</string>
-    <string name="timeMade">Welle geschafft: </string>
-    <string name="enemyMade">Gegner getötet: </string>
-    <string name="levelMade">Level geschafft: </string>
+    <string name="waveReached">geschafft Welle: </string>
+    <string name="enemyMade">getötete Gegner: </string>
     <string name="goOnTutorial">Weiter</string>
     <string name="tutorialTitel">Tutorial</string>
     <string name="tutorialWelcome">Willkommen bei Bug Defender! Wenn du das Tutorial überspringen möchtest, schließe einfach dieses Fenster.</string>
+    <string name="tutorialScroll">Das Spielfeld, auf dem du Türme platzieren kannst, ist scrollbar.</string>
     <string name="tutorialUpgradeBtn">Mit dem rechten Tool kannst du gebaute Türme upgraden.</string>
     <string name="tutorialBuildBtn">Mit dem mittleren Tool kannst du Türme bauen. Halte den Knopf gedrückt, um einen anderen Turm zu wählen.</string>
     <string name="tutorialTopGui">Oben findest du die Spielanzeigen.</string>

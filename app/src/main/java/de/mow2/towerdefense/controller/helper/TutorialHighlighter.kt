@@ -74,7 +74,11 @@ class TutorialHighlighter(
             "tutorial" -> {
                 dimElements(gameContainer, true, context)
             }
+            "playfield" -> {
+                dimElements(gameContainer, false, context)
+            }
             "bottomGui" -> {
+                dimElements(gameContainer, true, context)
                 highlight(bottomGui.children, true)
             }
             "deleteBtn" -> {

@@ -231,18 +231,12 @@ class GameActivity : AppCompatActivity(), GameController {
             setContentView(R.layout.gameover_view)
             SoundManager.mediaPlayer.release()
             soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
-            val timeValue = findViewById<TextView>(R.id.timeValue)
-            val levelValue = findViewById<TextView>(R.id.levelValue)
+            val wave = findViewById<TextView>(R.id.waveReached)
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
-            timeValue.text = buildString {
-                append(this@GameActivity.getString(R.string.timeMade))
+            wave.text = buildString {
+                append(this@GameActivity.getString(R.string.waveReached))
                 append(" ")
                 append(GameManager.gameLevel + 1)
-            }
-            levelValue.text = buildString {
-                append(this@GameActivity.getString(R.string.levelMade))
-                append(" ")
-                append(GameManager.gameLevel)
             }
             enemyValue.text = buildString {
                 append(this@GameActivity.getString(R.string.enemyMade))
@@ -253,6 +247,7 @@ class GameActivity : AppCompatActivity(), GameController {
         }
         gameState.deleteSaveGame()
     }
+
     override fun onResume() {
         super.onResume()
         // (re-)initialize MediaPlayer with correct settings
