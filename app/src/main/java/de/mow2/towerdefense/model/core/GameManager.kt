@@ -89,6 +89,7 @@ class GameManager(private val controller: GameController) {
                 }
             }
             else -> {
+                coinAmnt += level * 15
                 if (level % 12 == 0) {
                     increaseLives(level / 2)
                     controller.updateHealthBarMax(livesMax)
