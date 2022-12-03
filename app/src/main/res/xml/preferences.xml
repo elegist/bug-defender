@@ -5,6 +5,7 @@
     <CheckBoxPreference
         android:key="music_pref"
         android:title="@string/preference_music"
+        app:defaultValue="@bool/musicCheckbox"
         app:iconSpaceReserved="false" />
     <CheckBoxPreference
         android:defaultValue="@bool/soundCheckbox"
