@@ -47,16 +47,20 @@ class CustomToast(val context: Context, val parent: ConstraintLayout) {
                     append(GameManager.gameLevel + 1)
                 }
                 image.setImageResource(R.drawable.wave_up)
-                params.setMargins(width / 5, height / 2, width / 5, height / 2)
                 layout.setBackgroundResource(R.drawable.wave_toast_shape)
             }
             "money" -> {
                 text.setText(R.string.moneyWarning)
                 image.setImageResource(R.drawable.coins)
-                params.setMargins(width / 5, height / 2, width / 5, height / 2)
                 layout.setBackgroundResource(R.drawable.warning_toast_shape)
             }
+            "bossLevel" -> {
+                text.setText(R.string.bossLevel)
+                image.setImageResource(R.drawable.boss_wave_icon)
+                layout.setBackgroundResource(R.drawable.boss_toast_shape)
+            }
         }
+        params.setMargins(width / 5, height / 2, width / 5, height / 2)
         snackBar.view.layoutParams = params
         snackBar.show()
     }

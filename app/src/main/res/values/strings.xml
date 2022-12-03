@@ -15,7 +15,7 @@
     <string name="pauseGame">main menu</string>
     <string name="resumeGame">resume game</string>
     <string name="moneyWarning">not enough money</string>
-    <string name="toastAction">don\'t show again</string>
+    <string name="bossLevel">Boss Wave:</string>
     <string name="wave">Wave: </string>
     <string name="coins">coins</string>
     <string name="back">main menu</string>

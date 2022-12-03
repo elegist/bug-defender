@@ -14,10 +14,8 @@ import de.mow2.towerdefense.R
  * */
 
 enum class Sounds(var id: Int) {
-    DESTROYER(0), WAVE(0), GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(
-        0
-    ),
-    ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0)
+    DESTROYER(0), WAVE(0), GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(0),
+    ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0), BOSSLEVEL(0)
 }
 
 object SoundManager {
@@ -55,6 +53,7 @@ object SoundManager {
         Sounds.AOESHOT.id = soundPool.load(context, R.raw.aoe_shot, 2)
         Sounds.WAVE.id = soundPool.load(context, R.raw.wave_success, 1)
         Sounds.DESTROYER.id = soundPool.load(context, R.raw.destroyer_sound, 1)
+        Sounds.BOSSLEVEL.id = soundPool.load(context, R.raw.boss_level_sound, 1)
     }
 
     /**
