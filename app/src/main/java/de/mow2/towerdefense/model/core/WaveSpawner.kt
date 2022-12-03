@@ -11,7 +11,6 @@ import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
  * TODO: alternate between hard and easy waves so it doesn't get dull //
  */
 class WaveSpawner(val controller: GameController) {
-
     //enemy types and count for a specific wave
     private val baseSpawnCount = 5
     private var waveEnemyList = arrayListOf<EnemyType>()

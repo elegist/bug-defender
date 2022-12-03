@@ -102,7 +102,7 @@ class GameView(context: Context) :
                 BitmapPreloader.towerImagesArray[tower.towerLevel][tower.type],
                 tower.position
             )
-            if (GameManager.selectedTool == R.id.upgradeButton && tower.towerLevel < GameManager.maxTowerLevel && buildMenu.getTowerCost(
+            if (controller.selectedTool == R.id.upgradeButton && tower.towerLevel < GameManager.maxTowerLevel && buildMenu.getTowerCost(
                     tower.type,
                     tower.towerLevel + 1
                 ) <= GameManager.coinAmnt
@@ -176,16 +176,14 @@ class GameView(context: Context) :
                 y = ev.y
                 val selectedField = getTouchedSquare(x, y)
                 if (selectedField.mapPos["y"] in 1 until GameManager.squaresY - 1) {
-                    Log.i("Tool", "${GameManager.selectedTool}")
-
-                    when (GameManager.selectedTool) {
+                    when (controller.selectedTool) {
                         R.id.deleteButton -> {
                             if (selectedField.tower != null) {
                                 buildMenu.destroyTower(selectedField.tower!!)
                             }
                         }
                         R.id.buildButton -> {
-                            buildMenu.buildTower(selectedField, GameManager.selectedTower)
+                            buildMenu.buildTower(selectedField, controller.selectedTower)
                         }
                         R.id.upgradeButton -> {
                             buildMenu.upgradeTower(selectedField.tower)

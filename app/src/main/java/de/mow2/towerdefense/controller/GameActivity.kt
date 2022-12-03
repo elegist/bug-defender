@@ -35,6 +35,9 @@ class GameActivity : AppCompatActivity(), GameController {
     override var gameWidth = Resources.getSystem().displayMetrics.widthPixels
     override var gameHeight = 2 * gameWidth
     override var playGround = PlayGround(gameWidth)
+    //build menu
+    override var selectedTool: Int? = null
+    override var selectedTower: TowerTypes = TowerTypes.SINGLE
     //GUI
     private lateinit var binding: ActivityGameBinding
     private lateinit var bottomGuiContainer: ConstraintLayout
@@ -118,11 +121,11 @@ class GameActivity : AppCompatActivity(), GameController {
         bottomGuiSpacer.background = BitmapPreloader.bottomDrawable
         bottomGuiContainer.children.forEach { view ->
             view.setOnClickListener { button ->
-                if (GameManager.selectedTool == button.id) {
-                    GameManager.selectedTool = null
+                if (selectedTool == button.id) {
+                    selectedTool = null
                     bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 } else {
-                    GameManager.selectedTool = button.id
+                    selectedTool = button.id
                     bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                     button.setBackgroundResource(R.drawable.button_border_active)
                 }
@@ -145,8 +148,8 @@ class GameActivity : AppCompatActivity(), GameController {
             towerBtnText.setTextColor(Color.YELLOW)
             towerBtn.id = i
             towerBtn.setOnClickListener {
-                GameManager.selectedTool = buildButton.id
-                GameManager.selectedTower = type
+                selectedTool = buildButton.id
+                selectedTower = type
                 bottomGuiContainer.children.forEach { it.setBackgroundResource(R.drawable.defaultbtn_states) }
                 binding.buildButton.setBackgroundResource(R.drawable.button_border_active)
                 toggleBuildMenu()
@@ -163,7 +166,7 @@ class GameActivity : AppCompatActivity(), GameController {
             buttonContainer.addView(towerBtn)
             buildMenuLayout.addView(buttonContainer)
         }
-        GameManager.selectedTool = null //deselect any tool at beginning
+        selectedTool = null //deselect any tool at beginning
     }
 
     /**

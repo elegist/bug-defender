@@ -292,7 +292,6 @@ class GameManager(private val controller: GameController) {
     companion object {
         //tutorials
         var tutorialsActive = true
-
         //playground variables
         const val squaresX = 9
         const val squaresY = 18
@@ -316,10 +315,6 @@ class GameManager(private val controller: GameController) {
         var towerDestroyer: TowerDestroyer? = null
         var lastTower: Tower? = null
 
-        // build menu variables
-        var selectedTool: Int? = null
-        var selectedTower = TowerTypes.SINGLE // default tower
-
         /**
          * Reset all game variables
          */
@@ -331,8 +326,6 @@ class GameManager(private val controller: GameController) {
             livesAmnt = 0
             livesMax = 10
             killCounter = 0
-            selectedTool = null
-            selectedTower = TowerTypes.SINGLE
             lastTower = null
             gameLevel = 0
             enemiesKilled = 0
