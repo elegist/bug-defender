@@ -185,6 +185,7 @@ class GameActivity : AppCompatActivity(), GameController {
 
     override fun updateHealthBarMax(newMax: Int) {
         healthBar.max = newMax
+        healthBar.progress = GameManager.livesAmnt
     }
 
     override fun updateProgressBarMax(newMax: Int) {

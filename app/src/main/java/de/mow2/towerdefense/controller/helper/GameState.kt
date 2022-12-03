@@ -62,6 +62,7 @@ class GameState(val context: Context) {
             objectOut.writeObject(GameManager.gameLevel)
             objectOut.writeObject(GameManager.enemiesKilled)
             objectOut.writeObject(GameManager.livesAmnt)
+            objectOut.writeObject(GameManager.livesMax)
             objectOut.writeObject(GameManager.coinAmnt)
             objectOut.writeObject(GameManager.killCounter)
 
@@ -95,6 +96,7 @@ class GameState(val context: Context) {
             val level = input.readObject() as Int
             val enemiesKilled = input.readObject() as Int
             val lives = input.readObject() as Int
+            val livesMax = input.readObject() as Int
             val coins = input.readObject() as Int
             val kills = input.readObject() as Int
             val towerList = input.readObject() as Array<Array<*>>
@@ -110,6 +112,7 @@ class GameState(val context: Context) {
             GameManager.gameLevel = level
             GameManager.enemiesKilled = enemiesKilled
             GameManager.livesAmnt = lives
+            GameManager.livesMax = livesMax
             GameManager.coinAmnt = coins
             GameManager.killCounter = kills
             //close input stream

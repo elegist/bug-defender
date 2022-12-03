@@ -44,6 +44,7 @@ class GameManager(private val controller: GameController) {
 
     private fun increaseLives(newValue: Int) {
         livesAmnt += newValue
+        livesMax += newValue
         controller.updateGUI()
     }
 
@@ -82,31 +83,30 @@ class GameManager(private val controller: GameController) {
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 10
+                livesAmnt = livesMax
                 if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 350
                 }
             }
             else -> {
-                coinAmnt += level * 15
                 if (level % 12 == 0) {
                     increaseLives(level / 2)
-                    controller.updateHealthBarMax(livesAmnt)
+                    controller.updateHealthBarMax(livesMax)
                     controller.showToastMessage("bossLevel")
                     SoundManager.soundPool.play(Sounds.BOSSLEVEL.id, 1F, 1F, 1, 0, 1F)
                 } else {
                     controller.showToastMessage("wave")
                     SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
                 }
-                // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
+                //TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
                 controller.gameState.saveGameState() //auto-save progress
             }
         }
-        if(newGame) controller.updateHealthBarMax(livesAmnt)
-        controller.updateProgressBarMax(killsToProgress)
-
         killsToProgress = waveSpawner.enemyCount
         killCounter = 0
+
+        if(newGame) controller.updateHealthBarMax(livesMax)
+        controller.updateProgressBarMax(killsToProgress)
         controller.updateGUI()
     }
 
@@ -300,6 +300,7 @@ class GameManager(private val controller: GameController) {
         //static game variables
         var coinAmnt: Int = 0
         var livesAmnt: Int = 0
+        var livesMax: Int = 10
         var killCounter: Int = 0
         var killsToProgress: Int = 0
         var waveActive = true
@@ -328,6 +329,7 @@ class GameManager(private val controller: GameController) {
             projectileList = CopyOnWriteArrayList()
             coinAmnt = 0
             livesAmnt = 0
+            livesMax = 10
             killCounter = 0
             selectedTool = null
             selectedTower = TowerTypes.SINGLE
@@ -335,7 +337,6 @@ class GameManager(private val controller: GameController) {
             gameLevel = 0
             enemiesKilled = 0
             enemiesAlive = 0
-
         }
 
         fun addTower(tower: Tower) {
