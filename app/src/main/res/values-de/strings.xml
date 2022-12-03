@@ -18,7 +18,7 @@
     <string name="toastAction">nicht mehr anzeigen</string>
     <string name="wave">Welle: </string>
     <string name="coins">Münzen</string>
-    <string name="back">zurück zu Hauptmenü</string>
+    <string name="back">Hauptmenü</string>
     <string name="low">niedrig</string>
     <string name="avg">mittel</string>
     <string name="high">hoch</string>
@@ -30,7 +30,7 @@
     <string name="upgrade_tower_button">Upgrade Turm</string>
     <string name="progress_ball_image">Progress bar decor image</string>
     <string name="health_ball_image">Health bar decor image</string>
-    <string name="waveReached">geschafft Welle: </string>
+    <string name="waveReached">"geschaffte Welle: "</string>
     <string name="enemyMade">getötete Gegner: </string>
     <string name="goOnTutorial">Weiter</string>
     <string name="tutorialTitel">Tutorial</string>

@@ -33,69 +33,65 @@ class TutorialFragment : DialogFragment() {
         val tutClose = binding.closeTutBtn
         val gameActivity = (activity as GameActivity)
 
-        when (tag.toString()) {
-            "tutorialDialog" -> {
-                dialog?.window?.also { window ->
-                    window.attributes?.also { attributes ->
-                        attributes.dimAmount = 0f
-                        window.attributes = attributes
-                    }
-                }
-                tutText.setText(R.string.tutorialWelcome)
-                gameActivity.highlight("tutorial")
+        dialog?.window?.also { window ->
+            window.attributes?.also { attributes ->
+                attributes.dimAmount = 0f
+                window.attributes = attributes
+            }
+        }
+        tutText.setText(R.string.tutorialWelcome)
+        gameActivity.highlight("tutorial")
 
-                tutBtn.setOnClickListener {
-                    when (tutText.text) {
-                        getString(R.string.tutorialWelcome) -> {
-                            tutText.setText(R.string.tutorialScroll)
-                            gameActivity.highlight("playfield")
-                        }
-                        getString(R.string.tutorialScroll) -> {
-                            tutText.setText(R.string.tutorialBottomGui)
-                            gameActivity.highlight("bottomGui")
-                        }
-                        getString(R.string.tutorialBottomGui) -> {
-                            tutText.setText(R.string.tutorialBuildBtn)
-                            gameActivity.highlight("buildBtn")
-                        }
-                        getString(R.string.tutorialBuildBtn) -> {
-                            tutText.setText(R.string.tutorialUpgradeBtn)
-                            gameActivity.highlight("upgradeBtn")
-                        }
-                        getString(R.string.tutorialUpgradeBtn) -> {
-                            tutText.setText(R.string.tutorialDeleteBtn)
-                            gameActivity.highlight("deleteBtn")
-                        }
-                        getString(R.string.tutorialDeleteBtn) -> {
-                            tutText.setText(R.string.tutorialTopGui)
-                            gameActivity.highlight("topGui")
-                        }
-                        getString(R.string.tutorialTopGui) -> {
-                            tutText.setText(R.string.tutorialCoins)
-                            gameActivity.highlight("coins")
-                        }
-                        getString(R.string.tutorialCoins) -> {
-                            tutText.setText(R.string.tutorialWave)
-                            gameActivity.highlight("wave")
-                        }
-                        getString(R.string.tutorialWave) -> {
-                            tutText.setText(R.string.tutorialLifeBar)
-                            gameActivity.highlight("healthBar")
-                        }
-                        getString(R.string.tutorialLifeBar) -> {
-                            tutText.setText(R.string.tutoriaWaveBar)
-                            gameActivity.highlight("progressBar")
-                        }
-                        getString(R.string.tutoriaWaveBar) -> {
-                            tutText.setText(R.string.tutorialMenuButton)
-                            gameActivity.highlight("menuBtn")
-                            tutBtn.setText(R.string.close_button)
-                            tutBtn.setOnClickListener {
-                                gameActivity.highlight("endTutorial")
-                                gameActivity.displayTutorial(false)
-                                dismiss()
-                            }
-                        }
+        tutBtn.setOnClickListener {
+            when (tutText.text) {
+                getString(R.string.tutorialWelcome) -> {
+                    tutText.setText(R.string.tutorialScroll)
+                    gameActivity.highlight("playfield")
+                }
+                getString(R.string.tutorialScroll) -> {
+                    tutText.setText(R.string.tutorialBottomGui)
+                    gameActivity.highlight("bottomGui")
+                }
+                getString(R.string.tutorialBottomGui) -> {
+                    tutText.setText(R.string.tutorialBuildBtn)
+                    gameActivity.highlight("buildBtn")
+                }
+                getString(R.string.tutorialBuildBtn) -> {
+                    tutText.setText(R.string.tutorialUpgradeBtn)
+                    gameActivity.highlight("upgradeBtn")
+                }
+                getString(R.string.tutorialUpgradeBtn) -> {
+                    tutText.setText(R.string.tutorialDeleteBtn)
+                    gameActivity.highlight("deleteBtn")
+                }
+                getString(R.string.tutorialDeleteBtn) -> {
+                    tutText.setText(R.string.tutorialTopGui)
+                    gameActivity.highlight("topGui")
+                }
+                getString(R.string.tutorialTopGui) -> {
+                    tutText.setText(R.string.tutorialCoins)
+                    gameActivity.highlight("coins")
+                }
+                getString(R.string.tutorialCoins) -> {
+                    tutText.setText(R.string.tutorialWave)
+                    gameActivity.highlight("wave")
+                }
+                getString(R.string.tutorialWave) -> {
+                    tutText.setText(R.string.tutorialLifeBar)
+                    gameActivity.highlight("healthBar")
+                }
+                getString(R.string.tutorialLifeBar) -> {
+                    tutText.setText(R.string.tutoriaWaveBar)
+                    gameActivity.highlight("progressBar")
+                }
+                getString(R.string.tutoriaWaveBar) -> {
+                    tutText.setText(R.string.tutorialMenuButton)
+                    gameActivity.highlight("menuBtn")
+                    tutBtn.setText(R.string.close_button)
+                    tutBtn.setOnClickListener {
+                        gameActivity.highlight("endTutorial")
+                        gameActivity.displayTutorial(false)
+                        dismiss()
                     }
                 }
             }

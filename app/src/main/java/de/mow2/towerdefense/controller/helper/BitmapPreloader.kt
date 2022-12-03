@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.controller.helper
 
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -18,7 +19,12 @@ import java.util.concurrent.ConcurrentHashMap
  * @param resources needed to gain access to all bitmaps etc.
  */
 class BitmapPreloader(val resources: Resources) {
-    var gameWidth = Resources.getSystem().displayMetrics.widthPixels
+    var orientation = Resources.getSystem().configuration.orientation
+    private var gameWidth = if(Resources.getSystem().configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Resources.getSystem().displayMetrics.widthPixels
+    } else {
+        Resources.getSystem().displayMetrics.heightPixels
+    }
     val playGround = PlayGround(gameWidth)
     private val defaultWidth = playGround.squareSize
     private val defaultHeight = defaultWidth
