@@ -36,13 +36,13 @@
             android:text="@string/lostText"
             android:textAlignment="center"
             android:textSize="60sp"
-            app:layout_constraintBottom_toTopOf="@+id/timeValue"
+            app:layout_constraintBottom_toTopOf="@+id/waveReached"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/timeValue"
+            android:id="@+id/waveReached"
             style="@style/Heading.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,25 +59,12 @@
             style="@style/Heading.TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
             android:textAlignment="center"
             android:textSize="34sp"
-            app:layout_constraintBottom_toTopOf="@+id/levelValue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeValue" />
+            app:layout_constraintTop_toBottomOf="@+id/waveReached" />
 
-        <TextView
-            android:id="@+id/levelValue"
-            style="@style/Heading.TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="34sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enemyValue" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
@@ -85,7 +72,7 @@
         style="@style/Button.Main"
         android:layout_width="476dp"
         android:layout_height="102dp"
-        android:background="@drawable/button_border"
+        android:background="@drawable/defaultbtn_states"
         android:onClick="leaveGame"
         android:text="@string/back"
         android:textSize="34sp"

@@ -47,23 +47,26 @@ class TutorialFragment : DialogFragment() {
                 tutBtn.setOnClickListener {
                     when (tutText.text) {
                         getString(R.string.tutorialWelcome) -> {
+                            tutText.setText(R.string.tutorialScroll)
+                            gameActivity.highlight("playfield")
+                        }
+                        getString(R.string.tutorialScroll) -> {
                             tutText.setText(R.string.tutorialBottomGui)
                             gameActivity.highlight("bottomGui")
-
                         }
                         getString(R.string.tutorialBottomGui) -> {
-                            tutText.setText(R.string.tutorialDeleteBtn)
-                            gameActivity.highlight("deleteBtn")
-                        }
-                        getString(R.string.tutorialDeleteBtn) -> {
-                            tutText.setText(R.string.tutorialUpgradeBtn)
-                            gameActivity.highlight("upgradeBtn")
-                        }
-                        getString(R.string.tutorialUpgradeBtn) -> {
                             tutText.setText(R.string.tutorialBuildBtn)
                             gameActivity.highlight("buildBtn")
                         }
                         getString(R.string.tutorialBuildBtn) -> {
+                            tutText.setText(R.string.tutorialUpgradeBtn)
+                            gameActivity.highlight("upgradeBtn")
+                        }
+                        getString(R.string.tutorialUpgradeBtn) -> {
+                            tutText.setText(R.string.tutorialDeleteBtn)
+                            gameActivity.highlight("deleteBtn")
+                        }
+                        getString(R.string.tutorialDeleteBtn) -> {
                             tutText.setText(R.string.tutorialTopGui)
                             gameActivity.highlight("topGui")
                         }
