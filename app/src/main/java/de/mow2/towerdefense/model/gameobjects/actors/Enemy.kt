@@ -137,13 +137,13 @@ class Enemy(
             }
             EnemyType.SKELETONWARRIOR -> {
                 baseSpeed = 0.02f
-                healthPoints = 8 * GameManager.gameLevel
+                healthPoints = 7 * GameManager.gameLevel
                 baseDamage = 3
                 coinValue = 25
             }
             EnemyType.SKELETONKNIGHT -> {
                 baseSpeed = 0.02f
-                healthPoints = 10 * GameManager.gameLevel
+                healthPoints = 8 * GameManager.gameLevel
                 baseDamage = 3
                 coinValue = 30
             }

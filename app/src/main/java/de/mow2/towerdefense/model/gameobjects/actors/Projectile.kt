@@ -32,7 +32,7 @@ class Projectile(val tower: Tower, val enemy: Enemy, val controller: GameControl
                 SoundManager.soundPool.play(Sounds.SLOWSHOT.id, 0.2F, 0.2F, 2, 0, 1F)
             }
             TowerTypes.AOE -> {
-                SoundManager.soundPool.play(Sounds.AOESHOT.id, 0.2F, 0.2F, 2, 0, 1F)
+                SoundManager.soundPool.play(Sounds.AOESHOT.id, 0.3F, 0.3F, 2, 0, 1F)
                 width =
                     BitmapPreloader.projectileAnimsArray[tower.towerLevel][tower.type]!!.width / 2
                 height = width
