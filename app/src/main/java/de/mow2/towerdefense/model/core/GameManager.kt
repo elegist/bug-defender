@@ -93,7 +93,7 @@ class GameManager(private val controller: GameController) {
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 1
+                livesAmnt = 10
                 if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 350
                 }
@@ -102,7 +102,7 @@ class GameManager(private val controller: GameController) {
             else -> {
                 coinAmnt += level * 10
                 if (level % 10 == 0) {
-                    increaseLives(level)
+                    increaseLives(level / 2)
                     controller.updateHealthBarMax(livesAmnt)
                 }
                 SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)

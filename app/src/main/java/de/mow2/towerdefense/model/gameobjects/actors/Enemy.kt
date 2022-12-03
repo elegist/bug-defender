@@ -75,67 +75,67 @@ class Enemy(
             EnemyType.FIREBUG -> {
                 baseSpeed = 0.02f
                 healthPoints = 7 * GameManager.gameLevel
-                baseDamage = 2
+                baseDamage = 1
                 coinValue = 15
             }
             EnemyType.MAGMACRAB -> {
                 baseSpeed = 0.02f
                 healthPoints = 8 * GameManager.gameLevel
-                baseDamage = 3
-                coinValue = 20
+                baseDamage = 1
+                coinValue = 25
             }
             EnemyType.SCORPION -> {
                 baseSpeed = 0.015f
                 healthPoints = 8 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 1
                 coinValue = 20
             }
             EnemyType.CLAMPBEETLE -> {
                 baseSpeed = 0.07f
                 healthPoints = 1 * GameManager.gameLevel + 1
-                baseDamage = 4
+                baseDamage = 2
                 coinValue = 25
             }
             EnemyType.FIREWASP -> {
-                baseSpeed = 0.09f
+                baseSpeed = 0.085f
                 healthPoints = 1 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 2
                 coinValue = 25
             }
             EnemyType.LOCUST -> {
                 baseSpeed = 0.08f
                 healthPoints = 1 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 2
                 coinValue = 25
             }
             EnemyType.VOIDBUTTERFLY -> {
                 baseSpeed = 0.08f
                 healthPoints = 1 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 2
                 coinValue = 25
             }
             EnemyType.SKELETONGRUNT -> {
                 baseSpeed = 0.02f
                 healthPoints = 1 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 3
                 coinValue = 30
             }
             EnemyType.NECROMANCER -> {
                 baseSpeed = 0.02f
                 healthPoints = 1 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 3
                 coinValue = 30
             }
             EnemyType.SKELETONWARRIOR -> {
                 baseSpeed = 0.02f
                 healthPoints = 1 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 3
                 coinValue = 30
             }
             EnemyType.SKELETONKNIGHT -> {
                 baseSpeed = 0.02f
                 healthPoints = 1 * GameManager.gameLevel
-                baseDamage = 4
+                baseDamage = 3
                 coinValue = 30
             }
             EnemyType.SKELETONKING -> {

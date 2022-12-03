@@ -68,7 +68,7 @@ class WaveSpawner {
         waveEnemyList.clear()
         for (i in 0..gameLevel) {
             if (baseSpawnsPerMinute <= maxSpawnRPM) {
-                baseSpawnsPerMinute *= 1.1f //default = 1.2f; increase spawn rate by 20%
+                baseSpawnsPerMinute *= 1.08f //default = 1.2f; increase spawn rate by 20%
             }
         }
         when {
@@ -81,7 +81,7 @@ class WaveSpawner {
             //for each enemy type one level (except first)
             gameLevel in 1 until EnemyType.values().size - 1 -> { //until + size-1 because SKELETONKING (BOSS) is on the last position
                 waveEnemyList.add(EnemyType.values()[gameLevel])
-                enemyCount = baseSpawnCount * gameLevel
+                enemyCount = baseSpawnCount + gameLevel
                 spawnsPerMinute = baseSpawnsPerMinute
             }
             //Boss wave
