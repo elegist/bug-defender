@@ -10,7 +10,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
  * TODO: infinite waves: increase chance of enemies that haven't been spawned in a set amount of waves to make it more engaging
  * TODO: alternate between hard and easy waves so it doesn't get dull //
  */
-class WaveSpawner {
+class WaveSpawner(val controller: GameController) {
 
     //enemy types and count for a specific wave
     private val baseSpawnCount = 5
@@ -51,7 +51,7 @@ class WaveSpawner {
     fun spawnEnemy() {
         if (canSpawn() && enemyCount != 0) {
             if (enemyCount > 0) {
-                GameManager.addEnemy(Enemy(waveEnemyList.random()))
+                GameManager.addEnemy(Enemy(waveEnemyList.random(), controller))
                 enemyCount--
             }
         }
@@ -91,7 +91,7 @@ class WaveSpawner {
                         waveEnemyList.add(type)
                     }
                 }
-                GameManager.addEnemy(Enemy(EnemyType.SKELETONKING))
+                GameManager.addEnemy(Enemy(EnemyType.SKELETONKING, controller))
                 enemyCount = baseSpawnCount * gameLevel
                 spawnsPerMinute = baseSpawnsPerMinute
 

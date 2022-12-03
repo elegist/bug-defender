@@ -2,9 +2,9 @@ package de.mow2.towerdefense.controller
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -21,9 +21,7 @@ import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.helper.*
 import de.mow2.towerdefense.databinding.ActivityGameBinding
-import de.mow2.towerdefense.model.core.BuildUpgradeMenu
-import de.mow2.towerdefense.model.core.GameController
-import de.mow2.towerdefense.model.core.GameManager
+import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 /**
@@ -31,8 +29,12 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
  */
 class GameActivity : AppCompatActivity(), GameController {
     override var gameState = GameState(this)
-    private val gameManager = GameManager(this)
-
+    override var gameManager = GameManager(this)
+    override lateinit var gameLoop: GameLoop
+    //init play ground
+    override var gameWidth = Resources.getSystem().displayMetrics.widthPixels
+    override var gameHeight = 2 * gameWidth
+    override var playGround = PlayGround(gameWidth)
     //GUI
     private lateinit var binding: ActivityGameBinding
     private lateinit var bottomGuiContainer: ConstraintLayout
@@ -67,15 +69,12 @@ class GameActivity : AppCompatActivity(), GameController {
         SoundManager.loadPreferences(this)
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
-        Log.i("Binding: ", "$binding.")
-        //create new game view
+        //create new play ground and game view
         gameLayout = binding.gameViewContainer
-        gameView = GameView(this, this, gameManager)
+        gameView = GameView(this, this)
         gameLayout.addView(gameView)
         setContentView(binding.root)
         //load settings and GUI
@@ -87,10 +86,6 @@ class GameActivity : AppCompatActivity(), GameController {
         //initial wave display
         waveDisplayText = "${this.getString(R.string.wave)} ${GameManager.gameLevel + 1}"
         waveDisplay.text = waveDisplayText
-        // shows tutorial
-        if (GameManager.tutorialsActive) {
-            displayTutorial(true)
-        }
     }
 
     /**
@@ -138,7 +133,7 @@ class GameActivity : AppCompatActivity(), GameController {
         }
 
         //"choose a tower" menu displayed on long click
-        val buildMenu = BuildUpgradeMenu(gameManager, this)
+        val buildMenu = BuildUpgradeMenu(this)
         TowerTypes.values().forEachIndexed { i, type ->
             val towerBtn = BuildButton(this, null, R.style.MenuButton_Button, type)
             val towerBtnText = TextView(this)
@@ -308,12 +303,12 @@ class GameActivity : AppCompatActivity(), GameController {
     fun displayTutorial(active: Boolean) {
         if (active) {
             tutPopup.show(fm, "tutorialDialog")
-            gameView.toggleGameLoop(false)
+            toggleGameLoop(false)
         } else {
             prefManager.edit {
                 putBoolean("tutorial_pref", false)
             }
-            gameView.toggleGameLoop(true)
+            toggleGameLoop(true)
         }
     }
 
@@ -335,5 +330,24 @@ class GameActivity : AppCompatActivity(), GameController {
         val gameContainer = binding.gameContainer
         val tutorial = TutorialHighlighter(healthBar, progressBar, wave, coins, bottomGui, topGui, gameContainer, menuBtn, deleteBtn, upgradeBtn, buildBtn)
         tutorial.showElements(item, this)
+    }
+
+    override fun initGameLoop() {
+        gameLoop = GameLoop(gameManager)
+        // shows tutorial
+        if (GameManager.tutorialsActive) {
+            displayTutorial(true)
+        }
+    }
+
+    override fun toggleGameLoop(setRunning: Boolean) {
+        if (!setRunning) {
+            gameLoop.setRunning(false)
+            gameLoop.join()
+        } else {
+            gameLoop = GameLoop(gameManager)
+            gameLoop.setRunning(true)
+            gameLoop.start()
+        }
     }
 }

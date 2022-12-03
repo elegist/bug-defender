@@ -1,9 +1,6 @@
 package de.mow2.towerdefense.controller
 
-
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.util.Log
 import android.view.MotionEvent
@@ -11,25 +8,27 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
-import de.mow2.towerdefense.model.core.BuildUpgradeMenu
-import de.mow2.towerdefense.model.core.GameLoop
-import de.mow2.towerdefense.model.core.GameManager
-import de.mow2.towerdefense.model.core.SquareField
+import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.helper.Vector2D
 
-@SuppressLint("ViewConstructor")
-class GameView(context: Context, private val callBack: GameActivity, val gameManager: GameManager) :
+/**
+ * View component that displays game content on screen such as play ground, towers, enemies and so on
+ */
+class GameView(context: Context) :
     SurfaceView(context), SurfaceHolder.Callback {
-    private var gameLoop: GameLoop
+    constructor(context: Context, controller: GameController) : this(context) {
+        this.controller = controller
+        this.buildMenu = BuildUpgradeMenu(controller)
+    }
 
     //background tiles
-    private var bgPaint: Paint
-    private val buildMenu = BuildUpgradeMenu(gameManager, callBack)
+    private lateinit var controller: GameController
+    private val bgPaint: Paint
+    private lateinit var buildMenu: BuildUpgradeMenu
 
     init {
         holder.addCallback(this)
         holder.setFormat(0x00000004)
-        gameLoop = GameLoop(gameManager)
 
         //initializing background tiles
         bgPaint = Paint()
@@ -41,23 +40,12 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         )
     }
 
-    fun toggleGameLoop(setRunning: Boolean) {
-        if (!setRunning) {
-            gameLoop.setRunning(false)
-            gameLoop.join()
-        } else {
-            gameLoop = GameLoop(gameManager)
-            gameLoop.setRunning(true)
-            gameLoop.start()
-        }
-    }
-
     override fun surfaceCreated(holder: SurfaceHolder) {
         setWillNotDraw(false)
         //start game loop
-        Log.i("TutActive:", "${GameManager.tutorialsActive}")
+        controller.initGameLoop()
         if (!GameManager.tutorialsActive) {
-            toggleGameLoop(true)
+            controller.toggleGameLoop(true)
         }
     }
 
@@ -67,8 +55,8 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
         var retry = true
         while (retry) {
             try {
-                gameLoop.setRunning(false)
-                gameLoop.join()
+                controller.gameLoop.setRunning(false)
+                controller.gameLoop.join()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -169,8 +157,8 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val height = gameHeight
-        val width = gameWidth
+        val height = controller.gameHeight
+        val width = controller.gameWidth
 
         setMeasuredDimension(width, height)
     }
@@ -218,7 +206,7 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
     private fun getTouchedSquare(x: Float, y: Float): SquareField {
         var xPos = 0
         var yPos = 0
-        GameManager.playGround.squareArray.forEachIndexed { i, it ->
+        controller.playGround.squareArray.forEachIndexed { i, it ->
             it.forEachIndexed { j, element ->
                 val coordRangeX = element.position.x..(element.position.x + element.width)
                 val coordRangeY = element.position.y..(element.position.y + element.height)
@@ -228,11 +216,6 @@ class GameView(context: Context, private val callBack: GameActivity, val gameMan
                 }
             }
         }
-        return GameManager.playGround.squareArray[xPos][yPos]
-    }
-
-    companion object {
-        var gameWidth = Resources.getSystem().displayMetrics.widthPixels
-        var gameHeight = 2 * gameWidth
+        return controller.playGround.squareArray[xPos][yPos]
     }
 }

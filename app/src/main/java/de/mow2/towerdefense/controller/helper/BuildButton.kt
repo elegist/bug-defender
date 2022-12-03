@@ -7,7 +7,7 @@ import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 /**
- * Custom ImageButton - This button is part of the in-game build menu
+ * Custom ImageButton - This button is part of the in-game build menu (pop up on hold)
  */
 class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) :
     AppCompatImageButton(context, attributeSet, defStyleAttr) {
@@ -17,14 +17,17 @@ class BuildButton(context: Context, attributeSet: AttributeSet?, defStyleAttr: I
         defStyleAttr: Int,
         type: TowerTypes
     ) : this(context, attributeSet, defStyleAttr) {
-        initMenu(type)
+        initButton(type)
     }
 
     init {
         this.setPadding(30, 0, 30, 30)
     }
 
-    private fun initMenu(type: TowerTypes) {
+    /**
+     * Initializes the image resource of this button
+     */
+    private fun initButton(type: TowerTypes) {
         when (type) {
             TowerTypes.SINGLE -> {
                 this.setImageResource(R.drawable.tower_single_imagebtn)

@@ -8,7 +8,7 @@ import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 /**
  * Defines logic behind build and upgrade functions
  */
-class BuildUpgradeMenu(val gameManager: GameManager, private val controller: GameController) {
+class BuildUpgradeMenu(private val controller: GameController) {
     /**
      * Calculates tower value based on its type and level
      * @param type value of TowerTypes
@@ -32,7 +32,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
     fun buildTower(selectedField: SquareField, towerType: TowerTypes) {
         if (!selectedField.isBlocked) {
             val cost = getTowerCost(towerType)
-            if (gameManager.decreaseCoins(cost)) {
+            if (controller.gameManager.decreaseCoins(cost)) {
                 val tower = when (towerType) {
                     TowerTypes.SINGLE -> {
                         Tower(selectedField, TowerTypes.SINGLE)
@@ -51,7 +51,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
                 GameManager.addTower(tower)
                 GameManager.lastTower = tower
                 soundPool.play(Sounds.BUILD.id, 1F, 1F, 1, 0, 1F)
-                gameManager.validatePlayGround()
+                controller.gameManager.validatePlayGround()
             } else {
                 controller.showToastMessage("money")
             }
@@ -64,14 +64,14 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
     fun destroyTower(tower: Tower) {
         tower.squareField.removeTower() //free square
         GameManager.towerList.remove(tower) //remove tower from drawing list
-        gameManager.increaseCoins(
+        controller.gameManager.increaseCoins(
             getTowerCost(
                 tower.type,
                 tower.towerLevel
             ) / 2
         ) //get half of the tower value back
         soundPool.play(Sounds.TOWERDESTROY.id, 1F, 1F, 1, 0, 1F)
-        gameManager.validatePlayGround()
+        controller.gameManager.validatePlayGround()
     }
 
     /**
@@ -79,7 +79,7 @@ class BuildUpgradeMenu(val gameManager: GameManager, private val controller: Gam
      */
     fun upgradeTower(selectedTower: Tower?) {
         //only upgrade if there is a tower which is below max level and if player can afford the upgrade
-        if (selectedTower != null && selectedTower.towerLevel < GameManager.maxTowerLevel && gameManager.decreaseCoins(
+        if ((selectedTower != null) && (selectedTower.towerLevel < GameManager.maxTowerLevel) && controller.gameManager.decreaseCoins(
                 getTowerCost(selectedTower.type, selectedTower.towerLevel + 1)
             )
         ) {

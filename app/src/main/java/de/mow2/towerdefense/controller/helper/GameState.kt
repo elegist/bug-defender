@@ -3,12 +3,14 @@ package de.mow2.towerdefense.controller.helper
 import android.content.Context
 import android.util.Log
 import de.mow2.towerdefense.model.core.GameManager
-import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import java.io.*
 import java.util.concurrent.CopyOnWriteArrayList
 
-
+/**
+ * Saves and loads game data
+ * @param context App context
+ */
 class GameState(val context: Context) {
 
     /**
@@ -45,7 +47,7 @@ class GameState(val context: Context) {
 
     /**
      * Saves game data to specified file
-     * @param file Savegame file
+     * @param file save game file
      */
     private fun saveGame(file: File) {
         try {
@@ -59,7 +61,6 @@ class GameState(val context: Context) {
             objectOut.writeObject(GameManager.coinAmnt)
             objectOut.writeObject(GameManager.killCounter)
             objectOut.writeObject(GameManager.towerList)
-            objectOut.writeObject(GameManager.playGround)
             //close output stream
             objectOut.close()
         } catch (e: Exception) {
@@ -68,7 +69,7 @@ class GameState(val context: Context) {
     }
 
     /**
-     * Reads all saved game variables and objects from specified file
+     * Reads all saved game data from specified file, if it exists
      */
     fun readGameState() {
         val file = defineFile(context)
@@ -82,7 +83,6 @@ class GameState(val context: Context) {
             val coins = input.readObject() as Int
             val kills = input.readObject() as Int
             val towerList = input.readObject() as CopyOnWriteArrayList<Tower>
-            val playGround = input.readObject() as PlayGround
             //reset tower objects
             towerList.forEach {
                 it.actionsPerMinute = 60f
@@ -96,7 +96,6 @@ class GameState(val context: Context) {
             GameManager.coinAmnt = coins
             GameManager.killCounter = kills
             GameManager.towerList = towerList
-            GameManager.playGround = playGround
             //close input stream
             input.close()
         }
@@ -104,7 +103,7 @@ class GameState(val context: Context) {
 
     /**
      * Deletes the save game file if exists
-     * @return Boolean - true if file is deleted, otherwise false
+     * @return Boolean - true if file is deleted; false otherwise
      */
     fun deleteSaveGame(): Boolean {
         val file = defineFile(context)
