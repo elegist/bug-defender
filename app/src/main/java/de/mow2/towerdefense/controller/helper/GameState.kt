@@ -3,9 +3,13 @@ package de.mow2.towerdefense.controller.helper
 import android.content.Context
 import android.util.Log
 import de.mow2.towerdefense.model.core.GameManager
+import de.mow2.towerdefense.model.core.PlayGround
+import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
+import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import java.io.*
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.reflect.typeOf
 
 /**
  * Saves and loads game data
@@ -60,7 +64,18 @@ class GameState(val context: Context) {
             objectOut.writeObject(GameManager.livesAmnt)
             objectOut.writeObject(GameManager.coinAmnt)
             objectOut.writeObject(GameManager.killCounter)
-            objectOut.writeObject(GameManager.towerList)
+
+            var towerArray = emptyArray<Array<*>>()
+            GameManager.towerList.forEach { tower ->
+                val type = tower.type
+                val level = tower.towerLevel
+                val posX = tower.squareField.mapPos["x"]
+                val posY = tower.squareField.mapPos["y"]
+                val entry = arrayOf(type, level, posX, posY)
+                towerArray += entry
+            }
+            objectOut.writeObject(towerArray)
+
             //close output stream
             objectOut.close()
         } catch (e: Exception) {
@@ -71,7 +86,7 @@ class GameState(val context: Context) {
     /**
      * Reads all saved game data from specified file, if it exists
      */
-    fun readGameState() {
+    fun readGameState(playGround: PlayGround) {
         val file = defineFile(context)
         //load from file if it exists
         if (file.exists()) {
@@ -82,12 +97,14 @@ class GameState(val context: Context) {
             val lives = input.readObject() as Int
             val coins = input.readObject() as Int
             val kills = input.readObject() as Int
-            val towerList = input.readObject() as CopyOnWriteArrayList<Tower>
+            val towerList = input.readObject() as Array<Array<*>>
             //reset tower objects
             towerList.forEach {
-                it.actionsPerMinute = 60f
-                it.hasTarget = false
-                it.target = null
+                val squareField = playGround.squareArray[it[2] as Int][it[3] as Int]
+                squareField.isBlocked = true
+                val tower = Tower(squareField, it[0] as TowerTypes)
+                tower.towerLevel = it[1] as Int
+                GameManager.towerList.add(tower)
             }
             //replace GameManager variables with saved ones
             GameManager.gameLevel = level
@@ -95,7 +112,6 @@ class GameState(val context: Context) {
             GameManager.livesAmnt = lives
             GameManager.coinAmnt = coins
             GameManager.killCounter = kills
-            GameManager.towerList = towerList
             //close input stream
             input.close()
         }

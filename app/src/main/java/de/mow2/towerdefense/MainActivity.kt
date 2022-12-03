@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
                 PreferenceManager.getDefaultSharedPreferences(this).getString("quality_pref", "Low")
             BitmapPreloader(resources).preloadGraphics(graphics)
         }
+        Log.i("playgroundBG: ", "${BitmapPreloader.playgroundBG}")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
@@ -84,8 +85,10 @@ class MainActivity : AppCompatActivity() {
      * Load saved game
      */
     fun resumeGame(view: View) {
-        gameState.readGameState()
-        startActivity(Intent(this, GameActivity::class.java))
+        GameManager.reset()
+        val intent = Intent(this, GameActivity::class.java)
+        intent.putExtra("loadGame", true)
+        startActivity(intent)
     }
 
     /**

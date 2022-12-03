@@ -75,7 +75,7 @@ class GameManager(private val controller: GameController) {
     }
 
     private val waveSpawner = WaveSpawner(controller)
-    fun initLevel(level: Int) {
+    fun initLevel(level: Int, newGame: Boolean = false) {
         //gameLevel = 50
         //set the wave
         waveSpawner.initWave(level)
@@ -86,23 +86,22 @@ class GameManager(private val controller: GameController) {
                 if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 350
                 }
-                controller.updateHealthBarMax(livesAmnt)
             }
             else -> {
-                coinAmnt += level * 10
+                coinAmnt += level * 15
                 if (level % 10 == 0) {
                     increaseLives(level / 2)
                     controller.updateHealthBarMax(livesAmnt)
                 }
                 SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
-                // TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
                 controller.gameState.saveGameState() //auto-save progress
                 controller.showToastMessage("wave")
             }
         }
-        killsToProgress = waveSpawner.enemyCount
+        if(newGame) controller.updateHealthBarMax(livesAmnt)
         controller.updateProgressBarMax(killsToProgress)
 
+        killsToProgress = waveSpawner.enemyCount
         killCounter = 0
         controller.updateGUI()
     }

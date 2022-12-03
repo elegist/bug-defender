@@ -81,8 +81,11 @@ class GameActivity : AppCompatActivity(), GameController {
         loadPrefs()
         initGUI()
         hideSystemBars()
-        //init game manager
-        gameManager.initLevel(GameManager.gameLevel) //TODO: Load saved game
+        //start level
+        if(intent.getBooleanExtra("loadGame", false)) {
+            gameState.readGameState(playGround)
+        }
+        gameManager.initLevel(GameManager.gameLevel, true)
         //initial wave display
         waveDisplayText = "${this.getString(R.string.wave)} ${GameManager.gameLevel + 1}"
         waveDisplay.text = waveDisplayText
@@ -209,10 +212,12 @@ class GameActivity : AppCompatActivity(), GameController {
         }
     }
 
-    // sonst kommt man nicht auf resume game
+    /**
+     * leave game and save current progress
+     */
     fun pauseGame(view: View) {
-        leaveGame(view)
         gameState.saveGameState()
+        leaveGame(view)
     }
 
     /**

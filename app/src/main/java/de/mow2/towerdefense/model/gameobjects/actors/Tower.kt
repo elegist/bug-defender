@@ -114,7 +114,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
                 actionsPerMinute = baseSpeed + towerLevel * 10
             }
             TowerTypes.SLOW -> {
-                finalRange = baseRange + towerLevel * width / 2
+                finalRange = baseRange + towerLevel * width / 4
                 damage = 0
                 actionsPerMinute = baseSpeed / 2 + towerLevel * 10
                 slowAmount = 2 + towerLevel

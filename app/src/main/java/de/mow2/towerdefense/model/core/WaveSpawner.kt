@@ -92,7 +92,7 @@ class WaveSpawner(val controller: GameController) {
                     }
                 }
                 GameManager.addEnemy(Enemy(EnemyType.SKELETONKING, controller))
-                enemyCount = baseSpawnCount * gameLevel
+                enemyCount = baseSpawnCount + gameLevel
                 spawnsPerMinute = baseSpawnsPerMinute
 
                 if (enemyIndexEnd < (EnemyType.values().size - 2)) { //if enemyIndexEnd < 11
