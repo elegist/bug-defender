@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<animation-list android:oneshot="false" xmlns:android="http://schemas.android.com/apk/res/android">
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/splashscreen_tower_construction_frame_01" android:duration="100" />
     <item android:drawable="@drawable/splashscreen_tower_construction_frame_02" android:duration="100" />
     <item android:drawable="@drawable/splashscreen_tower_construction_frame_03" android:duration="100" />

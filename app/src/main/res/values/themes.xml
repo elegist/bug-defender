@@ -33,7 +33,7 @@
     <style name="Theme.TowerDefense.SplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/dark_brown</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splashscreen</item>
-        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="windowSplashScreenAnimationDuration">100</item>
         <item name="postSplashScreenTheme">@style/Theme.AppCompat.NoActionBar.Main</item>
     </style>
 </resources>

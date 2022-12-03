@@ -122,10 +122,7 @@ class GameManager(private val controller: GameController) {
     private val algs = Astar() //TODO: move into companion object?
     fun validatePlayGround() {
         waveActive = if (algs.findPath(
-                Astar.Node(0, 0),
-                Astar.Node(squaresX - 1, squaresY - 1),
-                squaresX,
-                squaresY
+                Astar.Node(0, 0), Astar.Node(squaresX - 1, squaresY - 1), squaresX, squaresY
             ) != null
         ) {
             true
@@ -238,8 +235,7 @@ class GameManager(private val controller: GameController) {
                         TowerTypes.SLOW -> {
                             enemyList.forEach { enemy ->
                                 if (tower.findDistance(
-                                        tower,
-                                        enemy
+                                        tower, enemy
                                     ) < tower.finalRange && !enemy.isSlowed
                                 ) {
                                     tower.targetArray = tower.targetArray.plus(enemy)

@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
+        val splashscreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         //preload all images
         if (!BitmapPreloader.bitmapsLoaded) {
