@@ -1,5 +1,6 @@
 package de.mow2.towerdefense.model.pathfinding
 
+import de.mow2.towerdefense.model.core.GameController
 import de.mow2.towerdefense.model.core.GameManager
 import kotlin.math.abs
 import kotlin.math.max
@@ -7,7 +8,7 @@ import kotlin.math.max
 /**
  * A-star search algorithm, used by enemies to find the fastest way across the map
  */
-class Astar : java.io.Serializable {
+class Astar(val controller: GameController) : java.io.Serializable {
 
     fun findPath(
         startNode: Node,
@@ -44,7 +45,7 @@ class Astar : java.io.Serializable {
             val neighbors = currentNode.getNeighbors(playGroundRows, playGroundCols)
 
             neighbors.forEach neighbors@{ node ->
-                if (GameManager.playGround.squareArray[node.x][node.y].isBlocked) {
+                if (controller.playGround.squareArray[node.x][node.y].isBlocked) {
                     return@neighbors
                 }
 
@@ -75,7 +76,7 @@ class Astar : java.io.Serializable {
      * @param x horizontal position
      * @param y vertical position
      */
-    data class Node(val x: Int, val y: Int) : Comparable<Node>, java.io.Serializable {
+    data class Node(val x: Int, val y: Int, val controller: GameController) : Comparable<Node>, java.io.Serializable {
         // parent is the node that came previous to the current one
         var parent: Node? = null
 
@@ -102,26 +103,26 @@ class Astar : java.io.Serializable {
              */
             //left
             if (x - 1 >= 0) {
-                if (!GameManager.playGround.squareArray[x - 1][y].isBlocked) {
-                    neighbors.add(Node(x - 1, y))
+                if (!controller.playGround.squareArray[x - 1][y].isBlocked) {
+                    neighbors.add(Node(x - 1, y, controller))
                 }
             }
             //top
             if (y + 1 < maxCols) {
-                if (!GameManager.playGround.squareArray[x][y + 1].isBlocked) {
-                    neighbors.add(Node(x, y + 1))
+                if (!controller.playGround.squareArray[x][y + 1].isBlocked) {
+                    neighbors.add(Node(x, y + 1, controller))
                 }
             }
             //right
             if (x + 1 < maxRows) {
-                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked) {
-                    neighbors.add(Node(x + 1, y))
+                if (!controller.playGround.squareArray[x + 1][y].isBlocked) {
+                    neighbors.add(Node(x + 1, y, controller))
                 }
             }
             //bottom
             if (y - 1 >= 0) {
-                if (!GameManager.playGround.squareArray[x][y - 1].isBlocked) {
-                    neighbors.add(Node(x, y - 1))
+                if (!controller.playGround.squareArray[x][y - 1].isBlocked) {
+                    neighbors.add(Node(x, y - 1, controller))
                 }
             }
 
@@ -130,26 +131,26 @@ class Astar : java.io.Serializable {
              */
             //diagonal bottom left
             if (x - 1 > 0 && y - 1 > 0) {
-                if (!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked) {
-                    neighbors.add(Node(x - 1, y - 1))
+                if (!controller.playGround.squareArray[x - 1][y].isBlocked && !controller.playGround.squareArray[x][y - 1].isBlocked) {
+                    neighbors.add(Node(x - 1, y - 1, controller))
                 }
             }
             //diagonal top left
             if (x - 1 > 0 && y + 1 < maxCols) {
-                if (!GameManager.playGround.squareArray[x - 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked) {
-                    neighbors.add(Node(x - 1, y + 1))
+                if (!controller.playGround.squareArray[x - 1][y].isBlocked && !controller.playGround.squareArray[x][y + 1].isBlocked) {
+                    neighbors.add(Node(x - 1, y + 1, controller))
                 }
             }
             //diagonal top right
             if (x + 1 < maxRows && y + 1 < maxCols) {
-                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y + 1].isBlocked) {
-                    neighbors.add(Node(x + 1, y + 1))
+                if (!controller.playGround.squareArray[x + 1][y].isBlocked && !controller.playGround.squareArray[x][y + 1].isBlocked) {
+                    neighbors.add(Node(x + 1, y + 1, controller))
                 }
             }
             //diagonal bottom right
             if (x + 1 < maxRows && y - 1 > 0) {
-                if (!GameManager.playGround.squareArray[x + 1][y].isBlocked && !GameManager.playGround.squareArray[x][y - 1].isBlocked) {
-                    neighbors.add(Node(x + 1, y - 1))
+                if (!controller.playGround.squareArray[x + 1][y].isBlocked && !controller.playGround.squareArray[x][y - 1].isBlocked) {
+                    neighbors.add(Node(x + 1, y - 1, controller))
                 }
             }
 

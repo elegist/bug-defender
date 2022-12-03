@@ -12,7 +12,7 @@ import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GameManager
 
 /**
- * class to set up SnackBar for wave and money warning message
+ * Custom toast message to display hints and warnings
  */
 class CustomToast(val context: Context, val parent: ConstraintLayout) {
 
@@ -28,8 +28,8 @@ class CustomToast(val context: Context, val parent: ConstraintLayout) {
     private val width = display.widthPixels
 
     /**
-     * adds Snackbar, sets functionality and decides which snackbar should be shown
-     * @param string for setting right snackbar
+     * Initializes Toast Message, sets functionality and decides which message will be displayed
+     * @param type used to decide which type of message will be displayed
      */
     fun setUpSnackbar(type: String) {
         snackBar.view.setBackgroundResource(R.color.transparent)

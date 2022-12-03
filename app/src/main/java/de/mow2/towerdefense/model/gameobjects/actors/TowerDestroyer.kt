@@ -1,13 +1,20 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import de.mow2.towerdefense.model.core.GameController
+import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.helper.Vector2D
 
-class TowerDestroyer(towerToDestroy: Tower) : GameObject() {
+class TowerDestroyer(towerToDestroy: Tower, val controller: GameController) : GameObject() {
     override var position = Vector2D(0f, 0f)
-    override var height = GameManager.playGround.squareSize
+    override var height = controller.playGround.squareSize
     override var width = height
+    override var speed: Float = 0f
+        set(value) {
+            val rawPixels = (controller.gameWidth + controller.gameHeight) * value
+            field = rawPixels / GameLoop.targetUPS
+        }
 
     private var target = 0f
 
@@ -21,7 +28,7 @@ class TowerDestroyer(towerToDestroy: Tower) : GameObject() {
             1
         } else {
             position = Vector2D(0f, towerToDestroy.position.y)
-            target = (GameManager.playGround.squareSize * GameManager.squaresX + width).toFloat()
+            target = (controller.playGround.squareSize * GameManager.squaresX + width).toFloat()
             0
         }
     }

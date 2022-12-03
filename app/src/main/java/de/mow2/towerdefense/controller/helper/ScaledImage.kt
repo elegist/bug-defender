@@ -11,6 +11,7 @@ import android.os.Build
  * @param width desired width
  * @param height desired height
  * @param bitmapR bitmap resource identifier
+ * @param imageQuality
  */
 data class ScaledImage(
     val resources: Resources,

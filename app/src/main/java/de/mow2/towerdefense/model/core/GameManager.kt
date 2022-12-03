@@ -1,9 +1,7 @@
 package de.mow2.towerdefense.model.core
 
-import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
-import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.model.gameobjects.actors.*
 import de.mow2.towerdefense.model.pathfinding.Astar
 import kotlinx.coroutines.coroutineScope
@@ -11,15 +9,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
-
-interface GameController {
-    var gameState: GameState
-    fun updateGUI()
-    fun updateHealthBarMax(newMax: Int)
-    fun updateProgressBarMax(newMax: Int)
-    fun onGameOver()
-    fun showToastMessage(type: String)
-}
 
 /**
  * GameManager handles the game logic, updates game objects and calls updates on UI Thread
@@ -85,7 +74,7 @@ class GameManager(private val controller: GameController) {
         controller.updateGUI()
     }
 
-    private val waveSpawner = WaveSpawner()
+    private val waveSpawner = WaveSpawner(controller)
     fun initLevel(level: Int) {
         //gameLevel = 50
         //set the wave
@@ -119,11 +108,11 @@ class GameManager(private val controller: GameController) {
     }
 
     //check if target can be reached from spawn
-    private val algs = Astar() //TODO: move into companion object?
+    private val algs = Astar(controller) //TODO: move into companion object?
     fun validatePlayGround() {
         waveActive = if (algs.findPath(
-                Astar.Node(0, 0),
-                Astar.Node(squaresX - 1, squaresY - 1),
+                Astar.Node(0, 0, controller),
+                Astar.Node(squaresX - 1, squaresY - 1, controller),
                 squaresX,
                 squaresY
             ) != null
@@ -131,7 +120,7 @@ class GameManager(private val controller: GameController) {
             true
         } else {
             SoundManager.soundPool.play(Sounds.DESTROYER.id, 1f, 1f, 1, 0, 1f)
-            towerDestroyer = TowerDestroyer(lastTower!!)
+            towerDestroyer = TowerDestroyer(lastTower!!, controller)
             towerDestroyerPatience--
             false
         }
@@ -203,7 +192,7 @@ class GameManager(private val controller: GameController) {
                         tower.isShooting = true
                         when (tower.type) {
                             TowerTypes.AOE -> {
-                                addProjectile(Projectile(tower, tower.targetArray.last()))
+                                addProjectile(Projectile(tower, tower.targetArray.last(), controller))
                                 tower.targetArray.forEach { enemy ->
                                     enemy.takeDamage(tower.damage, tower)
                                 }
@@ -213,11 +202,11 @@ class GameManager(private val controller: GameController) {
                                     tower.isShooting = false
                                     tower.target = null
                                 } else {
-                                    addProjectile(Projectile(tower, tower.target!!))
+                                    addProjectile(Projectile(tower, tower.target!!, controller))
                                 }
                             }
                             else -> {
-                                addProjectile(Projectile(tower, tower.target!!))
+                                addProjectile(Projectile(tower, tower.target!!, controller))
                             }
                         }
                     } else {
@@ -280,7 +269,7 @@ class GameManager(private val controller: GameController) {
          * update movement, update target or remove enemy
          */
         enemyList.forEach { enemy ->
-            if (enemy.position.y >= playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
+            if (enemy.position.y >= controller.playGround.squareArray[0][squaresY - 1].position.y) { //enemy reached finish line
                 enemy.die()
                 if (decreaseLives(enemy.baseDamage)) {
                     increaseKills(enemy.killValue)
@@ -305,7 +294,6 @@ class GameManager(private val controller: GameController) {
         //playground variables
         const val squaresX = 9
         const val squaresY = 18
-        var playGround = PlayGround(GameView.gameWidth)
 
         //static game variables
         var coinAmnt: Int = 0
@@ -333,7 +321,6 @@ class GameManager(private val controller: GameController) {
          * Reset all game variables
          */
         fun reset() {
-            playGround = PlayGround(GameView.gameWidth)
             towerList = CopyOnWriteArrayList<Tower>()
             enemyList = CopyOnWriteArrayList()
             projectileList = CopyOnWriteArrayList()

@@ -8,18 +8,26 @@ import android.graphics.drawable.BitmapDrawable
 import android.view.Gravity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.model.core.GameManager
+import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Loads all graphics before the game starts for better performance
+ * @param resources needed to gain access to all bitmaps etc.
+ */
 class BitmapPreloader(val resources: Resources) {
-    private val defaultWidth = GameManager.playGround.squareSize
+    var gameWidth = Resources.getSystem().displayMetrics.widthPixels
+    val playGround = PlayGround(gameWidth)
+    private val defaultWidth = playGround.squareSize
     private val defaultHeight = defaultWidth
     private var graphicsQuality = "Low"
 
     /**
      * Initialize all images and hold references for further use
-     * Should improve performance compared to decoding bitmaps while drawing
+     * Improves performance compared to decoding bitmaps while drawing
+     * @param graphicsQuality parsed from preferences. changes bitmap values in still images
      */
     fun preloadGraphics(graphicsQuality: String? = "Low") {
         if (graphicsQuality != null) {
@@ -34,6 +42,9 @@ class BitmapPreloader(val resources: Resources) {
         bitmapsLoaded = true
     }
 
+    /**
+     * Pre-loads all GUI-related graphics
+     */
     private fun preloadGui() {
         //bottom gui
         bottomDrawable = BitmapDrawable(
@@ -47,8 +58,8 @@ class BitmapPreloader(val resources: Resources) {
         topDrawable.tileModeX = Shader.TileMode.REPEAT
         topDrawable.gravity = Gravity.BOTTOM
         //background in game
-        val tileWidth = GameManager.playGround.squareSize
-        val tileHeight = GameManager.playGround.squareSize * 2
+        val tileWidth = playGround.squareSize
+        val tileHeight = playGround.squareSize * 2
         playgroundBG = Bitmap.createScaledBitmap(
             BitmapFactory.decodeResource(
                 resources,
@@ -65,6 +76,9 @@ class BitmapPreloader(val resources: Resources) {
         ).scaledImage
     }
 
+    /**
+     * Pre-loads all tower images
+     */
     private fun preloadTowers() {
         for (level in 0..GameManager.maxTowerLevel) { //for each tower level
             val towerImages = ConcurrentHashMap<TowerTypes, Bitmap>()
@@ -116,6 +130,9 @@ class BitmapPreloader(val resources: Resources) {
         }
     }
 
+    /**
+     * Pre-loads all weapon images / animations
+     */
     private fun preloadWeapons() {
         for (level in 0..GameManager.maxTowerLevel) { //for each tower level
             val weaponAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation>()
@@ -195,6 +212,9 @@ class BitmapPreloader(val resources: Resources) {
         }
     }
 
+    /**
+     * Pre-loads all projectile animations
+     */
     private fun preloadProjectiles() {
         for (level in 0..GameManager.maxTowerLevel) { //for each tower level
             val projectileAnims = ConcurrentHashMap<TowerTypes, SpriteAnimation>()
@@ -283,6 +303,9 @@ class BitmapPreloader(val resources: Resources) {
         }
     }
 
+    /**
+     * Pre-loads all enemy animations
+     */
     private fun preloadEnemies() {
         EnemyType.values().forEach { key ->
             val enemyR: Int
@@ -368,6 +391,9 @@ class BitmapPreloader(val resources: Resources) {
         }
     }
 
+    /**
+     * Pre-loads tower destroyer animation
+     */
     private fun preloadTowerDestroyer() {
         val towerDestroyerR = R.drawable.enemy_cacodaemon_anim
         val rowCount = 2
@@ -385,7 +411,6 @@ class BitmapPreloader(val resources: Resources) {
 
     companion object {
         var bitmapsLoaded = false
-
         //all various lists and maps for game objects and their respective bitmaps or animations
         var towerImagesArray = emptyArray<ConcurrentHashMap<TowerTypes, Bitmap>>()
         var weaponAnimsArray = emptyArray<ConcurrentHashMap<TowerTypes, SpriteAnimation>>()

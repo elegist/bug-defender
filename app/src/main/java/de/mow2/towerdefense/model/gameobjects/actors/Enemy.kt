@@ -1,5 +1,7 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import de.mow2.towerdefense.model.core.GameController
+import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.helper.Vector2D
@@ -15,26 +17,33 @@ import kotlin.random.nextInt
  */
 class Enemy(
     val type: EnemyType,
-    private val spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0)
+    val controller: GameController,
+    private val spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0, controller)
 ) : GameObject(), Comparable<Enemy>, java.io.Serializable {
 
     //position
-    override var position = GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
+    override var position = controller.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
 
     //size
-    override var height = GameManager.playGround.squareSize
+    override var height = controller.playGround.squareSize
     override var width = height
 
+    //movement
+    override var speed: Float = 0f
+        set(value) {
+            val rawPixels = (controller.gameWidth + controller.gameHeight) * value
+            field = rawPixels / GameLoop.targetUPS
+        }
     //path finding
-    private val alg = Astar()
+    private val alg = Astar(controller)
     private var targetIndex: Int = 0
     private var finalTarget =
-        Astar.Node(spawnPoint.x, GameManager.squaresY - 1) //initial destination
+        Astar.Node(spawnPoint.x, GameManager.squaresY - 1, controller) //initial destination
     private lateinit var sortedPath: List<Astar.Node>
     private var currentTargetNode: Astar.Node
     private var currentTargetPosition: Vector2D
     private var minDistance =
-        GameManager.playGround.squareSize * 0.1f //min distance an enemy has to be from the currentTargetPosition to update it's path
+        controller.playGround.squareSize * 0.1f //min distance an enemy has to be from the currentTargetPosition to update it's path
 
     //queue sorting
     override fun compareTo(other: Enemy): Int = this.position.y.compareTo(other.position.y)
@@ -55,11 +64,11 @@ class Enemy(
         if (pathToEnd(spawnPoint)) {
             currentTargetNode = sortedPath.first()
             currentTargetPosition =
-                GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
+                controller.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
         } else {
             currentTargetNode = spawnPoint
             currentTargetPosition =
-                GameManager.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
+                controller.playGround.squareArray[spawnPoint.x][spawnPoint.y].position
         }
 
         /**
@@ -206,12 +215,12 @@ class Enemy(
      */
     private fun findNextTarget() {
         currentTargetNode = sortedPath[targetIndex]
-        finalTarget = Astar.Node(currentTargetNode.x, GameManager.squaresY - 1)
+        finalTarget = Astar.Node(currentTargetNode.x, GameManager.squaresY - 1, controller)
         if (currentTargetNode != sortedPath.last()) {
             targetIndex++
         }
         currentTargetPosition =
-            GameManager.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
+            controller.playGround.squareArray[currentTargetNode.x][currentTargetNode.y].position
     }
 
     fun takeDamage(damageAmount: Int, tower: Tower) {

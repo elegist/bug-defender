@@ -1,6 +1,5 @@
 package de.mow2.towerdefense.model.gameobjects
 
-import de.mow2.towerdefense.controller.GameView
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.helper.Vector2D
 import kotlin.math.pow
@@ -36,11 +35,7 @@ abstract class GameObject {
      * Will be multiplied with direction to get a velocity.
      * @see moveTo()
      */
-    var speed: Float = 0f
-        set(value) {
-            val rawPixels = (GameView.gameWidth + GameView.gameHeight) * value
-            field = rawPixels / GameLoop.targetUPS
-        }
+    abstract var speed: Float
 
     private var updateCycle: Float = 0f
 

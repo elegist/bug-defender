@@ -5,7 +5,6 @@ package de.mow2.towerdefense.model.helper
  * @param x x-coordinate of the vector
  * @param y y-coordinate of the vector
  * */
-
 data class Vector2D(var x: Float, var y: Float) : java.io.Serializable {
     constructor(x: Int, y: Int) : this(x.toFloat(), y.toFloat())
     constructor(x: Double, y: Double) : this(x.toFloat(), y.toFloat())

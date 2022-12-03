@@ -18,6 +18,7 @@ class Tower(val squareField: SquareField, var type: TowerTypes) : Comparable<Tow
     override var width = squareField.width
     override var height = 2 * width
     override var position = Vector2D(squareField.position.x, squareField.position.y - width)
+    override var speed: Float = 0f
 
     //weapon positioning
     var weaponOffset = 0f
