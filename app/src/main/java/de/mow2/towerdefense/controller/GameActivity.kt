@@ -4,8 +4,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -242,8 +244,19 @@ class GameActivity : AppCompatActivity(), GameController {
             setContentView(R.layout.gameover_view)
             SoundManager.mediaPlayer.release()
             soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
+
+            val animationView = findViewById<ImageView>(R.id.gameOverIV)
+            val animationDrawable = animationView.drawable as AnimationDrawable
+            animationDrawable.start()
+
             val wave = findViewById<TextView>(R.id.waveReached)
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
+            val time = findViewById<TextView>(R.id.timeTV)
+            time.text = buildString {
+                append(this@GameActivity.getString(R.string.timeMade))
+                append(" ")
+                append("Zeit")
+            }
             wave.text = buildString {
                 append(this@GameActivity.getString(R.string.waveReached))
                 append(" ")
