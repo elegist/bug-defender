@@ -30,8 +30,9 @@
     <string name="upgrade_tower_button">Upgrade Turm</string>
     <string name="progress_ball_image">Progress bar decor image</string>
     <string name="health_ball_image">Health bar decor image</string>
-    <string name="waveReached">"geschaffte Welle: "</string>
+    <string name="waveReached">geschaffte Welle: </string>
     <string name="enemyMade">getötete Gegner: </string>
+    <string name="timeMade">gespielte Zeit: </string>
     <string name="goOnTutorial">Weiter</string>
     <string name="tutorialTitel">Tutorial</string>
     <string name="tutorialWelcome">Willkommen bei Bug Defender! Wenn du das Tutorial überspringen möchtest, schließe einfach dieses Fenster.</string>

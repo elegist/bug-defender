@@ -242,6 +242,12 @@ class GameActivity : AppCompatActivity(), GameController {
             soundPool.play(Sounds.GAMEOVER.id, 1F, 1F, 1, 0, 1F)
             val wave = findViewById<TextView>(R.id.waveReached)
             val enemyValue = findViewById<TextView>(R.id.enemyValue)
+            val time = findViewById<TextView>(R.id.timeTV)
+            time.text = buildString {
+                append(this@GameActivity.getString(R.string.timeMade))
+                append(" ")
+                append("Zeit")
+            }
             wave.text = buildString {
                 append(this@GameActivity.getString(R.string.waveReached))
                 append(" ")
