@@ -139,8 +139,8 @@ class GameManager(private val controller: GameController) {
                 launch { updateTowers() }
                 launch { updateProjectiles() }
                 launch { updateEnemies() }
-                launch { waveSpawner.spawnEnemy() }
             }
+            waveSpawner.spawnEnemy()
         } else {
             /**
              * if the wave cannot find a valid path, a tower-destroyer will spawn and destroy the last tower
