@@ -200,7 +200,6 @@ class GameActivity : AppCompatActivity(), GameController {
         waveBar.progress = 0
     }
 
-
     /**
      * opens menu as pop up window if menu button is clicked
      */
@@ -359,6 +358,9 @@ class GameActivity : AppCompatActivity(), GameController {
         }
     }
 
+    /**
+     * starts and stops the game loop
+     */
     override fun toggleGameLoop(setRunning: Boolean) {
         if (!setRunning) {
             gameLoop.setRunning(false)
