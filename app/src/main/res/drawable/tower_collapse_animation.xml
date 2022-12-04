@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list android:id="@+id/selected" android:oneshot="true" xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/tower_collapse_animation_frame_01" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_02" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_03" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_04" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_05" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_06" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_07" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_08" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_09" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_10" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_11" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_12" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_13" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_14" android:duration="150" />
-    <item android:drawable="@drawable/tower_collapse_animation_frame_15" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_01" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_02" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_03" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_04" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_05" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_06" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_07" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_08" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_09" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_10" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_11" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_12" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_13" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_14" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_15" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_16" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_17" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_18" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_19" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_20" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_21" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_22" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_23" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_24" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_25" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_26" android:duration="150" />
+    <item android:drawable="@drawable/tower_collapse_animation_27" android:duration="150" />
 </animation-list>
