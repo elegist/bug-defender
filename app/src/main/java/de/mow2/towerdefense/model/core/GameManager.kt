@@ -83,7 +83,7 @@ class GameManager(private val controller: GameController) {
         when (level) {
             0 -> {
                 /* Start game */
-                livesAmnt = 1
+                livesAmnt = livesMax
                 if (coinAmnt == 0) { //prevents save game cheating
                     coinAmnt = 350
                 }
