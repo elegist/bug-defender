@@ -22,7 +22,6 @@ class Projectile(val tower: Tower, val enemy: Enemy, val controller: GameControl
         }
 
     init {
-        // TODO(): each tower could have different projectile speeds
         speed = 0.2f
         when (tower.type) {
             TowerTypes.SINGLE -> {

@@ -9,14 +9,14 @@
 
     <ImageView
         android:id="@+id/gameOverIV"
-        android:layout_width="262dp"
+        android:layout_width="400dp"
         android:layout_height="278dp"
         android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toTopOf="@+id/valueDisplay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_main" />
+        app:srcCompat="@drawable/tower_collapse_animation" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/valueDisplay"

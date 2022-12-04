@@ -113,7 +113,7 @@ class GameManager(private val controller: GameController) {
     }
 
     //check if target can be reached from spawn
-    private val algs = Astar(controller) //TODO: move into companion object?
+    private val algs = Astar(controller)
     fun validatePlayGround() {
         waveActive = if (algs.findPath(
                 Astar.Node(0, 0, controller),
@@ -258,7 +258,6 @@ class GameManager(private val controller: GameController) {
     private suspend fun updateProjectiles() = coroutineScope {
         projectileList.forEach { projectile ->
             val enemy = projectile.enemy
-            //TODO: Best solution to collision detection would be using Rect.intersects, which needs android.graphics import ???
             if (enemy.findDistance(projectile.positionCenter, enemy.positionCenter) <= 15) {
                 enemy.takeDamage(projectile.baseDamage, projectile.tower)
                 projectileList.remove(projectile)

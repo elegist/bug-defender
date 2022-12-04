@@ -40,7 +40,6 @@ class SpriteAnimation(
      */
     fun nextFrame(orientation: Int): Bitmap {
         animation = animationMap[orientation]!!
-        //TODO: different orientations (e.g. walking direction of creep)
         if (System.currentTimeMillis() - startFrameTime >= frameDuration) {
             update()
             startFrameTime = System.currentTimeMillis()

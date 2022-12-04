@@ -259,7 +259,6 @@ class Enemy(
         CLAMPBEETLE, FIREWASP, LOCUST, VOIDBUTTERFLY, //flying insects
         SKELETONGRUNT, NECROMANCER, SKELETONWARRIOR, SKELETONKNIGHT, //skeletons and necromancer
         SKELETONKING, //boss
-        //CACODAEMON TODO: "boss" that destroys towers? Spritesheet only contains left/right! Should be a projectile
     }
 }
 
