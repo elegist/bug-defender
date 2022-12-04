@@ -2,7 +2,6 @@ package de.mow2.towerdefense.controller
 
 import android.content.Context
 import android.graphics.*
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -18,13 +17,11 @@ class GameView(context: Context) :
     SurfaceView(context), SurfaceHolder.Callback {
     constructor(context: Context, controller: GameController) : this(context) {
         this.controller = controller
-        this.buildMenu = BuildUpgradeMenu(controller)
     }
 
     //background tiles
     private lateinit var controller: GameController
     private val bgPaint: Paint
-    private lateinit var buildMenu: BuildUpgradeMenu
 
     init {
         holder.addCallback(this)
@@ -102,7 +99,7 @@ class GameView(context: Context) :
                 BitmapPreloader.towerImagesArray[tower.towerLevel][tower.type],
                 tower.position
             )
-            if (controller.selectedTool == R.id.upgradeButton && tower.towerLevel < GameManager.maxTowerLevel && buildMenu.getTowerCost(
+            if (controller.selectedTool == R.id.upgradeButton && tower.towerLevel < GameManager.maxTowerLevel && controller.buildMenu.getTowerCost(
                     tower.type,
                     tower.towerLevel + 1
                 ) <= GameManager.coinAmnt
@@ -179,14 +176,14 @@ class GameView(context: Context) :
                     when (controller.selectedTool) {
                         R.id.deleteButton -> {
                             if (selectedField.tower != null) {
-                                buildMenu.destroyTower(selectedField.tower!!)
+                                controller.buildMenu.destroyTower(selectedField.tower!!)
                             }
                         }
                         R.id.buildButton -> {
-                            buildMenu.buildTower(selectedField, controller.selectedTower)
+                            controller.buildMenu.buildTower(selectedField, controller.selectedTower)
                         }
                         R.id.upgradeButton -> {
-                            buildMenu.upgradeTower(selectedField.tower)
+                            controller.buildMenu.upgradeTower(selectedField.tower)
                         }
                     }
                 }

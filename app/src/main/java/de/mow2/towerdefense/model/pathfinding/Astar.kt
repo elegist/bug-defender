@@ -1,7 +1,6 @@
 package de.mow2.towerdefense.model.pathfinding
 
-import de.mow2.towerdefense.model.core.GameController
-import de.mow2.towerdefense.model.core.GameManager
+import de.mow2.towerdefense.controller.GameController
 import kotlin.math.abs
 import kotlin.math.max
 

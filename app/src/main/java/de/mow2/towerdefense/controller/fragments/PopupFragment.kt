@@ -1,4 +1,4 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.controller.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.controller.GameActivity
 import de.mow2.towerdefense.databinding.PopupViewBinding
 
 /**

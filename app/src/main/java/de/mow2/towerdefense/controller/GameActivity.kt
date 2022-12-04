@@ -19,6 +19,8 @@ import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
+import de.mow2.towerdefense.controller.fragments.PopupFragment
+import de.mow2.towerdefense.controller.fragments.TutorialFragment
 import de.mow2.towerdefense.controller.helper.*
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.*
@@ -36,6 +38,7 @@ class GameActivity : AppCompatActivity(), GameController {
     override var gameHeight = 2 * gameWidth
     override var playGround = PlayGround(gameWidth)
     //build menu
+    override val buildMenu = BuildUpgradeMenu(this)
     override var selectedTool: Int? = null
     override var selectedTower: TowerTypes = TowerTypes.SINGLE
     //GUI
@@ -139,7 +142,6 @@ class GameActivity : AppCompatActivity(), GameController {
         }
 
         //"choose a tower" menu displayed on long click
-        val buildMenu = BuildUpgradeMenu(this)
         TowerTypes.values().forEachIndexed { i, type ->
             val towerBtn = BuildButton(this, null, R.style.MenuButton_Button, type)
             val towerBtnText = TextView(this)

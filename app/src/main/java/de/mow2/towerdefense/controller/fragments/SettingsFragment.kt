@@ -1,10 +1,11 @@
-package de.mow2.towerdefense.controller
+package de.mow2.towerdefense.controller.fragments
 
 import android.os.Bundle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import de.mow2.towerdefense.R
+import de.mow2.towerdefense.controller.SoundManager
 
 /**
  * class SettingsFragment sets layout.xml for preferences

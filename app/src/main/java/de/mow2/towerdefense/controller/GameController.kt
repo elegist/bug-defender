@@ -1,6 +1,10 @@
-package de.mow2.towerdefense.model.core
+package de.mow2.towerdefense.controller
 
 import de.mow2.towerdefense.controller.helper.GameState
+import de.mow2.towerdefense.model.core.BuildUpgradeMenu
+import de.mow2.towerdefense.model.core.GameLoop
+import de.mow2.towerdefense.model.core.GameManager
+import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 
 interface GameController {
@@ -11,6 +15,7 @@ interface GameController {
     var playGround: PlayGround
 
     var gameState: GameState
+    val buildMenu: BuildUpgradeMenu
     var selectedTool: Int?
     var selectedTower: TowerTypes
 

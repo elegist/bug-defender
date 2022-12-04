@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.preference.PreferenceManager
 import de.mow2.towerdefense.controller.GameActivity
-import de.mow2.towerdefense.controller.PopupFragment
+import de.mow2.towerdefense.controller.fragments.PopupFragment
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashscreen = installSplashScreen()
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         //preload all images
         if (!BitmapPreloader.bitmapsLoaded) {
@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
                 PreferenceManager.getDefaultSharedPreferences(this).getString("quality_pref", "Low")
             BitmapPreloader(resources).preloadGraphics(graphics)
         }
-        Log.i("playgroundBG: ", "${BitmapPreloader.playgroundBG}")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

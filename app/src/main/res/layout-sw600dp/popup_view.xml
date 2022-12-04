@@ -55,7 +55,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/popupFragmentContainer"
-        android:name="de.mow2.towerdefense.controller.SettingsFragment"
+        android:name="de.mow2.towerdefense.controller.fragments.SettingsFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"

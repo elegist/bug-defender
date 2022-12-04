@@ -1,6 +1,7 @@
 package de.mow2.towerdefense.model.core
 
 import android.util.Log
+import de.mow2.towerdefense.controller.GameController
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
 

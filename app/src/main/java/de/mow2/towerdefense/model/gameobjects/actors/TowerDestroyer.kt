@@ -1,6 +1,6 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
-import de.mow2.towerdefense.model.core.GameController
+import de.mow2.towerdefense.controller.GameController
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
