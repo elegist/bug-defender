@@ -27,6 +27,8 @@ import de.mow2.towerdefense.controller.helper.*
 import de.mow2.towerdefense.databinding.ActivityGameBinding
 import de.mow2.towerdefense.model.core.*
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 /**
  * This Activity starts the game
@@ -67,6 +69,11 @@ class GameActivity : AppCompatActivity(), GameController {
     private lateinit var buildMenuLayout: LinearLayout
     private lateinit var buildButton: ImageButton
     private var buildMenuExists = false
+
+    //time measurement
+    private var playTimeStart = System.currentTimeMillis()
+    var timePlayed = 0L
+    var playTimeEnd = 0L
 
     /**
      * Load all saved user preferences
@@ -239,6 +246,12 @@ class GameActivity : AppCompatActivity(), GameController {
      * Triggered if liveAmt = 0, sets game over screen
      */
     override fun onGameOver() {
+        playTimeEnd = System.currentTimeMillis()
+        timePlayed += playTimeEnd - playTimeStart
+        val hours = TimeUnit.MILLISECONDS.toHours(timePlayed)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(timePlayed) % 60
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(timePlayed) % 60
+        val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
         runOnUiThread {
             setContentView(R.layout.gameover_view)
             SoundManager.mediaPlayer.release()
@@ -254,7 +267,7 @@ class GameActivity : AppCompatActivity(), GameController {
             time.text = buildString {
                 append(this@GameActivity.getString(R.string.timeMade))
                 append(" ")
-                append("Zeit")
+                append(timeString)
             }
             wave.text = buildString {
                 append(this@GameActivity.getString(R.string.waveReached))
@@ -365,10 +378,12 @@ class GameActivity : AppCompatActivity(), GameController {
         if (!setRunning) {
             gameLoop.setRunning(false)
             gameLoop.join()
+            timePlayed += System.currentTimeMillis() - playTimeStart
         } else {
             gameLoop = GameLoop(gameManager)
             gameLoop.setRunning(true)
             gameLoop.start()
+            playTimeStart = System.currentTimeMillis()
         }
     }
 }

@@ -137,7 +137,7 @@ class Enemy(
             }
             EnemyType.SKELETONKING -> {
                 baseSpeed = 0.005f
-                healthPoints = 40 * GameManager.gameLevel
+                healthPoints = 50 * GameManager.gameLevel
                 baseDamage = GameManager.livesMax
                 coinValue = 50
             }
