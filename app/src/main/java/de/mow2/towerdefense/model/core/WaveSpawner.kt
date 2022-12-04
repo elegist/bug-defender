@@ -5,12 +5,6 @@ import de.mow2.towerdefense.controller.GameController
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy
 import de.mow2.towerdefense.model.gameobjects.actors.Enemy.EnemyType
 
-/**
- * TODO: First few waves are predetermined show the player all the enemies.
- * TODO: Boss round with creeps
- * TODO: infinite waves: increase chance of enemies that haven't been spawned in a set amount of waves to make it more engaging
- * TODO: alternate between hard and easy waves so it doesn't get dull //
- */
 class WaveSpawner(val controller: GameController) {
     //enemy types and count for a specific wave
     private val baseSpawnCount = 5

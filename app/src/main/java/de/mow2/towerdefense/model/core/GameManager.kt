@@ -100,7 +100,6 @@ class GameManager(private val controller: GameController) {
                     controller.showToastMessage("wave")
                     SoundManager.soundPool.play(Sounds.WAVE.id, 1F, 1F, 1, 0, 1F)
                 }
-                //TODO: wave.remaining insufficient. Each enemy should have their own remaining stat
                 controller.gameState.saveGameState() //auto-save progress
             }
         }
