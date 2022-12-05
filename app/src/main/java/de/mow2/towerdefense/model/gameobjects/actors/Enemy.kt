@@ -18,7 +18,11 @@ import kotlin.random.nextInt
 class Enemy(
     val type: EnemyType,
     val controller: GameController,
-    private val spawnPoint: Astar.Node = Astar.Node(Random.nextInt(0 until GameManager.squaresX), 0, controller)
+    private val spawnPoint: Astar.Node = Astar.Node(
+        Random.nextInt(0 until GameManager.squaresX),
+        0,
+        controller
+    )
 ) : GameObject(), Comparable<Enemy>, java.io.Serializable {
 
     //position
@@ -34,6 +38,7 @@ class Enemy(
             val rawPixels = (controller.gameWidth + controller.gameHeight) * value
             field = rawPixels / GameLoop.targetUPS
         }
+
     //path finding
     private val alg = Astar(controller)
     private var targetIndex: Int = 0

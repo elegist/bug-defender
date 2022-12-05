@@ -20,7 +20,6 @@ class TutorialHighlighter(
     private val time: ConstraintLayout,
     private val coins: ConstraintLayout,
     private val bottomGui: ConstraintLayout,
-    private val topGui: ConstraintLayout,
     private val gameContainer: ScrollView,
     private val menuBtn: Button,
     private val deleteBtn: ImageButton,
@@ -97,11 +96,21 @@ class TutorialHighlighter(
                 highlight(progressBar.children, true)
                 highlight(menuBtn, true)
             }
-            "wave" -> { highlight(time.children, true) }
-            "coins" -> { highlight(coins.children, true) }
-            "healthBar" -> { highlight(healthBar.children, true) }
-            "progressBar" -> { highlight(progressBar.children, true) }
-            "menuBtn" -> { highlight(menuBtn, true) }
+            "wave" -> {
+                highlight(time.children, true)
+            }
+            "coins" -> {
+                highlight(coins.children, true)
+            }
+            "healthBar" -> {
+                highlight(healthBar.children, true)
+            }
+            "progressBar" -> {
+                highlight(progressBar.children, true)
+            }
+            "menuBtn" -> {
+                highlight(menuBtn, true)
+            }
             "endTutorial" -> {
                 dimElements(gameContainer, false, context)
                 highlight(bottomGui.children, true)

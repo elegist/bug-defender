@@ -1,19 +1,21 @@
 package de.mow2.towerdefense.model.gameobjects.actors
 
+import de.mow2.towerdefense.controller.GameController
 import de.mow2.towerdefense.controller.SoundManager
 import de.mow2.towerdefense.controller.Sounds
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
-import de.mow2.towerdefense.controller.GameController
 import de.mow2.towerdefense.model.core.GameLoop
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.helper.Vector2D
 
-class Projectile(val tower: Tower, val enemy: Enemy, val controller: GameController) : GameObject() {
+class Projectile(val tower: Tower, val enemy: Enemy, val controller: GameController) :
+    GameObject() {
     override var position = tower.positionCenter
     override var width: Int = 0
     override var height: Int = 0
     val baseDamage = tower.damage
+
     //movement
     override var speed: Float = 0f
         set(value) {

@@ -106,7 +106,7 @@ class GameManager(private val controller: GameController) {
         killsToProgress = waveSpawner.enemyCount
         killCounter = 0
 
-        if(newGame) controller.updateHealthBarMax(livesMax)
+        if (newGame) controller.updateHealthBarMax(livesMax)
         controller.updateProgressBarMax(killsToProgress)
         controller.updateGUI()
     }
@@ -196,7 +196,13 @@ class GameManager(private val controller: GameController) {
                         tower.isShooting = true
                         when (tower.type) {
                             TowerTypes.AOE -> {
-                                addProjectile(Projectile(tower, tower.targetArray.last(), controller))
+                                addProjectile(
+                                    Projectile(
+                                        tower,
+                                        tower.targetArray.last(),
+                                        controller
+                                    )
+                                )
                                 tower.targetArray.forEach { enemy ->
                                     enemy.takeDamage(tower.damage, tower)
                                 }
@@ -292,6 +298,7 @@ class GameManager(private val controller: GameController) {
     companion object {
         //tutorials
         var tutorialsActive = true
+
         //playground variables
         const val squaresX = 9
         const val squaresY = 18

@@ -1,18 +1,16 @@
-package de.mow2.towerdefense
+package de.mow2.towerdefense.controller
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.preference.PreferenceManager
-import de.mow2.towerdefense.controller.GameActivity
-import de.mow2.towerdefense.controller.fragments.PopupFragment
-import de.mow2.towerdefense.controller.SoundManager
+import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
 import de.mow2.towerdefense.controller.SoundManager.soundSetting
+import de.mow2.towerdefense.controller.fragments.PopupFragment
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
 import de.mow2.towerdefense.controller.helper.GameState
 import de.mow2.towerdefense.databinding.ActivityMainBinding
@@ -43,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         // decides if resume game button should be shown
-        if(gameState.defineFile(this).exists()){
+        if (gameState.defineFile(this).exists()) {
             binding.resumeGameBtn.visibility = View.VISIBLE
         }
         // loads music and sounds and sets them based on saved preferences

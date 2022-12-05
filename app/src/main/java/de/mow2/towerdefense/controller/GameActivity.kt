@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.children
 import androidx.preference.PreferenceManager
-import de.mow2.towerdefense.MainActivity
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.SoundManager.musicSetting
 import de.mow2.towerdefense.controller.SoundManager.soundPool
@@ -25,9 +23,11 @@ import de.mow2.towerdefense.controller.fragments.PopupFragment
 import de.mow2.towerdefense.controller.fragments.TutorialFragment
 import de.mow2.towerdefense.controller.helper.*
 import de.mow2.towerdefense.databinding.ActivityGameBinding
-import de.mow2.towerdefense.model.core.*
+import de.mow2.towerdefense.model.core.BuildUpgradeMenu
+import de.mow2.towerdefense.model.core.GameLoop
+import de.mow2.towerdefense.model.core.GameManager
+import de.mow2.towerdefense.model.core.PlayGround
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 /**
@@ -37,14 +37,17 @@ class GameActivity : AppCompatActivity(), GameController {
     override var gameState = GameState(this)
     override var gameManager = GameManager(this)
     override lateinit var gameLoop: GameLoop
+
     //init play ground
     override var gameWidth = Resources.getSystem().displayMetrics.widthPixels
     override var gameHeight = 2 * gameWidth
     override var playGround = PlayGround(gameWidth)
+
     //build menu
     override val buildMenu = BuildUpgradeMenu(this)
     override var selectedTool: Int? = null
     override var selectedTower: TowerTypes = TowerTypes.SINGLE
+
     //GUI
     private lateinit var binding: ActivityGameBinding
     private lateinit var bottomGuiContainer: ConstraintLayout
@@ -97,7 +100,7 @@ class GameActivity : AppCompatActivity(), GameController {
         initGUI()
         hideSystemBars()
         //start level
-        if(intent.getBooleanExtra("loadGame", false)) {
+        if (intent.getBooleanExtra("loadGame", false)) {
             gameState.readGameState(playGround)
         }
         gameManager.initLevel(GameManager.gameLevel, true)
@@ -359,7 +362,18 @@ class GameActivity : AppCompatActivity(), GameController {
         val bottomGui = binding.bottomGuiContainer
         val topGui = binding.topGUI
         val gameContainer = binding.gameContainer
-        val tutorial = TutorialHighlighter(healthBar, progressBar, wave, coins, bottomGui, topGui, gameContainer, menuBtn, deleteBtn, upgradeBtn, buildBtn)
+        val tutorial = TutorialHighlighter(
+            healthBar,
+            progressBar,
+            wave,
+            coins,
+            bottomGui,
+            gameContainer,
+            menuBtn,
+            deleteBtn,
+            upgradeBtn,
+            buildBtn
+        )
         tutorial.showElements(item, this)
     }
 

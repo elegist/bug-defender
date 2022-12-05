@@ -75,7 +75,8 @@ class Astar(val controller: GameController) : java.io.Serializable {
      * @param x horizontal position
      * @param y vertical position
      */
-    data class Node(val x: Int, val y: Int, val controller: GameController) : Comparable<Node>, java.io.Serializable {
+    data class Node(val x: Int, val y: Int, val controller: GameController) : Comparable<Node>,
+        java.io.Serializable {
         // parent is the node that came previous to the current one
         var parent: Node? = null
 

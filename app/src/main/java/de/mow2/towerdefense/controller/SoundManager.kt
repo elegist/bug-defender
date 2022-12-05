@@ -14,7 +14,9 @@ import de.mow2.towerdefense.R
  * */
 
 enum class Sounds(var id: Int) {
-    DESTROYER(0), WAVE(0), GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(0),
+    DESTROYER(0), WAVE(0), GAMEOVER(0), BUILD(0), CREEPDEATH(0), TOWERDESTROY(0), LIVELOSS(0), MAGICSHOT(
+        0
+    ),
     ARROWSHOT(0), AOESHOT(0), SLOWSHOT(0), BOSSLEVEL(0)
 }
 

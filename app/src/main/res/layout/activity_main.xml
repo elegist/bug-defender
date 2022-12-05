@@ -9,7 +9,7 @@
     android:backgroundTint="@color/light_brown"
     android:backgroundTintMode="multiply"
     android:theme="@style/ThemeOverlay.TowerDefense.FullscreenContainer"
-    tools:context=".MainActivity">
+    tools:context=".controller.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"

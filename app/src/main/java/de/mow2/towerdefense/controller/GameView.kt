@@ -7,7 +7,8 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import de.mow2.towerdefense.R
 import de.mow2.towerdefense.controller.helper.BitmapPreloader
-import de.mow2.towerdefense.model.core.*
+import de.mow2.towerdefense.model.core.GameManager
+import de.mow2.towerdefense.model.core.SquareField
 import de.mow2.towerdefense.model.helper.Vector2D
 
 /**
@@ -81,7 +82,7 @@ class GameView(context: Context) :
     /**
      * Iterates through game objects and calls draw method
      *
-     * ! Use iterators for lists, or use ConcurrentHashMaps to avoid ConcurrentModificationException !
+     * ! Use iterators for lists, or use ConcurrentHashMaps (or similar thread safe collection) to avoid ConcurrentModificationException !
      */
     private fun drawObjects(canvas: Canvas) {
         //enemies

@@ -32,7 +32,7 @@
     <string name="health_ball_image">Health bar decor image</string>
     <string name="waveReached">reached Wave: </string>
     <string name="enemyMade">killed Enemies: </string>
-    <string name="timeMade">gespielte Zeit: </string>
+    <string name="timeMade">time played:</string>
     <string name="goOnTutorial">Go On</string>
     <string name="tutorialTitel">Tutorial</string>
     <string name="tutorialWelcome">Welcome to Bug Defender! To skip the tutorial just close this Window.</string>

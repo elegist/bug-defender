@@ -20,11 +20,12 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class BitmapPreloader(val resources: Resources) {
     var orientation = Resources.getSystem().configuration.orientation
-    private var gameWidth = if(Resources.getSystem().configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-        Resources.getSystem().displayMetrics.widthPixels
-    } else {
-        Resources.getSystem().displayMetrics.heightPixels
-    }
+    private var gameWidth =
+        if (Resources.getSystem().configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Resources.getSystem().displayMetrics.widthPixels
+        } else {
+            Resources.getSystem().displayMetrics.heightPixels
+        }
     val playGround = PlayGround(gameWidth)
     private val defaultWidth = playGround.squareSize
     private val defaultHeight = defaultWidth
@@ -417,6 +418,7 @@ class BitmapPreloader(val resources: Resources) {
 
     companion object {
         var bitmapsLoaded = false
+
         //all various lists and maps for game objects and their respective bitmaps or animations
         var towerImagesArray = emptyArray<ConcurrentHashMap<TowerTypes, Bitmap>>()
         var weaponAnimsArray = emptyArray<ConcurrentHashMap<TowerTypes, SpriteAnimation>>()

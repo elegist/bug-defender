@@ -4,12 +4,9 @@ import android.content.Context
 import android.util.Log
 import de.mow2.towerdefense.model.core.GameManager
 import de.mow2.towerdefense.model.core.PlayGround
-import de.mow2.towerdefense.model.gameobjects.GameObject
 import de.mow2.towerdefense.model.gameobjects.actors.Tower
 import de.mow2.towerdefense.model.gameobjects.actors.TowerTypes
 import java.io.*
-import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.reflect.typeOf
 
 /**
  * Saves and loads game data
